@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="ozark-cdi-sample:war exploded">
+    <output-path>$PROJECT_DIR$/ozark-cdi-sample/target/ozark-cdi-sample-1.0-SNAPSHOT</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="ozark-cdi-sample" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="ozark-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="ozark" />
+          </element>
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="ozark-cdi-sample/web/Web" />
+    </root>
+  </artifact>
+</component>

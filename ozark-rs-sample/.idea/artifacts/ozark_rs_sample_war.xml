@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ozark-rs-sample:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="ozark-rs-sample-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="ozark-rs-sample:war exploded" />
+    </root>
+  </artifact>
+</component>
