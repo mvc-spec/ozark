@@ -54,7 +54,7 @@ public class BookController {
      * service provider since it is not annotated by @Controller.
      *
      * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
+     * @return Book model instance.
      */
     @GET
     @Produces("text/json")
