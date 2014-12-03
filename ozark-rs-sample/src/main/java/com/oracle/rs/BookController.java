@@ -57,7 +57,7 @@ public class BookController {
      * @return Book model instance.
      */
     @GET
-    @Produces("text/json")
+    @Produces("application/json")
     public Book json(@PathParam("id") String id) {
         return catalog.getBook(id);
     }
