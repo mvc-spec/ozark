@@ -63,15 +63,14 @@ public class StringWriterInterceptor implements WriterInterceptor {
 
     @Override
     public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
-        System.out.println("aroundWriteTo called");
-
         final Object entity = context.getEntity();
         final Annotation[] annotations = context.getAnnotations();
 
-        // Is this a controller method?
-        if (Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)
-                && entity instanceof String) {
-            // Wrap string in Viewable and use ViewableWriter
+        // Method must be decorated with @Controller for this interceptor to be enabled
+        assert(Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller));
+
+        // Wrap string in Viewable use ViewableWriter
+        if (entity instanceof String) {
             writer.writeTo(new Viewable((String) entity), Viewable.class, Viewable.class, annotations,
                     context.getMediaType(), context.getHeaders(), context.getOutputStream());
         } else {
