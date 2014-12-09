@@ -37,16 +37,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.mvc;
+package com.oracle.rs;
+
+import javax.mvc.MvcApplication;
+import javax.ws.rs.ApplicationPath;
+import java.util.Set;
 
 /**
- * Interface Models.
+ * Class Application.
  *
  * @author Santiago Pericas-Geertsen
  */
-public interface Models {
+@ApplicationPath("resources")
+public class Application extends MvcApplication {
 
-    Object get(String name);
-
-    void set(String name, Object model);
+    @Override
+    public Set<Class<?>> getClasses() {
+        Set<Class<?>> set = super.getClasses();
+        set.add(BookController.class);
+        return set;
+    }
 }

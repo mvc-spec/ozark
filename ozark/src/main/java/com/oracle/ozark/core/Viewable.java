@@ -37,16 +37,22 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.mvc;
+package com.oracle.ozark.core;
 
 /**
- * Interface Models.
+ * Class Viewable.
  *
  * @author Santiago Pericas-Geertsen
  */
-public interface Models {
+public class Viewable {
 
-    Object get(String name);
+    private String view;
 
-    void set(String name, Object model);
+    public Viewable(String view) {
+        this.view = view;
+    }
+
+    public String getView() {
+        return view;
+    }
 }

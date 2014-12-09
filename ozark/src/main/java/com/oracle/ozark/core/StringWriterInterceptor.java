@@ -37,16 +37,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.mvc;
+package com.oracle.ozark.core;
+
+import javax.mvc.Controller;
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.ext.Provider;
+import javax.ws.rs.ext.WriterInterceptor;
+import javax.ws.rs.ext.WriterInterceptorContext;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.Arrays;
 
 /**
- * Interface Models.
+ * Class StringWriterInterceptor.
  *
  * @author Santiago Pericas-Geertsen
  */
-public interface Models {
+@Provider
+@Controller
+public class StringWriterInterceptor implements WriterInterceptor {
 
-    Object get(String name);
+    @Inject
+    private ViewableWriter writer;
 
-    void set(String name, Object model);
+    @Override
+    public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
+        System.out.println("aroundWriteTo called");
+
+        final Object entity = context.getEntity();
+        final Annotation[] annotations = context.getAnnotations();
+
+        // Is this a controller method?
+        if (Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)
+                && entity instanceof String) {
+            // Wrap string in Viewable and use ViewableWriter
+            writer.writeTo(new Viewable((String) entity), Viewable.class, Viewable.class, annotations,
+                    context.getMediaType(), context.getHeaders(), context.getOutputStream());
+        } else {
+            context.proceed();
+        }
+    }
 }

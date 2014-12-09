@@ -37,16 +37,43 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.mvc;
+package com.oracle.ozark.core;
+
+import javax.inject.Inject;
+import javax.mvc.Models;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.ext.MessageBodyWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 
 /**
- * Interface Models.
+ * Class ViewableWriter.
  *
  * @author Santiago Pericas-Geertsen
  */
-public interface Models {
+public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
-    Object get(String name);
+    @Inject
+    private Models models;
 
-    void set(String name, Object model);
+    @Override
+    public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
+        return aClass == Viewable.class;
+    }
+
+    @Override
+    public long getSize(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
+        return 0;
+    }
+
+    @Override
+    public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
+                        MultivaluedMap<String, Object> stringObjectMultivaluedMap, OutputStream outputStream)
+            throws IOException, WebApplicationException {
+        outputStream.write(("Ozark Runtime: Viewable(" + viewable.getView() + ", " + models + ")").getBytes());
+    }
 }

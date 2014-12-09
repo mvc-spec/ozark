@@ -37,16 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.mvc;
+package com.oracle.ozark.core;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.mvc.Models;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Interface Models.
+ * Class ModelsImpl.
  *
  * @author Santiago Pericas-Geertsen
  */
-public interface Models {
+@ApplicationScoped
+class ModelsImpl implements Models {
 
-    Object get(String name);
+    private Map<String, Object> map = new HashMap<>();
 
-    void set(String name, Object model);
+    @Override
+    public Object get(String s) {
+        return map.get(s);
+    }
+
+    @Override
+    public void set(String s, Object o) {
+        map.put(s, o);
+    }
+
+    @Override
+    public String toString() {
+        return map.toString();
+    }
 }
