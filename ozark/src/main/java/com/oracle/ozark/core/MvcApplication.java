@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,16 +37,24 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package javax.mvc;
+package com.oracle.ozark.core;
+
+import com.oracle.ozark.core.StringWriterInterceptor;
+import javax.ws.rs.core.Application;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Interface Models.
+ * Class MvcApplication.
  *
  * @author Santiago Pericas-Geertsen
  */
-public interface Models {
+public class MvcApplication extends Application {
 
-    Object get(String name);
-
-    void set(String name, Object model);
+    @Override
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> set = new HashSet<>();
+        set.add(StringWriterInterceptor.class);
+        return set;
+    }
 }

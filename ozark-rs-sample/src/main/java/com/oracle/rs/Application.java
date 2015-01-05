@@ -39,7 +39,7 @@
  */
 package com.oracle.rs;
 
-import javax.mvc.MvcApplication;
+import com.oracle.ozark.core.MvcApplication;        // TODO
 import javax.ws.rs.ApplicationPath;
 import java.util.Set;
 
