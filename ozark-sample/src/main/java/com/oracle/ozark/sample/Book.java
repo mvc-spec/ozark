@@ -37,24 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.rs;
-
-import com.oracle.ozark.core.MvcApplication;        // TODO
-import javax.ws.rs.ApplicationPath;
-import java.util.Set;
+package com.oracle.ozark.sample;
 
 /**
- * Class Application.
+ * Class Book.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ApplicationPath("resources")
-public class Application extends MvcApplication {
+public class Book {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        Set<Class<?>> set = super.getClasses();
-        set.add(BookController.class);
-        return set;
+    private String title;
+    private String author;
+    private String isbn;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }
