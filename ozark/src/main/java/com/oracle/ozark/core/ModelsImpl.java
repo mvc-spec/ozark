@@ -43,6 +43,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.mvc.Models;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Class ModelsImpl.
@@ -62,6 +63,10 @@ class ModelsImpl implements Models {
     @Override
     public void set(String s, Object o) {
         map.put(s, o);
+    }
+
+    public Set<String> keySet() {
+        return map.keySet();
     }
 
     @Override

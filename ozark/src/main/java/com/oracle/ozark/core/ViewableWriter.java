@@ -41,12 +41,19 @@ package com.oracle.ozark.core;
 
 import javax.inject.Inject;
 import javax.mvc.Models;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -57,8 +64,20 @@ import java.lang.reflect.Type;
  */
 public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
+    private static final String TEMPLATE_BASE = "/WEB-INF/";
+    private static final String DEFAULT_ENCODING = "UTF-8";
+
     @Inject
     private Models models;
+
+    @Context
+    private ServletContext servletContext;
+
+    @Context
+    private HttpServletRequest servletRequest;
+
+    @Context
+    private HttpServletResponse servletResponse;
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
@@ -72,8 +91,47 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     @Override
     public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
-                        MultivaluedMap<String, Object> stringObjectMultivaluedMap, OutputStream outputStream)
+                        MultivaluedMap<String, Object> stringObjectMultivaluedMap, OutputStream out)
             throws IOException, WebApplicationException {
-        outputStream.write(("Ozark Runtime: Viewable(" + viewable.getView() + ", " + models + ")").getBytes());
+
+        RequestDispatcher rd = servletContext.getRequestDispatcher(TEMPLATE_BASE + viewable.getView());
+        try {
+            // Set attributes in request before forwarding
+            for (String k : ((ModelsImpl) models).keySet()) {
+                servletRequest.setAttribute(k, models.get(k));
+            }
+            // OutputStream and Writer for HttpServletResponseWrapper.
+            final ServletOutputStream responseStream = new ServletOutputStream() {
+                @Override
+                public void write(final int b) throws IOException {
+                    out.write(b);
+                }
+
+                @Override
+                public boolean isReady() {
+                    return false;
+                }
+
+                @Override
+                public void setWriteListener(WriteListener writeListener) {
+                    throw new UnsupportedOperationException("Not supported");
+                }
+            };
+            final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, DEFAULT_ENCODING));
+            rd.forward(servletRequest, new HttpServletResponseWrapper(servletResponse) {
+
+                @Override
+                public ServletOutputStream getOutputStream() throws IOException {
+                    return responseStream;
+                }
+
+                @Override
+                public PrintWriter getWriter() throws IOException {
+                    return responseWriter;
+                }
+            });
+        } catch (ServletException e) {
+            throw new WebApplicationException(e);
+        }
     }
 }
