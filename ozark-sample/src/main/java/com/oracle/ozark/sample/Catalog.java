@@ -50,6 +50,10 @@ import javax.enterprise.context.ApplicationScoped;
 public class Catalog {
 
     public Book getBook(String id) {
-        return new Book();
+        final Book b = new Book();
+        b.setAuthor("Some author");
+        b.setTitle("Some title");
+        b.setIsbn("Some ISBN");
+        return b;
     }
 }
