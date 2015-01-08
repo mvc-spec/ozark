@@ -37,47 +37,27 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
+package com.oracle.ozark.cdi;
 
-import javax.mvc.Controller;
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.ext.Provider;
-import javax.ws.rs.ext.WriterInterceptor;
-import javax.ws.rs.ext.WriterInterceptorContext;
-import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.util.Arrays;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.ProcessProducer;
 
 /**
- * Class StringWriterInterceptor.
+ * CdiExtension class
  *
- * @author Santiago Pericas-Geertsen
+ * @author Santiago.PericasGeertsen@oracle.com
  */
-@Provider
-@Controller
-public class StringWriterInterceptor implements WriterInterceptor {
+public class CdiExtension implements Extension {
 
-    @Inject
-    private ViewableWriter writer;
+    <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> pat,
+            BeanManager beanManager) {
+        System.out.println("### Scanning type: " + pat.getAnnotatedType().getJavaClass().getName());
+    }
 
-    @Override
-    public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
-        final Object entity = context.getEntity();
-        final Annotation[] annotations = context.getAnnotations();
-
-        // Method must be decorated with @Controller for this interceptor to be enabled
-        if (!Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)) {
-            context.proceed();
-            return;
-        }
-
-        // Wrap string in Viewable use ViewableWriter
-        if (entity instanceof String) {
-            writer.writeTo(new Viewable((String) entity), Viewable.class, Viewable.class, annotations,
-                    context.getMediaType(), context.getHeaders(), context.getOutputStream());
-        } else {
-            context.proceed();
-        }
+    void decorateEntityManager(@Observes ProcessProducer<?, ?> pp) {
+        System.out.println("### Process producer " + pp.getProducer());
     }
 }

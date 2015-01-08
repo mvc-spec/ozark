@@ -2,7 +2,7 @@ package com.oracle.ozark.sample;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -38,9 +38,13 @@ package com.oracle.ozark.sample;
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+import com.oracle.ozark.core.OzarkFeature;
+
+import javax.enterprise.inject.Instance;
 import javax.mvc.Controller;
 import javax.mvc.Models;
 import javax.inject.Inject;
+import javax.mvc.rs.ExtensionFeature;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Path;

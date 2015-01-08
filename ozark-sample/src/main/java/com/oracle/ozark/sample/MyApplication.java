@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,8 +39,15 @@
  */
 package com.oracle.ozark.sample;
 
+import com.oracle.ozark.core.OzarkFeature;
+
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
+import javax.enterprise.inject.Instance;
+import javax.mvc.rs.ExtensionFeature;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Context;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,11 +61,21 @@ import java.util.Set;
 @ApplicationPath("resources")
 public class MyApplication extends Application {
 
+    // TODO: Injection fails due to bootstrapping problems? Works in a resource class.
+    // @Inject
+    private ExtensionFeature feature = new com.oracle.ozark.core.OzarkFeature();
+
     @Override
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> set = new HashSet<>();
         set.add(BookController.class);
-        set.add(com.oracle.ozark.core.OzarkFeature.class);      // TODO
+        return set;
+    }
+
+    @Override
+    public Set<Object> getSingletons() {
+        final Set<Object> set = new HashSet<>();
+        set.add(feature);
         return set;
     }
 }
