@@ -55,7 +55,7 @@ import javax.ws.rs.Produces;
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("/book/{id}")
+@Path("/book/models")
 public class BookController {
 
     /**
@@ -71,7 +71,8 @@ public class BookController {
     private Models models;
 
     /**
-     * MVC controller to render a book in HTML.
+     * MVC controller to render a book in HTML. Uses the models map to
+     * bind a book instance.
      *
      * @param id ID of the book given in URI.
      * @return JSP page used for rendering.
@@ -79,21 +80,9 @@ public class BookController {
     @GET
     @Controller
     @Produces("text/html")
-    public String html(@PathParam("id") String id) {
+    @Path("{id}")
+    public String models(@PathParam("id") String id) {
         models.set("book", catalog.getBook(id));
         return "book.jsp";      // JSP to render a book
-    }
-
-    /**
-     * REST method that returns a JSON representation. No special processing
-     * since it is not annotated by @Controller.
-     *
-     * @param id ID of the book given in URI.
-     * @return Book model instance.
-     */
-    @GET
-    @Produces("application/json")
-    public Book json(@PathParam("id") String id) {
-        return catalog.getBook(id);
     }
 }
