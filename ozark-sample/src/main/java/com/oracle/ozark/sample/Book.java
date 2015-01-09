@@ -39,11 +39,17 @@
  */
 package com.oracle.ozark.sample;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+
 /**
  * Class Book.
  *
  * @author Santiago Pericas-Geertsen
  */
+@RequestScoped
+@Named("book")
 public class Book {
 
     private String title;

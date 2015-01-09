@@ -1,3 +1,4 @@
+package com.oracle.ozark.sample;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -37,46 +38,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.sample;
 
-import com.oracle.ozark.core.OzarkFeature;
-
-import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
 import javax.enterprise.inject.Instance;
-import javax.mvc.rs.ExtensionFeature;
-import javax.ws.rs.core.Application;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Context;
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
+import javax.mvc.Controller;
+import javax.mvc.Models;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 /**
- * Class MyApplication.
- *
- * TODO: The Ozark feature should be automatically registered, not manually as here.
+ * BookControllerCdi sample.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ApplicationPath("resources")
-public class MyApplication extends Application {
+@Path("/book/cdi")
+public class BookControllerCdi {
 
-    // TODO: Injection fails due to bootstrapping problems? Works in a resource class.
-    // @Inject
-    private ExtensionFeature feature = new com.oracle.ozark.core.OzarkFeature();
+    /**
+     * Inject instance of book in request scope.
+     */
+    @Inject
+    private Book book;
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        final Set<Class<?>> set = new HashSet<>();
-        set.add(BookController.class);
-        set.add(BookControllerCdi.class);
-        return set;
-    }
-
-    @Override
-    public Set<Object> getSingletons() {
-        final Set<Object> set = new HashSet<>();
-        set.add(feature);
-        return set;
+    /**
+     * MVC controller to render a book in HTML. Uses CDI and the request
+     * scope to bind a book instance.
+     *
+     * @param id ID of the book given in URI.
+     * @return JSP page used for rendering.
+     */
+    @GET
+    @Controller
+    @Produces("text/html")
+    @Path("{id}")
+    public String cdi(@PathParam("id") String id) {
+        book.setTitle("CDI book");
+        book.setAuthor("Some CDI author");
+        book.setIsbn("Some CDI ISBN");
+        return "book.jsp";      // JSP to render a book
     }
 }
