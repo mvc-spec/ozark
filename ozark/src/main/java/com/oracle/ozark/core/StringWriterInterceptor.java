@@ -48,6 +48,7 @@ import javax.ws.rs.ext.WriterInterceptorContext;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import javax.mvc.Controller;
 
 /**
  * Class StringWriterInterceptor.
@@ -55,7 +56,7 @@ import java.util.Arrays;
  * @author Santiago Pericas-Geertsen
  */
 @Provider
-//@Controller
+@Controller
 public class StringWriterInterceptor implements WriterInterceptor {
 
     @Inject
@@ -67,10 +68,10 @@ public class StringWriterInterceptor implements WriterInterceptor {
         final Annotation[] annotations = context.getAnnotations();
 
         // Method must be decorated with @Controller for this interceptor to be enabled
-//        if (!Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)) {
-//            context.proceed();
-//            return;
-//        }
+        if (!Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)) {
+            context.proceed();
+            return;
+        }
 
         // Wrap string in Viewable use ViewableWriter
         if (entity instanceof String) {

@@ -40,7 +40,7 @@
 package com.oracle.ozark.core;
 
 import javax.inject.Inject;
-//import javax.mvc.Models;
+import javax.mvc.Models;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,8 +67,8 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     private static final String TEMPLATE_BASE = "/WEB-INF/";
     private static final String DEFAULT_ENCODING = "UTF-8";
 
-//    @Inject
-//    private Models models;
+    @Inject
+    private Models models;
 
     @Context
     private ServletContext servletContext;
@@ -97,9 +97,9 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         RequestDispatcher rd = servletContext.getRequestDispatcher(TEMPLATE_BASE + viewable.getView());
         try {
             // Set attributes in request before forwarding
-//            for (String k : ((ModelsImpl) models).keySet()) {
-//                servletRequest.setAttribute(k, models.get(k));
-//            }
+            for (String k : ((ModelsImpl) models).keySet()) {
+                servletRequest.setAttribute(k, models.get(k));
+            }
             // OutputStream and Writer for HttpServletResponseWrapper.
             final ServletOutputStream responseStream = new ServletOutputStream() {
                 @Override
