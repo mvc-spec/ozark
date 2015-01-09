@@ -3,3 +3,7 @@ ozark/.idea
 ozark/target
 ozark-sample/target/
 ozark-sample/.idea
+/api/target/
+/test/jsp/target/
+/test/facelets/target/
+/test/target/

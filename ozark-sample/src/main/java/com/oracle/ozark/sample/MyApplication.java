@@ -39,12 +39,12 @@
  */
 package com.oracle.ozark.sample;
 
-import com.oracle.ozark.core.OzarkFeature;
+//import com.oracle.ozark.core.OzarkFeature;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.enterprise.inject.Instance;
-import javax.mvc.rs.ExtensionFeature;
+//import javax.mvc.rs.ExtensionFeature;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Context;
@@ -63,7 +63,7 @@ public class MyApplication extends Application {
 
     // TODO: Injection fails due to bootstrapping problems? Works in a resource class.
     // @Inject
-    private ExtensionFeature feature = new com.oracle.ozark.core.OzarkFeature();
+//    private ExtensionFeature feature = new com.oracle.ozark.core.OzarkFeature();
 
     @Override
     public Set<Class<?>> getClasses() {
@@ -76,7 +76,7 @@ public class MyApplication extends Application {
     @Override
     public Set<Object> getSingletons() {
         final Set<Object> set = new HashSet<>();
-        set.add(feature);
+//        set.add(feature);
         return set;
     }
 }

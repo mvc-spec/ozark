@@ -1,4 +1,3 @@
-package com.oracle.ozark.sample;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -39,44 +38,7 @@ package com.oracle.ozark.sample;
  * holder.
  */
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
-//import javax.mvc.Controller;
-//import javax.mvc.Models;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-
 /**
- * BookControllerCdi sample.
- *
- * @author Santiago Pericas-Geertsen
+ * The API package for JSR 371 - MVC.
  */
-@Path("/book/cdi")
-public class BookControllerCdi {
-
-    /**
-     * Inject instance of book in request scope.
-     */
-    @Inject
-    private Book book;
-
-    /**
-     * MVC controller to render a book in HTML. Uses CDI and the request
-     * scope to bind a book instance.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-//    @Controller
-    @Produces("text/html")
-    @Path("{id}")
-    public String cdi(@PathParam("id") String id) {
-        book.setTitle("CDI book");
-        book.setAuthor("Some CDI author");
-        book.setIsbn("Some CDI ISBN");
-        return "book.jsp";      // JSP to render a book
-    }
-}
+package javax.mvc;

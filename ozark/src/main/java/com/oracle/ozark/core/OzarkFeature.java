@@ -40,7 +40,7 @@
 package com.oracle.ozark.core;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.mvc.rs.ExtensionFeature;
+//import javax.mvc.rs.ExtensionFeature;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
@@ -53,9 +53,11 @@ import javax.ws.rs.core.FeatureContext;
  */
 @ConstrainedTo(RuntimeType.SERVER)
 @ApplicationScoped
-public class OzarkFeature implements ExtensionFeature {
+public class OzarkFeature 
+//    implements ExtensionFeature 
+{
 
-    @Override
+//    @Override
     public boolean configure(FeatureContext context) {
         final Configuration config = context.getConfiguration();
         if (!config.isRegistered(StringWriterInterceptor.class)) {

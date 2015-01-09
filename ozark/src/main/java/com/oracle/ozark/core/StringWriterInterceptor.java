@@ -39,7 +39,7 @@
  */
 package com.oracle.ozark.core;
 
-import javax.mvc.Controller;
+//import javax.mvc.Controller;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.Provider;
@@ -55,7 +55,7 @@ import java.util.Arrays;
  * @author Santiago Pericas-Geertsen
  */
 @Provider
-@Controller
+//@Controller
 public class StringWriterInterceptor implements WriterInterceptor {
 
     @Inject
@@ -67,10 +67,10 @@ public class StringWriterInterceptor implements WriterInterceptor {
         final Annotation[] annotations = context.getAnnotations();
 
         // Method must be decorated with @Controller for this interceptor to be enabled
-        if (!Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)) {
-            context.proceed();
-            return;
-        }
+//        if (!Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)) {
+//            context.proceed();
+//            return;
+//        }
 
         // Wrap string in Viewable use ViewableWriter
         if (entity instanceof String) {

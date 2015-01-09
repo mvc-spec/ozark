@@ -40,7 +40,7 @@
 package com.oracle.ozark.core;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.mvc.Models;
+//import javax.mvc.Models;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -51,16 +51,18 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
-class ModelsImpl implements Models {
+class ModelsImpl 
+//    implements Models 
+{
 
     private Map<String, Object> map = new HashMap<>();
 
-    @Override
+//    @Override
     public Object get(String s) {
         return map.get(s);
     }
 
-    @Override
+//    @Override
     public void set(String s, Object o) {
         map.put(s, o);
     }
