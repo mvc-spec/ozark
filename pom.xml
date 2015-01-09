@@ -41,7 +41,6 @@
     <modules>
         <module>ozark</module>
         <module>ozark-sample</module>
-        <module>api</module>
         <module>test</module>
     </modules>
     <properties>
