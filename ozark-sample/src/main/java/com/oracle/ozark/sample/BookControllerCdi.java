@@ -41,6 +41,7 @@ package com.oracle.ozark.sample;
 
 import javax.inject.Inject;
 import javax.mvc.Controller;
+import javax.mvc.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -51,7 +52,7 @@ import javax.ws.rs.Produces;
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("/book/cdi")
+@Path("book")
 public class BookControllerCdi {
 
     /**
@@ -61,7 +62,7 @@ public class BookControllerCdi {
     private Book book;
 
     /**
-     * MVC controller to render a book in HTML. Uses CDI and the request
+     * MVC controller to render a book in HTML. Uses CDI and request
      * scope to bind a book instance.
      *
      * @param id ID of the book given in URI.
@@ -70,11 +71,30 @@ public class BookControllerCdi {
     @GET
     @Controller
     @Produces("text/html")
-    @Path("{id}")
+    @Path("cdi/{id}")
     public String cdi(@PathParam("id") String id) {
         book.setTitle("CDI book");
         book.setAuthor("Some CDI author");
         book.setIsbn("Some CDI ISBN");
         return "book.jsp";      // JSP to render a book
+    }
+
+    /**
+     * MVC controller to render a book in HTML. Uses CDI and request
+     * scope to bind a book instance. The view template is specified
+     * using @View.
+     *
+     * @param id ID of the book given in URI.
+     * @return JSP page used for rendering.
+     */
+    @GET
+    @Controller
+    @Produces("text/html")
+    @Path("cdiview/{id}")
+    @View("book.jsp")
+    public void cdiView(@PathParam("id") String id) {
+        book.setTitle("CDI book");
+        book.setAuthor("Some CDI author");
+        book.setIsbn("Some CDI ISBN");
     }
 }

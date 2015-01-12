@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,31 +39,45 @@
  */
 package com.oracle.ozark.core;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.mvc.rs.ExtensionFeature;
-import javax.ws.rs.ConstrainedTo;
-import javax.ws.rs.RuntimeType;
-import javax.ws.rs.core.Configuration;
-import javax.ws.rs.core.FeatureContext;
+import javax.mvc.Controller;
+import javax.mvc.View;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.Provider;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
+import static javax.ws.rs.core.MediaType.TEXT_HTML_TYPE;
+import static javax.ws.rs.core.Response.Status.OK;
+
 
 /**
- * Class OzarkFeature.
+ * Class ViewResponseFilter.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ConstrainedTo(RuntimeType.SERVER)
-@ApplicationScoped
-public class OzarkFeature implements ExtensionFeature {
+@Provider
+@Controller
+public class ViewResponseFilter implements ContainerResponseFilter {
+
+    @Context
+    private ResourceInfo resourceInfo;
 
     @Override
-    public boolean configure(FeatureContext context) {
-        final Configuration config = context.getConfiguration();
-        if (!config.isRegistered(StringWriterInterceptor.class)) {
-            context.register(StringWriterInterceptor.class);
-            context.register(ViewResponseFilter.class);
-            context.register(ViewableWriter.class);
-            return true;
+    public void filter(ContainerRequestContext requestContext,
+                       ContainerResponseContext responseContext) throws IOException {
+        final Method method = resourceInfo.getResourceMethod();
+        final View view = method.getDeclaredAnnotation(View.class);
+        if (view != null) {
+            final Viewable viewable = new Viewable(view.value());
+            responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);
+            responseContext.setStatusInfo(OK);      // Needed for method returning void
         }
-        return false;
     }
 }

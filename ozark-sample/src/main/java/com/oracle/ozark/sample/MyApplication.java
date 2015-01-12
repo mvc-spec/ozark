@@ -62,7 +62,7 @@ import java.util.Set;
 public class MyApplication extends Application {
 
     // TODO: Injection fails due to bootstrapping problems? Works in a resource class.
-    @Inject
+    // @Inject
     private ExtensionFeature feature = new com.oracle.ozark.core.OzarkFeature();
 
     @Override
