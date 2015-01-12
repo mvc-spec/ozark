@@ -45,6 +45,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -57,11 +58,14 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import static javax.ws.rs.core.MediaType.TEXT_HTML;
+
 /**
  * Class ViewableWriter.
  *
  * @author Santiago Pericas-Geertsen
  */
+@Produces(MediaType.TEXT_HTML)
 public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     private static final String TEMPLATE_BASE = "/WEB-INF/";
@@ -86,7 +90,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     @Override
     public long getSize(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
-        return 0;
+        return -1;
     }
 
     @Override
@@ -95,29 +99,30 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             throws IOException, WebApplicationException {
 
         RequestDispatcher rd = servletContext.getRequestDispatcher(TEMPLATE_BASE + viewable.getView());
-        try {
-            // Set attributes in request before forwarding
-            for (String k : ((ModelsImpl) models).keySet()) {
-                servletRequest.setAttribute(k, models.get(k));
+        // Set attributes in request before forwarding
+        for (String k : ((ModelsImpl) models).keySet()) {
+            servletRequest.setAttribute(k, models.get(k));
+        }
+        // OutputStream and Writer for HttpServletResponseWrapper.
+        final ServletOutputStream responseStream = new ServletOutputStream() {
+            @Override
+            public void write(final int b) throws IOException {
+                System.out.print(Character.valueOf((char) b));
+                out.write(b);
             }
-            // OutputStream and Writer for HttpServletResponseWrapper.
-            final ServletOutputStream responseStream = new ServletOutputStream() {
-                @Override
-                public void write(final int b) throws IOException {
-                    out.write(b);
-                }
 
-                @Override
-                public boolean isReady() {
-                    return false;
-                }
+            @Override
+            public boolean isReady() {
+                return false;
+            }
 
-                @Override
-                public void setWriteListener(WriteListener writeListener) {
-                    throw new UnsupportedOperationException("Not supported");
-                }
-            };
-            final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, DEFAULT_ENCODING));
+            @Override
+            public void setWriteListener(WriteListener writeListener) {
+                throw new UnsupportedOperationException("Not supported");
+            }
+        };
+        final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, DEFAULT_ENCODING));
+        try {
             rd.forward(servletRequest, new HttpServletResponseWrapper(servletResponse) {
 
                 @Override
@@ -132,6 +137,8 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             });
         } catch (ServletException e) {
             throw new WebApplicationException(e);
+        } finally {
+            responseWriter.flush();
         }
     }
 }
