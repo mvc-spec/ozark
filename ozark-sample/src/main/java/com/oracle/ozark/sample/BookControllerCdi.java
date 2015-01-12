@@ -1,4 +1,3 @@
-package com.oracle.ozark.sample;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,11 +37,10 @@ package com.oracle.ozark.sample;
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
+package com.oracle.ozark.sample;
 
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-//import javax.mvc.Controller;
-//import javax.mvc.Models;
+import javax.mvc.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -70,7 +68,7 @@ public class BookControllerCdi {
      * @return JSP page used for rendering.
      */
     @GET
-//    @Controller
+    @Controller
     @Produces("text/html")
     @Path("{id}")
     public String cdi(@PathParam("id") String id) {

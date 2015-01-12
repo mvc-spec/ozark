@@ -1,4 +1,3 @@
-package com.oracle.ozark.sample;
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
@@ -38,13 +37,14 @@ package com.oracle.ozark.sample;
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-//import com.oracle.ozark.core.OzarkFeature;
+package com.oracle.ozark.sample;
 
-//import javax.enterprise.inject.Instance;
-//import javax.mvc.Controller;
-//import javax.mvc.Models;
+import com.oracle.ozark.core.OzarkFeature;
+import javax.enterprise.inject.Instance;
+import javax.mvc.Controller;
+import javax.mvc.Models;
 import javax.inject.Inject;
-//import javax.mvc.rs.ExtensionFeature;
+import javax.mvc.rs.ExtensionFeature;
 import javax.ws.rs.GET;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Path;
@@ -67,8 +67,8 @@ public class BookController {
     /**
      * MVC Framework class used to bind models by name.
      */
-//    @Inject
-//    private Models models;
+    @Inject
+    private Models models;
 
     /**
      * MVC controller to render a book in HTML. Uses the models map to
@@ -78,11 +78,11 @@ public class BookController {
      * @return JSP page used for rendering.
      */
     @GET
-//    @Controller
+    @Controller
     @Produces("text/html")
     @Path("{id}")
     public String models(@PathParam("id") String id) {
-//        models.set("book", catalog.getBook(id));
+        models.set("book", catalog.getBook(id));
         return "book.jsp";      // JSP to render a book
     }
 }
