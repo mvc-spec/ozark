@@ -69,7 +69,6 @@ public class MyApplication extends Application {
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> set = new HashSet<>();
         set.add(BookController.class);
-        set.add(BookControllerCdi.class);
         return set;
     }
 

@@ -48,12 +48,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
- * BookControllerCdi sample.
+ * BookController sample.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Path("book")
-public class BookControllerCdi {
+public class BookController {
 
     /**
      * Inject instance of book in request scope.
@@ -71,8 +71,8 @@ public class BookControllerCdi {
     @GET
     @Controller
     @Produces("text/html")
-    @Path("cdi/{id}")
-    public String cdi(@PathParam("id") String id) {
+    @Path("view1/{id}")
+    public String view1(@PathParam("id") String id) {
         book.setTitle("CDI book");
         book.setAuthor("Some CDI author");
         book.setIsbn("Some CDI ISBN");
@@ -90,9 +90,9 @@ public class BookControllerCdi {
     @GET
     @Controller
     @Produces("text/html")
-    @Path("cdiview/{id}")
+    @Path("view2/{id}")
     @View("book.jsp")
-    public void cdiView(@PathParam("id") String id) {
+    public void view2(@PathParam("id") String id) {
         book.setTitle("CDI book");
         book.setAuthor("Some CDI author");
         book.setIsbn("Some CDI ISBN");
