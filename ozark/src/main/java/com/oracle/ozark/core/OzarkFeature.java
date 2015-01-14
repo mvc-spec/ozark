@@ -40,9 +40,8 @@
 package com.oracle.ozark.core;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.mvc.Controller;
 import javax.mvc.rs.ExtensionFeature;
-import javax.ws.rs.ConstrainedTo;
-import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
 
@@ -51,7 +50,7 @@ import javax.ws.rs.core.FeatureContext;
  *
  * @author Santiago Pericas-Geertsen
  */
-@ConstrainedTo(RuntimeType.SERVER)
+@Controller
 @ApplicationScoped
 public class OzarkFeature implements ExtensionFeature {
 
