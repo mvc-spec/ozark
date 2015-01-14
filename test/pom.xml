@@ -30,10 +30,17 @@
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <modules>
-        <module>jsp</module>
         <module>facelets</module>
+        <module>jsp</module>
+        <module>sample</module>
     </modules>
     <profiles>
         <profile>
@@ -42,6 +49,12 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
+                <dependency>
+                    <groupId>javax.mvc</groupId>
+                    <artifactId>javax.mvc-api</artifactId>
+                    <version>${project.version}</version>
+                    <scope>compile</scope>
+                </dependency>
                 <dependency>
                     <groupId>com.oracle</groupId>
                     <artifactId>ozark</artifactId>
