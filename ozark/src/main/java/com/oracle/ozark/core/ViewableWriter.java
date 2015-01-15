@@ -39,8 +39,11 @@
  */
 package com.oracle.ozark.core;
 
+import com.oracle.ozark.engine.ViewEngineFinder;
+
 import javax.inject.Inject;
 import javax.mvc.Models;
+import javax.mvc.engine.ViewEngine;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,8 +61,6 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import static javax.ws.rs.core.MediaType.TEXT_HTML;
-
 /**
  * Class ViewableWriter.
  *
@@ -68,20 +69,19 @@ import static javax.ws.rs.core.MediaType.TEXT_HTML;
 @Produces(MediaType.TEXT_HTML)
 public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
-    private static final String TEMPLATE_BASE = "/WEB-INF/";
-    private static final String DEFAULT_ENCODING = "UTF-8";
+    private static final String DEFAULT_ENCODING = "UTF-8";         // TODO
 
     @Inject
     private Models models;
 
     @Context
-    private ServletContext servletContext;
+    private HttpServletRequest request;
 
     @Context
-    private HttpServletRequest servletRequest;
+    private HttpServletResponse response;
 
-    @Context
-    private HttpServletResponse servletResponse;
+    @Inject
+    private ViewEngineFinder engineFinder;
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
@@ -96,14 +96,20 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     @Override
     public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> stringObjectMultivaluedMap, OutputStream out)
-            throws IOException, WebApplicationException {
-
-        RequestDispatcher rd = servletContext.getRequestDispatcher(TEMPLATE_BASE + viewable.getView());
-        // Set attributes in request before forwarding
-        for (String k : ((ModelsImpl) models).keySet()) {
-            servletRequest.setAttribute(k, models.get(k));
+            throws IOException, WebApplicationException
+    {
+        // Find engine for this Viewable
+        final ViewEngine engine = engineFinder.find(viewable);
+        if (engine == null) {
+            throw new WebApplicationException("Unable to find suitable view engine for '" + viewable + "'");
         }
-        // OutputStream and Writer for HttpServletResponseWrapper.
+
+        // Set attributes in request
+        for (String k : ((ModelsImpl) models).keySet()) {
+            request.setAttribute(k, models.get(k));
+        }
+
+        // Create wrapper for response
         final ServletOutputStream responseStream = new ServletOutputStream() {
             @Override
             public void write(final int b) throws IOException {
@@ -122,20 +128,23 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             }
         };
         final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, DEFAULT_ENCODING));
+        final HttpServletResponse responseWrapper = new HttpServletResponseWrapper(response) {
+
+            @Override
+            public ServletOutputStream getOutputStream() throws IOException {
+                return responseStream;
+            }
+
+            @Override
+            public PrintWriter getWriter() throws IOException {
+                return responseWriter;
+            }
+        };
+
+        // Pass request to view engine
         try {
-            rd.forward(servletRequest, new HttpServletResponseWrapper(servletResponse) {
-
-                @Override
-                public ServletOutputStream getOutputStream() throws IOException {
-                    return responseStream;
-                }
-
-                @Override
-                public PrintWriter getWriter() throws IOException {
-                    return responseWriter;
-                }
-            });
-        } catch (ServletException e) {
+            engine.processView(viewable.getView(), request, responseWrapper);
+        } catch (ServletException | IOException e) {
             throw new WebApplicationException(e);
         } finally {
             responseWriter.flush();

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,27 +37,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
+package com.oracle.ozark.engine;
+
+import javax.inject.Inject;
+import javax.mvc.engine.Supports;
+import javax.mvc.engine.ViewEngine;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Context;
+import java.io.IOException;
 
 /**
- * Class Viewable.
+ * Class JspViewEngine.
  *
  * @author Santiago Pericas-Geertsen
  */
-public class Viewable {
+@Supports(".jsp")
+public class JspViewEngine implements ViewEngine {
 
-    private String view;
+    private static final String TEMPLATE_BASE = "/WEB-INF/";
 
-    public Viewable(String view) {
-        this.view = view;
-    }
-
-    public String getView() {
-        return view;
-    }
+    @Inject
+    private ServletContext context;
 
     @Override
-    public String toString() {
-        return view;
+    public void processView(String view, HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        RequestDispatcher rd = context.getRequestDispatcher(TEMPLATE_BASE + view);
+        rd.forward(request, response);
     }
 }
