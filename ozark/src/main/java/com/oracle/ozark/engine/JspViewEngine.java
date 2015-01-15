@@ -41,8 +41,10 @@ package com.oracle.ozark.engine;
 
 import com.oracle.ozark.core.ModelsImpl;
 
+import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.Models;
+import javax.mvc.engine.Priorities;
 import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
 import javax.servlet.RequestDispatcher;
@@ -59,6 +61,7 @@ import java.io.IOException;
  * @author Santiago Pericas-Geertsen
  */
 @Supports(".jsp")
+@Priority(Priorities.DEFAULT)
 public class JspViewEngine implements ViewEngine {
 
     private static final String TEMPLATE_BASE = "/WEB-INF/";

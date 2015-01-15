@@ -39,7 +39,9 @@
  */
 package com.oracle.ozark.engine;
 
+import javax.annotation.Priority;
 import javax.mvc.Models;
+import javax.mvc.engine.Priorities;
 import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
 import javax.servlet.RequestDispatcher;
@@ -56,6 +58,7 @@ import java.io.IOException;
  * @author Santiago Pericas-Geertsen
  */
 @Supports(".xhtml")
+@Priority(Priorities.DEFAULT)
 public class FaceletsViewEngine implements ViewEngine {
 
     @Override
