@@ -2,6 +2,8 @@
 Ozark Samples
 -------------
 
+ All samples can be compiled using JDK 8 and deployed on GlassFish 4.1 or later. 
+
  o book-cdi: Shows how to bind view template parameters using CDI. An instance of Book in
    request scope is injected in BookController and also accessed directly by the JSP.
 
