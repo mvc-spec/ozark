@@ -39,7 +39,10 @@
  */
 package com.oracle.ozark.engine;
 
+import com.oracle.ozark.core.ModelsImpl;
+
 import javax.inject.Inject;
+import javax.mvc.Models;
 import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
 import javax.servlet.RequestDispatcher;
@@ -64,8 +67,14 @@ public class JspViewEngine implements ViewEngine {
     private ServletContext context;
 
     @Override
-    public void processView(String view, HttpServletRequest request, HttpServletResponse response)
+    public void processView(String view, Models models, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // Set attributes in request
+        for (String name : models.names()) {
+            request.setAttribute(name, models.get(name));
+        }
+        // Forward request to servlet engine to process JSP
         RequestDispatcher rd = context.getRequestDispatcher(TEMPLATE_BASE + view);
         rd.forward(request, response);
     }

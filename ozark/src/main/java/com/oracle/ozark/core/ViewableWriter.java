@@ -104,11 +104,6 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             throw new WebApplicationException("Unable to find suitable view engine for '" + viewable + "'");
         }
 
-        // Set attributes in request
-        for (String k : ((ModelsImpl) models).keySet()) {
-            request.setAttribute(k, models.get(k));
-        }
-
         // Create wrapper for response
         final ServletOutputStream responseStream = new ServletOutputStream() {
             @Override
@@ -143,7 +138,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
         // Pass request to view engine
         try {
-            engine.processView(viewable.getView(), request, responseWrapper);
+            engine.processView(viewable.getView(), models, request, responseWrapper);
         } catch (ServletException | IOException e) {
             throw new WebApplicationException(e);
         } finally {

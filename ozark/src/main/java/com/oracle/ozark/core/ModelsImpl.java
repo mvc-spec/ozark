@@ -42,6 +42,7 @@ package com.oracle.ozark.core;
 import javax.enterprise.context.RequestScoped;
 import javax.mvc.Models;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +52,7 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  */
 @RequestScoped
-class ModelsImpl implements Models {
+public class ModelsImpl implements Models {
 
     private Map<String, Object> map = new HashMap<>();
 
@@ -65,7 +66,8 @@ class ModelsImpl implements Models {
         map.put(s, o);
     }
 
-    public Set<String> keySet() {
+    @Override
+    public Iterable<String> names() {
         return map.keySet();
     }
 

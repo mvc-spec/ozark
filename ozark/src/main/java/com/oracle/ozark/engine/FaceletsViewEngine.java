@@ -39,6 +39,7 @@
  */
 package com.oracle.ozark.engine;
 
+import javax.mvc.Models;
 import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
 import javax.servlet.RequestDispatcher;
@@ -58,7 +59,7 @@ import java.io.IOException;
 public class FaceletsViewEngine implements ViewEngine {
 
     @Override
-    public void processView(String view, HttpServletRequest request, HttpServletResponse response)
+    public void processView(String view, Models models, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         throw new UnsupportedOperationException("Not supported yet");
     }
