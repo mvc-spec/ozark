@@ -40,7 +40,9 @@
     <modules>
         <module>facelets</module>
         <module>jsp</module>
-        <module>sample</module>
+        <module>book-cdi</module>
+        <module>book-models</module>
+        <module>conversation</module>
     </modules>
     <profiles>
         <profile>
