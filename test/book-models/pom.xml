@@ -10,7 +10,7 @@
     <groupId>com.oracle.ozark</groupId>
     <artifactId>book-models</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Sample</name>
+    <name>Ozark ${project.artifactId} Sample</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
