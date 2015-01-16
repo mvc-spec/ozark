@@ -108,7 +108,6 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         final ServletOutputStream responseStream = new ServletOutputStream() {
             @Override
             public void write(final int b) throws IOException {
-                System.out.print(Character.valueOf((char) b));
                 out.write(b);
             }
 

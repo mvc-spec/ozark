@@ -5,11 +5,13 @@ import com.oracle.ozark.core.Viewable;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Any;
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
+import javax.mvc.event.ViewEngineSelected;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -25,6 +27,12 @@ public class ViewEngineFinder {
 
     @Inject @Any
     private Instance<ViewEngine> engines;
+
+    @Inject
+    private Event<ViewEngineSelected> selectedEvent;
+
+    @Inject
+    private ViewEngineSelected selected;
 
     public ViewEngine find(Viewable viewable) {
         // Gather set of candidates based on extensions
@@ -45,6 +53,14 @@ public class ViewEngineFinder {
                     final int v2 = p1 != null ? p2.value() : Priorities.DEFAULT;
                     return v1 - v2;
                 });
-        return ve.isPresent() ? ve.get() : null;        // TODO: caching
+
+        if (ve.isPresent()) {
+            // Fire ViewEngineSelected event
+            selected.setView(viewable.getView());
+            selected.setEngine(ve.get().getClass());
+            selectedEvent.fire(selected);
+            return ve.get();        // TODO: caching
+        }
+        return null;
     }
 }

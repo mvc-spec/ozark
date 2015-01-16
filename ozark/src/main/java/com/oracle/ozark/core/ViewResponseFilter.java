@@ -39,8 +39,12 @@
  */
 package com.oracle.ozark.core;
 
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.View;
+import javax.mvc.event.ControllerMatched;
+import javax.mvc.event.ViewEngineSelected;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -48,6 +52,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -67,17 +72,34 @@ import static javax.ws.rs.core.Response.Status.OK;
 public class ViewResponseFilter implements ContainerResponseFilter {
 
     @Context
+    private UriInfo uriInfo;
+
+    @Context
     private ResourceInfo resourceInfo;
+
+    @Inject
+    private Event<ControllerMatched> matchedEvent;
+
+    @Inject
+    private ControllerMatched matched;
 
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
+        // Fire ControllerMatched event
+        matched.setUriInfo(uriInfo);
+        matched.setResourceInfo(resourceInfo);
+        matchedEvent.fire(matched);
+
+        // Extract view information from @View if present
         final Method method = resourceInfo.getResourceMethod();
         final View view = method.getDeclaredAnnotation(View.class);
         if (view != null) {
             final Viewable viewable = new Viewable(view.value());
             responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);
             responseContext.setStatusInfo(OK);      // Needed for method returning void
+        } else {
+            // TODO: Report error if method returns void
         }
     }
 }
