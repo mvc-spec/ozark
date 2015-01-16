@@ -2,3 +2,4 @@ book-cdi/target
 book-models/target
 conversation/target
 events/target
+validation/target
