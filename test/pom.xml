@@ -79,6 +79,113 @@
             </dependencies>
         </profile>
         <profile>
+            <id>glassfish-cargo</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.cargo</groupId>
+                        <artifactId>cargo-maven2-plugin</artifactId>
+                        <inherited>true</inherited>
+                        <executions>
+                            <execution>
+                                <id>start-container</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>2400000</timeout>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-container</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <timeout>2400000</timeout>
+                                </configuration>
+                            </execution>
+                        </executions>                        
+                        <configuration>
+                            <container>
+                                <containerId>${glassfish.cargo.id}</containerId>
+                                <type>installed</type>
+                                <home>${glassfish.cargo.home}</home>
+                                <timeout>2400000</timeout>
+                            </container>
+                            <configuration>
+                                <type>${glassfish.cargo.configType}</type>
+                                <home>${glassfish.cargo.config}</home>
+                                <properties>
+                                    <cargo.hostname>${glassfish.cargo.serverName}</cargo.hostname>
+                                    <cargo.servlet.port>${glassfish.cargo.servletPort}</cargo.servlet.port>
+                                    <cargo.glassfish.domain.name>${glassfish.cargo.domain}</cargo.glassfish.domain.name>
+                                </properties>
+                            </configuration>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <glassfish.cargo.home>C:/Glassfish4.1</glassfish.cargo.home>
+                <glassfish.cargo.configType>standalone</glassfish.cargo.configType>
+                <glassfish.cargo.config>${glassfish.cargo.home}/glassfish/domains</glassfish.cargo.config>
+                <glassfish.cargo.domain>domain1</glassfish.cargo.domain>
+                <glassfish.cargo.id>glassfish4x</glassfish.cargo.id>
+                <glassfish.cargo.serverName>localhost</glassfish.cargo.serverName>
+                <glassfish.cargo.servletPort>8080</glassfish.cargo.servletPort>
+            </properties>
+        </profile>
+        <profile>
+            <id>glassfish-unzip</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>prepare</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <target>
+                                        <delete quiet="true" failonerror="false" dir="${glassfish.unzip.unzipDir}"/>
+                                        <mkdir dir="${glassfish.unzip.unzipDir}"/>
+                                        <unzip src="${glassfish.unzip.zipFile}" dest="${glassfish.unzip.unzipDir}"/>
+                                        <exec executable="sh" osfamily="unix">
+                                            <arg line='-c "chmod a+x ${glassfish.unzip.home}/glassfish/bin/*"'/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>1.0b3</version>
+                                <exclusions>
+                                    <exclusion>
+                                        <groupId>ant</groupId>
+                                        <artifactId>ant</artifactId>
+                                    </exclusion>
+                                </exclusions>
+                            </dependency>
+                        </dependencies>
+                    </plugin>                    
+                </plugins>
+            </build>
+            <properties>
+                <glassfish.unzip.unzipDir>C:/</glassfish.unzip.unzipDir>
+                <glassfish.unzip.home>C:/glassfish4</glassfish.unzip.home>
+                <glassfish.unzip.zipFile>C:/Downloads/Glassfish4.1.zip</glassfish.unzip.zipFile>
+            </properties>
+        </profile>        <profile>
             <id>integration</id>
             <build>
                 <plugins>
