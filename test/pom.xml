@@ -85,6 +85,7 @@
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
                         <artifactId>cargo-maven2-plugin</artifactId>
+                        <version>1.4.11</version>
                         <inherited>true</inherited>
                         <executions>
                             <execution>
