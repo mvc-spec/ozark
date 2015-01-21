@@ -39,38 +39,24 @@
  */
 package com.oracle.ozark.sample;
 
-import javax.mvc.rs.ExtensionFeature;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Class MyApplication.
  *
- * TODO: The Ozark feature should be automatically registered, not manually as here.
- *
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationPath("resources")
 public class MyApplication extends Application {
-
-    // TODO: Injection fails due to bootstrapping problems? Works in a resource class.
-    // @Inject
-    private ExtensionFeature feature = new com.oracle.ozark.core.OzarkFeature();
 
     @Override
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> set = new HashSet<>();
         set.add(BookController.class);
         set.add(BookController.class);
-        return set;
-    }
-
-    @Override
-    public Set<Object> getSingletons() {
-        final Set<Object> set = new HashSet<>();
-        set.add(feature);
         return set;
     }
 }

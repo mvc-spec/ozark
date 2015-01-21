@@ -9,7 +9,7 @@
     </parent>
     <artifactId>book-cdi</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} CDI Book Sample</name>
+    <name>Ozark ${project.artifactId} Sample</name>
     <build>
         <finalName>test-book-cdi</finalName>
     </build>

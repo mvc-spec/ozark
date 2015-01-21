@@ -37,11 +37,17 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
+package com.oracle.ozark.jersey;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.mvc.Controller;
-import javax.mvc.rs.ExtensionFeature;
+import com.oracle.ozark.core.StringWriterInterceptor;
+import com.oracle.ozark.core.ViewResponseFilter;
+import com.oracle.ozark.core.ViewableWriter;
+import org.glassfish.jersey.internal.spi.AutoDiscoverable;
+import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
+
+import javax.annotation.Priority;
+import javax.ws.rs.ConstrainedTo;
+import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
 
@@ -50,19 +56,17 @@ import javax.ws.rs.core.FeatureContext;
  *
  * @author Santiago Pericas-Geertsen
  */
-@Controller
-@ApplicationScoped
-public class OzarkFeature implements ExtensionFeature {
+@ConstrainedTo(RuntimeType.SERVER)
+@Priority(AutoDiscoverable.DEFAULT_PRIORITY)
+public class OzarkFeature implements ForcedAutoDiscoverable {
 
     @Override
-    public boolean configure(FeatureContext context) {
+    public void configure(FeatureContext context) {
         final Configuration config = context.getConfiguration();
         if (!config.isRegistered(StringWriterInterceptor.class)) {
             context.register(StringWriterInterceptor.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
-            return true;
         }
-        return false;
     }
 }

@@ -39,16 +39,13 @@
  */
 package com.oracle.ozark.sample;
 
-import com.oracle.ozark.core.OzarkFeature;
-import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.Models;
-import javax.inject.Inject;
 import javax.mvc.View;
-import javax.mvc.rs.ExtensionFeature;
 import javax.ws.rs.GET;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 /**
