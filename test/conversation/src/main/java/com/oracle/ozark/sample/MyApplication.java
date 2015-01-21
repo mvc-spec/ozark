@@ -41,7 +41,7 @@ package com.oracle.ozark.sample;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -54,8 +54,6 @@ public class MyApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        final Set<Class<?>> set = new HashSet<>();
-        set.add(ConversationController.class);
-        return set;
+        return Collections.singleton(ConversationController.class);
     }
 }
