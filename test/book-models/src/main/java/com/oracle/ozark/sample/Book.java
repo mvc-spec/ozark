@@ -39,9 +39,6 @@
  */
 package com.oracle.ozark.sample;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-
 /**
  * Class Book.
  *

@@ -43,11 +43,12 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Iterator;
+
+import static org.junit.Assert.assertTrue;
 
 public class BookModelsIT {
 
@@ -73,7 +74,7 @@ public class BookModelsIT {
         assertTrue(it.next().asText().contains("Some author"));
         assertTrue(it.next().asText().contains("Some ISBN"));
     }
-    
+
     @Test
     public void testView2() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/book/view2/1");
