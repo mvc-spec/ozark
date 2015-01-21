@@ -37,19 +37,21 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.bookcdi;
+package com.oracle.ozark.test.conversation;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Iterator;
 
-public class BookModelsIT {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class ConversationIT {
 
     private String webUrl;
     private WebClient webClient;
@@ -66,20 +68,23 @@ public class BookModelsIT {
     }
 
     @Test
-    public void testView1() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "resources/book/view1/1");
-        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
-        assertTrue(it.next().asText().contains("Some title"));
-        assertTrue(it.next().asText().contains("Some author"));
-        assertTrue(it.next().asText().contains("Some ISBN"));
-    }
-    
-    @Test
-    public void testView2() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "resources/book/view2/1");
-        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
-        assertTrue(it.next().asText().contains("Some title"));
-        assertTrue(it.next().asText().contains("Some author"));
-        assertTrue(it.next().asText().contains("Some ISBN"));
+    public void testConversation() throws Exception {
+        HtmlPage page;
+        Iterator<HtmlElement> it;
+
+        page = webClient.getPage(webUrl + "resources/converse/start");
+        it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        final String secret = it.next().asText();
+        System.out.println(secret);
+
+        page = webClient.getPage(webUrl + "resources/converse/" +
+            page.getDocumentElement().getHtmlElementsByTagName("a")
+                .iterator().next().getAttribute("href"));
+        it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        assertTrue(secret.equals(it.next().asText()));
+
+        page = webClient.getPage(webUrl + "resources/converse/stop");
+        it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        assertFalse(secret.equals(it.next().asText()));
     }
 }
