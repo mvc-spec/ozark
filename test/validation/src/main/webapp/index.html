@@ -8,12 +8,12 @@
     <body>
     <h1>Form Validation</h1>
     <p>An empty name or an age less than 18 will result in a 400 (validation error)</p>
-    <form action="resources/form" method="post">
+    <form name="form" action="resources/form" method="post">
         <label id="name">Name:</label>
         <input type="text" name="name">
         <label id="age">Age:</label>
         <input type="text" name="age">
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" name="button">
     </form>
     </body>
 </html>
