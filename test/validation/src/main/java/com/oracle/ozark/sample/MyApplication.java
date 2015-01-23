@@ -42,6 +42,7 @@ package com.oracle.ozark.sample;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -54,7 +55,9 @@ public class MyApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
-        return Collections.singleton(FormController.class);
-
+        final Set<Class<?>> set = new HashSet<>();
+        set.add(FormController.class);
+        set.add(FormController.FormExceptionMapper.class);
+        return set;
     }
 }

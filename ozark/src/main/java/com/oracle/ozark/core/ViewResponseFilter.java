@@ -43,6 +43,7 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.View;
+import javax.mvc.Viewable;
 import javax.mvc.event.ControllerMatched;
 import javax.mvc.event.ViewEngineSelected;
 import javax.ws.rs.container.ContainerRequestContext;

@@ -41,11 +41,17 @@ package com.oracle.ozark.sample;
 
 import javax.inject.Inject;
 import javax.mvc.Controller;
+import javax.mvc.Viewable;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.util.Set;
 
 /**
  * FormController sample.
@@ -66,5 +72,28 @@ public class FormController {
         out.setAge(form.getAge());
         out.setName(form.getName());
         return "data.jsp";
+    }
+
+    /**
+     * FormExceptionMapper class. Catches any ConstraintViolationExceptions thrown and returns
+     * a human-readable description of the violation using a JSP.
+     */
+    public static class FormExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
+
+        @Inject
+        private ErrorDataBean error;
+
+        @Override
+        public Response toResponse(ConstraintViolationException e) {
+            final Set<ConstraintViolation<?>> set = e.getConstraintViolations();
+            if (!set.isEmpty()) {
+                final ConstraintViolation<?> cv = set.iterator().next();
+                final String property = cv.getPropertyPath().toString();
+                error.setProperty(property.substring(property.lastIndexOf('.') + 1));
+                error.setValue(cv.getInvalidValue());
+                error.setMessage(cv.getMessage());
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity(new Viewable("error.jsp")).build();
+        }
     }
 }

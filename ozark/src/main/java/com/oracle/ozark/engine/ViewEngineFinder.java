@@ -1,13 +1,12 @@
 package com.oracle.ozark.engine;
 
-import com.oracle.ozark.core.Viewable;
-
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
 import javax.enterprise.event.Event;
+import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.mvc.Viewable;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
@@ -25,7 +24,8 @@ import java.util.Set;
 @ApplicationScoped
 public class ViewEngineFinder {
 
-    @Inject @Any
+    @Inject
+    @Any
     private Instance<ViewEngine> engines;
 
     @Inject

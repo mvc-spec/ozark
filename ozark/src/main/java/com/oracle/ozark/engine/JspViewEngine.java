@@ -39,8 +39,6 @@
  */
 package com.oracle.ozark.engine;
 
-import com.oracle.ozark.core.ModelsImpl;
-
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.Models;
@@ -52,7 +50,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Context;
 import java.io.IOException;
 
 /**

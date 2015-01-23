@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,27 +37,51 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
+package com.oracle.ozark.sample;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.ws.rs.FormParam;
 
 /**
- * Class Viewable.
+ * Class FormDataBean.
  *
  * @author Santiago Pericas-Geertsen
  */
-public class Viewable {
+@Named("error")
+@RequestScoped
+public class ErrorDataBean {
 
-    private String view;
+    private String property;
 
-    public Viewable(String view) {
-        this.view = view;
+    private Object value;
+
+    private String message;
+
+    public String getProperty() {
+        return property;
     }
 
-    public String getView() {
-        return view;
+    public void setProperty(String property) {
+        this.property = property;
     }
 
-    @Override
-    public String toString() {
-        return view;
+    public Object getValue() {
+        return value;
+    }
+
+    public void setValue(Object value) {
+        this.value = value;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

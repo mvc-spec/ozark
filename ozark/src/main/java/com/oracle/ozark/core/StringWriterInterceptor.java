@@ -39,8 +39,9 @@
  */
 package com.oracle.ozark.core;
 
-//import javax.mvc.Controller;
 import javax.inject.Inject;
+import javax.mvc.Controller;
+import javax.mvc.Viewable;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.WriterInterceptor;
@@ -48,7 +49,6 @@ import javax.ws.rs.ext.WriterInterceptorContext;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
-import javax.mvc.Controller;
 
 /**
  * Class StringWriterInterceptor.
