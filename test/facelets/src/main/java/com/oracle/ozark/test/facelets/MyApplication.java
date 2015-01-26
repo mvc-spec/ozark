@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,43 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.engine;
+package com.oracle.ozark.test.facelets;
 
-import javax.annotation.Priority;
-import javax.mvc.Models;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.Supports;
-import javax.mvc.engine.ViewEngine;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import javax.inject.Inject;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.Collections;
+import java.util.Set;
 
 /**
- * Class FaceletsViewEngine.
+ * Class MyApplication.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Supports(".xhtml")
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine implements ViewEngine {
+@ApplicationPath("resources")
+public class MyApplication extends Application {
 
-    @Inject
-    private ServletContext context;
-    
     @Override
-    public void processView(String view, Models models, 
-            HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        for (String name : models.names()) {
-            request.setAttribute(name, models.get(name));
-        }
-        
-        RequestDispatcher rd = context.getRequestDispatcher(view);
-        rd.forward(request, response);
+    public Set<Class<?>> getClasses() {
+        return Collections.singleton(BookController.class);
     }
 }

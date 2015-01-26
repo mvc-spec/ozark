@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,43 +37,66 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.engine;
+package com.oracle.ozark.test.facelets;
 
-import javax.annotation.Priority;
-import javax.mvc.Models;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.Supports;
-import javax.mvc.engine.ViewEngine;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import javax.inject.Inject;
+import javax.mvc.Controller;
+import javax.mvc.Models;
+import javax.mvc.View;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 /**
- * Class FaceletsViewEngine.
+ * BookController sample.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Supports(".xhtml")
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine implements ViewEngine {
+@Path("book")
+public class BookController {
 
+    /**
+     * Application class used to find books.
+     */
     @Inject
-    private ServletContext context;
-    
-    @Override
-    public void processView(String view, Models models, 
-            HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        for (String name : models.names()) {
-            request.setAttribute(name, models.get(name));
-        }
-        
-        RequestDispatcher rd = context.getRequestDispatcher(view);
-        rd.forward(request, response);
+    private Catalog catalog;
+
+    /**
+     * MVC Framework class used to bind models by name.
+     */
+    @Inject
+    private Models models;
+
+    /**
+     * MVC controller to render a book in HTML. Uses the models map to
+     * bind a book instance.
+     *
+     * @param id ID of the book given in URI.
+     * @return JSP page used for rendering.
+     */
+    @GET
+    @Controller
+    @Produces("text/html")
+    @Path("view1/{id}")
+    public String view1(@PathParam("id") String id) {
+        models.set("book", catalog.getBook(id));
+        return "/index.xhtml";      // JSP to render a book
+    }
+
+    /**
+     * MVC controller to render a book in HTML. Uses the models map to
+     * bind a book instance and @View to specify path to view.
+     *
+     * @param id ID of the book given in URI.
+     * @return JSP page used for rendering.
+     */
+    @GET
+    @Controller
+    @Produces("text/html")
+    @Path("view2/{id}")
+    @View("/index.xhtml")
+    public void view2(@PathParam("id") String id) {
+        models.set("book", catalog.getBook(id));
     }
 }
