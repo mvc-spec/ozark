@@ -44,7 +44,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
-import java.util.Iterator;
+import java.util.Set;
 
 /**
  * CdiUtil class
@@ -59,11 +59,8 @@ public class CdiUtil {
 
     @SuppressWarnings("unchecked")
     public <T> T newBean(Class<T> clazz) {
-        Iterator<Bean<?>> it = bm.getBeans(clazz).iterator();
-        if (!it.hasNext()) {
-            return null;
-        }
-        final Bean<T> bean = (Bean<T>) it.next();
+        Set<Bean<?>> beans = bm.getBeans(clazz);
+        final Bean<T> bean = (Bean<T>) bm.resolve(beans);
         final CreationalContext<T> ctx = bm.createCreationalContext(bean);
         return (T) bm.getReference(bean, clazz, ctx);
     }
