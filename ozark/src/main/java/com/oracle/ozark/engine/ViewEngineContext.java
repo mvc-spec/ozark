@@ -39,45 +39,49 @@
  */
 package com.oracle.ozark.engine;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.mvc.Models;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngine;
-import javax.mvc.engine.ViewEngineContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * Class FaceletsViewEngine.
+ * Class ViewEngineContext.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine implements ViewEngine {
+public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
 
-    @Inject
-    private ServletContext servletContext;
+    private final String view;
 
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith("xhtml");      // TODO
+    private final Models models;
+
+    private final HttpServletRequest request;
+
+    private final HttpServletResponse response;
+
+    public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response) {
+        this.view = view;
+        this.models = models;
+        this.request = request;
+        this.response = response;
     }
 
     @Override
-    public void processView(ViewEngineContext context) throws ServletException, IOException {
-        final Models models = context.getModels();
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
+    public String getView() {
+        return view;
+    }
 
-        for (String name : models) {
-            request.setAttribute(name, models.get(name));
-        }
-        RequestDispatcher rd = servletContext.getRequestDispatcher(context.getView());
-        rd.forward(request, response);
+    @Override
+    public Models getModels() {
+        return models;
+    }
+
+    @Override
+    public HttpServletRequest getRequest() {
+        return request;
+    }
+
+    @Override
+    public HttpServletResponse getResponse() {
+        return response;
     }
 }

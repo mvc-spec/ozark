@@ -41,10 +41,11 @@ package com.oracle.ozark.core;
 
 import javax.enterprise.context.RequestScoped;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Class ModelsImpl.
+ * Class Models.
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -64,12 +65,12 @@ public class Models implements javax.mvc.Models {
     }
 
     @Override
-    public Iterable<String> names() {
-        return map.keySet();
+    public String toString() {
+        return map.toString();
     }
 
     @Override
-    public String toString() {
-        return map.toString();
+    public Iterator<String> iterator() {
+        return map.keySet().iterator();
     }
 }

@@ -39,8 +39,10 @@
  */
 package com.oracle.ozark.core;
 
+import com.oracle.ozark.engine.ViewEngineContext;
 import com.oracle.ozark.engine.ViewEngineFinder;
 
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.Viewable;
@@ -73,7 +75,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     private static final String DEFAULT_ENCODING = "UTF-8";         // TODO
 
     @Inject
-    private Models models;
+    private Instance<Models> modelsInstance;
 
     @Context
     private HttpServletRequest request;
@@ -138,7 +140,13 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
         // Pass request to view engine
         try {
-            engine.processView(viewable.getView(), models, request, responseWrapper);
+            // If no models in viewable, inject via CDI
+            Models models = viewable.getModels();
+            if (models == null) {
+                models = modelsInstance.get();
+            }
+            // Process view using selected engine
+            engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper));
         } catch (ServletException | IOException e) {
             throw new WebApplicationException(e);
         } finally {

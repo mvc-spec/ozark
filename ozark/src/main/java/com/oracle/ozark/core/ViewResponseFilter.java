@@ -45,30 +45,25 @@ import javax.mvc.Controller;
 import javax.mvc.View;
 import javax.mvc.Viewable;
 import javax.mvc.event.ControllerMatched;
-import javax.mvc.event.ViewEngineSelected;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import static javax.ws.rs.core.MediaType.TEXT_HTML_TYPE;
 import static javax.ws.rs.core.Response.Status.OK;
-
 
 /**
  * Class ViewResponseFilter.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Provider
 @Controller
 public class ViewResponseFilter implements ContainerResponseFilter {
 
@@ -94,13 +89,16 @@ public class ViewResponseFilter implements ContainerResponseFilter {
 
         // Extract view information from @View if present
         final Method method = resourceInfo.getResourceMethod();
-        final View view = method.getDeclaredAnnotation(View.class);
-        if (view != null) {
-            final Viewable viewable = new Viewable(view.value());
-            responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);
-            responseContext.setStatusInfo(OK);      // Needed for method returning void
-        } else {
-            // TODO: Report error if method returns void
+        if (method.getReturnType() == Void.TYPE) {
+            final View view = method.getDeclaredAnnotation(View.class);
+            if (view != null) {
+                final Viewable viewable = new Viewable(view.value());
+                responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);
+                responseContext.setStatusInfo(OK);      // Needed for method returning void
+            } else {
+                throw new ServerErrorException("Controller method must specify view using @View annotation",
+                        Response.Status.INTERNAL_SERVER_ERROR);
+            }
         }
     }
 }

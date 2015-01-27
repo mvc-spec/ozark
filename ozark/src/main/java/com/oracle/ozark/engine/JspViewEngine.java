@@ -43,8 +43,8 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.engine.Priorities;
-import javax.mvc.engine.Supports;
 import javax.mvc.engine.ViewEngine;
+import javax.mvc.engine.ViewEngineContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -57,25 +57,31 @@ import java.io.IOException;
  *
  * @author Santiago Pericas-Geertsen
  */
-@Supports(".jsp")
 @Priority(Priorities.DEFAULT)
 public class JspViewEngine implements ViewEngine {
 
     private static final String TEMPLATE_BASE = "/WEB-INF/";
 
     @Inject
-    private ServletContext context;
+    private ServletContext servletContext;
 
     @Override
-    public void processView(String view, Models models, HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public boolean supports(String view) {
+        return view.endsWith("jsp");
+    }
+
+    @Override
+    public void processView(ViewEngineContext context) throws ServletException, IOException {
+        final Models models = context.getModels();
+        final HttpServletRequest request = context.getRequest();
+        final HttpServletResponse response = context.getResponse();
 
         // Set attributes in request
-        for (String name : models.names()) {
+        for (String name : models) {
             request.setAttribute(name, models.get(name));
         }
         // Forward request to servlet engine to process JSP
-        RequestDispatcher rd = context.getRequestDispatcher(TEMPLATE_BASE + view);
+        RequestDispatcher rd = servletContext.getRequestDispatcher(TEMPLATE_BASE + context.getView());
         rd.forward(request, response);
     }
 }
