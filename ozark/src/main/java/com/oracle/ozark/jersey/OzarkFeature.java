@@ -46,10 +46,12 @@ import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
 
 import javax.annotation.Priority;
+import javax.mvc.Controller;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
+import java.util.Arrays;
 
 /**
  * Class OzarkFeature.
@@ -63,10 +65,20 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
     @Override
     public void configure(FeatureContext context) {
         final Configuration config = context.getConfiguration();
-        if (!config.isRegistered(StringWriterInterceptor.class)) {
+        if (config.isRegistered(StringWriterInterceptor.class)) {
+            return;     // already registered!
+        }
+        final boolean enableOzark = config.getClasses().stream().anyMatch(this::isController)
+            || config.getInstances().stream().map(o -> o.getClass()).anyMatch(this::isController);
+        if (enableOzark) {
             context.register(StringWriterInterceptor.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
         }
+    }
+
+    private boolean isController(Class<?> c) {
+        return c.getAnnotation(Controller.class) != null ||
+                Arrays.asList(c.getMethods()).stream().anyMatch(m -> m.getAnnotation(Controller.class) != null);
     }
 }

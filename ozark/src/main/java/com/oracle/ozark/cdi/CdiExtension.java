@@ -54,10 +54,10 @@ public class CdiExtension implements Extension {
 
     <T> void processAnnotatedType(@Observes ProcessAnnotatedType<T> pat,
             BeanManager beanManager) {
-        System.out.println("### Scanning type: " + pat.getAnnotatedType().getJavaClass().getName());
+        // no-op
     }
 
     void decorateEntityManager(@Observes ProcessProducer<?, ?> pp) {
-        System.out.println("### Process producer " + pp.getProducer());
+        // no-op
     }
 }
