@@ -63,6 +63,7 @@
         <module>conversation</module>
         <module>events</module>
         <module>validation</module>
+        <module>freemarker</module>
     </modules>
     <profiles>
         <profile>
