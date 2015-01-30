@@ -60,7 +60,7 @@ import java.io.IOException;
 @Priority(Priorities.DEFAULT)
 public class JspViewEngine implements ViewEngine {
 
-    private static final String TEMPLATE_BASE = "/WEB-INF/";
+    private static final String VIEW_BASE = "/WEB-INF/";
 
     @Inject
     private ServletContext servletContext;
@@ -81,7 +81,7 @@ public class JspViewEngine implements ViewEngine {
             request.setAttribute(name, models.get(name));
         }
         // Forward request to servlet engine to process JSP
-        RequestDispatcher rd = servletContext.getRequestDispatcher(TEMPLATE_BASE + context.getView());
+        RequestDispatcher rd = servletContext.getRequestDispatcher(VIEW_BASE + context.getView());
         rd.forward(request, response);
     }
 }
