@@ -64,6 +64,6 @@ public class HelloController {
     @Produces("text/html")
     @View("hello.ftl")
     public void hello(@QueryParam("user") String user) {
-        models.set("user", user);
+        models.put("user", user);
     }
 }

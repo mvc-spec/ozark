@@ -67,18 +67,10 @@ public class FreemarkerViewEngine implements ViewEngine {
     public void processView(ViewEngineContext context) throws ServletException, IOException {
         final Template template = configuration.getTemplate(context.getView());
         try {
-            template.process(modelsAsMap(context.getModels()),
+            template.process(context.getModels(),
                     new OutputStreamWriter(context.getResponse().getOutputStream()));
         } catch (TemplateException e) {
             throw new RuntimeException(e);      // TODO
         }
-    }
-
-    private Map<String, Object> modelsAsMap(Models models) {
-        final Map<String, Object> map = new HashMap<>();
-        for (String name : models) {
-            map.put(name, models.get(name));
-        }
-        return map;
     }
 }

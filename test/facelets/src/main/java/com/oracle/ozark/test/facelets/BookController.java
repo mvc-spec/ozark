@@ -80,7 +80,7 @@ public class BookController {
     @Produces("text/html")
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
-        models.set("book", catalog.getBook(id));
+        models.put("book", catalog.getBook(id));
         return "/index.xhtml";      // JSP to render a book
     }
 
@@ -97,6 +97,6 @@ public class BookController {
     @Path("view2/{id}")
     @View("/index.xhtml")
     public void view2(@PathParam("id") String id) {
-        models.set("book", catalog.getBook(id));
+        models.put("book", catalog.getBook(id));
     }
 }
