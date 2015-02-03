@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,66 +37,63 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
+package com.oracle.ozark.test.validation;
 
 import javax.inject.Inject;
 import javax.mvc.Controller;
-import javax.mvc.Models;
-import javax.mvc.View;
-import javax.ws.rs.GET;
+import javax.mvc.Viewable;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
+import javax.ws.rs.BeanParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.util.Set;
 
 /**
- * BookController test.
+ * FormController test.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("book")
-public class BookController {
+@Path("form")
+public class FormController {
 
-    /**
-     * Application class used to find books.
-     */
     @Inject
-    private Catalog catalog;
+    private FormDataBean out;
 
-    /**
-     * MVC Framework class used to bind models by name.
-     */
-    @Inject
-    private Models models;
-
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
+    @POST
     @Controller
     @Produces("text/html")
-    @Path("view1/{id}")
-    public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+    public String get(@Valid @BeanParam FormDataBean form) {
+        // TODO: It appears Jersey is not allocating FormDataBean via CDI
+        out.setAge(form.getAge());
+        out.setName(form.getName());
+        return "data.jsp";
     }
 
     /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance and @View to specify path to view.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
+     * FormExceptionMapper class. Catches any ConstraintViolationExceptions thrown and returns
+     * a human-readable description of the violation using a JSP.
      */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view2/{id}")
-    @View("/index.xhtml")
-    public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+    public static class FormExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
+
+        @Inject
+        private ErrorDataBean error;
+
+        @Override
+        public Response toResponse(ConstraintViolationException e) {
+            final Set<ConstraintViolation<?>> set = e.getConstraintViolations();
+            if (!set.isEmpty()) {
+                final ConstraintViolation<?> cv = set.iterator().next();
+                final String property = cv.getPropertyPath().toString();
+                error.setProperty(property.substring(property.lastIndexOf('.') + 1));
+                error.setValue(cv.getInvalidValue());
+                error.setMessage(cv.getMessage());
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity(new Viewable("error.jsp")).build();
+        }
     }
 }

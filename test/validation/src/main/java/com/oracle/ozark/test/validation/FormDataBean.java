@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,66 +37,45 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
+package com.oracle.ozark.test.validation;
 
-import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.Models;
-import javax.mvc.View;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import javax.ws.rs.FormParam;
 
 /**
- * BookController test.
+ * Class FormDataBean.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("book")
-public class BookController {
+@Named("data")
+@RequestScoped
+public class FormDataBean {
 
-    /**
-     * Application class used to find books.
-     */
-    @Inject
-    private Catalog catalog;
+    @NotNull @Size(min=1)
+    @FormParam("name")
+    private String name;
 
-    /**
-     * MVC Framework class used to bind models by name.
-     */
-    @Inject
-    private Models models;
+    @Min(18)
+    @FormParam("age")
+    private int age;
 
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view1/{id}")
-    public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+    public String getName() {
+        return name;
     }
 
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance and @View to specify path to view.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view2/{id}")
-    @View("/index.xhtml")
-    public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
     }
 }

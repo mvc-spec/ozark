@@ -37,66 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
-
-import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.Models;
-import javax.mvc.View;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+package com.oracle.ozark.test.bookmodels;
 
 /**
- * BookController test.
+ * Class Book.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("book")
-public class BookController {
+public class Book {
 
-    /**
-     * Application class used to find books.
-     */
-    @Inject
-    private Catalog catalog;
+    private String title;
+    private String author;
+    private String isbn;
 
-    /**
-     * MVC Framework class used to bind models by name.
-     */
-    @Inject
-    private Models models;
-
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view1/{id}")
-    public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance and @View to specify path to view.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view2/{id}")
-    @View("/index.xhtml")
-    public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }

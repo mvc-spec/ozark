@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,66 +37,60 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
+package com.oracle.ozark.test.events;
 
-import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.Models;
-import javax.mvc.View;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+import javax.mvc.engine.ViewEngine;
+import java.lang.reflect.Method;
+import java.net.URI;
 
 /**
- * BookController test.
+ * Class EventBean.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("book")
-public class BookController {
+@Named("event")
+@RequestScoped
+public class EventBean {
 
-    /**
-     * Application class used to find books.
-     */
-    @Inject
-    private Catalog catalog;
+    private URI requestUri;
 
-    /**
-     * MVC Framework class used to bind models by name.
-     */
-    @Inject
-    private Models models;
+    private Method method;
 
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view1/{id}")
-    public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+    private String view;
+
+    private Class<? extends ViewEngine> engine;
+
+    public URI getRequestUri() {
+        return requestUri;
     }
 
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance and @View to specify path to view.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
-    @GET
-    @Controller
-    @Produces("text/html")
-    @Path("view2/{id}")
-    @View("/index.xhtml")
-    public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+    public void setRequestUri(URI requestUri) {
+        this.requestUri = requestUri;
+    }
+
+    public Method getMethod() {
+        return method;
+    }
+
+    public void setMethod(Method method) {
+        this.method = method;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
+
+    public Class<? extends ViewEngine> getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Class<? extends ViewEngine> engine) {
+        this.engine = engine;
     }
 }

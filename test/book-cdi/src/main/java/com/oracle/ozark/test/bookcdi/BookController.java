@@ -37,11 +37,10 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
+package com.oracle.ozark.test.bookcdi;
 
 import javax.inject.Inject;
 import javax.mvc.Controller;
-import javax.mvc.Models;
 import javax.mvc.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -57,36 +56,33 @@ import javax.ws.rs.Produces;
 public class BookController {
 
     /**
-     * Application class used to find books.
+     * Inject instance of book in request scope.
      */
     @Inject
-    private Catalog catalog;
+    private Book book;
 
     /**
-     * MVC Framework class used to bind models by name.
-     */
-    @Inject
-    private Models models;
-
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance.
+     * MVC controller to render a book in HTML. Uses CDI and request
+     * scope to bind a book instance.
      *
      * @param id ID of the book given in URI.
      * @return JSP page used for rendering.
      */
     @GET
     @Controller
-    @Produces("text/html")
+    @Produces("text/html;charset=utf-8")
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+        book.setTitle("CDI book");
+        book.setAuthor("Some CDI author");
+        book.setIsbn("Some CDI ISBN");
+        return "book.jsp";      // JSP to render a book
     }
 
     /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance and @View to specify path to view.
+     * MVC controller to render a book in HTML. Uses CDI and request
+     * scope to bind a book instance. The view template is specified
+     * using @View.
      *
      * @param id ID of the book given in URI.
      * @return JSP page used for rendering.
@@ -95,8 +91,10 @@ public class BookController {
     @Controller
     @Produces("text/html")
     @Path("view2/{id}")
-    @View("/index.xhtml")
+    @View("book.jsp")
     public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+        book.setTitle("CDI book");
+        book.setAuthor("Some CDI author");
+        book.setIsbn("Some CDI ISBN");
     }
 }

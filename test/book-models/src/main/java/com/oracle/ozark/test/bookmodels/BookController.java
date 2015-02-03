@@ -37,7 +37,7 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
+package com.oracle.ozark.test.bookmodels;
 
 import javax.inject.Inject;
 import javax.mvc.Controller;
@@ -81,7 +81,7 @@ public class BookController {
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
         models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+        return "book.jsp";      // JSP to render a book
     }
 
     /**
@@ -95,7 +95,7 @@ public class BookController {
     @Controller
     @Produces("text/html")
     @Path("view2/{id}")
-    @View("/index.xhtml")
+    @View("book.jsp")
     public void view2(@PathParam("id") String id) {
         models.put("book", catalog.getBook(id));
     }

@@ -37,66 +37,52 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.facelets;
+package com.oracle.ozark.test.conversation;
 
 import javax.inject.Inject;
 import javax.mvc.Controller;
-import javax.mvc.Models;
-import javax.mvc.View;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 
 /**
- * BookController test.
+ * ConversationController test.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("book")
-public class BookController {
+@Path("converse")
+public class ConversationController {
 
-    /**
-     * Application class used to find books.
-     */
     @Inject
-    private Catalog catalog;
+    private SecretBean bean;
 
-    /**
-     * MVC Framework class used to bind models by name.
-     */
-    @Inject
-    private Models models;
-
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
     @GET
     @Controller
     @Produces("text/html")
-    @Path("view1/{id}")
-    public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
-        return "/index.xhtml";      // JSP to render a book
+    @Path("start")
+    public String startConversation() {
+        bean.beginConversation();
+        bean.setSecret(findSecret());
+        return "start.jsp";
     }
 
-    /**
-     * MVC controller to render a book in HTML. Uses the models map to
-     * bind a book instance and @View to specify path to view.
-     *
-     * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
-     */
     @GET
     @Controller
     @Produces("text/html")
-    @Path("view2/{id}")
-    @View("/index.xhtml")
-    public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+    @Path("tellme")
+    public String tellme() {
+        return "tellme.jsp";
+    }
+
+    @GET
+    @Controller
+    @Produces("text/html")
+    @Path("stop")
+    public String stopConversation() {
+        bean.endConversation();
+        return "stop.jsp";
+    }
+
+    private String findSecret() {
+        final String secret = bean.toString();
+        return secret.substring(secret.indexOf('@') + 1);
     }
 }
