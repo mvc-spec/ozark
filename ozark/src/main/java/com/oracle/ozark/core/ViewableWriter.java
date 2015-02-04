@@ -63,6 +63,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Class ViewableWriter.
@@ -72,7 +74,7 @@ import java.lang.reflect.Type;
 @Produces(MediaType.TEXT_HTML)
 public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
-    private static final String DEFAULT_ENCODING = "UTF-8";         // TODO
+    private static final String DEFAULT_ENCODING = "ISO-8859-1";        // HTTP 1.1
 
     @Inject
     private Instance<Models> modelsInstance;
@@ -98,7 +100,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     @Override
     public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
-                        MultivaluedMap<String, Object> stringObjectMultivaluedMap, OutputStream out)
+                        MultivaluedMap<String, Object> headers, OutputStream out)
             throws IOException, WebApplicationException
     {
         // Find engine for this Viewable
@@ -124,7 +126,8 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                 throw new UnsupportedOperationException("Not supported");
             }
         };
-        final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, DEFAULT_ENCODING));
+        final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream,
+                findEncoding(headers, annotations)));
         final HttpServletResponse responseWrapper = new HttpServletResponseWrapper(response) {
 
             @Override
@@ -152,5 +155,22 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         } finally {
             responseWriter.flush();
         }
+    }
+
+    /**
+     * Looks for a character set as part of the Content-Type header. Returns it
+     * if specified or {@link DEFAULT_ENCODING} if not.
+     *
+     * TODO: Jersey does not seem to copy MIME type params from @Produces.
+     * Thus, if a charset is specified in @Produces, it will not be available
+     * in the Content-Type header.
+     *
+     * @param headers Response headers.
+     * @return Character set to use.
+     */
+    private String findEncoding(MultivaluedMap<String, Object> headers, Annotation[] annotations) {
+        final MediaType mt = (MediaType) headers.get("Content-Type").get(0);
+        final String charset = mt.getParameters().get("charset");
+        return charset != null ? charset : DEFAULT_ENCODING;
     }
 }
