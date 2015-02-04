@@ -67,7 +67,7 @@ public class JspViewEngine implements ViewEngine {
 
     @Override
     public boolean supports(String view) {
-        return view.endsWith("jsp");
+        return view.endsWith("jsp") || view.endsWith("jspx");
     }
 
     @Override
