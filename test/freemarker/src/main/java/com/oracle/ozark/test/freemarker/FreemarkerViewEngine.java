@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
+import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.*;
@@ -61,13 +62,13 @@ public class FreemarkerViewEngine implements ViewEngine {
     }
 
     @Override
-    public void processView(ViewEngineContext context) throws ServletException, IOException {
-        final Template template = configuration.getTemplate(context.getView());
+    public void processView(ViewEngineContext context) throws ViewEngineException {
         try {
+            final Template template = configuration.getTemplate(context.getView());
             template.process(context.getModels(),
                     new OutputStreamWriter(context.getResponse().getOutputStream()));
-        } catch (TemplateException e) {
-            throw new RuntimeException(e);      // TODO
+        } catch (TemplateException | IOException e) {
+            throw new ViewEngineException(e);
         }
     }
 }

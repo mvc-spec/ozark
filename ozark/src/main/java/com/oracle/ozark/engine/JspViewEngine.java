@@ -45,6 +45,7 @@ import javax.mvc.Models;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
+import javax.mvc.engine.ViewEngineException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -71,7 +72,7 @@ public class JspViewEngine implements ViewEngine {
     }
 
     @Override
-    public void processView(ViewEngineContext context) throws ServletException, IOException {
+    public void processView(ViewEngineContext context) throws ViewEngineException {
         final Models models = context.getModels();
         final HttpServletRequest request = context.getRequest();
         final HttpServletResponse response = context.getResponse();
@@ -82,6 +83,10 @@ public class JspViewEngine implements ViewEngine {
         }
         // Forward request to servlet engine to process JSP
         RequestDispatcher rd = servletContext.getRequestDispatcher(VIEW_BASE + context.getView());
-        rd.forward(request, response);
+        try {
+            rd.forward(request, response);
+        } catch (ServletException | IOException e) {
+            throw new ViewEngineException(e);
+        }
     }
 }

@@ -47,15 +47,19 @@ import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
-import javax.servlet.*;
+import javax.mvc.engine.ViewEngineException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.Produces;
+import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.MessageBodyWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -63,8 +67,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Class ViewableWriter.
@@ -101,8 +103,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     @Override
     public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> headers, OutputStream out)
-            throws IOException, WebApplicationException
-    {
+            throws IOException, WebApplicationException {
         // Find engine for this Viewable
         final ViewEngine engine = engineFinder.find(viewable);
         if (engine == null) {
@@ -150,8 +151,8 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             }
             // Process view using selected engine
             engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper));
-        } catch (ServletException | IOException e) {
-            throw new WebApplicationException(e);
+        } catch (ViewEngineException e) {
+            throw new ServerErrorException(Response.Status.INTERNAL_SERVER_ERROR, e);
         } finally {
             responseWriter.flush();
         }
@@ -160,7 +161,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     /**
      * Looks for a character set as part of the Content-Type header. Returns it
      * if specified or {@link DEFAULT_ENCODING} if not.
-     *
+     * <p/>
      * TODO: Jersey does not seem to copy MIME type params from @Produces.
      * Thus, if a charset is specified in @Produces, it will not be available
      * in the Content-Type header.
