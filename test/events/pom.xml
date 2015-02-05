@@ -19,4 +19,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+    <dependencies>
+        <!-- Access Ozark's extended MVC events -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ozark</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

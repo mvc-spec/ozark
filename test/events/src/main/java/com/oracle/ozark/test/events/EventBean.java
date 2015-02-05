@@ -62,6 +62,8 @@ public class EventBean {
 
     private Class<? extends ViewEngine> engine;
 
+    private boolean cached;
+
     public URI getRequestUri() {
         return requestUri;
     }
@@ -92,5 +94,13 @@ public class EventBean {
 
     public void setEngine(Class<? extends ViewEngine> engine) {
         this.engine = engine;
+    }
+
+    public boolean isCached() {
+        return cached;
+    }
+
+    public void setCached(boolean cached) {
+        this.cached = cached;
     }
 }

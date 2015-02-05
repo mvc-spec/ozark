@@ -9,4 +9,5 @@
     <p>Controller Method: ${event.method}</p>
     <p>View: ${event.view}</p>
     <p>View Engine: ${event.engine}</p>
+    <p>[Ozark] Cached: ${event.cached}</p>
 </html>
