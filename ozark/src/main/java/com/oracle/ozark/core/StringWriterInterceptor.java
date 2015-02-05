@@ -43,19 +43,16 @@ import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.Viewable;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.WriterInterceptor;
 import javax.ws.rs.ext.WriterInterceptorContext;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 
 /**
  * Class StringWriterInterceptor.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Provider
 @Controller
 public class StringWriterInterceptor implements WriterInterceptor {
 
@@ -66,14 +63,6 @@ public class StringWriterInterceptor implements WriterInterceptor {
     public void aroundWriteTo(WriterInterceptorContext context) throws IOException, WebApplicationException {
         final Object entity = context.getEntity();
         final Annotation[] annotations = context.getAnnotations();
-
-        // Method must be decorated with @Controller for this interceptor to be enabled
-        if (!Arrays.asList(annotations).stream().anyMatch(a -> a instanceof Controller)) {
-            context.proceed();
-            return;
-        }
-
-        // Wrap string in Viewable use ViewableWriter
         if (entity instanceof String) {
             writer.writeTo(new Viewable((String) entity), Viewable.class, Viewable.class, annotations,
                     context.getMediaType(), context.getHeaders(), context.getOutputStream());
