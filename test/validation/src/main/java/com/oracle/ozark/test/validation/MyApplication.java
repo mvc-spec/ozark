@@ -39,10 +39,10 @@
  */
 package com.oracle.ozark.test.validation;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import java.util.HashSet;
-import java.util.Set;
+        import javax.ws.rs.ApplicationPath;
+        import javax.ws.rs.core.Application;
+        import java.util.HashSet;
+        import java.util.Set;
 
 /**
  * Class MyApplication.
@@ -56,7 +56,6 @@ public class MyApplication extends Application {
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> set = new HashSet<>();
         set.add(FormController.class);
-        set.add(FormController.FormExceptionMapper.class);
         return set;
     }
 }

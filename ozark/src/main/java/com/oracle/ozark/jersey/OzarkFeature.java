@@ -42,6 +42,7 @@ package com.oracle.ozark.jersey;
 import com.oracle.ozark.core.StringWriterInterceptor;
 import com.oracle.ozark.core.ViewResponseFilter;
 import com.oracle.ozark.core.ViewableWriter;
+import com.oracle.ozark.mapper.ConstraintViolationMapper;
 import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
 
@@ -74,6 +75,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(StringWriterInterceptor.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
+            context.register(ConstraintViolationMapper.class);
         }
     }
 

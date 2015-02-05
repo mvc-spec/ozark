@@ -42,6 +42,8 @@ package com.oracle.ozark.test.validation;
 import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.Viewable;
+import javax.mvc.mapper.ConstraintViolationMapper;
+import javax.mvc.mapper.OnConstraintViolation;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
@@ -50,23 +52,23 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
 import java.util.Set;
 
 /**
- * FormController test.
+ * FormController class.
  *
  * @author Santiago Pericas-Geertsen
  */
+@Controller
 @Path("form")
+@Produces("text/html")
 public class FormController {
 
     @Inject
     private FormDataBean out;
 
     @POST
-    @Controller
-    @Produces("text/html")
+    @OnConstraintViolation(FormViolationMapper.class)
     public String get(@Valid @BeanParam FormDataBean form) {
         // TODO: It appears Jersey is not allocating FormDataBean via CDI
         out.setAge(form.getAge());
@@ -74,11 +76,7 @@ public class FormController {
         return "data.jsp";
     }
 
-    /**
-     * FormExceptionMapper class. Catches any ConstraintViolationExceptions thrown and returns
-     * a human-readable description of the violation using a JSP.
-     */
-    public static class FormExceptionMapper implements ExceptionMapper<ConstraintViolationException> {
+    public static class FormViolationMapper implements ConstraintViolationMapper {
 
         @Inject
         private ErrorDataBean error;
