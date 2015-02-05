@@ -37,47 +37,53 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.engine;
+package com.oracle.ozark.event;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.mvc.Models;
-import javax.mvc.engine.Priorities;
+import javax.enterprise.context.Dependent;
 import javax.mvc.engine.ViewEngine;
-import javax.mvc.engine.ViewEngineContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
- * Class FaceletsViewEngine.
+ * Class ViewEngineSelected.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine implements ViewEngine {
+@Dependent
+public class ViewEngineSelected implements javax.mvc.event.ViewEngineSelected {
 
-    @Inject
-    private ServletContext servletContext;
+    private String view;
 
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith("xhtml");
+    private Class<? extends ViewEngine> engine;
+
+    private boolean cached;
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
+
+    public Class<? extends ViewEngine> getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Class<? extends ViewEngine> engine) {
+        this.engine = engine;
+    }
+
+    public boolean isCached() {
+        return cached;
+    }
+
+    public void setCached(boolean cached) {
+        this.cached = cached;
     }
 
     @Override
-    public void processView(ViewEngineContext context) throws ServletException, IOException {
-        final Models models = context.getModels();
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        for (String name : models) {
-            request.setAttribute(name, models.get(name));
-        }
-        RequestDispatcher rd = servletContext.getRequestDispatcher(context.getView());
-        rd.forward(request, response);
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[MVC Event] ViewEngineSelected:");
+        sb.append(view).append(":").append(engine.getName()).append(cached ? " (cached)" : "");
+        return sb.toString();
     }
 }

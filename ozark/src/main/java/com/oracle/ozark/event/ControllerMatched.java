@@ -37,69 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
+package com.oracle.ozark.event;
 
-import com.oracle.ozark.event.ControllerMatched;
-
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.View;
-import javax.mvc.Viewable;
-import javax.ws.rs.ServerErrorException;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
+import javax.enterprise.context.Dependent;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.io.IOException;
-import java.lang.reflect.Method;
-
-import static javax.ws.rs.core.MediaType.TEXT_HTML_TYPE;
-import static javax.ws.rs.core.Response.Status.OK;
 
 /**
- * Class ViewResponseFilter.
+ * Class ControllerMatched.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Controller
-public class ViewResponseFilter implements ContainerResponseFilter {
+@Dependent
+public class ControllerMatched implements javax.mvc.event.ControllerMatched {
 
-    @Context
     private UriInfo uriInfo;
 
-    @Context
     private ResourceInfo resourceInfo;
 
-    @Inject
-    private Event<ControllerMatched> matchedEvent;
+    public UriInfo getUriInfo() {
+        return uriInfo;
+    }
 
-    @Inject
-    private ControllerMatched matched;
+    public void setUriInfo(UriInfo uriInfo) {
+        this.uriInfo = uriInfo;
+    }
+
+    public ResourceInfo getResourceInfo() {
+        return resourceInfo;
+    }
+
+    public void setResourceInfo(ResourceInfo resourceInfo) {
+        this.resourceInfo = resourceInfo;
+    }
 
     @Override
-    public void filter(ContainerRequestContext requestContext,
-                       ContainerResponseContext responseContext) throws IOException {
-        // Fire ControllerMatched event
-        matched.setUriInfo(uriInfo);
-        matched.setResourceInfo(resourceInfo);
-        matchedEvent.fire(matched);
-
-        // Extract view information from @View if present
-        final Method method = resourceInfo.getResourceMethod();
-        if (method.getReturnType() == Void.TYPE) {
-            final View view = method.getDeclaredAnnotation(View.class);
-            if (view != null) {
-                final Viewable viewable = new Viewable(view.value());
-                responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);
-                responseContext.setStatusInfo(OK);      // Needed for method returning void
-            } else {
-                throw new ServerErrorException("Controller method must specify view using @View annotation",
-                        Response.Status.INTERNAL_SERVER_ERROR);
-            }
-        }
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[MVC Event] ControllerMatched:");
+        sb.append(uriInfo.getRequestUri()).append(":").append(resourceInfo.getResourceMethod());
+        return sb.toString();
     }
 }
