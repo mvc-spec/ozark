@@ -42,6 +42,8 @@ package com.oracle.ozark.engine;
 import javax.mvc.Models;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.UriInfo;
 
 /**
  * Class ViewEngineContext.
@@ -58,11 +60,18 @@ public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
 
     private final HttpServletResponse response;
 
-    public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response) {
+    private final UriInfo uriInfo;
+
+    private final ResourceInfo resourceInfo;
+
+    public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
+                             UriInfo uriInfo, ResourceInfo resourceInfo) {
         this.view = view;
         this.models = models;
         this.request = request;
         this.response = response;
+        this.uriInfo = uriInfo;
+        this.resourceInfo = resourceInfo;
     }
 
     @Override
@@ -83,5 +92,15 @@ public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
     @Override
     public HttpServletResponse getResponse() {
         return response;
+    }
+
+    @Override
+    public UriInfo getUriInfo() {
+        return uriInfo;
+    }
+
+    @Override
+    public ResourceInfo getResourceInfo() {
+        return resourceInfo;
     }
 }

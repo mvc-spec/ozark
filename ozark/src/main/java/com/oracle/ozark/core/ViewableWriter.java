@@ -56,10 +56,8 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.*;
 import javax.ws.rs.ext.MessageBodyWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -86,6 +84,12 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     @Context
     private HttpServletResponse response;
+
+    @Context
+    private UriInfo uriInfo;
+
+    @Context
+    private ResourceInfo resourceInfo;
 
     @Inject
     private ViewEngineFinder engineFinder;
@@ -150,7 +154,8 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                 models = modelsInstance.get();
             }
             // Process view using selected engine
-            engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper));
+            engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper,
+                    uriInfo, resourceInfo));
         } catch (ViewEngineException e) {
             throw new ServerErrorException(Response.Status.INTERNAL_SERVER_ERROR, e);
         } finally {
