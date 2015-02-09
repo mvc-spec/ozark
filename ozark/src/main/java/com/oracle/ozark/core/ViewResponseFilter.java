@@ -91,10 +91,13 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         // Extract view information from @View if present
         final Method method = resourceInfo.getResourceMethod();
         if (method.getReturnType() == Void.TYPE) {
-            final View view = method.getDeclaredAnnotation(View.class);
+            View view = method.getAnnotation(View.class);
+            if (view == null) {
+                view = resourceInfo.getResourceClass().getAnnotation(View.class);
+            }
             if (view != null) {
                 final Viewable viewable = new Viewable(view.value());
-                responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);
+                responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);      // TODO @Produces?
                 responseContext.setStatusInfo(OK);      // Needed for method returning void
             } else {
                 throw new ServerErrorException("Controller method must specify view using @View annotation",
