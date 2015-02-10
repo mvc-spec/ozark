@@ -46,15 +46,18 @@ import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.View;
 import javax.mvc.Viewable;
+import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import static javax.ws.rs.core.MediaType.TEXT_HTML_TYPE;
@@ -97,7 +100,21 @@ public class ViewResponseFilter implements ContainerResponseFilter {
             }
             if (view != null) {
                 final Viewable viewable = new Viewable(view.value());
-                responseContext.setEntity(viewable, null, TEXT_HTML_TYPE);      // TODO @Produces?
+                // Determine media type by inspecting @Produces
+                Produces an = resourceInfo.getResourceMethod().getAnnotation(Produces.class);
+                if (an == null) {
+                    an = resourceInfo.getResourceMethod().getClass().getAnnotation(Produces.class);
+                }
+                if (an != null) {
+                    final String[] types = an.value();
+                    if (types.length != 1) {
+                        throw new ServerErrorException("Unable to determine response media type for "
+                            + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
+                    }
+                    responseContext.setEntity(viewable, null, MediaType.valueOf(types[0]));
+                } else {
+                    responseContext.setEntity(viewable, null, MediaType.TEXT_HTML_TYPE);    // default
+                }
                 responseContext.setStatusInfo(OK);      // Needed for method returning void
             } else {
                 throw new ServerErrorException("Controller method must specify view using @View annotation",

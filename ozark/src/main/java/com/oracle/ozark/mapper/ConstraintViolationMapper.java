@@ -4,6 +4,8 @@ import com.oracle.ozark.cdi.CdiUtil;
 import org.glassfish.jersey.spi.ExtendedExceptionMapper;
 
 import javax.inject.Inject;
+import javax.mvc.Models;
+import javax.mvc.Viewable;
 import javax.mvc.mapper.OnConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.container.ResourceInfo;
@@ -28,7 +30,28 @@ public class ConstraintViolationMapper implements ExtendedExceptionMapper<Constr
     @Context
     private ResourceInfo resourceInfo;
 
+    private String view;
+
     private javax.mvc.mapper.ConstraintViolationMapper mapper;
+
+    /**
+     * Default mapper for {@link javax.validation.ConstraintViolationException}. Bind
+     * {@code ex} to the exception and return a 400 response using the view specified
+     * in the annotation.
+     */
+    static private class DefaultMapper implements javax.mvc.mapper.ConstraintViolationMapper {
+
+        private static final String EX_NAME = "ex";
+
+        @Inject
+        private Models models;
+
+        @Override
+        public Response toResponse(ConstraintViolationException e, String view) {
+            models.put(EX_NAME, e);
+            return Response.status(Response.Status.BAD_REQUEST).entity(new Viewable(view)).build();
+        }
+    }
 
     @Override
     public boolean isMappable(ConstraintViolationException exception) {
@@ -40,9 +63,13 @@ public class ConstraintViolationMapper implements ExtendedExceptionMapper<Constr
                 an = resourceClass.getAnnotation(OnConstraintViolation.class);
             }
             if (an != null) {
-                final Class<? extends javax.mvc.mapper.ConstraintViolationMapper> mapperClass = an.value();
+                Class<? extends javax.mvc.mapper.ConstraintViolationMapper> mapperClass = an.mapper();
+                if (mapperClass == javax.mvc.mapper.ConstraintViolationMapper.class) {
+                    mapperClass = DefaultMapper.class;      // use default
+                }
                 mapper = cdiUtil.newBean(mapperClass);
                 if (mapper != null) {
+                    view = an.view();
                     return true;
                 }
             }
@@ -52,6 +79,6 @@ public class ConstraintViolationMapper implements ExtendedExceptionMapper<Constr
 
     @Override
     public Response toResponse(ConstraintViolationException e) {
-        return mapper.toResponse(e);
+        return mapper.toResponse(e, view);
     }
 }

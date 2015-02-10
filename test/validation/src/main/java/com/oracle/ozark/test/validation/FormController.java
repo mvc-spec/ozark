@@ -68,7 +68,7 @@ public class FormController {
     private FormDataBean out;
 
     @POST
-    @OnConstraintViolation(FormViolationMapper.class)
+    @OnConstraintViolation(view="error.jsp", mapper=FormViolationMapper.class)
     public String get(@Valid @BeanParam FormDataBean form) {
         // TODO: It appears Jersey is not allocating FormDataBean via CDI
         out.setAge(form.getAge());
@@ -82,7 +82,7 @@ public class FormController {
         private ErrorDataBean error;
 
         @Override
-        public Response toResponse(ConstraintViolationException e) {
+        public Response toResponse(ConstraintViolationException e, String view) {
             final Set<ConstraintViolation<?>> set = e.getConstraintViolations();
             if (!set.isEmpty()) {
                 final ConstraintViolation<?> cv = set.iterator().next();
@@ -91,7 +91,7 @@ public class FormController {
                 error.setValue(cv.getInvalidValue());
                 error.setMessage(cv.getMessage());
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(new Viewable("error.jsp")).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(new Viewable(view)).build();
         }
     }
 }
