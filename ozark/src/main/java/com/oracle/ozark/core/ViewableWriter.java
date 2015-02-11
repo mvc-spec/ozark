@@ -65,6 +65,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 
 /**
  * Class ViewableWriter.
@@ -111,9 +113,20 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         // Find engine for this Viewable
         final ViewEngine engine = engineFinder.find(viewable);
         if (engine == null) {
-            throw new WebApplicationException("Unable to find suitable view engine for '" + viewable + "'");
+            RequestDispatcher requestDispatcher = 
+                    request.getServletContext().getRequestDispatcher(viewable.getView());
+            if (requestDispatcher != null) {
+                try {
+                    requestDispatcher.forward(request, response);
+                } catch (ServletException ex) {
+                    throw new IOException(ex);
+                }
+            }
+            else {
+                throw new WebApplicationException("Unable to find suitable view engine for '" + viewable + "'");
+            }
         }
-
+        
         // Create wrapper for response
         final ServletOutputStream responseStream = new ServletOutputStream() {
             @Override
