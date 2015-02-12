@@ -47,6 +47,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import java.util.Locale;
 
 /**
  * HelloController test.
@@ -117,5 +118,47 @@ public class HelloController {
     @View("hello.jsp")
     public Response otherProduces2() {
         return Response.ok(new Viewable("hello.jsp"), "application/xhtml+xml").build();
+    }
+
+    /**
+     * Sets language to "es".
+     */
+    @GET
+    @Path("language1")
+    @Produces("text/html")      // overridden below
+    public Response language1() {
+        return Response.ok(new Viewable("hello.jsp"), "application/xhtml+xml").language("es").build();
+    }
+
+    /**
+     * Sets language to "es" when using @View.
+     */
+    @GET
+    @Path("language2")
+    @Produces("text/html")      // overridden below
+    @View("hello.jsp")
+    public Response language2() {
+        return Response.ok(new Viewable("hello.jsp"), "application/xhtml+xml").language("es").build();
+    }
+
+    /**
+     * Sets locale to UK.
+     */
+    @GET
+    @Path("locale1")
+    @Produces("text/html")      // overridden below
+    public Response locale1() {
+        return Response.ok(new Viewable("hello.jsp"), "application/xhtml+xml").language(Locale.UK).build();
+    }
+
+    /**
+     * Sets locale to UK when using @View.
+     */
+    @GET
+    @Path("locale2")
+    @Produces("text/html")      // overridden below
+    @View("hello.jsp")
+    public Response locale2() {
+        return Response.ok(new Viewable("hello.jsp"), "application/xhtml+xml").language(Locale.UK).build();
     }
 }
