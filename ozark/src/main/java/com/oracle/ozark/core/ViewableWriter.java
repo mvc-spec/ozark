@@ -73,7 +73,7 @@ import javax.servlet.ServletException;
  *
  * @author Santiago Pericas-Geertsen
  */
-@Produces(MediaType.TEXT_HTML)
+@Produces(MediaType.WILDCARD)
 public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     private static final String DEFAULT_ENCODING = "ISO-8859-1";        // HTTP 1.1
