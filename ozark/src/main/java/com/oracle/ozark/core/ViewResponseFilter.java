@@ -40,12 +40,14 @@
 package com.oracle.ozark.core;
 
 import com.oracle.ozark.event.ControllerMatched;
+import com.oracle.ozark.jersey.VariantSelector;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.View;
 import javax.mvc.Viewable;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -77,6 +79,9 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Context
     private ResourceInfo resourceInfo;
 
+    @Context
+    private HttpServletRequest request;
+
     @Inject
     private Event<ControllerMatched> matchedEvent;
 
@@ -100,21 +105,11 @@ public class ViewResponseFilter implements ContainerResponseFilter {
             }
             if (view != null) {
                 final Viewable viewable = new Viewable(view.value());
-                // Determine media type by inspecting @Produces
-                Produces an = resourceInfo.getResourceMethod().getAnnotation(Produces.class);
-                if (an == null) {
-                    an = resourceInfo.getResourceMethod().getClass().getAnnotation(Produces.class);
+                MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
+                if (contentType == null) {
+                    contentType = MediaType.TEXT_HTML_TYPE;      // default
                 }
-                if (an != null) {
-                    final String[] types = an.value();
-                    if (types.length != 1) {
-                        throw new ServerErrorException("Unable to determine response media type for "
-                            + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
-                    }
-                    responseContext.setEntity(viewable, null, MediaType.valueOf(types[0]));
-                } else {
-                    responseContext.setEntity(viewable, null, MediaType.TEXT_HTML_TYPE);    // default
-                }
+                responseContext.setEntity(viewable, null, contentType);
                 responseContext.setStatusInfo(OK);      // Needed for method returning void
             } else {
                 throw new ServerErrorException("Controller method must specify view using @View annotation",

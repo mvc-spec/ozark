@@ -64,6 +64,7 @@
         <module>events</module>
         <module>validation</module>
         <module>freemarker</module>
+        <module>produces</module>
     </modules>
     <profiles>
         <profile>
