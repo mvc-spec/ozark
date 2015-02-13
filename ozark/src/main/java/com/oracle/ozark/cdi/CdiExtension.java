@@ -46,9 +46,10 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.ProcessProducer;
 
 /**
- * CdiExtension class
+ * CDI extension with observers for annotated types and producers. Defined for
+ * future use.
  *
- * @author Santiago.PericasGeertsen@oracle.com
+ * @author Santiago Pericas-Geertsen
  */
 public class CdiExtension implements Extension {
 

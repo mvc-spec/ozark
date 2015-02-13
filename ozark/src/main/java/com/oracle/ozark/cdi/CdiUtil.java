@@ -47,9 +47,10 @@ import javax.inject.Inject;
 import java.util.Set;
 
 /**
- * CdiUtil class
+ * Utility class for CDI-related tasks. This is a CDI class itself and can be
+ * injected to call its methods.
  *
- * @author Santiago.PericasGeertsen@oracle.com
+ * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
 public class CdiUtil {
@@ -57,6 +58,14 @@ public class CdiUtil {
     @Inject
     private BeanManager bm;
 
+    /**
+     * Create a new CDI bean given its class. The bean is created in the context
+     * defined by the scope annotation on the class.
+     *
+     * @param clazz CDI class.
+     * @param <T>   Class parameter.
+     * @return Newly allocated CDI bean.
+     */
     @SuppressWarnings("unchecked")
     public <T> T newBean(Class<T> clazz) {
         Set<Bean<?>> beans = bm.getBeans(clazz);

@@ -43,7 +43,8 @@ import javax.enterprise.context.RequestScoped;
 import java.util.*;
 
 /**
- * Class Models.
+ * Implementation of {@link javax.mvc.Models} interface. A CDI class that delegates
+ * to a {@link java.util.Map} implementation.
  *
  * @author Santiago Pericas-Geertsen
  */

@@ -65,18 +65,29 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 /**
- * Class ViewableWriter.
+ * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
+ * {@link javax.mvc.engine.ViewEngine} that is capable of processing the view. If no
+ * engine is found, it forwards the request back to the servlet container.</p>
+ *
+ * <p>If {@link javax.mvc.Models} is available in the viewable, it is used; otherwise,
+ * this class is injected via CDI. A view engine in the viewable can also bypass
+ * the lookup mechanism.</p>
+ *
+ * <p>The charset for the response is obtained from the media type, and defaults to
+ * UTF-8.</p>
  *
  * @author Santiago Pericas-Geertsen
  */
 @Produces(MediaType.WILDCARD)
 public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
-    private static final String DEFAULT_ENCODING = "ISO-8859-1";        // HTTP 1.1
+    public static final String CONTENT_TYPE = "Content-Type";
+    public static final Charset UTF8 = Charset.forName("UTF-8");
 
     @Inject
     private Instance<Models> modelsInstance;
@@ -106,6 +117,10 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         return -1;
     }
 
+    /**
+     * Searches for a suitable {@link javax.mvc.engine.ViewEngine} to process the view. If no engine
+     * is found, is forwards the request back to the servlet container.
+     */
     @Override
     public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> headers, OutputStream out)
@@ -113,17 +128,18 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         // Find engine for this Viewable
         final ViewEngine engine = engineFinder.find(viewable);
         if (engine == null) {
-            RequestDispatcher requestDispatcher = 
+            RequestDispatcher requestDispatcher =
                     request.getServletContext().getRequestDispatcher(viewable.getView());
             if (requestDispatcher != null) {
                 try {
                     requestDispatcher.forward(request, response);
                 } catch (ServletException ex) {
-                    throw new IOException(ex);
+                    throw new ServerErrorException(Response.Status.INTERNAL_SERVER_ERROR, ex);
                 }
             }
             else {
-                throw new WebApplicationException("Unable to find suitable view engine for '" + viewable + "'");
+                throw new ServerErrorException("Unable to find suitable view engine for '" + viewable + "'",
+                        Response.Status.INTERNAL_SERVER_ERROR);
             }
         }
         
@@ -144,8 +160,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                 throw new UnsupportedOperationException("Not supported");
             }
         };
-        final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream,
-                findEncoding(headers, annotations)));
+        final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, getCharset(headers)));
         final HttpServletResponse responseWrapper = new HttpServletResponseWrapper(response) {
 
             @Override
@@ -178,18 +193,14 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     /**
      * Looks for a character set as part of the Content-Type header. Returns it
-     * if specified or {@link DEFAULT_ENCODING} if not.
-     * <p/>
-     * TODO: Jersey does not seem to copy MIME type params from @Produces.
-     * Thus, if a charset is specified in @Produces, it will not be available
-     * in the Content-Type header.
+     * if specified or {@link #UTF8} if not.
      *
      * @param headers Response headers.
      * @return Character set to use.
      */
-    private String findEncoding(MultivaluedMap<String, Object> headers, Annotation[] annotations) {
-        final MediaType mt = (MediaType) headers.get("Content-Type").get(0);
-        final String charset = mt.getParameters().get("charset");
-        return charset != null ? charset : DEFAULT_ENCODING;
+    private Charset getCharset(MultivaluedMap<String, Object> headers) {
+        final MediaType mt = (MediaType) headers.get(CONTENT_TYPE).get(0);
+        final String charset = mt.getParameters().get(MediaType.CHARSET_PARAMETER);
+        return charset != null ? Charset.forName(charset) : UTF8;
     }
 }
