@@ -47,19 +47,15 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-common</artifactId>
+            <version>2.16</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <!--
-              Static dependency to access Jersey's ForcedAutoDiscoverable SPI.
-              See com.oracle.ozark.jersey.OzarkFeature and META-INF/services.
-              -->
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-common</artifactId>
-            <version>2.12</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

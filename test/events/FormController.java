@@ -61,16 +61,10 @@ import java.util.Set;
 @Path("form")
 public class FormController {
 
-    @Inject
-    private FormDataBean out;
-
     @POST
     @Controller
     @Produces("text/html")
     public String get(@Valid @BeanParam FormDataBean form) {
-        // TODO: It appears Jersey is not allocating FormDataBean via CDI
-        out.setAge(form.getAge());
-        out.setName(form.getName());
         return "data.jsp";
     }
 
