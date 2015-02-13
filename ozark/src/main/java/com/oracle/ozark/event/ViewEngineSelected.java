@@ -43,7 +43,7 @@ import javax.enterprise.context.Dependent;
 import javax.mvc.engine.ViewEngine;
 
 /**
- * Class ViewEngineSelected.
+ * An implementation of {@link javax.mvc.event.ViewEngineSelected}.
  *
  * @author Santiago Pericas-Geertsen
  */

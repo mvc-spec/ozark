@@ -51,7 +51,8 @@ import javax.ws.rs.ext.Provider;
 import java.util.Set;
 
 /**
- * Class OzarkContainerInitializer.
+ * Servlet extension called at initialization time if certain types are found in the
+ * application. Defined for future use.
  *
  * @author Santiago Pericas-Geertsen
  */

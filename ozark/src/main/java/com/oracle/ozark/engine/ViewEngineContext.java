@@ -46,7 +46,8 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * Class ViewEngineContext.
+ * Implementation of {@link javax.mvc.engine.ViewEngineContext}. Provides all the information
+ * needed for a view engine to process a view.
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -64,6 +65,16 @@ public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
 
     private final ResourceInfo resourceInfo;
 
+    /**
+     * Constructor for view engine contexts.
+     *
+     * @param view Name of view.
+     * @param models Instance of models.
+     * @param request HTTP servlet request.
+     * @param response HTTP servlet response.
+     * @param uriInfo URI info about the request.
+     * @param resourceInfo Resource matched info.
+     */
     public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
                              UriInfo uriInfo, ResourceInfo resourceInfo) {
         this.view = view;

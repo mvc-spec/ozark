@@ -44,7 +44,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * Class ControllerMatched.
+ * An implementation of {@link javax.mvc.event.ControllerMatched}.
  *
  * @author Santiago Pericas-Geertsen
  */

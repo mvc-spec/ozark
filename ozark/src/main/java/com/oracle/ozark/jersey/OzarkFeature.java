@@ -54,7 +54,12 @@ import javax.ws.rs.core.FeatureContext;
 import java.util.Arrays;
 
 /**
- * Class OzarkFeature.
+ * <p>Jersey feature that sets up the JAX-RS pipeline for MVC processing using one
+ * or more providers. This feature is enabled only if any of the classes or methods
+ * in the application has an instance of the {@link javax.mvc.Controller} annotation.</p>
+ *
+ * <p>Takes advantage of the {@link org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable}
+ * SPI in Jersey.</p>
  *
  * @author Santiago Pericas-Geertsen
  */

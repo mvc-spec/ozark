@@ -15,7 +15,19 @@ import javax.mvc.engine.ViewEngine;
 import java.util.*;
 
 /**
- * Class ViewEngineFinder.
+ * <p>Selects the view engine for a {@link javax.mvc.Viewable}. If the viewable
+ * includes a reference to an engine, the selection process stops and returns
+ * it. Otherwise, the method {@link javax.mvc.engine.ViewEngine#supports(String)}
+ * is called for each of the view engines injectable via CDI (i.e., all classes
+ * that implement {@link javax.mvc.engine.ViewEngine}).</p>
+ *
+ * <p>The resulting set of candidates is sorted based on its priority as
+ * defined by the annotation {@link javax.annotation.Priority} on the view engine
+ * implementation. Finally, a {@link javax.mvc.event.ViewEngineSelected} is fired to
+ * inform applications about the selection.</p>
+ *
+ * <p>This class implements a simple cache to avoid repeated look-ups for the same
+ * view.</p>
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -37,6 +49,12 @@ public class ViewEngineFinder {
 
     private Map<String, ViewEngine> cache = new HashMap<>();
 
+    /**
+     * Finds view engine for a viewable.
+     *
+     * @param viewable the viewable to be used.
+     * @return selected view engine or {@code null} if none found.
+     */
     public ViewEngine find(Viewable viewable) {
         Optional<ViewEngine> engine;
         final String view = viewable.getView();

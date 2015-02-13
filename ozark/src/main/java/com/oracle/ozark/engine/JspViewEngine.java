@@ -54,7 +54,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Class JspViewEngine.
+ * Implementation of JSP view engine. Uses a {@link javax.servlet.RequestDispatcher}
+ * to forward the request back to the servlet container. Location of JSP pages is
+ * assumed relative to the {@code WEB-INF} directory in the archive.
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -66,11 +68,24 @@ public class JspViewEngine implements ViewEngine {
     @Inject
     private ServletContext servletContext;
 
+    /**
+     * Assumes that any view that ends with {@code jsp} or {@code jspx} is a JSP.
+     *
+     * @param view the name of the view.
+     * @return {@code true} if supported or {@code false} if not.
+     */
     @Override
     public boolean supports(String view) {
         return view.endsWith("jsp") || view.endsWith("jspx");
     }
 
+    /**
+     * Sets attributes in request based on {@link javax.mvc.Models} and forwards
+     * request to servlet container.
+     *
+     * @param context view engine context.
+     * @throws ViewEngineException if any error occurs.
+     */
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         final Models models = context.getModels();
