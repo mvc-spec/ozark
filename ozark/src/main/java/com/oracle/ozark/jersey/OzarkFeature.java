@@ -39,7 +39,6 @@
  */
 package com.oracle.ozark.jersey;
 
-import com.oracle.ozark.core.StringWriterInterceptor;
 import com.oracle.ozark.core.ViewResponseFilter;
 import com.oracle.ozark.core.ViewableWriter;
 import com.oracle.ozark.mapper.ConstraintViolationMapper;
@@ -66,13 +65,12 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
     @Override
     public void configure(FeatureContext context) {
         final Configuration config = context.getConfiguration();
-        if (config.isRegistered(StringWriterInterceptor.class)) {
+        if (config.isRegistered(ViewResponseFilter.class)) {
             return;     // already registered!
         }
         final boolean enableOzark = config.getClasses().stream().anyMatch(this::isController)
-            || config.getInstances().stream().map(o -> o.getClass()).anyMatch(this::isController);
+                || config.getInstances().stream().map(o -> o.getClass()).anyMatch(this::isController);
         if (enableOzark) {
-            context.register(StringWriterInterceptor.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
             context.register(ConstraintViolationMapper.class);
