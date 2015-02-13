@@ -64,15 +64,9 @@ import java.util.Set;
 @Produces("text/html")
 public class FormController {
 
-    @Inject
-    private FormDataBean out;
-
     @POST
     @OnConstraintViolation(view="error.jsp", mapper=FormViolationMapper.class)
     public String get(@Valid @BeanParam FormDataBean form) {
-        // TODO: It appears Jersey is not allocating FormDataBean via CDI
-        out.setAge(form.getAge());
-        out.setName(form.getName());
         return "data.jsp";
     }
 
@@ -91,7 +85,7 @@ public class FormController {
                 error.setValue(cv.getInvalidValue());
                 error.setMessage(cv.getMessage());
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(new Viewable(view)).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(view).build();
         }
     }
 }
