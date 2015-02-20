@@ -39,88 +39,27 @@
  */
 package com.oracle.ozark.engine;
 
-import javax.mvc.Models;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.container.ResourceInfo;
+import javax.mvc.engine.ViewEngine;
 import javax.ws.rs.core.Configuration;
-import javax.ws.rs.core.UriInfo;
 
 /**
- * Implementation of {@link javax.mvc.engine.ViewEngineContext}. Provides all the information
- * needed for a view engine to process a view.
+ * Base class for view engines that factors out all common logic.
  *
  * @author Santiago Pericas-Geertsen
  */
-public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
-
-    private final String view;
-
-    private final Models models;
-
-    private final HttpServletRequest request;
-
-    private final HttpServletResponse response;
-
-    private final UriInfo uriInfo;
-
-    private final ResourceInfo resourceInfo;
-
-    private final Configuration configuration;
+public abstract class ViewEngineBase implements ViewEngine {
 
     /**
-     * Constructor for view engine contexts.
+     * Search a {@link javax.ws.rs.core.Configuration} object for the value of
+     * property {@link javax.mvc.engine.ViewEngine#VIEW_FOLDER}. This property
+     * defines the root for all views. Default value for this property is
+     * {@link javax.mvc.engine.ViewEngine#DEFAULT_VIEW_FOLDER}.
      *
-     * @param view Name of view.
-     * @param models Instance of models.
-     * @param request HTTP servlet request.
-     * @param response HTTP servlet response.
-     * @param uriInfo URI info about the request.
-     * @param resourceInfo Resource matched info.
+     * @param c configuration object.
+     * @return property's value or default.
      */
-    public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
-                             UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {
-        this.view = view;
-        this.models = models;
-        this.request = request;
-        this.response = response;
-        this.uriInfo = uriInfo;
-        this.resourceInfo = resourceInfo;
-        this.configuration = configuration;
-    }
-
-    @Override
-    public String getView() {
-        return view;
-    }
-
-    @Override
-    public Models getModels() {
-        return models;
-    }
-
-    @Override
-    public HttpServletRequest getRequest() {
-        return request;
-    }
-
-    @Override
-    public HttpServletResponse getResponse() {
-        return response;
-    }
-
-    @Override
-    public UriInfo getUriInfo() {
-        return uriInfo;
-    }
-
-    @Override
-    public ResourceInfo getResourceInfo() {
-        return resourceInfo;
-    }
-
-    @Override
-    public Configuration getConfiguration() {
-        return configuration;
+    protected String getViewFolder(Configuration c) {
+        final String viewFolder = (String) c.getProperty(ViewEngine.VIEW_FOLDER);
+        return viewFolder != null ? viewFolder : ViewEngine.DEFAULT_VIEW_FOLDER;
     }
 }

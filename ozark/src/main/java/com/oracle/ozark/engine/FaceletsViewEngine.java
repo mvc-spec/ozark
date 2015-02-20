@@ -43,7 +43,6 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.RequestDispatcher;
@@ -61,7 +60,7 @@ import java.io.IOException;
  * @author Santiago Pericas-Geertsen
  */
 @Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine implements ViewEngine {
+public class FaceletsViewEngine extends ViewEngineBase {
 
     @Inject
     private ServletContext servletContext;
@@ -93,7 +92,8 @@ public class FaceletsViewEngine implements ViewEngine {
         for (String name : models) {
             request.setAttribute(name, models.get(name));
         }
-        RequestDispatcher rd = servletContext.getRequestDispatcher(context.getView());
+        RequestDispatcher rd = servletContext.getRequestDispatcher(
+                getViewFolder(context.getConfiguration()) + context.getView());
         try {
             rd.forward(request, response);
         } catch (ServletException | IOException e) {

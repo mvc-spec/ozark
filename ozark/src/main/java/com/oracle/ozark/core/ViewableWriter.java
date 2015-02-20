@@ -107,6 +107,9 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     @Inject
     private ViewEngineFinder engineFinder;
 
+    @Context
+    private Configuration configuration;
+
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
         return aClass == Viewable.class;
@@ -183,7 +186,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             }
             // Process view using selected engine
             engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper,
-                    uriInfo, resourceInfo));
+                    uriInfo, resourceInfo, configuration));
         } catch (ViewEngineException e) {
             throw new ServerErrorException(Response.Status.INTERNAL_SERVER_ERROR, e);
         } finally {

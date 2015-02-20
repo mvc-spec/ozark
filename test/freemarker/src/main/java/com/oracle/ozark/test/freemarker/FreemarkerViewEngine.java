@@ -22,7 +22,7 @@ import java.io.*;
 @ApplicationScoped
 public class FreemarkerViewEngine implements ViewEngine {
 
-    private static final String VIEW_BASE = "/WEB-INF/";
+    private static final String VIEW_BASE = "/WEB-INF/views/";
 
     @Inject
     private ServletContext servletContext;

@@ -39,9 +39,12 @@
  */
 package com.oracle.ozark.test.facelets;
 
+import javax.mvc.engine.ViewEngine;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -55,5 +58,12 @@ public class MyApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         return Collections.singleton(BookController.class);
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put(ViewEngine.VIEW_FOLDER, "/");       // overrides default /WEB-INF/
+        return map;
     }
 }
