@@ -65,6 +65,7 @@
         <module>validation</module>
         <module>freemarker</module>
         <module>produces</module>
+        <module>mustache</module>
     </modules>
     <profiles>
         <profile>
