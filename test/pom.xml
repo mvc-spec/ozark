@@ -263,6 +263,14 @@
                     </plugin>
                 </plugins>
             </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>org.jacoco.agent</artifactId>
+                    <version>0.7.2.201409121644</version>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
         </profile>
     </profiles>
     <properties>
