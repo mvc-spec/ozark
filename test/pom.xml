@@ -43,6 +43,12 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>2.16</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -56,15 +62,7 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>facelets</module>
-        <module>book-cdi</module>
-        <module>book-models</module>
-        <module>conversation</module>
-        <module>events</module>
         <module>validation</module>
-        <module>freemarker</module>
-        <module>produces</module>
-        <module>mustache</module>
     </modules>
     <profiles>
         <profile>
