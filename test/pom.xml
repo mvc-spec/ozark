@@ -37,7 +37,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.oracle.ozark</groupId>
             <artifactId>ozark</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>runtime</scope>

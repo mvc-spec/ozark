@@ -22,7 +22,7 @@
     <dependencies>
         <!-- Access Ozark's extended MVC events -->
         <dependency>
-            <groupId>com.oracle</groupId>
+            <groupId>com.oracle.ozark</groupId>
             <artifactId>ozark</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
