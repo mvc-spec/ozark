@@ -75,7 +75,7 @@ public final class VariantSelector {
      * Interface to get a dimension value from a variant and check if an
      * acceptable dimension value is compatible with a dimension value.
      */
-    private static interface DimensionChecker<T, U> {
+    private interface DimensionChecker<T, U> {
 
         /**
          * Get the dimension value from the variant.
@@ -363,7 +363,7 @@ public final class VariantSelector {
                 return Collections.singletonList(new AcceptableToken("*"));
             }
             return HttpHeaderReader.readAcceptToken(acceptCharset);
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             throw new InternalServerErrorException("Unable to parse request 'Accept-Charset' header");
         }
     }
@@ -381,7 +381,7 @@ public final class VariantSelector {
                 return Collections.singletonList(new AcceptableToken("*"));
             }
             return HttpHeaderReader.readAcceptToken(acceptEncoding);
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             throw new InternalServerErrorException("Unable to parse request 'Accept-Encoding' header");
         }
     }

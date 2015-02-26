@@ -11,10 +11,10 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>com.oracle.ozark</groupId>
-    <artifactId>ri</artifactId>
+    <artifactId>ozark</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Ozark RI</name>
+    <name>Ozark MVC RI</name>
     <build>
         <plugins>
             <plugin>
