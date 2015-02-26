@@ -62,7 +62,16 @@
         </dependency>
     </dependencies>
     <modules>
+        <module>facelets</module>
+        <module>book-cdi</module>
+        <module>book-models</module>
+        <module>conversation</module>
+        <module>events</module>
         <module>validation</module>
+        <module>freemarker</module>
+        <module>produces</module>
+        <module>mustache</module>
+        <module>velocity</module>
     </modules>
     <profiles>
         <profile>

@@ -31,5 +31,6 @@
     <modules>
         <module>freemarker</module>
         <module>mustache</module>
+        <module>velocity</module>
     </modules>
 </project>
