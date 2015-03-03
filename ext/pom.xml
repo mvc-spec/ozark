@@ -13,7 +13,7 @@
     <artifactId>ext</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Ozark Extensions</name>
+    <name>Ozark ${project.version} Extensions</name>
     <dependencies>
         <dependency>
             <groupId>javax.mvc</groupId>

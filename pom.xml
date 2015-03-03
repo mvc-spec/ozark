@@ -7,7 +7,7 @@
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Ozark Parent Project</name>
+    <name>Ozark ${project.version} Parent Project</name>
     <parent>
         <groupId>net.java</groupId>
         <artifactId>jvnet-parent</artifactId>

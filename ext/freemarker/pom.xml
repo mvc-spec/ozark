@@ -9,7 +9,7 @@
     </parent>
     <artifactId>ozark-freemarker</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark Freemarker Extension</name>
+    <name>Ozark ${project.version} Freemarker Extension</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
