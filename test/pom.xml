@@ -5,11 +5,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.oracle.ozark</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
     <groupId>com.oracle.ozark.test</groupId>
-    <artifactId>pom</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <name>Ozark ${project.version} Integration Test POM</name>
+    <name>Ozark ${project.version} Integration Tests</name>
     <build>
         <plugins>
             <plugin>
@@ -25,27 +29,9 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>javax.mvc</groupId>
-            <artifactId>javax.mvc-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.ozark</groupId>
-            <artifactId>ozark</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey.core</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>2.16</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -62,15 +48,15 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>facelets</module>
         <module>book-cdi</module>
         <module>book-models</module>
         <module>conversation</module>
         <module>events</module>
-        <module>validation</module>
+        <module>facelets</module>
         <module>freemarker</module>
-        <module>produces</module>
         <module>mustache</module>
+        <module>produces</module>
+        <module>validation</module>
         <module>velocity</module>
     </modules>
     <profiles>
@@ -85,6 +71,18 @@
                     <artifactId>javax.mvc-api</artifactId>
                     <version>${project.version}</version>
                     <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.oracle.ozark</groupId>
+                    <artifactId>ozark</artifactId>
+                    <version>${project.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-server</artifactId>
+                    <version>2.16</version>
+                    <scope>provided</scope>
                 </dependency>
             </dependencies>
         </profile>

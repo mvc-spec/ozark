@@ -4,21 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.oracle.ozark.test</groupId>
-        <artifactId>pom</artifactId>
+        <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.oracle.ozark</groupId>
     <artifactId>events</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.artifactId} Sample</name>
+    <name>Ozark ${project.version} CDI Events Tests</name>
     <build>
         <finalName>test-events</finalName>
     </build>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
     <dependencies>
         <!-- Access Ozark's extended MVC events -->
         <dependency>
@@ -28,4 +22,9 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
 </project>

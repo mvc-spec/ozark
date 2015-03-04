@@ -16,5 +16,6 @@
     <modules>
         <module>ozark</module>
         <module>ext</module>
+        <module>test</module>
     </modules>
 </project>

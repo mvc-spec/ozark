@@ -4,13 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.oracle.ozark.test</groupId>
-        <artifactId>pom</artifactId>
+        <artifactId>parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.oracle.ozark</groupId>
     <artifactId>conversation</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.artifactId} Sample</name>
+    <name>Ozark ${project.version} CDI Conversation Tests</name>
     <build>
         <finalName>test-conversation</finalName>
     </build>
