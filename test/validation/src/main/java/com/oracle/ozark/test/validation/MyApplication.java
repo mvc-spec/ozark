@@ -56,6 +56,7 @@ public class MyApplication extends Application {
     public Set<Class<?>> getClasses() {
         final Set<Class<?>> set = new HashSet<>();
         set.add(FormController.class);
+        set.add(FormControllerProperty.class);
         return set;
     }
 }

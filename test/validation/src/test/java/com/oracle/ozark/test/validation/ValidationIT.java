@@ -39,12 +39,12 @@
  */
 package com.oracle.ozark.test.validation;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -69,7 +69,7 @@ public class ValidationIT {
     }
 
     @Test
-    public void testValidationOk() throws Exception {
+    public void testFormControllerOk() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl);
         final HtmlForm form = page.getFormByName("form");
         final HtmlTextInput name = form.getInputByName("name");
@@ -83,9 +83,41 @@ public class ValidationIT {
         assertTrue(it.next().asText().contains("21"));
     }
 
-    @Test
-    public void testValidationFail() throws Exception {
+    @Test @Ignore
+    public void testFormControllerFail() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl);
+        final HtmlForm form = page.getFormByName("form");
+        final HtmlTextInput name = form.getInputByName("name");
+        final HtmlTextInput age = form.getInputByName("age");
+        final HtmlSubmitInput button = form.getInputByName("button");
+        name.setValueAttribute("john");
+        age.setValueAttribute("2");         // Not old enough!
+        try {
+            button.click();
+            fail("Validation error expected in form submission");
+        } catch (FailingHttpStatusCodeException e) {
+            assertTrue(e.getStatusCode() == 400);
+        }
+    }
+
+    @Test
+    public void testFormControllerPropertyOk() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "/indexprop.html");
+        final HtmlForm form = page.getFormByName("form");
+        final HtmlTextInput name = form.getInputByName("name");
+        final HtmlTextInput age = form.getInputByName("age");
+        final HtmlSubmitInput button = form.getInputByName("button");
+        name.setValueAttribute("john");
+        age.setValueAttribute("21");
+        final HtmlPage page2 = button.click();
+        final Iterator<HtmlElement> it = page2.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        assertTrue(it.next().asText().contains("john"));
+        assertTrue(it.next().asText().contains("21"));
+    }
+
+    @Test @Ignore
+    public void testFormControllerPropertyFail() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "/indexprop.html");
         final HtmlForm form = page.getFormByName("form");
         final HtmlTextInput name = form.getInputByName("name");
         final HtmlTextInput age = form.getInputByName("age");

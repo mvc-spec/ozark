@@ -57,17 +57,15 @@ import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
 
 /**
- * FormController class. Defines ValidationResult as injectable field.
+ * FormController class. Defines ValidationResult as a property inherited
+ * from a base class.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Controller
-@Path("form")
+@Path("formprop")
 @Produces("text/html")
-public class FormController {
-
-    @Inject
-    private ValidationResult vr;
+public class FormControllerProperty extends FormControllerBase {
 
     @Inject
     private ErrorDataBean error;
@@ -75,6 +73,7 @@ public class FormController {
     @POST
     @ValidateOnExecution(type = ExecutableType.NONE)
     public Response formPost(@Valid @BeanParam FormDataBean form) {
+        final ValidationResult vr = getVr();
         if (vr.isFailed()) {
             final Set<ConstraintViolation<?>> set = vr.getAllViolations();
             final ConstraintViolation<?> cv = set.iterator().next();
