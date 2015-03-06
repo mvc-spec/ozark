@@ -138,7 +138,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 responseContext.setEntity(new Viewable(an.value()), null, contentType);
                 responseContext.setStatusInfo(OK);      // Needed for method returning void
             } else {
-                throw new ServerErrorException("Missing @View annotation in controller method "
+                throw new ServerErrorException("Response entity is null. Missing @View annotation? "
                         + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
             }
         } else if (entityType == String.class) {
