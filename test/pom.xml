@@ -294,7 +294,7 @@
                                         </artifactItem>
                                         <artifactItem>
                                             <groupId>javax.mvc</groupId>
-                                            <artifactId>mvc-api</artifactId>
+                                            <artifactId>javax.mvc-api</artifactId>
                                             <version>${project.version}</version>
                                             <type>jar</type>
                                             <classifier>sources</classifier>
