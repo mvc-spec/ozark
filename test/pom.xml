@@ -348,23 +348,6 @@
                     <classifier>sources</classifier>
                     <scope>provided</scope>
                 </dependency>
-                <!--
-                
-                    The regular dependencies for Ozark.
-                
-                -->
-                <dependency>
-                    <groupId>javax.mvc</groupId>
-                    <artifactId>javax.mvc-api</artifactId>
-                    <version>${project.version}</version>
-                    <scope>compile</scope>
-                </dependency>
-                <dependency>
-                    <groupId>com.oracle.ozark</groupId>
-                    <artifactId>ozark</artifactId>
-                    <version>${project.version}</version>
-                    <scope>runtime</scope>
-                </dependency>
                 <dependency>
                     <groupId>org.glassfish.jersey.core</groupId>
                     <artifactId>jersey-server</artifactId>
