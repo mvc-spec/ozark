@@ -319,7 +319,7 @@
                     <artifactId>javax.mvc-api</artifactId>
                     <version>${project.version}</version>
                     <classifier>instrumented</classifier>
-                    <scope>runtime</scope>
+                    <scope>compile</scope>
                 </dependency>
                 <dependency>
                     <groupId>com.oracle.ozark</groupId>
