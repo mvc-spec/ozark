@@ -338,7 +338,7 @@
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
                     <version>${project.version}</version>
-                    <classifier>source</classifier>
+                    <classifier>sources</classifier>
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
