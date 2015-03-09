@@ -267,6 +267,112 @@
                 </dependency>
             </dependencies>
         </profile>
+        <profile>
+            <id>jacoco-bundled</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-dependency-plugin</artifactId>
+                        <version>2.10</version>
+                        <executions>
+                            <execution>
+                                <id>unpack</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>unpack</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>com.oracle.ozark</groupId>
+                                            <artifactId>ozark</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>jar</type>
+                                            <classifier>sources</classifier>
+                                            <overWrite>true</overWrite>
+                                        </artifactItem>
+                                        <artifactItem>
+                                            <groupId>javax.mvc</groupId>
+                                            <artifactId>mvc-api</artifactId>
+                                            <version>${project.version}</version>
+                                            <type>jar</type>
+                                            <classifier>sources</classifier>
+                                            <overWrite>true</overWrite>
+                                        </artifactItem>
+                                    </artifactItems>
+                                    <outputDirectory>${project.build.directory}/jacoco-sources</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <!--
+                
+                    The Jacoco instrumented need to be first.
+                
+                  -->
+                <dependency>
+                    <groupId>javax.mvc</groupId>
+                    <artifactId>javax.mvc-api</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>instrumented</classifier>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.oracle.ozark</groupId>
+                    <artifactId>ozark</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>instrumented</classifier>
+                    <scope>runtime</scope>
+                </dependency>
+                <!--
+                
+                    The sources so Jacoco has access to them to generate the
+                    Jacoco reports.
+                
+                  -->
+                <dependency>
+                    <groupId>javax.mvc</groupId>
+                    <artifactId>javax.mvc-api</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>source</classifier>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.oracle.ozark</groupId>
+                    <artifactId>ozark</artifactId>
+                    <version>${project.version}</version>
+                    <classifier>sources</classifier>
+                    <scope>provided</scope>
+                </dependency>
+                <!--
+                
+                    The regular dependencies for Ozark.
+                
+                -->
+                <dependency>
+                    <groupId>javax.mvc</groupId>
+                    <artifactId>javax.mvc-api</artifactId>
+                    <version>${project.version}</version>
+                    <scope>compile</scope>
+                </dependency>
+                <dependency>
+                    <groupId>com.oracle.ozark</groupId>
+                    <artifactId>ozark</artifactId>
+                    <version>${project.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-server</artifactId>
+                    <version>2.16</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
