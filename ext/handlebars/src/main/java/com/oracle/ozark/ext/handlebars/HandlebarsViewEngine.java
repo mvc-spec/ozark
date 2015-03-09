@@ -40,43 +40,33 @@
 package com.oracle.ozark.ext.handlebars;
 
 import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Helper;
-import com.github.jknack.handlebars.Options;
 import com.github.jknack.handlebars.Template;
-import com.github.jknack.handlebars.helper.BlockHelper;
-import com.github.jknack.handlebars.helper.EachHelper;
-import com.github.jknack.handlebars.helper.EmbeddedHelper;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.Models;
-import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolation;
 import java.io.*;
-import java.io.BufferedReader;import java.io.IOException;import java.io.InputStream;import java.io.InputStreamReader;import java.io.PrintWriter;import java.lang.Override;import java.lang.String;import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * Class HandlebarsViewEngine
+ *
  * @author Rahman Usta
  */
 @ApplicationScoped
 public class HandlebarsViewEngine implements ViewEngine {
+
+    private static final String VIEW_BASE = "/WEB-INF/views/";
 
     @Inject
     private ServletContext servletContext;
 
     @Override
     public boolean supports(String view) {
-        return view.endsWith(".hbs");
+        return view.endsWith(".hbs") || view.endsWith(".handlebars");
     }
 
     @Override
@@ -84,11 +74,11 @@ public class HandlebarsViewEngine implements ViewEngine {
 
         Models models = context.getModels();
         String viewName = context.getView();
-        if (!viewName.startsWith("/"))
-            viewName = "/" + viewName;
+        if (viewName.startsWith("/"))
+            viewName = viewName.substring(1);
 
         try (PrintWriter writer = context.getResponse().getWriter();
-             InputStream resourceAsStream = servletContext.getResourceAsStream(viewName);
+             InputStream resourceAsStream = servletContext.getResourceAsStream(VIEW_BASE + viewName);
              InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
              BufferedReader bufferedReader = new BufferedReader(in);) {
 
