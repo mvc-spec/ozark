@@ -69,7 +69,9 @@
         <profile>
             <id>bundled</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <file>
+                    <missing>container</missing>
+                </file>
             </activation>
             <dependencies>
                 <dependency>
