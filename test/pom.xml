@@ -59,6 +59,7 @@
         <module>produces</module>
         <module>validation</module>
         <module>velocity</module>
+	<module>thymeleaf</module>
     </modules>
     <profiles>
         <profile>

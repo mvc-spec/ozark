@@ -33,5 +33,6 @@
         <module>handlebars</module>
         <module>mustache</module>
         <module>velocity</module>
+	<module>thymeleaf</module>
     </modules>
 </project>

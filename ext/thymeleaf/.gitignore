@@ -1,0 +1,4 @@
+/target/
+test/thymeleaf/.classpath
+test/thymeleaf/.project
+test/thymeleaf/.settings/

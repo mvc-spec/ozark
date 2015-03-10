@@ -1,4 +1,6 @@
 .idea
+.project
+.settings/
 ozark/.idea
 ozark/target
 ozark-sample/target/
@@ -9,3 +11,5 @@ ozark-sample/.idea
 /test/target/
 /test/sample/target/
 ext/freemarker/target/
+*/.classpath
+*/*/.classpath
