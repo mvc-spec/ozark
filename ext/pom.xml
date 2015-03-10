@@ -30,6 +30,7 @@
     </dependencies>
     <modules>
         <module>freemarker</module>
+        <module>handlebars</module>
         <module>mustache</module>
         <module>velocity</module>
     </modules>
