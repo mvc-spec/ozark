@@ -71,7 +71,7 @@
             <id>bundled</id>
             <activation>
                 <file>
-                    <missing>${basedir}/container/glassfish4/README.txt</missing>
+                    <missing>${env.WORKSPACE}/coverageContainer/glassfish4/README.txt</missing>
                 </file>
             </activation>
             <dependencies>
