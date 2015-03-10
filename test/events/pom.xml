@@ -19,7 +19,7 @@
             <groupId>com.oracle.ozark</groupId>
             <artifactId>ozark</artifactId>
             <version>${project.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <properties>
