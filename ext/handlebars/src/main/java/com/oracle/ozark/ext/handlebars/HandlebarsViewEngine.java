@@ -41,6 +41,7 @@ package com.oracle.ozark.ext.handlebars;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.Models;
@@ -48,7 +49,11 @@ import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.stream.Collectors;
 
 /**
@@ -71,26 +76,21 @@ public class HandlebarsViewEngine implements ViewEngine {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-
         Models models = context.getModels();
         String viewName = context.getView();
-        if (viewName.startsWith("/"))
-            viewName = viewName.substring(1);
 
         try (PrintWriter writer = context.getResponse().getWriter();
-             InputStream resourceAsStream = servletContext.getResourceAsStream(VIEW_BASE + viewName);
-             InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
-             BufferedReader bufferedReader = new BufferedReader(in);) {
+            InputStream resourceAsStream = servletContext.getResourceAsStream(VIEW_BASE + viewName);
+            InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
+            BufferedReader bufferedReader = new BufferedReader(in);) {
 
             String viewContent = bufferedReader.lines().collect(Collectors.joining());
 
             Handlebars handlebars = new Handlebars();
             Template template = handlebars.compileInline(viewContent);
             template.apply(models, writer);
-
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }
-
     }
 }

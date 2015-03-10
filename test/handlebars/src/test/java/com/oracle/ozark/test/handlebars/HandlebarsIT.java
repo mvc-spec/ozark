@@ -52,6 +52,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Class HandlebarsIT
+ *
  * @author Rahman Usta
  */
 public class HandlebarsIT {
@@ -74,8 +75,6 @@ public class HandlebarsIT {
     public void testView1() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/person");
         List<DomElement> div = page.getElementsByTagName("div");
-
-        assertEquals(3,div.size());
-
+        assertEquals(3, div.size());
     }
 }
