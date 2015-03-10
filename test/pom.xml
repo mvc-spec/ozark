@@ -71,7 +71,7 @@
             <id>bundled</id>
             <activation>
                 <file>
-                    <missing>container</missing>
+                    <missing>${basedir}/container/glassfish4/README.txt</missing>
                 </file>
             </activation>
             <dependencies>
