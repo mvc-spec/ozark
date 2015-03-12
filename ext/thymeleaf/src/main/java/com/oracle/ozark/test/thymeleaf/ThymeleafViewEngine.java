@@ -68,12 +68,14 @@ public class ThymeleafViewEngine implements ViewEngine {
 	@Inject
 	private ServletContext servletContext;
 
-	private TemplateResolver resolver;
+	private final TemplateEngine engine;
 
 
 	public ThymeleafViewEngine() {
-		resolver = new ServletContextTemplateResolver();
+		TemplateResolver resolver = new ServletContextTemplateResolver();
 		resolver.setPrefix(VIEW_BASE);
+		engine = new TemplateEngine();
+		engine.setTemplateResolver(resolver);
 	}
 
 	@Override
@@ -84,8 +86,6 @@ public class ThymeleafViewEngine implements ViewEngine {
 	@Override
 	public void processView(ViewEngineContext context) throws ViewEngineException {
 		try {
-			TemplateEngine engine = new TemplateEngine();
-			engine.setTemplateResolver(resolver);
 			HttpServletRequest request = context.getRequest();
 			HttpServletResponse response = context.getResponse();
 			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
