@@ -83,7 +83,7 @@ public class ValidationIT {
         assertTrue(it.next().asText().contains("21"));
     }
 
-    @Test @Ignore
+    @Test
     public void testFormControllerFail() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl);
         final HtmlForm form = page.getFormByName("form");
@@ -115,7 +115,7 @@ public class ValidationIT {
         assertTrue(it.next().asText().contains("21"));
     }
 
-    @Test @Ignore
+    @Test
     public void testFormControllerPropertyFail() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "/indexprop.html");
         final HtmlForm form = page.getFormByName("form");
