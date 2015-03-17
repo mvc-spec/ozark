@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project 
-    xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.oracle.ozark</groupId>
@@ -59,7 +59,8 @@
         <module>produces</module>
         <module>validation</module>
         <module>velocity</module>
-	<module>thymeleaf</module>
+        <module>thymeleaf</module>
+        <module>redirect</module>
     </modules>
     <profiles>
         <profile>
@@ -120,7 +121,7 @@
                                     <timeout>2400000</timeout>
                                 </configuration>
                             </execution>
-                        </executions>                        
+                        </executions>
                         <configuration>
                             <container>
                                 <containerId>${glassfish.cargo.id}</containerId>
@@ -191,7 +192,7 @@
                                 </exclusions>
                             </dependency>
                         </dependencies>
-                    </plugin>                    
+                    </plugin>
                 </plugins>
             </build>
             <properties>
@@ -199,7 +200,7 @@
                 <glassfish.unzip.home>C:/glassfish4</glassfish.unzip.home>
                 <glassfish.unzip.zipFile>C:/Downloads/Glassfish4.1.zip</glassfish.unzip.zipFile>
             </properties>
-        </profile>        
+        </profile>
         <profile>
             <id>integration</id>
             <build>
@@ -222,12 +223,15 @@
                                 <integration.serverName>${integration.serverName}</integration.serverName>
                                 <integration.serverPort>${integration.serverPort}</integration.serverPort>
                                 <integration.serverProtocol>${integration.serverProtocol}</integration.serverProtocol>
-                                <integration.url>${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/</integration.url>
+                                <integration.url>
+                                    ${integration.protocol}://${integration.serverName}:${integration.serverPort}/${project.build.finalName}/
+                                </integration.url>
                                 <project.build.finalName>${project.build.finalName}</project.build.finalName>
-                                <project.build.sourceEncoding>${project.build.sourceEncoding}</project.build.sourceEncoding>
+                                <project.build.sourceEncoding>${project.build.sourceEncoding}
+                                </project.build.sourceEncoding>
                             </systemPropertyVariables>
                         </configuration>
-                    </plugin>                
+                    </plugin>
                 </plugins>
             </build>
             <properties>

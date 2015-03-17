@@ -39,7 +39,6 @@
  */
 package com.oracle.ozark.test.produces;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.WebResponse;
@@ -49,10 +48,9 @@ import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
-
-import java.net.URL;
 
 public class ProducesIT {
 
@@ -123,7 +121,7 @@ public class ProducesIT {
 
     @Test
     public void language1() throws Exception {
-        final WebRequest wrq =  new WebRequest(new URL(webUrl + "resources/language1"), ACCEPT_HEADER);
+        final WebRequest wrq = new WebRequest(new URL(webUrl + "resources/language1"), ACCEPT_HEADER);
         wrq.setAdditionalHeader("Accept-Language", ACCEPT_LANGUAGE);
         final WebResponse wr = webClient.loadWebResponse(wrq);
         assertEquals(Response.Status.OK.getStatusCode(), wr.getStatusCode());
@@ -133,9 +131,9 @@ public class ProducesIT {
 
     @Test
     public void language2() throws Exception {
-        final WebRequest wrq =  new WebRequest(new URL(webUrl + "resources/language2"), ACCEPT_HEADER);
+        final WebRequest wrq = new WebRequest(new URL(webUrl + "resources/language2"), ACCEPT_HEADER);
         wrq.setAdditionalHeader("Accept-Language", ACCEPT_LANGUAGE);
-        final WebResponse wr = webClient.loadWebResponse(wrq);;
+        final WebResponse wr = webClient.loadWebResponse(wrq);
         assertEquals(Response.Status.OK.getStatusCode(), wr.getStatusCode());
         assertEquals(MediaType.APPLICATION_XHTML_XML, wr.getContentType());
         assertEquals("es", wr.getResponseHeaderValue("Content-Language"));
@@ -143,7 +141,7 @@ public class ProducesIT {
 
     @Test
     public void locale1() throws Exception {
-        final WebRequest wrq =  new WebRequest(new URL(webUrl + "resources/locale1"), ACCEPT_HEADER);
+        final WebRequest wrq = new WebRequest(new URL(webUrl + "resources/locale1"), ACCEPT_HEADER);
         wrq.setAdditionalHeader("Accept-Language", ACCEPT_LANGUAGE);
         final WebResponse wr = webClient.loadWebResponse(wrq);
         assertEquals(Response.Status.OK.getStatusCode(), wr.getStatusCode());
@@ -153,7 +151,7 @@ public class ProducesIT {
 
     @Test
     public void locale2() throws Exception {
-        final WebRequest wrq =  new WebRequest(new URL(webUrl + "resources/locale2"), ACCEPT_HEADER);
+        final WebRequest wrq = new WebRequest(new URL(webUrl + "resources/locale2"), ACCEPT_HEADER);
         wrq.setAdditionalHeader("Accept-Language", ACCEPT_LANGUAGE);
         final WebResponse wr = webClient.loadWebResponse(wrq);
         assertEquals(Response.Status.OK.getStatusCode(), wr.getStatusCode());

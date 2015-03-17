@@ -63,6 +63,8 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import static javax.ws.rs.core.Response.Status.FOUND;
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static javax.ws.rs.core.Response.Status.OK;
 
 /**
@@ -88,6 +90,9 @@ import static javax.ws.rs.core.Response.Status.OK;
 @Controller
 @Priority(Priorities.ENTITY_CODER)
 public class ViewResponseFilter implements ContainerResponseFilter {
+
+    private static final String REDIRECT = "redirect:";
+    private static final String LOCATION_HEADER = "Location";
 
     @Context
     private UriInfo uriInfo;
@@ -122,28 +127,40 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                     + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
         }
 
-        // Wrap entity type into Viewable, possibly looking at @View
-        final Object entity = responseContext.getEntity();
-        final Class<?> entityType = entity != null ? entity.getClass() : null;
-        if (entityType == null) {
-            View an = method.getAnnotation(View.class);
-            if (an == null) {
-                an = resourceInfo.getResourceClass().getAnnotation(View.class);
-            }
-            if (an != null) {
-                MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
-                if (contentType == null) {
-                    contentType = MediaType.TEXT_HTML_TYPE;     // default
+        // Under normal processing, no exceptions
+        final Response.StatusType statusType = responseContext.getStatusInfo();
+        if (statusType == OK || statusType == NO_CONTENT) {
+            // Wrap entity type into Viewable, possibly looking at @View
+            final Object entity = responseContext.getEntity();
+            final Class<?> entityType = entity != null ? entity.getClass() : null;
+            if (entityType == null) {       // NO_CONTENT
+                View an = method.getAnnotation(View.class);
+                if (an == null) {
+                    an = resourceInfo.getResourceClass().getAnnotation(View.class);
                 }
-                responseContext.setEntity(new Viewable(an.value()), null, contentType);
-                responseContext.setStatusInfo(OK);      // Needed for method returning void
-            } else {
-                throw new ServerErrorException("Response entity is null. Missing @View annotation? "
-                        + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
+                if (an != null) {
+                    MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
+                    if (contentType == null) {
+                        contentType = MediaType.TEXT_HTML_TYPE;     // default
+                    }
+                    responseContext.setEntity(new Viewable(an.value()), null, contentType);
+                    responseContext.setStatusInfo(OK);      // Needed for method returning void
+                } else {
+                    throw new ServerErrorException("Response entity is null. Missing @View annotation? "
+                            + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
+                }
+            } else if (entityType == String.class) {
+                responseContext.setEntity(new Viewable((String) entity), null, responseContext.getMediaType());
             }
-        } else if (entityType == String.class) {
-            final String view = (String) responseContext.getEntity();
-            responseContext.setEntity(new Viewable(view), null, responseContext.getMediaType());
+
+            // Redirect logic, entity must be a Viewable now
+            final String view = ((Viewable) responseContext.getEntity()).getView();
+            if (view.startsWith(REDIRECT)) {
+                final String uri = uriInfo.getBaseUri() + view.substring(REDIRECT.length() + 1);
+                responseContext.setStatusInfo(FOUND);
+                responseContext.getHeaders().putSingle(LOCATION_HEADER, uri);
+                responseContext.setEntity(null);
+            }
         }
     }
 }
