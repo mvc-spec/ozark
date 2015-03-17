@@ -39,31 +39,28 @@
  */
 package com.oracle.ozark.test.thymeleaf;
 
-import java.io.IOException;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.mvc.engine.ViewEngine;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.oracle.ozark.engine.ViewEngineBase;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.mvc.engine.ViewEngineContext;
+import javax.mvc.engine.ViewEngineException;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 /**
- * Class ThymeleafViewEngine.
+ * Class Thymeleaf ViewEngine.
  *
  * @author Rodrigo Turini
  */
 @ApplicationScoped
-public class ThymeleafViewEngine implements ViewEngine {
-
-	private static final String VIEW_BASE = "/WEB-INF/views/";
+public class ThymeleafViewEngine extends ViewEngineBase {
 
 	@Inject
 	private ServletContext servletContext;
@@ -73,14 +70,13 @@ public class ThymeleafViewEngine implements ViewEngine {
 
 	public ThymeleafViewEngine() {
 		TemplateResolver resolver = new ServletContextTemplateResolver();
-		resolver.setPrefix(VIEW_BASE);
 		engine = new TemplateEngine();
 		engine.setTemplateResolver(resolver);
 	}
 
 	@Override
 	public boolean supports(String view) {
-		return view.endsWith("html");
+		return view.endsWith(".html");
 	}
 
 	@Override
@@ -90,7 +86,7 @@ public class ThymeleafViewEngine implements ViewEngine {
 			HttpServletResponse response = context.getResponse();
 			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 			ctx.setVariables(context.getModels());
-			engine.process(context.getView(), ctx, response.getWriter());
+			engine.process(resolveView(context), ctx, response.getWriter());
 		} catch (IOException e) {
 			throw new ViewEngineException(e);
 		}

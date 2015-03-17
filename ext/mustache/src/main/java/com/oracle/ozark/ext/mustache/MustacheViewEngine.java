@@ -42,10 +42,10 @@ package com.oracle.ozark.ext.mustache;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import com.oracle.ozark.engine.ViewEngineBase;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
@@ -59,9 +59,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  * @author Rodrigo Turini
  */
 @ApplicationScoped
-public class MustacheViewEngine implements ViewEngine {
-
-	private static final String VIEW_BASE = "/WEB-INF/views/";
+public class MustacheViewEngine extends ViewEngineBase {
 
 	@Inject
 	private ServletContext servletContext;
@@ -79,7 +77,7 @@ public class MustacheViewEngine implements ViewEngine {
 
 	@Override
 	public void processView(ViewEngineContext context) throws ViewEngineException {
-		Mustache mustache = factory.compile(context.getView());
+		Mustache mustache = factory.compile(resolveView(context));
 		try {
 			Writer writer = context.getResponse().getWriter();
 			mustache.execute(writer, context.getModels()).flush();
@@ -91,7 +89,7 @@ public class MustacheViewEngine implements ViewEngine {
 	private class CustomMustacheFactory extends DefaultMustacheFactory {
 		@Override
 		public Reader getReader(String resourceName) {
-			InputStream is = servletContext.getResourceAsStream(VIEW_BASE + resourceName);
+			InputStream is = servletContext.getResourceAsStream(resourceName);
 			if (is != null) {
 				return new BufferedReader(new InputStreamReader(is, UTF_8));
 			}

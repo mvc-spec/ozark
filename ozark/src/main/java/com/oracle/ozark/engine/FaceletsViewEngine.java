@@ -92,8 +92,7 @@ public class FaceletsViewEngine extends ViewEngineBase {
         for (String name : models) {
             request.setAttribute(name, models.get(name));
         }
-        RequestDispatcher rd = servletContext.getRequestDispatcher(
-                getViewFolder(context.getConfiguration()) + context.getView());
+        final RequestDispatcher rd = servletContext.getRequestDispatcher(resolveView(context));
         try {
             rd.forward(request, response);
         } catch (ServletException | IOException e) {

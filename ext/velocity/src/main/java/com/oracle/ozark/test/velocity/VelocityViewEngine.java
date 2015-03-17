@@ -39,6 +39,7 @@
  */
 package com.oracle.ozark.test.velocity;
 
+import com.oracle.ozark.engine.ViewEngineBase;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -46,7 +47,6 @@ import org.apache.velocity.app.VelocityEngine;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
@@ -58,9 +58,7 @@ import java.io.IOException;
  * @author Rodrigo Turini
  */
 @ApplicationScoped
-public class VelocityViewEngine implements ViewEngine {
-
-    private static final String VIEW_BASE = "/WEB-INF/views/";
+public class VelocityViewEngine extends ViewEngineBase {
 
     @Inject
     private ServletContext servletContext;
@@ -72,7 +70,6 @@ public class VelocityViewEngine implements ViewEngine {
         velocityEngine = new VelocityEngine();
         velocityEngine.setProperty("resource.loader", "webapp");
         velocityEngine.setProperty("webapp.resource.loader.class", "org.apache.velocity.tools.view.servlet.WebappLoader");
-        velocityEngine.setProperty("webapp.resource.loader.path", VIEW_BASE);
         velocityEngine.setApplicationAttribute("javax.servlet.ServletContext", servletContext);
         velocityEngine.init();
     }
@@ -85,7 +82,7 @@ public class VelocityViewEngine implements ViewEngine {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         try {
-            Template template = velocityEngine.getTemplate(context.getView());
+            Template template = velocityEngine.getTemplate(resolveView(context));
             VelocityContext velocityContext = new VelocityContext(context.getModels());
             template.merge(velocityContext, context.getResponse().getWriter());
         } catch (IOException e) {

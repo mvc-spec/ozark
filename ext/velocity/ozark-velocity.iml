@@ -15,6 +15,7 @@
     <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.4" level="project" />
     <orderEntry type="library" name="Maven: velocity-tools:velocity-tools-view:2.0-beta1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.mvc:javax.mvc-api:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="ri" scope="PROVIDED" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-web-api:7.0" level="project" />
   </component>
 </module>

@@ -22,6 +22,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.oracle.ozark</groupId>
+            <artifactId>ozark</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>7.0</version>
@@ -33,6 +39,6 @@
         <module>handlebars</module>
         <module>mustache</module>
         <module>velocity</module>
-	<module>thymeleaf</module>
+	    <module>thymeleaf</module>
     </modules>
 </project>

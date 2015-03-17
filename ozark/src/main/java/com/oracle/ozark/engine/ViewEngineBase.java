@@ -40,7 +40,7 @@
 package com.oracle.ozark.engine;
 
 import javax.mvc.engine.ViewEngine;
-import javax.ws.rs.core.Configuration;
+import javax.mvc.engine.ViewEngineContext;
 
 /**
  * Base class for view engines that factors out all common logic.
@@ -50,16 +50,22 @@ import javax.ws.rs.core.Configuration;
 public abstract class ViewEngineBase implements ViewEngine {
 
     /**
-     * Search a {@link javax.ws.rs.core.Configuration} object for the value of
-     * property {@link javax.mvc.engine.ViewEngine#VIEW_FOLDER}. This property
-     * defines the root for all views. Default value for this property is
-     * {@link javax.mvc.engine.ViewEngine#DEFAULT_VIEW_FOLDER}.
+     * Resolves a view path based on {@link javax.mvc.engine.ViewEngine#VIEW_FOLDER}
+     * in the active configuration. If the view is absolute, starts with '/', then
+     * it is returned unchanged.
      *
-     * @param c configuration object.
-     * @return property's value or default.
+     * @param context view engine context.
+     * @return resolved view.
      */
-    protected String getViewFolder(Configuration c) {
-        final String viewFolder = (String) c.getProperty(ViewEngine.VIEW_FOLDER);
-        return viewFolder != null ? viewFolder : ViewEngine.DEFAULT_VIEW_FOLDER;
+    protected String resolveView(ViewEngineContext context) {
+        final String view = context.getView();
+        if (view.charAt(0) != '/') {        // Relative?
+            String viewFolder = (String) context.getConfiguration().getProperty(ViewEngine.VIEW_FOLDER);
+            if (viewFolder == null) {
+                viewFolder = ViewEngine.DEFAULT_VIEW_FOLDER;
+            }
+            return viewFolder + view;
+        }
+        return view;
     }
 }

@@ -39,6 +39,7 @@
  */
 package com.oracle.ozark.ext.freemarker;
 
+import com.oracle.ozark.engine.ViewEngineBase;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -46,7 +47,6 @@ import freemarker.template.TemplateException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
@@ -58,9 +58,7 @@ import java.io.*;
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
-public class FreemarkerViewEngine implements ViewEngine {
-
-    private static final String VIEW_BASE = "/WEB-INF/views/";
+public class FreemarkerViewEngine extends ViewEngineBase {
 
     @Inject
     private ServletContext servletContext;
@@ -74,7 +72,7 @@ public class FreemarkerViewEngine implements ViewEngine {
 
             @Override
             public Object findTemplateSource(String s) throws IOException {
-                return servletContext.getResourceAsStream(VIEW_BASE + s);
+                return servletContext.getResourceAsStream("/" + s);     // Freemarker drops "/"
             }
 
             @Override
@@ -102,7 +100,7 @@ public class FreemarkerViewEngine implements ViewEngine {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         try {
-            final Template template = configuration.getTemplate(context.getView());
+            final Template template = configuration.getTemplate(resolveView(context));
             template.process(context.getModels(),
                     new OutputStreamWriter(context.getResponse().getOutputStream()));
         } catch (TemplateException | IOException e) {

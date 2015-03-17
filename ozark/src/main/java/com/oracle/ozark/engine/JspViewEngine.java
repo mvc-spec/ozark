@@ -94,8 +94,7 @@ public class JspViewEngine extends ViewEngineBase {
             request.setAttribute(name, models.get(name));
         }
         // Forward request to servlet engine to process JSP
-        RequestDispatcher rd = servletContext.getRequestDispatcher(
-                getViewFolder(context.getConfiguration()) + context.getView());
+        final RequestDispatcher rd = servletContext.getRequestDispatcher(resolveView(context));
         try {
             rd.forward(request, response);
         } catch (ServletException | IOException e) {

@@ -41,19 +41,15 @@ package com.oracle.ozark.ext.handlebars;
 
 import com.github.jknack.handlebars.Handlebars;
 import com.github.jknack.handlebars.Template;
+import com.oracle.ozark.engine.ViewEngineBase;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.Models;
-import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.stream.Collectors;
 
 /**
@@ -62,9 +58,7 @@ import java.util.stream.Collectors;
  * @author Rahman Usta
  */
 @ApplicationScoped
-public class HandlebarsViewEngine implements ViewEngine {
-
-    private static final String VIEW_BASE = "/WEB-INF/views/";
+public class HandlebarsViewEngine extends ViewEngineBase {
 
     @Inject
     private ServletContext servletContext;
@@ -80,7 +74,7 @@ public class HandlebarsViewEngine implements ViewEngine {
         String viewName = context.getView();
 
         try (PrintWriter writer = context.getResponse().getWriter();
-            InputStream resourceAsStream = servletContext.getResourceAsStream(VIEW_BASE + viewName);
+            InputStream resourceAsStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(in);) {
 
