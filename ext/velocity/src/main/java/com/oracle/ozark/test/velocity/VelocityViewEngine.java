@@ -79,7 +79,7 @@ public class VelocityViewEngine implements ViewEngine {
 
     @Override
     public boolean supports(String view) {
-        return view.endsWith("vm");
+        return view.endsWith(".vm");
     }
 
     @Override

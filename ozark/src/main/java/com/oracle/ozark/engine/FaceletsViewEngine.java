@@ -66,14 +66,14 @@ public class FaceletsViewEngine extends ViewEngineBase {
     private ServletContext servletContext;
 
     /**
-     * Assumes that any view that ends with {@code xhtml} is a facelet.
+     * Assumes that any view that ends with {@code .xhtml} is a facelet.
      *
      * @param view the name of the view.
      * @return {@code true} if supported or {@code false} if not.
      */
     @Override
     public boolean supports(String view) {
-        return view.endsWith("xhtml");
+        return view.endsWith(".xhtml");
     }
 
     /**

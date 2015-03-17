@@ -39,14 +39,9 @@
  */
 package com.oracle.ozark.ext.mustache;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.Writer;
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -54,10 +49,9 @@ import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
+import java.io.*;
 
-import com.github.mustachejava.DefaultMustacheFactory;
-import com.github.mustachejava.Mustache;
-import com.github.mustachejava.MustacheFactory;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Class MustacheViewEngine.
@@ -80,7 +74,7 @@ public class MustacheViewEngine implements ViewEngine {
 
 	@Override
 	public boolean supports(String view) {
-		return view.endsWith("mustache");
+		return view.endsWith(".mustache");
 	}
 
 	@Override

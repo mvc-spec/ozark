@@ -50,7 +50,6 @@ import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import java.io.*;
 
 /**
@@ -97,7 +96,7 @@ public class FreemarkerViewEngine implements ViewEngine {
 
     @Override
     public boolean supports(String view) {
-        return view.endsWith("ftl");
+        return view.endsWith(".ftl");
     }
 
     @Override

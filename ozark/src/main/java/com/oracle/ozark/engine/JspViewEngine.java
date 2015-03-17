@@ -66,14 +66,14 @@ public class JspViewEngine extends ViewEngineBase {
     private ServletContext servletContext;
 
     /**
-     * Assumes that any view that ends with {@code jsp} or {@code jspx} is a JSP.
+     * Assumes that any view that ends with {@code .jsp} or {@code .jspx} is a JSP.
      *
      * @param view the name of the view.
      * @return {@code true} if supported or {@code false} if not.
      */
     @Override
     public boolean supports(String view) {
-        return view.endsWith("jsp") || view.endsWith("jspx");
+        return view.endsWith(".jsp") || view.endsWith(".jspx");
     }
 
     /**
