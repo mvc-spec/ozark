@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Stopping Conversation</title>
+    <link rel="stylesheet" type="text/css" href="../../ozark.css">
 </head>
 <body>
     <h1>Stopping Conversation</h1>
