@@ -73,9 +73,9 @@ public class BookController {
     @Produces("text/html;charset=utf-8")
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
-        book.setTitle("CDI book");
-        book.setAuthor("Some CDI author");
-        book.setIsbn("Some CDI ISBN");
+        book.setTitle("Some title");
+        book.setAuthor("Some author");
+        book.setIsbn("Some ISBN");
         return "book.jsp";      // JSP to render a book
     }
 
@@ -93,8 +93,8 @@ public class BookController {
     @Path("view2/{id}")
     @View("book.jsp")
     public void view2(@PathParam("id") String id) {
-        book.setTitle("CDI book");
-        book.setAuthor("Some CDI author");
-        book.setIsbn("Some CDI ISBN");
+        book.setTitle("Some title");
+        book.setAuthor("Some author");
+        book.setIsbn("Some ISBN");
     }
 }

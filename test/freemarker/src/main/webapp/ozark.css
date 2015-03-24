@@ -1,11 +1,11 @@
 h1 {
     color: steelblue;
-    font-size: 26px;
+    font-size: 30px;
 }
 
 h2 {
     color: steelblue;
-    font-size: 20px;
+    font-size: 24px;
     margin-top: 20px;
 }
 
@@ -42,7 +42,8 @@ input[type=submit] {
 }
 
 .table {
-    width: 95%;
+    width: 70%;
+    border-collapse: collapse;
     color: white;
 }
 
@@ -52,12 +53,12 @@ input[type=submit] {
 
 .table th {
     background: steelblue;
-    color: lightgoldenrodyellow;
+    color: white;
     padding-top: 10px;
     padding-bottom: 10px;
     text-align: left;
     padding-left: 5px;
-    font-size: 110%;
+    font-size: 125%;
 }
 
 .table tr {
