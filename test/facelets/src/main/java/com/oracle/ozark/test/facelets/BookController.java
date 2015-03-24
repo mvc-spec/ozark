@@ -81,7 +81,7 @@ public class BookController {
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
         models.put("book", catalog.getBook(id));
-        return "index.xhtml";
+        return "book.xhtml";
     }
 
     /**
@@ -95,7 +95,7 @@ public class BookController {
     @Controller
     @Produces("text/html")
     @Path("view2/{id}")
-    @View("index.xhtml")
+    @View("book.xhtml")
     public void view2(@PathParam("id") String id) {
         models.put("book", catalog.getBook(id));
     }

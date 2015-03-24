@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project 
     xmlns="http://maven.apache.org/POM/4.0.0" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -13,6 +12,9 @@
     <artifactId>facelets</artifactId>
     <packaging>war</packaging>
     <name>Ozark ${project.version} Facelets Tests</name>
+    <build>
+        <finalName>test-facelets</finalName>
+    </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
