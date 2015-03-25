@@ -61,6 +61,7 @@
         <module>velocity</module>
         <module>thymeleaf</module>
         <module>redirect</module>
+        <module>samples</module>
     </modules>
     <profiles>
         <profile>
