@@ -63,9 +63,7 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static javax.ws.rs.core.Response.Status.FOUND;
-import static javax.ws.rs.core.Response.Status.NO_CONTENT;
-import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.*;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatched}
@@ -129,7 +127,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
 
         // Under normal processing, no exceptions
         final Response.StatusType statusType = responseContext.getStatusInfo();
-        if (statusType == OK || statusType == NO_CONTENT) {
+        if (statusType != INTERNAL_SERVER_ERROR) {
             // Wrap entity type into Viewable, possibly looking at @View
             final Object entity = responseContext.getEntity();
             final Class<?> entityType = entity != null ? entity.getClass() : null;
