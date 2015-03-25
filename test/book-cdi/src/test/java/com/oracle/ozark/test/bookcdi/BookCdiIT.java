@@ -70,17 +70,17 @@ public class BookCdiIT {
     public void testView1() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/book/view1/1");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
-        assertTrue(it.next().asText().contains("CDI book"));
-        assertTrue(it.next().asText().contains("CDI author"));
-        assertTrue(it.next().asText().contains("CDI ISBN"));
+        assertTrue(it.next().asText().contains("Some title"));
+        assertTrue(it.next().asText().contains("Some author"));
+        assertTrue(it.next().asText().contains("Some ISBN"));
     }
 
     @Test
     public void testView2() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/book/view2/1");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
-        assertTrue(it.next().asText().contains("CDI book"));
-        assertTrue(it.next().asText().contains("CDI author"));
-        assertTrue(it.next().asText().contains("CDI ISBN"));
+        assertTrue(it.next().asText().contains("Some title"));
+        assertTrue(it.next().asText().contains("Some author"));
+        assertTrue(it.next().asText().contains("Some ISBN"));
     }
 }
