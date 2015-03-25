@@ -28,6 +28,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.oracle.ozark.ext:ozark-mustache:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: com.oracle.ozark:ozark:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="ozark-mustache" />
     <orderEntry type="library" name="Maven: com.github.spullara.mustache.java:compiler:0.9.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax:javaee-web-api:7.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
@@ -54,7 +56,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-io:8.1.15.v20140411" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-http:8.1.15.v20140411" level="project" />
     <orderEntry type="library" name="Maven: javax.mvc:javax.mvc-api:1.0-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: com.oracle.ozark:ozark:1.0-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="ri" scope="RUNTIME" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.glassfish.jersey.core:jersey-server:2.17" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.glassfish.jersey.core:jersey-common:2.17" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.ws.rs:javax.ws.rs-api:2.0.1" level="project" />
