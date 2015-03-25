@@ -44,7 +44,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -97,6 +96,7 @@ public class ValidationIT {
             fail("Validation error expected in form submission");
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getStatusCode() == 400);
+            assertTrue(e.getResponse().getContentAsString().contains("<h1>Form Error</h1>"));
         }
     }
 
@@ -129,6 +129,7 @@ public class ValidationIT {
             fail("Validation error expected in form submission");
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getStatusCode() == 400);
+            assertTrue(e.getResponse().getContentAsString().contains("<h1>Form Error</h1>"));
         }
     }
 }
