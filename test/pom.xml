@@ -75,7 +75,7 @@
                 <dependency>
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
-                    <version>${project.version}</version>
+                    <version>1.0-edr1</version>
                     <scope>compile</scope>
                 </dependency>
                 <dependency>
@@ -298,7 +298,7 @@
                                         <artifactItem>
                                             <groupId>javax.mvc</groupId>
                                             <artifactId>javax.mvc-api</artifactId>
-                                            <version>${project.version}</version>
+                                            <version>1.0-edr1</version>
                                             <type>jar</type>
                                             <classifier>sources</classifier>
                                             <overWrite>true</overWrite>
@@ -320,7 +320,7 @@
                 <dependency>
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
-                    <version>${project.version}</version>
+                    <version>1.0-edr1</version>
                     <classifier>instrumented</classifier>
                     <scope>compile</scope>
                 </dependency>
@@ -340,7 +340,7 @@
                 <dependency>
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
-                    <version>${project.version}</version>
+                    <version>1.0-edr1</version>
                     <classifier>sources</classifier>
                     <scope>provided</scope>
                 </dependency>
