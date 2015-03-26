@@ -20,5 +20,9 @@
     </modules>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
-    </reporting>
+    </reporting>    
+    <scm>
+        <connection>scm:git:git://java.net/ozark~sources</connection>
+        <developerConnection>scm:git:ssh://mriem@git.java.net/ozark~sources</developerConnection>
+    </scm>
 </project>
