@@ -77,6 +77,7 @@ public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
      * @param response HTTP servlet response.
      * @param uriInfo URI info about the request.
      * @param resourceInfo Resource matched info.
+     * @param configuration
      */
     public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
                              UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {

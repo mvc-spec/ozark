@@ -69,14 +69,14 @@ import static javax.ws.rs.core.Response.Status.*;
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatched}
  * event. It also verifies the static return type of the controller method is correct,
  * and ensures that the entity is a {@link javax.mvc.Viewable} to be processed by
- * {@link com.oracle.ozark.core.ViewableWriter}.<p/>
+ * {@link com.oracle.ozark.core.ViewableWriter}.</p>
  *
  * <p>A {@link com.oracle.ozark.jersey.VariantSelector} implements the algorithm in
  * Section 3.8 of the JAX-RS specification to compute the final Content-Type when
  * the method returns void (no entity). If unable to compute the final Content-Type,
  * e.g. if the controller method is not annotated by {@code @Produces}, it defaults to
  * {@code text/html}. If the method does not return void (has an entity), the computation
- * of the Content-Type is done by JAX-RS and is available via {@code responseContext}.<p/>
+ * of the Content-Type is done by JAX-RS and is available via {@code responseContext}.</p>
  *
  * <p>Given that this filter is annotated by {@link javax.mvc.Controller}, it will
  * be called after every controller method returns. Priority is set to
