@@ -89,7 +89,6 @@ public class BookController {
      * bind a book instance and @View to specify path to view.
      *
      * @param id ID of the book given in URI.
-     * @return JSP page used for rendering.
      */
     @GET
     @Controller
