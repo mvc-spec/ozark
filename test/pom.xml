@@ -8,7 +8,7 @@
     <parent>
         <groupId>com.oracle.ozark</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
     <groupId>com.oracle.ozark.test</groupId>
     <artifactId>parent</artifactId>
@@ -75,7 +75,7 @@
                 <dependency>
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
-                    <version>1.0-edr1</version>
+                    <version>1.0-SNAPSHOT</version>
                     <scope>compile</scope>
                 </dependency>
                 <dependency>
@@ -298,7 +298,7 @@
                                         <artifactItem>
                                             <groupId>javax.mvc</groupId>
                                             <artifactId>javax.mvc-api</artifactId>
-                                            <version>1.0-edr1</version>
+                                            <version>1.0-SNAPSHOT</version>
                                             <type>jar</type>
                                             <classifier>sources</classifier>
                                             <overWrite>true</overWrite>
@@ -320,7 +320,7 @@
                 <dependency>
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
-                    <version>1.0-edr1</version>
+                    <version>1.0-SNAPSHOT</version>
                     <classifier>instrumented</classifier>
                     <scope>compile</scope>
                 </dependency>
@@ -340,7 +340,7 @@
                 <dependency>
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
-                    <version>1.0-edr1</version>
+                    <version>1.0-SNAPSHOT</version>
                     <classifier>sources</classifier>
                     <scope>provided</scope>
                 </dependency>
