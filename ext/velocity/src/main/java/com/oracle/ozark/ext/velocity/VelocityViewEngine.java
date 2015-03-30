@@ -37,58 +37,56 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.thymeleaf;
+package com.oracle.ozark.ext.velocity;
 
 import com.oracle.ozark.engine.ViewEngineBase;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.VelocityEngine;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Class Thymeleaf ViewEngine.
+ * Class VelocityViewEngine.
  *
  * @author Rodrigo Turini
  */
 @ApplicationScoped
-public class ThymeleafViewEngine extends ViewEngineBase {
+public class VelocityViewEngine extends ViewEngineBase {
 
-	@Inject
-	private ServletContext servletContext;
+    @Inject
+    private ServletContext servletContext;
 
-	private final TemplateEngine engine;
+    private VelocityEngine velocityEngine;
 
+    @PostConstruct
+    public void init() {
+        velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty("resource.loader", "webapp");
+        velocityEngine.setProperty("webapp.resource.loader.class", "org.apache.velocity.tools.view.servlet.WebappLoader");
+        velocityEngine.setApplicationAttribute("javax.servlet.ServletContext", servletContext);
+        velocityEngine.init();
+    }
 
-	public ThymeleafViewEngine() {
-		TemplateResolver resolver = new ServletContextTemplateResolver();
-		engine = new TemplateEngine();
-		engine.setTemplateResolver(resolver);
-	}
+    @Override
+    public boolean supports(String view) {
+        return view.endsWith(".vm");
+    }
 
-	@Override
-	public boolean supports(String view) {
-		return view.endsWith(".html");
-	}
-
-	@Override
-	public void processView(ViewEngineContext context) throws ViewEngineException {
-		try {
-			HttpServletRequest request = context.getRequest();
-			HttpServletResponse response = context.getResponse();
-			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariables(context.getModels());
-			engine.process(resolveView(context), ctx, response.getWriter());
-		} catch (IOException e) {
-			throw new ViewEngineException(e);
-		}
-	}
+    @Override
+    public void processView(ViewEngineContext context) throws ViewEngineException {
+        try {
+            Template template = velocityEngine.getTemplate(resolveView(context));
+            VelocityContext velocityContext = new VelocityContext(context.getModels());
+            template.merge(velocityContext, context.getResponse().getWriter());
+        } catch (IOException e) {
+            throw new ViewEngineException(e);
+        }
+    }
 }
