@@ -57,12 +57,6 @@ import javax.ws.rs.Produces;
 public class BookController {
 
     /**
-     * Application class used to find books.
-     */
-    @Inject
-    private Catalog catalog;
-
-    /**
      * MVC Framework class used to bind models by name.
      */
     @Inject
@@ -80,7 +74,12 @@ public class BookController {
     @Produces("text/html")
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+        final Book book = new Book();
+        book.setId(id);
+        book.setAuthor("Some author");
+        book.setTitle("Some title");
+        book.setIsbn("Some ISBN");
+        models.put("book", book);
         return "book.jsp";      // JSP to render a book
     }
 
@@ -96,6 +95,11 @@ public class BookController {
     @Path("view2/{id}")
     @View("book.jsp")
     public void view2(@PathParam("id") String id) {
-        models.put("book", catalog.getBook(id));
+        final Book book = new Book();
+        book.setId(id);
+        book.setAuthor("Some author");
+        book.setTitle("Some title");
+        book.setIsbn("Some ISBN");
+        models.put("book", book);
     }
 }

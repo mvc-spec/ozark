@@ -73,6 +73,7 @@ public class BookController {
     @Produces("text/html;charset=utf-8")
     @Path("view1/{id}")
     public String view1(@PathParam("id") String id) {
+        book.setId(id);
         book.setTitle("Some title");
         book.setAuthor("Some author");
         book.setIsbn("Some ISBN");
@@ -92,6 +93,7 @@ public class BookController {
     @Path("view2/{id}")
     @View("book.jsp")
     public void view2(@PathParam("id") String id) {
+        book.setId(id);
         book.setTitle("Some title");
         book.setAuthor("Some author");
         book.setIsbn("Some ISBN");
