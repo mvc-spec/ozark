@@ -7,5 +7,6 @@ target
 *~
 *.iml
 *.swp
+nb-configuration.xml
 .DS_Store
 
