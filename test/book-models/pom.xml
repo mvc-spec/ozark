@@ -9,7 +9,7 @@
     </parent>
     <artifactId>book-models</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version.} Book Models Tests</name>
+    <name>Ozark ${project.version} Book Models Tests</name>
     <build>
         <finalName>test-book-models</finalName>
     </build>
