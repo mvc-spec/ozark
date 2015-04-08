@@ -40,6 +40,7 @@
 package com.oracle.ozark.validation;
 
 import javax.enterprise.context.RequestScoped;
+import javax.mvc.validation.ValidationResult;
 import javax.validation.ConstraintViolation;
 import java.util.Collections;
 import java.util.Iterator;
@@ -52,7 +53,7 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  */
 @RequestScoped
-public class ValidationResult implements javax.mvc.validation.ValidationResult {
+public class ValidationResultImpl implements ValidationResult {
 
     private Set<ConstraintViolation<?>> violations = Collections.emptySet();
 
