@@ -40,6 +40,7 @@
 package com.oracle.ozark.core;
 
 import javax.enterprise.context.RequestScoped;
+import javax.mvc.Models;
 import java.util.*;
 
 /**
@@ -49,7 +50,7 @@ import java.util.*;
  * @author Santiago Pericas-Geertsen
  */
 @RequestScoped
-public class Models implements javax.mvc.Models {
+public class ModelsImpl implements Models {
 
     private Map<String, Object> delegate = new HashMap<>();
 
