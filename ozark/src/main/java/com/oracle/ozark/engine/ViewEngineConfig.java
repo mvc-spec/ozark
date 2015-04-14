@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,46 +37,20 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.freemarker;
+package com.oracle.ozark.engine;
 
-import com.oracle.ozark.engine.ViewEngineBase;
-import com.oracle.ozark.engine.ViewEngineConfig;
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import javax.inject.Qualifier;
+import java.lang.annotation.*;
 
 /**
- * Class FreemarkerViewEngine.
+ * Qualifier used for beans representing the configuration of a template engine used by a
+ * {@link javax.mvc.engine.ViewEngine} implementation
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@ApplicationScoped
-public class FreemarkerViewEngine extends ViewEngineBase {
-
-    @Inject
-    @ViewEngineConfig
-    private Configuration configuration;
-
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".ftl");
-    }
-
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            final Template template = configuration.getTemplate(resolveView(context));
-            template.process(context.getModels(),
-                    new OutputStreamWriter(context.getResponse().getOutputStream()));
-        } catch (TemplateException | IOException e) {
-            throw new ViewEngineException(e);
-        }
-    }
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD, ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Qualifier
+public @interface ViewEngineConfig {
 }

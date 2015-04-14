@@ -39,44 +39,60 @@
  */
 package com.oracle.ozark.ext.freemarker;
 
-import com.oracle.ozark.engine.ViewEngineBase;
 import com.oracle.ozark.engine.ViewEngineConfig;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
+import javax.servlet.ServletContext;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 
 /**
- * Class FreemarkerViewEngine.
+ * Producer for the Freemarker {@link freemarker.template.Configuration} used by
+ * {@link com.oracle.ozark.ext.freemarker.FreemarkerViewEngine}.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@ApplicationScoped
-public class FreemarkerViewEngine extends ViewEngineBase {
+public class DefaultConfigurationProducer {
 
     @Inject
+    private ServletContext servletContext;
+
+    @Produces
     @ViewEngineConfig
-    private Configuration configuration;
+    public Configuration getConfiguration() {
 
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".ftl");
+        Configuration configuration = new Configuration();
+        configuration.setDefaultEncoding("UTF-8");
+        configuration.setTemplateLoader(new TemplateLoader() {
+
+            @Override
+            public Object findTemplateSource(String s) throws IOException {
+                return servletContext.getResourceAsStream("/" + s);     // Freemarker drops "/"
+            }
+
+            @Override
+            public long getLastModified(Object o) {
+                return -1;
+            }
+
+            @Override
+            public Reader getReader(Object o, String s) throws IOException {
+                return new InputStreamReader((InputStream) o);
+            }
+
+            @Override
+            public void closeTemplateSource(Object o) throws IOException {
+                ((InputStream) o).close();
+            }
+        });
+
+        return configuration;
+
     }
 
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            final Template template = configuration.getTemplate(resolveView(context));
-            template.process(context.getModels(),
-                    new OutputStreamWriter(context.getResponse().getOutputStream()));
-        } catch (TemplateException | IOException e) {
-            throw new ViewEngineException(e);
-        }
-    }
 }
