@@ -39,52 +39,30 @@
  */
 package com.oracle.ozark.ext.thymeleaf;
 
-import com.oracle.ozark.engine.ViewEngineBase;
 import com.oracle.ozark.engine.ViewEngineConfig;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import javax.enterprise.inject.Produces;
 
 /**
- * Class Thymeleaf ViewEngine.
+ * Producer for the TemplateEngine used by ThymeleafViewEngine.
  *
- * @author Rodrigo Turini
+ * @author Christian Kaltepoth
  */
-@ApplicationScoped
-public class ThymeleafViewEngine extends ViewEngineBase {
+public class DefaultTemplateEngineProducer {
 
-	@Inject
-	private ServletContext servletContext;
+    @Produces
+    @ViewEngineConfig
+    public TemplateEngine getTemplateEngine() {
 
-	@Inject
-	@ViewEngineConfig
-	private TemplateEngine engine;
+        TemplateResolver resolver = new ServletContextTemplateResolver();
 
-	@Override
-	public boolean supports(String view) {
-		return view.endsWith(".html");
-	}
+        TemplateEngine engine = new TemplateEngine();
+        engine.setTemplateResolver(resolver);
+        return engine;
 
-	@Override
-	public void processView(ViewEngineContext context) throws ViewEngineException {
-		try {
-			HttpServletRequest request = context.getRequest();
-			HttpServletResponse response = context.getResponse();
-			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariables(context.getModels());
-			engine.process(resolveView(context), ctx, response.getWriter());
-		} catch (IOException e) {
-			throw new ViewEngineException(e);
-		}
-	}
+    }
+
 }
