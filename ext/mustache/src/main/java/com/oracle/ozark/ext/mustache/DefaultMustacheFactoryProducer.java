@@ -39,43 +39,44 @@
  */
 package com.oracle.ozark.ext.mustache;
 
-import com.github.mustachejava.Mustache;
+import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.MustacheFactory;
-import com.oracle.ozark.engine.ViewEngineBase;
 import com.oracle.ozark.engine.ViewEngineConfig;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import java.io.IOException;
-import java.io.Writer;
+import javax.servlet.ServletContext;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
- * Class MustacheViewEngine.
+ * Producer for the MustacheFactory used by MustacheViewEngine
  *
- * @author Rodrigo Turini
+ * @author Christian Kaltepoth
  */
-@ApplicationScoped
-public class MustacheViewEngine extends ViewEngineBase {
+public class DefaultMustacheFactoryProducer {
 
     @Inject
-    @ViewEngineConfig
-    private MustacheFactory factory;
+    private ServletContext servletContext;
 
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".mustache");
+    @Produces
+    @ViewEngineConfig
+    public MustacheFactory getMustacheFactory() {
+        return new OzarkMustacheFactory();
     }
 
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        Mustache mustache = factory.compile(resolveView(context));
-        try {
-            Writer writer = context.getResponse().getWriter();
-            mustache.execute(writer, context.getModels()).flush();
-        } catch (IOException e) {
-            throw new ViewEngineException(e);
+    private class OzarkMustacheFactory extends DefaultMustacheFactory {
+        @Override
+        public Reader getReader(String resourceName) {
+            InputStream is = servletContext.getResourceAsStream(resourceName);
+            if (is != null) {
+                return new BufferedReader(new InputStreamReader(is, UTF_8));
+            }
+            return super.getReader(resourceName);
         }
     }
 
