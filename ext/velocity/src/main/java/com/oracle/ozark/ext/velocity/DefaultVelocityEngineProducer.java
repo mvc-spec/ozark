@@ -39,43 +39,32 @@
  */
 package com.oracle.ozark.ext.velocity;
 
-import com.oracle.ozark.engine.ViewEngineBase;
 import com.oracle.ozark.engine.ViewEngineConfig;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import java.io.IOException;
+import javax.servlet.ServletContext;
 
 /**
- * Class VelocityViewEngine.
+ * Producer for the VelocityEngine used by VelocityViewEngine.
  *
- * @author Rodrigo Turini
+ * @author Christian Kaltepoth
  */
-@ApplicationScoped
-public class VelocityViewEngine extends ViewEngineBase {
+public class DefaultVelocityEngineProducer {
 
     @Inject
+    private ServletContext servletContext;
+
+    @Produces
     @ViewEngineConfig
-    private VelocityEngine velocityEngine;
-
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".vm");
+    public VelocityEngine getVelocityEngine() {
+        VelocityEngine velocityEngine = new VelocityEngine();
+        velocityEngine.setProperty("resource.loader", "webapp");
+        velocityEngine.setProperty("webapp.resource.loader.class", "org.apache.velocity.tools.view.servlet.WebappLoader");
+        velocityEngine.setApplicationAttribute("javax.servlet.ServletContext", servletContext);
+        velocityEngine.init();
+        return velocityEngine;
     }
 
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            Template template = velocityEngine.getTemplate(resolveView(context));
-            VelocityContext velocityContext = new VelocityContext(context.getModels());
-            template.merge(velocityContext, context.getResponse().getWriter());
-        } catch (IOException e) {
-            throw new ViewEngineException(e);
-        }
-    }
 }
