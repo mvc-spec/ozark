@@ -40,55 +40,21 @@
 package com.oracle.ozark.ext.handlebars;
 
 import com.github.jknack.handlebars.Handlebars;
-import com.github.jknack.handlebars.Template;
-import com.oracle.ozark.engine.ViewEngineBase;
 import com.oracle.ozark.engine.ViewEngineConfig;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.mvc.Models;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import java.io.*;
-import java.util.stream.Collectors;
+import javax.enterprise.inject.Produces;
 
 /**
- * Class HandlebarsViewEngine
+ * Producer for the Handlebars instance used by HandlebarsViewEngine.
  *
- * @author Rahman Usta
+ * @author Christian Kaltepoth
  */
-@ApplicationScoped
-public class HandlebarsViewEngine extends ViewEngineBase {
+public class DefaultHandlebarsProducer {
 
-    @Inject
-    private ServletContext servletContext;
-
-    @Inject
+    @Produces
     @ViewEngineConfig
-    private Handlebars handlebars;
-
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".hbs") || view.endsWith(".handlebars");
+    public Handlebars getHandlebars() {
+        return new Handlebars();
     }
 
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        Models models = context.getModels();
-        String viewName = context.getView();
-
-        try (PrintWriter writer = context.getResponse().getWriter();
-            InputStream resourceAsStream = servletContext.getResourceAsStream(resolveView(context));
-            InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
-            BufferedReader bufferedReader = new BufferedReader(in);) {
-
-            String viewContent = bufferedReader.lines().collect(Collectors.joining());
-
-            Template template = handlebars.compileInline(viewContent);
-            template.apply(models, writer);
-        } catch (IOException e) {
-            throw new ViewEngineException(e);
-        }
-    }
 }
