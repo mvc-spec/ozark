@@ -1,8 +1,9 @@
 #!/bin/bash
  
-JERSEY_VERSION=2.17-SNAPSHOT
+JERSEY_VERSION=2.18-SNAPSHOT
 HK2_VERSION=2.4.0-b10
 JAVASSIST_VERSION=3.18.1-GA
+JACKSON_VERSION=2.5.2
  
 MODULES_DIR=$GF_HOME/glassfish/modules
 OSGI_CACHE_DIR=$GF_HOME/glassfish/domains/domain1/osgi-cache/felix
@@ -65,10 +66,10 @@ processLocalArtifact jersey-media-json-processing.jar $HOME/.m2/repository/org/g
 processLocalArtifact jersey-media-moxy.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-moxy/${JERSEY_VERSION}/jersey-media-moxy-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-media-multipart.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-multipart/${JERSEY_VERSION}/jersey-media-multipart-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-media-sse.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-sse/${JERSEY_VERSION}/jersey-media-sse-${JERSEY_VERSION}.jar
-processLocalArtifact jersey-guava.jar $HOME/.m2/repository/org/glassfish/jersey/bundles/repackaged/jersey-guava/2.17-SNAPSHOT/jersey-guava-2.17-SNAPSHOT.jar
-processLocalArtifact jersey-cdi1x-transaction.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x-transaction/2.17-SNAPSHOT/jersey-cdi1x-transaction-2.17-SNAPSHOT.jar
-processLocalArtifact jersey-cdi1x.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x/2.17-SNAPSHOT/jersey-cdi1x-2.17-SNAPSHOT.jar
-processLocalArtifact jersey-media-jaxb.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/2.17-SNAPSHOT/jersey-media-jaxb-2.17-SNAPSHOT.jar
+processLocalArtifact jersey-guava.jar $HOME/.m2/repository/org/glassfish/jersey/bundles/repackaged/jersey-guava/${JERSEY_VERSION}/jersey-guava-${JERSEY_VERSION}.jar
+processLocalArtifact jersey-cdi1x-transaction.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x-transaction/${JERSEY_VERSION}/jersey-cdi1x-transaction-${JERSEY_VERSION}.jar
+processLocalArtifact jersey-cdi1x.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x/${JERSEY_VERSION}/jersey-cdi1x-${JERSEY_VERSION}.jar
+processLocalArtifact jersey-media-jaxb.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/${JERSEY_VERSION}/jersey-media-jaxb-${JERSEY_VERSION}.jar
 
 # Backup and download new HK2
  
@@ -89,7 +90,14 @@ processArtifact asm-all-repackaged.jar http://central.maven.org/maven2/org/glass
 processArtifact javax.inject.jar http://central.maven.org/maven2/org/glassfish/hk2/external/javax.inject/${HK2_VERSION}/javax.inject-${HK2_VERSION}.jar
  
 processArtifact javassist.jar http://repo.maven.apache.org/maven2/org/javassist/javassist/${JAVASSIST_VERSION}/javassist-${JAVASSIST_VERSION}.jar
- 
+
+processArtifact jackson-core.jar http://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/${JACKSON_VERSION}/jackson-core-${JACKSON_VERSION}.jar
+processArtifact jackson-databind.jar http://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-databind/${JACKSON_VERSION}/jackson-databind-${JACKSON_VERSION}.jar
+processArtifact jackson-annotations.jar http://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/${JACKSON_VERSION}/jackson-annotations-${JACKSON_VERSION}.jar
+processArtifact jackson-jaxrs-base.jar http://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-annotations/${JACKSON_VERSION}/jackson-annotations-${JACKSON_VERSION}.jar
+processArtifact jackson-annotations.jar http://repo.maven.apache.org/maven2/com/fasterxml/jackson/jaxrs/jackson-jaxrs-base/${JACKSON_VERSION}/jackson-jaxrs-base-${JACKSON_VERSION}.jar
+processArtifact jackson-jaxrs-json-provider.jar http://repo.maven.apache.org/maven2/com/fasterxml/jackson/jaxrs/jackson-jaxrs-json-provider/${JACKSON_VERSION}/jackson-jaxrs-json-provider-${JACKSON_VERSION}.jar
+
 # Clean up OSGi cache
  
 if [ -d "$OSGI_CACHE_DIR" ]; then
