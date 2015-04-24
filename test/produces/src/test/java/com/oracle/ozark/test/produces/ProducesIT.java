@@ -72,6 +72,22 @@ public class ProducesIT {
     }
 
     @Test
+    public void testNoProducesEmptyAccept1() throws Exception {
+        final WebResponse wr = webClient.loadWebResponse(
+                new WebRequest(new URL(webUrl + "resources/no_produces1"), ""));
+        assertEquals(Response.Status.OK.getStatusCode(), wr.getStatusCode());
+        assertEquals(MediaType.TEXT_HTML, wr.getContentType());     // default
+    }
+
+    @Test
+    public void testNoProducesEmptyAccept2() throws Exception {
+        final WebResponse wr = webClient.loadWebResponse(
+                new WebRequest(new URL(webUrl + "resources/no_produces2"), ""));
+        assertEquals(Response.Status.OK.getStatusCode(), wr.getStatusCode());
+        assertEquals(MediaType.TEXT_HTML, wr.getContentType());     // default
+    }
+
+    @Test
     public void testNoProduces1() throws Exception {
         final WebResponse wr = webClient.loadWebResponse(
                 new WebRequest(new URL(webUrl + "resources/no_produces1"), ACCEPT_HEADER));

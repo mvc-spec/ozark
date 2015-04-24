@@ -79,6 +79,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
             context.register(ValidationInterceptorImpl.class);
+            context.register(OzarkModelProcessor.class);
         }
     }
 
