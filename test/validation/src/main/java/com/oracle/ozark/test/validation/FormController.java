@@ -39,6 +39,7 @@
  */
 package com.oracle.ozark.test.validation;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mvc.Controller;
 import javax.mvc.validation.ValidationResult;
@@ -64,6 +65,7 @@ import static javax.ws.rs.core.Response.Status.OK;
 @Controller
 @Path("form")
 @Produces("text/html")
+@RequestScoped
 public class FormController {
 
     @Inject
