@@ -62,6 +62,7 @@
         <module>thymeleaf</module>
         <module>redirect</module>
         <module>view-annotation</module>
+        <module>returns</module>
         <module>samples</module>
     </modules>
     <profiles>

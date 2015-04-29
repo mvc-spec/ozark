@@ -118,13 +118,6 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         final Method method = resourceInfo.getResourceMethod();
         final Class<?> returnType = method.getReturnType();
 
-        // First verify static return type of controller method
-        if (returnType != Void.TYPE && returnType != String.class && returnType != Viewable.class
-                && returnType != Response.class) {
-            throw new WebApplicationException("Invalid return type for controller method "
-                    + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
-        }
-
         // Under normal processing, no exceptions
         final Response.StatusType statusType = responseContext.getStatusInfo();
         if (statusType != INTERNAL_SERVER_ERROR) {
@@ -147,8 +140,8 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                     throw new ServerErrorException("Response entity is null. Missing @View annotation? "
                             + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
                 }
-            } else if (entityType == String.class) {
-                responseContext.setEntity(new Viewable((String) entity), null, responseContext.getMediaType());
+            } else if (entityType != Viewable.class) {
+                responseContext.setEntity(new Viewable(entity.toString()), null, responseContext.getMediaType());
             }
 
             // Redirect logic, entity must be a Viewable now
