@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Bye World</title>
-    <link rel="stylesheet" type="text/css" href="../../ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
 </head>
 <body>
 <h1>Bye World</h1>

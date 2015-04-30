@@ -2,8 +2,7 @@
 <html>
 <head>
     <title>MVC Events</title>
-    <link rel="stylesheet" type="text/css" href="../../ozark.css">
-
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
 </head>
 <body>
     <h1>Event Information</h1>
