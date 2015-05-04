@@ -69,7 +69,21 @@ public class RedirectIT {
 
     @Test
     public void testRedirect() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "resources/redirect");
+        final HtmlPage page = webClient.getPage(webUrl + "resources/redirect/string");
+        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
+        assertTrue(it.next().asText().contains("Redirect Works!"));
+    }
+
+    @Test
+    public void testRedirectResponse1() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "resources/redirect/response1");
+        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
+        assertTrue(it.next().asText().contains("Redirect Works!"));
+    }
+
+    @Test
+    public void testRedirectResponse2() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "resources/redirect/response2");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
         assertTrue(it.next().asText().contains("Redirect Works!"));
     }

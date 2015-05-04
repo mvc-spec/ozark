@@ -43,6 +43,8 @@ import javax.mvc.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 
 /**
  * RedirectController test.
@@ -54,8 +56,23 @@ import javax.ws.rs.Produces;
 public class RedirectController {
 
     @GET
-    public String get1() {
+    @Path("string")
+    public String getString() {
         return "redirect:/redirect/here";
+    }
+
+    @GET
+    @Path("response1")
+    public Response getResponse1() {
+        return Response.seeOther(URI.create("redirect/here")).build();
+    }
+
+    @GET
+    @Path("response2")
+    public Response getResponse2() {
+        return Response.status(Response.Status.FOUND)
+                .header("Location", "redirect/here")
+                .build();
     }
 
     @GET
