@@ -39,6 +39,8 @@
  */
 package com.oracle.ozark.jersey;
 
+import com.oracle.ozark.core.CsrfProtectFilter;
+import com.oracle.ozark.core.CsrfValidateInterceptor;
 import com.oracle.ozark.core.ViewResponseFilter;
 import com.oracle.ozark.core.ViewableWriter;
 import com.oracle.ozark.validation.ValidationInterceptorImpl;
@@ -80,6 +82,8 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(ViewableWriter.class);
             context.register(ValidationInterceptorImpl.class);
             context.register(OzarkModelProcessor.class);
+            context.register(CsrfValidateInterceptor.class);
+            context.register(CsrfProtectFilter.class);
         }
     }
 
