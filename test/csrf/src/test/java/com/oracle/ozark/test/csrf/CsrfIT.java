@@ -39,9 +39,13 @@
  */
 package com.oracle.ozark.test.csrf;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
+import org.glassfish.jersey.client.filter.CsrfProtectionFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,7 +53,14 @@ import org.junit.Test;
 import java.util.Iterator;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+/**
+ * Tests CSRF implementation. Ensures hidden field is returned and that a form submitted
+ * without it results in a 403 error.
+ *
+ * @author Santiago Pericas-Geertsen
+ */
 public class CsrfIT {
 
     private String webUrl;
@@ -66,4 +77,53 @@ public class CsrfIT {
     public void tearDown() {
         webClient.closeAllWindows();
     }
+
+    /**
+     * Retrieve a form and submit it making sure the CSRF hidden field is present
+     *
+     * @throws Exception an error occurs or validation fails.
+     */
+    @Test
+    public void testFormOk() throws Exception {
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+        HtmlForm form = (HtmlForm) page1.getDocumentElement().getHtmlElementsByTagName("form").get(0);
+
+        // Check hidden input field
+        HtmlElement input = form.getHtmlElementsByTagName("input").get(1);
+        assertTrue(input.getAttribute("type").equals("hidden"));
+        assertTrue(input.getAttribute("name").equals(CsrfProtectionFilter.HEADER_NAME));
+        assertTrue(input.hasAttribute("value"));        // token
+
+        // Submit form
+        HtmlSubmitInput button = (HtmlSubmitInput) form.getHtmlElementsByTagName("input").get(0);
+        HtmlPage page2 = button.click();
+        Iterator<HtmlElement> it = page2.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
+        assertTrue(it.next().asText().contains("CSRF Protection OK"));
+    }
+
+    /**
+     * Retrieves a form, removes CSRF hidden field and attempts to submit. Should
+     * result in a 403 error.
+     *
+     * @throws Exception an error occurs or validation fails.
+     */
+    @Test
+    public void testFormFail() throws Exception {
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+        HtmlForm form = (HtmlForm) page1.getDocumentElement().getHtmlElementsByTagName("form").get(0);
+
+        // Remove hidden input field to cause a CSRF validation failure
+        HtmlElement input = form.getHtmlElementsByTagName("input").get(1);
+        form.removeChild(input);
+
+        // Submit form - should fail
+        HtmlSubmitInput button = (HtmlSubmitInput) form.getHtmlElementsByTagName("input").get(0);
+        try {
+            button.click();
+            fail("CSRF validation should have failed!");
+        } catch (FailingHttpStatusCodeException e) {
+            // falls through
+        }
+    }
 }
+
