@@ -40,7 +40,7 @@
 package com.oracle.ozark.core;
 
 import com.oracle.ozark.api.CsrfProtected;
-import com.oracle.ozark.api.Mvc;
+import com.oracle.ozark.api.Csrf;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -67,14 +67,14 @@ import java.io.IOException;
 public class CsrfProtectFilter implements ContainerResponseFilter {
 
     @Inject
-    private Mvc mvc;
+    private Csrf csrf;
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-        if (!headers.containsKey(mvc.getCsrfHeader())) {
-            headers.putSingle(mvc.getCsrfHeader(), mvc.getCsrfToken());
+        if (!headers.containsKey(csrf.getName())) {
+            headers.putSingle(csrf.getName(), csrf.getToken());
         }
     }
 }

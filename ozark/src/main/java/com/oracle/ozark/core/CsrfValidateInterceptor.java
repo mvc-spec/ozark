@@ -40,7 +40,7 @@
 package com.oracle.ozark.core;
 
 import com.oracle.ozark.api.CsrfValidated;
-import com.oracle.ozark.api.Mvc;
+import com.oracle.ozark.api.Csrf;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -64,31 +64,35 @@ import java.net.URLDecoder;
  * requests).</p>
  *
  * <p>Stream buffering is required to restore the entity for the next interceptor.
- * If validation succeeds, it calls the next interceptor in the chain.</p>
+ * If validation succeeds, it calls the next interceptor in the chain. Default
+ * character encoding is utf-8. Even though none of the main browsers send a
+ * charset param on a form post, we still check it to decode the entity.</p>
  *
  * @author Santiago Pericas-Geertsen
+ * @see <a href="http://www.w3.org/TR/html40/appendix/notes.html#non-ascii-chars">HTML 4.0 Appendix</a>
  */
 @CsrfValidated
 @Priority(Priorities.HEADER_DECORATOR)
 public class CsrfValidateInterceptor implements ReaderInterceptor {
 
     private static final int BUFFER_SIZE = 4096;
-    private static final String ENCODING = "UTF-8";
+    private static final String DEFAULT_CHARSET = "UTF-8";
 
     @Inject
-    private Mvc mvc;
+    private Csrf csrf;
 
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
         // First check if CSRF token is in header
-        final String csrfHeader = mvc.getCsrfHeader();
+        final String csrfHeader = csrf.getName();
         final String csrfToken = context.getHeaders().getFirst(csrfHeader);
-        if (mvc.getCsrfToken().equals(csrfToken)) {
+        if (csrf.getToken().equals(csrfToken)) {
             return context.proceed();
         }
 
         // Otherwise, it must be a form parameter
-        if (!context.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+        final MediaType contentType = context.getMediaType();
+        if (!contentType.equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
             throw new ForbiddenException("Unable to validate CSRF with media type " + context.getMediaType());
         }
 
@@ -103,16 +107,17 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
 
         // Validate CSRF
         boolean validated = false;
-        final String encoded = toString(bais, ENCODING);
-        final String[] pairs = encoded.split("\\&");
+        final String charset = contentType.getParameters().get("charset");
+        final String entity = toString(bais, charset != null ? charset : DEFAULT_CHARSET);
+        final String[] pairs = entity.split("\\&");
         for (int i = 0; i < pairs.length; i++) {
             final String[] fields = pairs[i].split("=");
-            final String nn = URLDecoder.decode(fields[0], ENCODING);
+            final String nn = URLDecoder.decode(fields[0], DEFAULT_CHARSET);
             // Is this the CSRF field?
-            if (mvc.getCsrfHeader().equals(nn)) {
-                final String vv = URLDecoder.decode(fields[1], ENCODING);
+            if (csrf.getName().equals(nn)) {
+                final String vv = URLDecoder.decode(fields[1], DEFAULT_CHARSET);
                 // If so then check the token
-                if (mvc.getCsrfToken().equals(vv)) {
+                if (csrf.getToken().equals(vv)) {
                     validated = true;
                     break;
                 }

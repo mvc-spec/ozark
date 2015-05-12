@@ -49,21 +49,21 @@ import java.util.UUID;
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("_mvc")
+@Named("_csrf")
 @SessionScoped
-public class Mvc implements Serializable {
+public class Csrf implements Serializable {
 
     private static final String CSRF_HEADER = "X-Requested-By";
 
     private static final long serialVersionUID = -403250971215462525L;
 
-    private UUID csrfToken = UUID.randomUUID();
+    private UUID token = UUID.randomUUID();
 
-    public String getCsrfHeader() {
+    public String getName() {
         return CSRF_HEADER;
     }
 
-    public String getCsrfToken() {
-        return csrfToken.toString();
+    public String getToken() {
+        return token.toString();
     }
 }
