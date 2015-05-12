@@ -39,8 +39,7 @@
  */
 package com.oracle.ozark.test.csrf;
 
-import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
-import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.*;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -50,10 +49,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.ws.rs.core.Response;
+import java.net.URL;
 import java.util.Iterator;
+import java.util.UUID;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests CSRF implementation. Ensures hidden field is returned and that a form submitted
@@ -62,6 +63,8 @@ import static org.junit.Assert.fail;
  * @author Santiago Pericas-Geertsen
  */
 public class CsrfIT {
+
+    private static final String CSRF_HEADER = "X-Requested-By";
 
     private String webUrl;
     private WebClient webClient;
@@ -124,6 +127,49 @@ public class CsrfIT {
         } catch (FailingHttpStatusCodeException e) {
             // falls through
         }
+    }
+
+    /**
+     * Checks that CSRF validation works if token sent as header instead of
+     * form field.
+     *
+     * @throws Exception an error occurs or validation fails.
+     */
+    @Test
+    public void testFormHeaderOk() throws Exception {
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+
+        // Check response and CSRF header
+        WebResponse res = page1.getWebResponse();
+        assertEquals(Response.Status.OK.getStatusCode(), res.getStatusCode());
+        assertNotNull(res.getResponseHeaderValue(CSRF_HEADER));
+
+        WebRequest req = new WebRequest(new URL(webUrl + "resources/csrf"));
+        req.setHttpMethod(HttpMethod.POST);
+        req.setAdditionalHeader(CSRF_HEADER, res.getResponseHeaderValue(CSRF_HEADER));
+        res = webClient.loadWebResponse(req);
+        assertEquals(Response.Status.OK.getStatusCode(), res.getStatusCode());
+    }
+
+    /**
+     * Checks that CSRF validation fails if token is invalid.
+     *
+     * @throws Exception an error occurs or validation fails.
+     */
+    @Test
+    public void testFormHeaderFail() throws Exception {
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+
+        // Check response and CSRF header
+        WebResponse res = page1.getWebResponse();
+        assertEquals(Response.Status.OK.getStatusCode(), res.getStatusCode());
+        assertNotNull(res.getResponseHeaderValue(CSRF_HEADER));
+
+        WebRequest req = new WebRequest(new URL(webUrl + "resources/csrf"));
+        req.setHttpMethod(HttpMethod.POST);
+        req.setAdditionalHeader(CSRF_HEADER,  UUID.randomUUID().toString());    // invalid
+        res = webClient.loadWebResponse(req);
+        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), res.getStatusCode());
     }
 }
 

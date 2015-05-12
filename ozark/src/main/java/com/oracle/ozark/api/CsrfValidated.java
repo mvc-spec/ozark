@@ -48,6 +48,11 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.*;
 import static java.lang.annotation.ElementType.*;
 
+/**
+ * Annotation CsrfValidated.
+ *
+ * @author Santiago Pericas-Geertsen
+ */
 @NameBinding
 @Target({METHOD, TYPE})
 @Retention(RUNTIME)

@@ -47,13 +47,24 @@ import javax.inject.Inject;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.ReaderInterceptorContext;
 import java.io.*;
 import java.net.URLDecoder;
 
 /**
- * Class CsrfValidateRequestFilter.
+ * <p>Reader interceptor that checks for the CSRF header and token. If not available as
+ * an HTTP header, it looks for it as a form parameter in which case the media type must be
+ * {@link javax.ws.rs.core.MediaType#APPLICATION_FORM_URLENCODED_TYPE}. If validation
+ * fails, a 403 error is returned.
+ *
+ * <p>Because this interceptor is bound by name and not globally, it does not check
+ * the HTTP method (note that CSRF validation should only apply to non-idempotent
+ * requests).</p>
+ *
+ * <p>Stream buffering is required to restore the entity for the next interceptor.
+ * If validation succeeds, it calls the next interceptor in the chain.</p>
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -61,6 +72,7 @@ import java.net.URLDecoder;
 @Priority(Priorities.HEADER_DECORATOR)
 public class CsrfValidateInterceptor implements ReaderInterceptor {
 
+    private static final int BUFFER_SIZE = 4096;
     private static final String ENCODING = "UTF-8";
 
     @Inject
@@ -68,6 +80,19 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
 
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
+        // First check if CSRF token is in header
+        final String csrfHeader = mvc.getCsrfHeader();
+        final String csrfToken = context.getHeaders().getFirst(csrfHeader);
+        if (mvc.getCsrfToken().equals(csrfToken)) {
+            return context.proceed();
+        }
+
+        // Otherwise, it must be a form parameter
+        if (!context.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+            throw new ForbiddenException("Unable to validate CSRF with media type " + context.getMediaType());
+        }
+
+        // Ensure stream can be restored for next interceptor
         ByteArrayInputStream bais;
         final InputStream is = context.getInputStream();
         if (is instanceof ByteArrayInputStream) {
@@ -76,6 +101,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
             bais = copyStream(is);
         }
 
+        // Validate CSRF
         boolean validated = false;
         final String encoded = toString(bais, ENCODING);
         final String[] pairs = encoded.split("\\&");
@@ -97,6 +123,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
             throw new ForbiddenException("Validation of CSRF failed due to missing field");
         }
 
+        // Restore stream and proceed
         bais.reset();
         context.setInputStream(bais);
         return context.proceed();
@@ -105,7 +132,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     private ByteArrayInputStream copyStream(InputStream is) throws IOException {
         int n;
         try (final ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
-            final byte[] buffer = new byte[2048];
+            final byte[] buffer = new byte[BUFFER_SIZE];
             while ((n = is.read(buffer)) >= 0) {
                 baos.write(buffer, 0, n);
             }
@@ -113,7 +140,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
         }
     }
 
-    private String toString(ByteArrayInputStream bais, String encoding) throws UnsupportedEncodingException{
+    private String toString(ByteArrayInputStream bais, String encoding) throws UnsupportedEncodingException {
         int n = 0;
         final byte[] bb = new byte[bais.available()];
         while ((n = bais.read(bb, n, bb.length - n)) >= 0);

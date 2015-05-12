@@ -48,10 +48,17 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 
 /**
- * Class CsrfProtectResponseFilter.
+ * <p>Response filter that adds the CSRF header with a unique token value. Clients can
+ * use this header in subsequent form posts. Alternatively, it is also possible to
+ * inject hidden fields in forms returned by controllers, in which case the client
+ * does not need any further processing before submitting a form.</p>
+ *
+ * <p>Note that the CSRF header is added only if it is not already present in the
+ * response.</p>
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -65,6 +72,9 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        responseContext.getHeaders().putSingle(mvc.getCsrfHeader(), mvc.getCsrfToken());
+        final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+        if (!headers.containsKey(mvc.getCsrfHeader())) {
+            headers.putSingle(mvc.getCsrfHeader(), mvc.getCsrfToken());
+        }
     }
 }
