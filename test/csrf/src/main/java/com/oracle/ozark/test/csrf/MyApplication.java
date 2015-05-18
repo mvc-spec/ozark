@@ -39,9 +39,13 @@
  */
 package com.oracle.ozark.test.csrf;
 
+import com.oracle.ozark.api.Csrf;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -57,5 +61,12 @@ public class MyApplication extends Application {
         final Set<Class<?>> set = new HashSet<>();
         set.add(CsrfController.class);
         return set;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put(Csrf.ENABLE_CSRF, Boolean.TRUE);
+        return map;
     }
 }

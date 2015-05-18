@@ -49,12 +49,15 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static java.lang.annotation.ElementType.*;
 
 /**
- * Annotation CsrfProtected.
+ * Controller annotation that can be used to enable CSRF token generation.
+ * Tokens are stored in the session-scoped bean {@link com.oracle.ozark.api.Csrf}.
+ * Alternatively, generation can be enabled for all controllers using the
+ * application-level property {@link com.oracle.ozark.api.Csrf#ENABLE_CSRF}.
  *
  * @author Santiago Pericas-Geertsen
  */
 @NameBinding
-@Target({METHOD, TYPE})
+@Target(METHOD)
 @Retention(RUNTIME)
 @Documented
 @Inherited

@@ -49,7 +49,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static java.lang.annotation.ElementType.*;
 
 /**
- * Annotation CsrfValidated.
+ * Controller annotation that can be used to validate a CSRF token value received
+ * in a request. Tokens are stored in the session-scoped bean {@link com.oracle.ozark.api.Csrf}.
+ * Even though this annotation is targeted to {@code TYPE}, it can only be used to decorate
+ * individual controller methods.
  *
  * @author Santiago Pericas-Geertsen
  */

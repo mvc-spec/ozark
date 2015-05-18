@@ -45,13 +45,17 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * Class Mvc.
+ * CSRF bean in session scope available for injection and via EL. Provides access to
+ * the CSRF header name (a constant) and the CSRF token value (one per session). It
+ * is accessible from EL using the name "csrf".
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("_csrf")
+@Named("csrf")
 @SessionScoped
 public class Csrf implements Serializable {
+
+    public static final String ENABLE_CSRF = "javax.mvc.EnableCsrf";
 
     private static final String CSRF_HEADER = "X-Requested-By";
 

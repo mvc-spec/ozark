@@ -60,7 +60,14 @@ public class CsrfController {
 
     @GET
     @CsrfProtected
+    @Path("annotation")
     public String getForm() {
+        return "csrf.jsp";
+    }
+
+    @GET
+    @Path("no_annotation")
+    public String getFormNoAnnotation() {
         return "csrf.jsp";
     }
 

@@ -6,8 +6,8 @@
 </head>
 <body>
     <h1>CSRF Protection Test</h1>
-    <form action="csrf" method="post" accept-charset="utf-8">
+    <form action="../csrf" method="post" accept-charset="utf-8">
         <input type="submit" value="Click here"/>
-        <input type="hidden" name="${_csrf.name}" value="${_csrf.token}"/>
+        <input type="hidden" name="${csrf.name}" value="${csrf.token}"/>
     </form>
 </html>

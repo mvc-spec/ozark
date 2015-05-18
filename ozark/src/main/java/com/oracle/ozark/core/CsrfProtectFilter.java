@@ -39,42 +39,67 @@
  */
 package com.oracle.ozark.core;
 
-import com.oracle.ozark.api.CsrfProtected;
 import com.oracle.ozark.api.Csrf;
+import com.oracle.ozark.api.CsrfProtected;
 
 import javax.annotation.Priority;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
+import java.lang.reflect.Method;
+
+import static java.lang.Boolean.TRUE;
 
 /**
- * <p>Response filter that adds the CSRF header with a unique token value. Clients can
- * use this header in subsequent form posts. Alternatively, it is also possible to
- * inject hidden fields in forms returned by controllers, in which case the client
- * does not need any further processing before submitting a form.</p>
+ * <p>Response filter that adds the CSRF header with a unique token value. Clients must
+ * submit the header in subsequent form posts if validation is enabled on the controller
+ * via {@link com.oracle.ozark.api.CsrfValidated}. Alternatively, it is also possible to
+ * inject hidden form fields returned by controllers, in which case the client does not
+ * need any further processing before submitting a form.</p>
+ *
+ * <p>This filter is enabled only when either the annotation
+ * {@link com.oracle.ozark.api.CsrfProtected} decorates the matched controller or when
+ * the global property {@link com.oracle.ozark.api.Csrf#ENABLE_CSRF} is set to true
+ * (defaults to false).</p>
  *
  * <p>Note that the CSRF header is added only if it is not already present in the
  * response.</p>
  *
  * @author Santiago Pericas-Geertsen
  */
-@CsrfProtected
 @Priority(Priorities.HEADER_DECORATOR)
 public class CsrfProtectFilter implements ContainerResponseFilter {
 
     @Inject
-    private Csrf csrf;
+    private Instance<Csrf> csrfInstance;
+
+    @Context
+    private ResourceInfo resourceInfo;
+
+    @Context
+    private Configuration config;
 
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-        if (!headers.containsKey(csrf.getName())) {
-            headers.putSingle(csrf.getName(), csrf.getToken());
+        if (TRUE.equals(config.getProperty(Csrf.ENABLE_CSRF)) || isNameBound(resourceInfo.getResourceMethod())) {
+            final Csrf csrf = csrfInstance.get();
+            final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+            if (!headers.containsKey(csrf.getName())) {
+                headers.putSingle(csrf.getName(), csrf.getToken());
+            }
         }
+    }
+
+    private static boolean isNameBound(Method controller) {
+        return (controller == null) ? false : controller.getAnnotation(CsrfProtected.class) != null;
     }
 }
