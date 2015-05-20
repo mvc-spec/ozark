@@ -37,13 +37,12 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
-
-import com.oracle.ozark.api.CsrfValidated;
-import com.oracle.ozark.api.Csrf;
+package com.oracle.ozark.security;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.mvc.security.Csrf;
+import javax.mvc.security.CsrfValidated;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
@@ -58,11 +57,11 @@ import java.net.URLDecoder;
  * an HTTP header, it looks for it as a form parameter in which case the media type must be
  * {@link javax.ws.rs.core.MediaType#APPLICATION_FORM_URLENCODED_TYPE}. If validation
  * fails, a 403 error is returned.
- *
+ * <p/>
  * <p>Because this interceptor is bound by name and not globally, it does not check
  * the HTTP method (note that CSRF validation should only apply to non-idempotent
  * requests).</p>
- *
+ * <p/>
  * <p>Stream buffering is required to restore the entity for the next interceptor.
  * If validation succeeds, it calls the next interceptor in the chain. Default
  * character encoding is utf-8. Even though none of the main browsers send a
@@ -148,7 +147,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     private String toString(ByteArrayInputStream bais, String encoding) throws UnsupportedEncodingException {
         int n = 0;
         final byte[] bb = new byte[bais.available()];
-        while ((n = bais.read(bb, n, bb.length - n)) >= 0);
+        while ((n = bais.read(bb, n, bb.length - n)) >= 0) ;
         bais.reset();
         return new String(bb, encoding);
     }

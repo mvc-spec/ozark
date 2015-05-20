@@ -37,37 +37,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.api;
+package com.oracle.ozark.security;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import java.io.Serializable;
-import java.util.UUID;
+import javax.mvc.security.Encoders;
 
 /**
- * CSRF bean in session scope available for injection and via EL. Provides access to
- * the CSRF header name (a constant) and the CSRF token value (one per session). It
- * is accessible from EL using the name "csrf".
+ * Utility bean that provides encoders to <em>escape</em> code in JavaScript, HTML,
+ * CSS, etc. Encoding data that may be mis-interpreted in a client (e.g., a browser)
+ * can prevent XSS attacks. Injectable bean that is also accessible from EL using
+ * the name {@code encoders}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("csrf")
-@SessionScoped
-public class Csrf implements Serializable {
+@Named("encoders")
+@ApplicationScoped
+public class EncodersImpl implements Encoders {
 
-    public static final String ENABLE_CSRF = "javax.mvc.EnableCsrf";
-
-    private static final String CSRF_HEADER = "X-Requested-By";
-
-    private static final long serialVersionUID = -403250971215462525L;
-
-    private UUID token = UUID.randomUUID();
-
-    public String getName() {
-        return CSRF_HEADER;
+    public String js(String s) {
+        return s;       // TODO
     }
 
-    public String getToken() {
-        return token.toString();
+    public String html(String s) {
+        return s;       // TODO
     }
 }

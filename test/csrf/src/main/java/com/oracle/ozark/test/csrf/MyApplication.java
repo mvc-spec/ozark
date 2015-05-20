@@ -39,8 +39,7 @@
  */
 package com.oracle.ozark.test.csrf;
 
-import com.oracle.ozark.api.Csrf;
-
+import javax.mvc.security.Csrf;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashMap;

@@ -39,11 +39,10 @@
  */
 package com.oracle.ozark.test.csrf;
 
-import com.oracle.ozark.api.CsrfProtected;
-import com.oracle.ozark.api.CsrfValidated;
-
 import javax.mvc.Controller;
 import javax.mvc.View;
+import javax.mvc.security.CsrfProtected;
+import javax.mvc.security.CsrfValidated;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

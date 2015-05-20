@@ -37,29 +37,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.api;
+package com.oracle.ozark.security;
 
-import javax.ws.rs.NameBinding;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.RetentionPolicy.*;
-import static java.lang.annotation.ElementType.*;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
+import javax.mvc.security.Csrf;
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
- * Controller annotation that can be used to validate a CSRF token value received
- * in a request. Tokens are stored in the session-scoped bean {@link com.oracle.ozark.api.Csrf}.
- * Even though this annotation is targeted to {@code TYPE}, it can only be used to decorate
- * individual controller methods.
+ * CSRF bean in session scope available for injection and via EL. Provides access to
+ * the CSRF header name (a constant) and the CSRF token value (one per session). It
+ * is accessible from EL using the name "csrf".
  *
  * @author Santiago Pericas-Geertsen
  */
-@NameBinding
-@Target({METHOD, TYPE})
-@Retention(RUNTIME)
-@Documented
-@Inherited
-public @interface CsrfValidated {
+@Named("csrf")
+@SessionScoped
+public class CsrfImpl implements Csrf, Serializable {
+
+    private static final String CSRF_HEADER = "X-Requested-By";
+
+    private static final long serialVersionUID = -403250971215462525L;
+
+    private UUID token = UUID.randomUUID();
+
+    public String getName() {
+        return CSRF_HEADER;
+    }
+
+    public String getToken() {
+        return token.toString();
+    }
 }

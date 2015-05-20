@@ -88,7 +88,7 @@ public class CsrfIT {
      */
     @Test
     public void testFormOk() throws Exception {
-        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf/annotation");
         HtmlForm form = (HtmlForm) page1.getDocumentElement().getHtmlElementsByTagName("form").get(0);
 
         // Check hidden input field
@@ -112,7 +112,7 @@ public class CsrfIT {
      */
     @Test
     public void testFormFail() throws Exception {
-        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf/annotation");
         HtmlForm form = (HtmlForm) page1.getDocumentElement().getHtmlElementsByTagName("form").get(0);
 
         // Remove hidden input field to cause a CSRF validation failure
@@ -137,7 +137,7 @@ public class CsrfIT {
      */
     @Test
     public void testFormHeaderOk() throws Exception {
-        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf/annotation");
 
         // Check response and CSRF header
         WebResponse res = page1.getWebResponse();
@@ -158,7 +158,7 @@ public class CsrfIT {
      */
     @Test
     public void testFormHeaderFail() throws Exception {
-        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf");
+        HtmlPage page1 = webClient.getPage(webUrl + "resources/csrf/no_annotation");
 
         // Check response and CSRF header
         WebResponse res = page1.getWebResponse();

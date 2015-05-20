@@ -39,8 +39,8 @@
  */
 package com.oracle.ozark.jersey;
 
-import com.oracle.ozark.core.CsrfProtectFilter;
-import com.oracle.ozark.core.CsrfValidateInterceptor;
+import com.oracle.ozark.security.CsrfProtectFilter;
+import com.oracle.ozark.security.CsrfValidateInterceptor;
 import com.oracle.ozark.core.ViewResponseFilter;
 import com.oracle.ozark.core.ViewableWriter;
 import com.oracle.ozark.validation.ValidationInterceptorImpl;
