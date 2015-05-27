@@ -51,7 +51,6 @@ import javax.mvc.Viewable;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.ServerErrorException;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -63,7 +62,8 @@ import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.FOUND;
+import static javax.ws.rs.core.Response.Status.OK;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatched}
@@ -118,43 +118,38 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         final Method method = resourceInfo.getResourceMethod();
         final Class<?> returnType = method.getReturnType();
 
-        // Under normal processing, no exceptions
-        Object entity = null;
-        final Response.StatusType statusType = responseContext.getStatusInfo();
-        if (statusType != INTERNAL_SERVER_ERROR) {
-            // Wrap entity type into Viewable, possibly looking at @View
-            entity = responseContext.getEntity();
-            final Class<?> entityType = entity != null ? entity.getClass() : null;
-            if (entityType == null) {       // NO_CONTENT
-                View an = method.getAnnotation(View.class);
-                if (an == null) {
-                    an = resourceInfo.getResourceClass().getAnnotation(View.class);
-                }
-                if (an != null) {
-                    MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
-                    if (contentType == null) {
-                        contentType = MediaType.TEXT_HTML_TYPE;     // default
-                    }
-                    responseContext.setEntity(new Viewable(an.value()), null, contentType);
-                    responseContext.setStatusInfo(OK);      // Needed for method returning void
-                } else if (returnType == Void.class) {
-                    throw new ServerErrorException("Void controller and no @View annotation? "
-                            + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
-                }
-            } else if (entityType != Viewable.class) {
-                responseContext.setEntity(new Viewable(entity.toString()), null, responseContext.getMediaType());
+        // Wrap entity type into Viewable, possibly looking at @View
+        Object entity = responseContext.getEntity();
+        final Class<?> entityType = entity != null ? entity.getClass() : null;
+        if (entityType == null) {       // NO_CONTENT
+            View an = method.getAnnotation(View.class);
+            if (an == null) {
+                an = resourceInfo.getResourceClass().getAnnotation(View.class);
             }
-
-            // Redirect logic, entity must be a Viewable if not null
-            entity = responseContext.getEntity();
-            if (entity != null) {
-                final String view = ((Viewable) entity).getView();
-                if (view.startsWith(REDIRECT)) {
-                    final String uri = uriInfo.getBaseUri() + view.substring(REDIRECT.length() + 1);
-                    responseContext.setStatusInfo(FOUND);
-                    responseContext.getHeaders().putSingle(LOCATION_HEADER, uri);
-                    responseContext.setEntity(null);
+            if (an != null) {
+                MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
+                if (contentType == null) {
+                    contentType = MediaType.TEXT_HTML_TYPE;     // default
                 }
+                responseContext.setEntity(new Viewable(an.value()), null, contentType);
+                responseContext.setStatusInfo(OK);      // Needed for method returning void
+            } else if (returnType == Void.class) {
+                throw new ServerErrorException("Void controller and no @View annotation? "
+                        + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
+            }
+        } else if (entityType != Viewable.class) {
+            responseContext.setEntity(new Viewable(entity.toString()), null, responseContext.getMediaType());
+        }
+
+        // Redirect logic, entity must be a Viewable if not null
+        entity = responseContext.getEntity();
+        if (entity != null) {
+            final String view = ((Viewable) entity).getView();
+            if (view.startsWith(REDIRECT)) {
+                final String uri = uriInfo.getBaseUri() + view.substring(REDIRECT.length() + 1);
+                responseContext.setStatusInfo(FOUND);
+                responseContext.getHeaders().putSingle(LOCATION_HEADER, uri);
+                responseContext.setEntity(null);
             }
         }
     }
