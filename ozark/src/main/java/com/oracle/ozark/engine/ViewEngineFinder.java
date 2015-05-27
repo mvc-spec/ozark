@@ -81,7 +81,7 @@ public class ViewEngineFinder {
                             final Priority p1 = e1.getClass().getAnnotation(Priority.class);
                             final int v1 = p1 != null ? p1.value() : Priorities.DEFAULT;
                             final Priority p2 = e2.getClass().getAnnotation(Priority.class);
-                            final int v2 = p1 != null ? p2.value() : Priorities.DEFAULT;
+                            final int v2 = p2 != null ? p2.value() : Priorities.DEFAULT;
                             return v1 - v2;
                         });
                 // Update cache
