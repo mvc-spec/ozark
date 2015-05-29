@@ -39,6 +39,7 @@
  */
 package com.oracle.ozark.core;
 
+import com.oracle.ozark.cdi.CdiUtil;
 import com.oracle.ozark.event.ControllerMatched;
 import com.oracle.ozark.jersey.VariantSelector;
 
@@ -107,6 +108,9 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Inject
     private ControllerMatched matched;
 
+    @Inject
+    private CdiUtil cdiUtil;
+
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
@@ -124,7 +128,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         if (entityType == null) {       // NO_CONTENT
             View an = method.getAnnotation(View.class);
             if (an == null) {
-                an = resourceInfo.getResourceClass().getAnnotation(View.class);
+                an = cdiUtil.getAnnotation(resourceInfo.getResourceClass(), View.class);
             }
             if (an != null) {
                 MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);

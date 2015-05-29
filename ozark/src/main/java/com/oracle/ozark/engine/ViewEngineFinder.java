@@ -45,7 +45,7 @@ public class ViewEngineFinder {
     private ViewEngineSelected selected;
 
     @Inject
-    private Instance<CdiUtil> cdiUtil;
+    private CdiUtil cdiUtil;
 
     private Map<String, ViewEngine> cache = new HashMap<>();
 
@@ -62,7 +62,7 @@ public class ViewEngineFinder {
         // If engine specified in viewable, use it
         final Class<? extends ViewEngine> engineClass = viewable.getViewEngine();
         if (engineClass != null) {
-            engine = Optional.of(cdiUtil.get().newBean(engineClass));
+            engine = Optional.of(cdiUtil.newBean(engineClass));
         } else {
             // Check cache first
             engine = Optional.ofNullable(cache.get(view));
@@ -78,9 +78,9 @@ public class ViewEngineFinder {
                 // Find candidate with highest priority
                 engine = candidates.stream().max(
                         (e1, e2) -> {
-                            final Priority p1 = e1.getClass().getAnnotation(Priority.class);
+                            final Priority p1 = cdiUtil.getAnnotation(e1.getClass(), Priority.class);
                             final int v1 = p1 != null ? p1.value() : Priorities.DEFAULT;
-                            final Priority p2 = e2.getClass().getAnnotation(Priority.class);
+                            final Priority p2 = cdiUtil.getAnnotation(e2.getClass(), Priority.class);
                             final int v2 = p2 != null ? p2.value() : Priorities.DEFAULT;
                             return v1 - v2;
                         });

@@ -39,6 +39,7 @@
  */
 package com.oracle.ozark.jersey;
 
+import com.oracle.ozark.cdi.CdiUtil;
 import org.glassfish.jersey.message.internal.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -419,7 +420,7 @@ public final class VariantSelector {
     public static MediaType selectVariant(HttpServletRequest request, ResourceInfo resourceInfo) {
         Produces produces = resourceInfo.getResourceMethod().getAnnotation(Produces.class);
         if (produces == null) {
-            produces = resourceInfo.getResourceClass().getAnnotation(Produces.class);
+            produces = CdiUtil.getAnnotation(resourceInfo.getResourceClass(), Produces.class);
         }
         if (produces != null) {
             final String[] mediaTypes = produces.value();
