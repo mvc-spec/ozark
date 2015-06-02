@@ -61,11 +61,4 @@ public class MyApplication extends Application {
         set.add(CsrfController.class);
         return set;
     }
-
-    @Override
-    public Map<String, Object> getProperties() {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(Csrf.ENABLE_CSRF, Boolean.TRUE);
-        return map;
-    }
 }

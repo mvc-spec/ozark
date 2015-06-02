@@ -6,11 +6,11 @@
         <artifactId>parent</artifactId>
         <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
-    <artifactId>csrf</artifactId>
+    <artifactId>csrf-property</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} CSRF Tests</name>
+    <name>Ozark ${project.version} CSRF Property Tests</name>
     <build>
-        <finalName>test-csrf</finalName>
+        <finalName>test-csrf-property</finalName>
     </build>
     <dependencies>
         <dependency>

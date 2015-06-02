@@ -37,14 +37,10 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.csrf;
+package com.oracle.ozark.test.csrfproperty;
 
-import javax.mvc.Controller;
-import javax.mvc.View;
 import javax.mvc.security.Csrf;
-import javax.mvc.security.CsrfProtected;
-import javax.mvc.security.CsrfValidated;
-import javax.ws.rs.*;
+import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -52,29 +48,24 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * CsrfController test.
+ * Class MyApplication.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Path("csrf")
-@Controller
-public class CsrfController {
+@ApplicationPath("resources")
+public class MyApplication extends Application {
 
-    @GET
-    @CsrfProtected
-    public String getForm() {
-        return "csrf.jsp";
+    @Override
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> set = new HashSet<>();
+        set.add(CsrfController.class);
+        return set;
     }
 
-    @POST
-    @CsrfValidated
-    public String postForm(@FormParam("greeting") String greeting) {
-        return "redirect:/csrf/ok";
-    }
-
-    @GET
-    @Path("ok")
-    @View("ok.jsp")
-    public void getOk() {
+    @Override
+    public Map<String, Object> getProperties() {
+        final Map<String, Object> map = new HashMap<>();
+        map.put(Csrf.ENABLE_CSRF, Boolean.TRUE);
+        return map;
     }
 }

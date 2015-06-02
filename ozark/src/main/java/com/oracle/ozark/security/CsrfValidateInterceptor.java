@@ -44,13 +44,20 @@ import javax.inject.Inject;
 import javax.mvc.security.Csrf;
 import javax.mvc.security.CsrfValidated;
 import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.ReaderInterceptorContext;
 import java.io.*;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
+
+import static java.lang.Boolean.TRUE;
 
 /**
  * <p>Reader interceptor that checks for the CSRF header and token. If not available as
@@ -70,7 +77,6 @@ import java.net.URLDecoder;
  * @author Santiago Pericas-Geertsen
  * @see <a href="http://www.w3.org/TR/html40/appendix/notes.html#non-ascii-chars">HTML 4.0 Appendix</a>
  */
-@CsrfValidated
 @Priority(Priorities.HEADER_DECORATOR)
 public class CsrfValidateInterceptor implements ReaderInterceptor {
 
@@ -80,56 +86,66 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     @Inject
     private Csrf csrf;
 
+    @Context
+    private Configuration config;
+
+    @Context
+    private ResourceInfo resourceInfo;
+
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
-        // First check if CSRF token is in header
-        final String csrfHeader = csrf.getName();
-        final String csrfToken = context.getHeaders().getFirst(csrfHeader);
-        if (csrf.getToken().equals(csrfToken)) {
-            return context.proceed();
-        }
-
-        // Otherwise, it must be a form parameter
-        final MediaType contentType = context.getMediaType();
-        if (!contentType.equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
-            throw new ForbiddenException("Unable to validate CSRF with media type " + context.getMediaType());
-        }
-
-        // Ensure stream can be restored for next interceptor
-        ByteArrayInputStream bais;
-        final InputStream is = context.getInputStream();
-        if (is instanceof ByteArrayInputStream) {
-            bais = (ByteArrayInputStream) is;
-        } else {
-            bais = copyStream(is);
-        }
-
-        // Validate CSRF
-        boolean validated = false;
-        final String charset = contentType.getParameters().get("charset");
-        final String entity = toString(bais, charset != null ? charset : DEFAULT_CHARSET);
-        final String[] pairs = entity.split("\\&");
-        for (int i = 0; i < pairs.length; i++) {
-            final String[] fields = pairs[i].split("=");
-            final String nn = URLDecoder.decode(fields[0], DEFAULT_CHARSET);
-            // Is this the CSRF field?
-            if (csrf.getName().equals(nn)) {
-                final String vv = URLDecoder.decode(fields[1], DEFAULT_CHARSET);
-                // If so then check the token
-                if (csrf.getToken().equals(vv)) {
-                    validated = true;
-                    break;
-                }
-                throw new ForbiddenException("Validation of CSRF failed due to mismatching tokens");
+        // Validate if name bound or if CSRF property enabled and a POST
+        final Method controller = resourceInfo.getResourceMethod();
+        if (isNameBound(controller) || (TRUE.equals(config.getProperty(Csrf.ENABLE_CSRF)) && isPost(controller))) {
+            // First check if CSRF token is in header
+            final String csrfHeader = csrf.getName();
+            final String csrfToken = context.getHeaders().getFirst(csrfHeader);
+            if (csrf.getToken().equals(csrfToken)) {
+                return context.proceed();
             }
-        }
-        if (!validated) {
-            throw new ForbiddenException("Validation of CSRF failed due to missing field");
-        }
 
-        // Restore stream and proceed
-        bais.reset();
-        context.setInputStream(bais);
+            // Otherwise, it must be a form parameter
+            final MediaType contentType = context.getMediaType();
+            if (!contentType.equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+                throw new ForbiddenException("Unable to validate CSRF with media type " + context.getMediaType());
+            }
+
+            // Ensure stream can be restored for next interceptor
+            ByteArrayInputStream bais;
+            final InputStream is = context.getInputStream();
+            if (is instanceof ByteArrayInputStream) {
+                bais = (ByteArrayInputStream) is;
+            } else {
+                bais = copyStream(is);
+            }
+
+            // Validate CSRF
+            boolean validated = false;
+            final String charset = contentType.getParameters().get("charset");
+            final String entity = toString(bais, charset != null ? charset : DEFAULT_CHARSET);
+            final String[] pairs = entity.split("\\&");
+            for (int i = 0; i < pairs.length; i++) {
+                final String[] fields = pairs[i].split("=");
+                final String nn = URLDecoder.decode(fields[0], DEFAULT_CHARSET);
+                // Is this the CSRF field?
+                if (csrf.getName().equals(nn)) {
+                    final String vv = URLDecoder.decode(fields[1], DEFAULT_CHARSET);
+                    // If so then check the token
+                    if (csrf.getToken().equals(vv)) {
+                        validated = true;
+                        break;
+                    }
+                    throw new ForbiddenException("Validation of CSRF failed due to mismatching tokens");
+                }
+            }
+            if (!validated) {
+                throw new ForbiddenException("Validation of CSRF failed due to missing field");
+            }
+
+            // Restore stream and proceed
+            bais.reset();
+            context.setInputStream(bais);
+        }
         return context.proceed();
     }
 
@@ -150,5 +166,13 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
         while ((n = bais.read(bb, n, bb.length - n)) >= 0) ;
         bais.reset();
         return new String(bb, encoding);
+    }
+
+    private static boolean isNameBound(Method controller) {
+        return (controller == null) ? false : controller.getAnnotation(CsrfValidated.class) != null;
+    }
+
+    private static boolean isPost(Method controller) {
+        return (controller == null) ? false : controller.getAnnotation(POST.class) != null;
     }
 }

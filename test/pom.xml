@@ -64,6 +64,7 @@
         <module>view-annotation</module>
         <module>returns</module>
         <module>csrf</module>
+        <module>csrf-property</module>
         <module>exceptions</module>
         <module>samples</module>
     </modules>

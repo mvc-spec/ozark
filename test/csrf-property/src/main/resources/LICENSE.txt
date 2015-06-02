@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,44 +37,4 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.csrf;
 
-import javax.mvc.Controller;
-import javax.mvc.View;
-import javax.mvc.security.Csrf;
-import javax.mvc.security.CsrfProtected;
-import javax.mvc.security.CsrfValidated;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-/**
- * CsrfController test.
- *
- * @author Santiago Pericas-Geertsen
- */
-@Path("csrf")
-@Controller
-public class CsrfController {
-
-    @GET
-    @CsrfProtected
-    public String getForm() {
-        return "csrf.jsp";
-    }
-
-    @POST
-    @CsrfValidated
-    public String postForm(@FormParam("greeting") String greeting) {
-        return "redirect:/csrf/ok";
-    }
-
-    @GET
-    @Path("ok")
-    @View("ok.jsp")
-    public void getOk() {
-    }
-}

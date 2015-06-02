@@ -37,19 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.test.csrf;
+package com.oracle.ozark.test.csrfproperty;
 
 import javax.mvc.Controller;
 import javax.mvc.View;
-import javax.mvc.security.Csrf;
-import javax.mvc.security.CsrfProtected;
-import javax.mvc.security.CsrfValidated;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 
 /**
  * CsrfController test.
@@ -61,13 +56,11 @@ import java.util.Set;
 public class CsrfController {
 
     @GET
-    @CsrfProtected
     public String getForm() {
         return "csrf.jsp";
     }
 
     @POST
-    @CsrfValidated
     public String postForm(@FormParam("greeting") String greeting) {
         return "redirect:/csrf/ok";
     }
