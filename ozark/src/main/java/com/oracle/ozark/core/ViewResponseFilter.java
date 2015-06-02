@@ -65,6 +65,8 @@ import java.lang.reflect.Method;
 
 import static javax.ws.rs.core.Response.Status.FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
+import static com.oracle.ozark.core.PathUtil.noStartingSlash;
+import static com.oracle.ozark.core.PathUtil.noPrefix;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatched}
@@ -150,7 +152,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         if (entity != null) {
             final String view = ((Viewable) entity).getView();
             if (view.startsWith(REDIRECT)) {
-                final String uri = uriInfo.getBaseUri() + view.substring(REDIRECT.length() + 1);
+                final String uri = uriInfo.getBaseUri() + noStartingSlash(noPrefix(view, REDIRECT));
                 responseContext.setStatusInfo(FOUND);
                 responseContext.getHeaders().putSingle(LOCATION_HEADER, uri);
                 responseContext.setEntity(null);

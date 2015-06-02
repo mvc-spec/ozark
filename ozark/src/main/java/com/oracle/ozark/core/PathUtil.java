@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,37 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.engine;
-
-import javax.mvc.engine.ViewEngine;
-import javax.mvc.engine.ViewEngineContext;
-
-import static com.oracle.ozark.core.PathUtil.hasStartingSlash;
+package com.oracle.ozark.core;
 
 /**
- * Base class for view engines that factors out all common logic.
+ * Utility methods for path and URI handling.
  *
  * @author Santiago Pericas-Geertsen
  */
-public abstract class ViewEngineBase implements ViewEngine {
+public class PathUtil {
 
     /**
-     * Resolves a view path based on {@link javax.mvc.engine.ViewEngine#VIEW_FOLDER}
-     * in the active configuration. If the view is absolute, starts with '/', then
-     * it is returned unchanged.
+     * Drops starting slash from path if present.
      *
-     * @param context view engine context.
-     * @return resolved view.
+     * @param path the path.
+     * @return the resulting path without a starting slash.
      */
-    protected String resolveView(ViewEngineContext context) {
-        final String view = context.getView();
-        if (!hasStartingSlash(view)) {        // Relative?
-            String viewFolder = (String) context.getConfiguration().getProperty(ViewEngine.VIEW_FOLDER);
-            if (viewFolder == null) {
-                viewFolder = ViewEngine.DEFAULT_VIEW_FOLDER;
-            }
-            return viewFolder + view;
-        }
-        return view;
+    public static String noStartingSlash(String path) {
+        return hasStartingSlash(path) ? path.substring(1) : path;
+    }
+
+    /**
+     * Determines of path starts with a slash.
+     *
+     * @param path the path to test.
+     * @return outcome of test.
+     */
+    public static boolean hasStartingSlash(String path) {
+        return path.charAt(0) == '/';
+    }
+
+    /**
+     * Drops a prefix from a path if it exists or returns original path if prefix does
+     * not match.
+     *
+     * @param path the path.
+     * @param prefix the prefix to drop.
+     * @return new path without prefix or old path if prefix does not exist.
+     */
+    public static String noPrefix(String path, String prefix) {
+        return path.startsWith(prefix) ? path.substring(prefix.length()) : path;
     }
 }
