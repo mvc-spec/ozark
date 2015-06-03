@@ -115,7 +115,7 @@ public final class AnnotationUtils {
             final Class<?>[] interfaces = method.getDeclaringClass().getInterfaces();
             for (Class<?> in : interfaces) {
                 try {
-                    final Method superMethod = superClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                    final Method superMethod = in.getDeclaredMethod(method.getName(), method.getParameterTypes());
                     an = getAnnotation(superMethod, annotationType);
                 } catch (NoSuchMethodException e) {
                     // falls through
