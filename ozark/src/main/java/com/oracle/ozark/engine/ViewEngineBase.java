@@ -42,7 +42,7 @@ package com.oracle.ozark.engine;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 
-import static com.oracle.ozark.core.PathUtil.hasStartingSlash;
+import static com.oracle.ozark.util.PathUtils.hasStartingSlash;
 
 /**
  * Base class for view engines that factors out all common logic.

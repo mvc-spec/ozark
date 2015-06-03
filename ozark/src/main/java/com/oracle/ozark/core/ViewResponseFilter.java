@@ -39,7 +39,7 @@
  */
 package com.oracle.ozark.core;
 
-import com.oracle.ozark.cdi.CdiUtil;
+import com.oracle.ozark.util.CdiUtils;
 import com.oracle.ozark.event.ControllerMatched;
 import com.oracle.ozark.jersey.VariantSelector;
 
@@ -65,8 +65,9 @@ import java.lang.reflect.Method;
 
 import static javax.ws.rs.core.Response.Status.FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
-import static com.oracle.ozark.core.PathUtil.noStartingSlash;
-import static com.oracle.ozark.core.PathUtil.noPrefix;
+import static com.oracle.ozark.util.PathUtils.noStartingSlash;
+import static com.oracle.ozark.util.PathUtils.noPrefix;
+import static com.oracle.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatched}
@@ -111,7 +112,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     private ControllerMatched matched;
 
     @Inject
-    private CdiUtil cdiUtil;
+    private CdiUtils cdiUtils;
 
     @Override
     public void filter(ContainerRequestContext requestContext,
@@ -130,7 +131,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         if (entityType == null) {       // NO_CONTENT
             View an = method.getAnnotation(View.class);
             if (an == null) {
-                an = cdiUtil.getAnnotation(resourceInfo.getResourceClass(), View.class);
+                an = getAnnotation(resourceInfo.getResourceClass(), View.class);
             }
             if (an != null) {
                 MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);

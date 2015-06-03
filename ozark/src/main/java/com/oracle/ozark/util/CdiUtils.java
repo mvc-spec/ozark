@@ -37,14 +37,13 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.cdi;
+package com.oracle.ozark.util;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
-import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
@@ -54,7 +53,7 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
-public class CdiUtil {
+public class CdiUtils {
 
     @Inject
     private BeanManager bm;
@@ -64,8 +63,8 @@ public class CdiUtil {
      * defined by the scope annotation on the class.
      *
      * @param clazz CDI class.
-     * @param <T>   Class parameter.
-     * @return Newly allocated CDI bean.
+     * @param <T>   class parameter.
+     * @return newly allocated CDI bean.
      */
     @SuppressWarnings("unchecked")
     public <T> T newBean(Class<T> clazz) {
@@ -73,24 +72,5 @@ public class CdiUtil {
         final Bean<T> bean = (Bean<T>) bm.resolve(beans);
         final CreationalContext<T> ctx = bm.createCreationalContext(bean);
         return (T) bm.getReference(bean, clazz, ctx);
-    }
-
-    /**
-     * Retrieve an annotation from a possibly proxied CDI/Weld class. First inspect
-     * the class and if that fails, try the super class. Note that there is no special
-     * processing required for method annotations in proxied classes. Ideally this
-     * method should be part of the CDI API.
-     *
-     * @param clazz class to search annotation.
-     * @param annotationType type of annotation to search for.
-     * @return annotation instance or {@code null} if none found.
-     */
-    public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationType) {
-        final T an = clazz.getAnnotation(annotationType);
-        if (an != null) {
-            return an;
-        }
-        // CDI/Weld proxies may require to inspect super class
-        return clazz.getSuperclass().getAnnotation(annotationType);
     }
 }

@@ -60,8 +60,8 @@ public class ValidationInterceptorImpl implements ValidationInterceptor {
     @Override
     public void onValidate(ValidationInterceptorContext ctx) throws ValidationException {
         Object resource = ctx.getResource();
-        if (ValidationResultUtil.isTargetInstanceProxy(resource)) {
-            resource = ValidationResultUtil.getTargetInstance(resource);
+        if (ValidationResultUtils.isTargetInstanceProxy(resource)) {
+            resource = ValidationResultUtils.getTargetInstance(resource);
             ctx.setResource(resource);
         }
 
@@ -72,14 +72,14 @@ public class ValidationInterceptorImpl implements ValidationInterceptor {
             final ValidationResultImpl arg = getValidationResultInArgs(ctx.getArgs());
             if (arg != null) {
                 arg.setViolations(cve.getConstraintViolations());
-            } else if (ValidationResultUtil.hasValidationResultProperty(resource)) {
+            } else if (ValidationResultUtils.hasValidationResultProperty(resource)) {
                 // Next check if a property
-                final Method validationResultGetter = ValidationResultUtil.getValidationResultGetter(resource);
-                ValidationResultUtil.updateValidationResultProperty(resource, validationResultGetter,
+                final Method validationResultGetter = ValidationResultUtils.getValidationResultGetter(resource);
+                ValidationResultUtils.updateValidationResultProperty(resource, validationResultGetter,
                         cve.getConstraintViolations());
             } else {
                 // Then check for a field
-                final Field vr = ValidationResultUtil.getValidationResultField(resource);
+                final Field vr = ValidationResultUtils.getValidationResultField(resource);
                 if (vr != null) {
                     try {
                         vr.setAccessible(true);

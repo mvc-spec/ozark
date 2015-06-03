@@ -1,6 +1,6 @@
 package com.oracle.ozark.engine;
 
-import com.oracle.ozark.cdi.CdiUtil;
+import com.oracle.ozark.util.CdiUtils;
 import com.oracle.ozark.event.ViewEngineSelected;
 
 import javax.annotation.Priority;
@@ -12,7 +12,13 @@ import javax.inject.Inject;
 import javax.mvc.Viewable;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+
+import static com.oracle.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
  * <p>Selects the view engine for a {@link javax.mvc.Viewable}. If the viewable
@@ -45,7 +51,7 @@ public class ViewEngineFinder {
     private ViewEngineSelected selected;
 
     @Inject
-    private CdiUtil cdiUtil;
+    private CdiUtils cdiUtils;
 
     private Map<String, ViewEngine> cache = new HashMap<>();
 
@@ -62,7 +68,7 @@ public class ViewEngineFinder {
         // If engine specified in viewable, use it
         final Class<? extends ViewEngine> engineClass = viewable.getViewEngine();
         if (engineClass != null) {
-            engine = Optional.of(cdiUtil.newBean(engineClass));
+            engine = Optional.of(cdiUtils.newBean(engineClass));
         } else {
             // Check cache first
             engine = Optional.ofNullable(cache.get(view));
@@ -78,9 +84,9 @@ public class ViewEngineFinder {
                 // Find candidate with highest priority
                 engine = candidates.stream().max(
                         (e1, e2) -> {
-                            final Priority p1 = cdiUtil.getAnnotation(e1.getClass(), Priority.class);
+                            final Priority p1 = getAnnotation(e1.getClass(), Priority.class);
                             final int v1 = p1 != null ? p1.value() : Priorities.DEFAULT;
-                            final Priority p2 = cdiUtil.getAnnotation(e2.getClass(), Priority.class);
+                            final Priority p2 = getAnnotation(e2.getClass(), Priority.class);
                             final int v2 = p2 != null ? p2.value() : Priorities.DEFAULT;
                             return v1 - v2;
                         });

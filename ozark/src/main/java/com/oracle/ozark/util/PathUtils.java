@@ -37,14 +37,14 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.core;
+package com.oracle.ozark.util;
 
 /**
  * Utility methods for path and URI handling.
  *
  * @author Santiago Pericas-Geertsen
  */
-public class PathUtil {
+public final class PathUtils {
 
     /**
      * Drops starting slash from path if present.

@@ -39,7 +39,6 @@
  */
 package com.oracle.ozark.jersey;
 
-import com.oracle.ozark.cdi.CdiUtil;
 import org.glassfish.jersey.message.internal.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +51,8 @@ import javax.ws.rs.core.Variant;
 import java.text.ParseException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.oracle.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
  * Utility for selecting variant that best matches request from a list of variants.
@@ -420,7 +421,7 @@ public final class VariantSelector {
     public static MediaType selectVariant(HttpServletRequest request, ResourceInfo resourceInfo) {
         Produces produces = resourceInfo.getResourceMethod().getAnnotation(Produces.class);
         if (produces == null) {
-            produces = CdiUtil.getAnnotation(resourceInfo.getResourceClass(), Produces.class);
+            produces = getAnnotation(resourceInfo.getResourceClass(), Produces.class);
         }
         if (produces != null) {
             final String[] mediaTypes = produces.value();

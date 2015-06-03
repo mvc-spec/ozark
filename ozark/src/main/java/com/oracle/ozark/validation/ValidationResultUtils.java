@@ -55,7 +55,7 @@ import java.util.Set;
  *
  * @author Santiago Pericas-Geertsen
  */
-public final class ValidationResultUtil {
+public final class ValidationResultUtils {
 
     private static Class<?> TARGET_INSTANCE;
 
@@ -68,7 +68,7 @@ public final class ValidationResultUtil {
         }
     }
 
-    private ValidationResultUtil() {
+    private ValidationResultUtils() {
         throw new AssertionError("Instantiation not allowed.");
     }
 

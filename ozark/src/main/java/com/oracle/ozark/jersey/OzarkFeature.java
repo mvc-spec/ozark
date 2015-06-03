@@ -39,7 +39,6 @@
  */
 package com.oracle.ozark.jersey;
 
-import com.oracle.ozark.cdi.CdiUtil;
 import com.oracle.ozark.security.CsrfProtectFilter;
 import com.oracle.ozark.security.CsrfValidateInterceptor;
 import com.oracle.ozark.core.ViewResponseFilter;
@@ -55,6 +54,8 @@ import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
 import java.util.Arrays;
+
+import static com.oracle.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
  * <p>Jersey feature that sets up the JAX-RS pipeline for MVC processing using one
@@ -89,7 +90,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
     }
 
     private boolean isController(Class<?> c) {
-        return CdiUtil.getAnnotation(c, Controller.class) != null ||
-                Arrays.asList(c.getMethods()).stream().anyMatch(m -> m.getAnnotation(Controller.class) != null);
+        return getAnnotation(c, Controller.class) != null ||
+                Arrays.asList(c.getMethods()).stream().anyMatch(m -> getAnnotation(m, Controller.class) != null);
     }
 }
