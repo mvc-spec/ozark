@@ -56,10 +56,77 @@ import javax.mvc.security.Encoders;
 public class EncodersImpl implements Encoders {
 
     public String js(String s) {
-        return s;       // TODO
+        final int l = s.length();
+        final StringBuffer sb = new StringBuffer(l);
+        for (int i = 0; i < l; i++) {
+            final char ch = s.charAt(i);
+            switch (ch) {
+                case '\b':
+                    sb.append("\\b");
+                    break;
+                case '\t':
+                    sb.append("\\t");
+                    break;
+                case '\n':
+                    sb.append("\\n");
+                    break;
+                case '\f':
+                    sb.append("\\f");
+                    break;
+                case '\r':
+                    sb.append("\\r");
+                    break;
+                case '/':
+                    sb.append("\\/");
+                    break;
+                case '\\':
+                    sb.append("\\\\");
+                    break;
+                case '\"':
+                    sb.append("\\x22");
+                    break;
+                case '&':
+                    sb.append("\\x26");
+                    break;
+                case '\'':
+                    sb.append("\\x27");
+                    break;
+                default:
+                    if (ch >= '\u0000' && ch <= '\u001F') {
+                        sb.append("\\x").append(ch <= '\u000F' ? "0" : "").append(Integer.toHexString((int) ch));
+                    } else {
+                        sb.append(ch);
+                    }
+            }
+        }
+        return sb.toString();
     }
 
     public String html(String s) {
-        return s;       // TODO
+        final int l = s.length();
+        final StringBuffer sb = new StringBuffer(l);
+        for (int i = 0; i < l; i++) {
+            final char ch = s.charAt(i);
+            switch (ch) {
+                case '&':
+                    sb.append("&amp;");
+                    break;
+                case '<':
+                    sb.append("&lt;");
+                    break;
+                case '>':
+                    sb.append("&gt;");
+                    break;
+                case '"':
+                    sb.append("&#34;");
+                    break;
+                case '\'':
+                    sb.append("&#39;");
+                    break;
+                default:
+                    sb.append(ch);
+            }
+        }
+        return sb.toString();
     }
 }
