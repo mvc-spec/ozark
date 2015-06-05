@@ -65,7 +65,7 @@ public class Jsr223IT {
 
     @Test
     public void testGroovy() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "mvc/groovy");
+        final HtmlPage page = webClient.getPage(webUrl + "mvc/groovy?name=Groovy");
         assertTrue(page.asXml().contains("Hello Groovy"));
     }
 

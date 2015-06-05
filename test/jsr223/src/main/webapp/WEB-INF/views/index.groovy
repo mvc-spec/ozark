@@ -1,1 +1,1 @@
-"Hello Groovy"
+"Hello " + models.name;

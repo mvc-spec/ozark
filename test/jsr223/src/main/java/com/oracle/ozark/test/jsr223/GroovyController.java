@@ -46,6 +46,7 @@ import javax.mvc.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
  * A Groovy controller.
@@ -62,6 +63,7 @@ public class GroovyController {
     @Controller
     @Produces("text/html")
     @View("index.groovy")
-    public void index() {
+    public void index(@QueryParam("name") String name) {
+        models.put("name", name);
     }
 }

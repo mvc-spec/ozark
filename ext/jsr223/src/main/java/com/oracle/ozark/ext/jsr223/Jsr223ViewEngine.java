@@ -46,6 +46,7 @@ import java.io.InputStreamReader;
 import javax.enterprise.context.ApplicationScoped;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
+import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -103,7 +104,9 @@ public class Jsr223ViewEngine extends ViewEngineBase {
             InputStream inputStream = context.getRequest()
                     .getServletContext().getResourceAsStream(resolveView(context));
             InputStreamReader reader = new InputStreamReader(inputStream);
-            responseObject = scriptEngine.eval(reader);
+            Bindings bindings = scriptEngine.createBindings();
+            bindings.put("models", context.getModels());
+            responseObject = scriptEngine.eval(reader, bindings);
         } catch (ScriptException exception) {
             throw new ViewEngineException("Unable to execute script", exception);
         }
