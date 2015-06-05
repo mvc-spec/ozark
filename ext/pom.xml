@@ -40,5 +40,6 @@
         <module>mustache</module>
         <module>velocity</module>
 	    <module>thymeleaf</module>
+        <module>jsr223</module>
     </modules>
 </project>

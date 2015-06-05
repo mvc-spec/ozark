@@ -51,22 +51,23 @@
         <module>book-cdi</module>
         <module>book-models</module>
         <module>conversation</module>
+        <module>csrf</module>
+        <module>csrf-property</module>
         <module>events</module>
+        <module>exceptions</module>
         <module>facelets</module>
         <module>freemarker</module>
         <module>handlebars</module>
+        <module>jsr223</module>
         <module>mustache</module>
         <module>produces</module>
+        <module>redirect</module>
+        <module>returns</module>
+        <module>samples</module>
+        <module>thymeleaf</module>
         <module>validation</module>
         <module>velocity</module>
-        <module>thymeleaf</module>
-        <module>redirect</module>
         <module>view-annotation</module>
-        <module>returns</module>
-        <module>csrf</module>
-        <module>csrf-property</module>
-        <module>exceptions</module>
-        <module>samples</module>
     </modules>
     <profiles>
         <profile>
