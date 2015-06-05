@@ -8,7 +8,7 @@
     </parent>
     <artifactId>exceptions</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Returns Tests</name>
+    <name>Ozark ${project.version} Exceptions Tests</name>
     <build>
         <finalName>test-exceptions</finalName>
     </build>
