@@ -74,4 +74,10 @@ public class Jsr223IT {
         final HtmlPage page = webClient.getPage(webUrl + "mvc/nashorn");
         assertTrue(page.asXml().contains("Hello Nashorn"));
     }
+
+    @Test
+    public void testJython() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "mvc/jython?name=Jython");
+        assertTrue(page.asXml().contains("Hello Jython"));
+    }
 }

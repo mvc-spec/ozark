@@ -39,25 +39,31 @@
  */
 package com.oracle.ozark.test.jsr223;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import java.util.HashSet;
-import java.util.Set;
+import javax.inject.Inject;
+import javax.mvc.Controller;
+import javax.mvc.Models;
+import javax.mvc.View;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 
 /**
- * A JSR-223 application.
+ * A Jython controller.
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
-@ApplicationPath("mvc")
-public class Jsr223Application extends Application {
+@Path("jython")
+public class JythonController {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        HashSet<Class<?>> classes = new HashSet<>();
-        classes.add(GroovyController.class);
-        classes.add(NashornController.class);
-        classes.add(JythonController.class);
-        return classes;
+    @Inject
+    private Models models;
+
+    @GET
+    @Controller
+    @Produces("text/html")
+    @View("index.py")
+    public void index(@QueryParam("name") String name) {
+        models.put("name", name);
     }
 }
