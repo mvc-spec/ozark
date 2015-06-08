@@ -83,7 +83,7 @@ public class Jsr223ViewEngine extends ViewEngineBase {
      */
     private ScriptEngine getScriptEngine(String view) {
         if (view.contains(".")) {
-            String extension = view.substring(view.indexOf(".") + 1);
+            String extension = view.substring(view.lastIndexOf(".") + 1);
             return scriptEngineManager.getEngineByExtension(extension);
         }
         return null;
