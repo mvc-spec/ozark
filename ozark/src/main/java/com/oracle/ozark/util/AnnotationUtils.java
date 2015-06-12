@@ -66,8 +66,8 @@ public final class AnnotationUtils {
         if (an != null) {
             return an;
         }
-        // CDI/Weld proxies may require to inspect super class
-        return clazz.getSuperclass().getDeclaredAnnotation(annotationType);
+        // Weld proxies require inspecting the superclass
+        return isWeldProxy(clazz) ? clazz.getSuperclass().getDeclaredAnnotation(annotationType) : null;
     }
 
     /**
@@ -139,5 +139,21 @@ public final class AnnotationUtils {
     private static boolean hasMvcAnnotations(Method method) {
         final List<Annotation> ans = Arrays.asList(method.getDeclaredAnnotations());
         return ans.stream().anyMatch(a -> a.getClass().getName().startsWith("javax.mvc."));
+    }
+
+    /**
+     * All Weld proxies should implement this interface.
+     */
+    private static final String PROXY_OBJECT = "org.jboss.weld.bean.proxy.ProxyObject";
+
+    /**
+     * Determines if a class represents a Weld proxy. This code is naturally not portable
+     * across CDI implementations.
+     *
+     * @param clazz class to check if it is a Weld proxy.
+     * @return outcome of test.
+     */
+    private static boolean isWeldProxy(Class<?> clazz) {
+        return Arrays.asList(clazz.getInterfaces()).stream().anyMatch(in -> in.getName().equals(PROXY_OBJECT));
     }
 }
