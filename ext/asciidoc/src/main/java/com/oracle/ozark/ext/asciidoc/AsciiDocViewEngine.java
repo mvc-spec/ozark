@@ -43,7 +43,6 @@ import com.oracle.ozark.engine.ViewEngineBase;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Asciidoctor.Factory;
 import org.asciidoctor.Options;
-import org.asciidoctor.extension.JavaExtensionRegistry;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -55,6 +54,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 /**
  * Class AsciiDocViewEngine.
@@ -83,15 +83,12 @@ public class AsciiDocViewEngine extends ViewEngineBase {
         try (PrintWriter writer = context.getResponse().getWriter();
              InputStream is = servletContext.getResourceAsStream(resolveView(context));
              InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-             BufferedReader reader = new BufferedReader(isr);)
-        {
-            AttributesPreprocessor preprocessor = new AttributesPreprocessor();
-            preprocessor.setModels(context.getModels());
+             BufferedReader reader = new BufferedReader(isr)) {
 
-            JavaExtensionRegistry extensionRegistry = asciidoctor.javaExtensionRegistry();
-            extensionRegistry.preprocessor(preprocessor);
+            Options options = new Options();
+            options.setAttributes(new HashMap(context.getModels()));
 
-            asciidoctor.convert(reader, writer, new Options());
+            asciidoctor.convert(reader, writer, options);
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }
