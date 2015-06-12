@@ -35,6 +35,7 @@
         </dependency>
     </dependencies>
     <modules>
+        <module>asciidoc</module>
         <module>freemarker</module>
         <module>handlebars</module>
         <module>mustache</module>
