@@ -44,7 +44,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -77,7 +76,6 @@ public class ExceptionsIT {
     }
 
     @Test
-    @Ignore
     public void testNotFound() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/exceptions/not_found");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
@@ -92,7 +90,6 @@ public class ExceptionsIT {
     }
 
     @Test
-    @Ignore
     public void testInternalError() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/exceptions/internal_error");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
@@ -107,10 +104,10 @@ public class ExceptionsIT {
     }
 
     @Test
-    @Ignore
     public void testInternalErrorMapped() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/exceptions/internal_error_mapped");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
         assertTrue(it.next().asText().contains("Hello World"));
     }
 }
+
