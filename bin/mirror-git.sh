@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd /tmp
 git clone --bare ssh://spericas@git.java.net/ozark~sources
 cd ozark~sources.git
