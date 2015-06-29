@@ -86,7 +86,7 @@
                     <scope>compile</scope>
                 </dependency>
                 <dependency>
-                    <groupId>com.oracle.ozark</groupId>
+                    <groupId>org.glassfish.ozark</groupId>
                     <artifactId>ozark</artifactId>
                     <version>${project.version}</version>
                     <scope>runtime</scope>
@@ -295,7 +295,7 @@
                                 <configuration>
                                     <artifactItems>
                                         <artifactItem>
-                                            <groupId>com.oracle.ozark</groupId>
+                                            <groupId>org.glassfish.ozark</groupId>
                                             <artifactId>ozark</artifactId>
                                             <version>${project.version}</version>
                                             <type>jar</type>
@@ -332,7 +332,7 @@
                     <scope>compile</scope>
                 </dependency>
                 <dependency>
-                    <groupId>com.oracle.ozark</groupId>
+                    <groupId>org.glassfish.ozark</groupId>
                     <artifactId>ozark</artifactId>
                     <version>${project.version}</version>
                     <classifier>instrumented</classifier>
@@ -352,7 +352,7 @@
                     <scope>provided</scope>
                 </dependency>
                 <dependency>
-                    <groupId>com.oracle.ozark</groupId>
+                    <groupId>org.glassfish.ozark</groupId>
                     <artifactId>ozark</artifactId>
                     <version>${project.version}</version>
                     <classifier>sources</classifier>

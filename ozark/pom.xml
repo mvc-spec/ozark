@@ -10,6 +10,7 @@
         <artifactId>parent</artifactId>
         <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
+    <groupId>org.glassfish.ozark</groupId>
     <artifactId>ozark</artifactId>
     <version>1.0.0-m02-SNAPSHOT</version>
     <packaging>jar</packaging>

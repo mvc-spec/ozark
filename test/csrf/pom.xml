@@ -14,7 +14,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.oracle.ozark</groupId>
+            <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
             <version>1.0.0-m02-SNAPSHOT</version>
         </dependency>

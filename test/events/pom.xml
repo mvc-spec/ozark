@@ -16,7 +16,7 @@
     <dependencies>
         <!-- Access Ozark's extended MVC events -->
         <dependency>
-            <groupId>com.oracle.ozark</groupId>
+            <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
