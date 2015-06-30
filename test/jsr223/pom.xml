@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.oracle.ozark.test</groupId>
+        <groupId>org.glassfish.ozark.test</groupId>
         <artifactId>parent</artifactId>
         <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
@@ -16,7 +16,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>com.oracle.ozark.ext</groupId>
+            <groupId>org.glassfish.ozark.ext</groupId>
             <artifactId>ozark-jsr223</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
