@@ -63,6 +63,7 @@
         <module>mustache</module>
         <module>produces</module>
         <module>redirect</module>
+        <module>requestDispatcher</module>
         <module>returns</module>
         <module>samples</module>
         <module>thymeleaf</module>
