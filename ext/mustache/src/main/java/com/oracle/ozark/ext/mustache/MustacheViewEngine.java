@@ -41,8 +41,8 @@ package com.oracle.ozark.ext.mustache;
 
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import com.oracle.ozark.engine.ViewEngineBase;
-import com.oracle.ozark.engine.ViewEngineConfig;
+import org.glassfish.ozark.engine.ViewEngineBase;
+import org.glassfish.ozark.engine.ViewEngineConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

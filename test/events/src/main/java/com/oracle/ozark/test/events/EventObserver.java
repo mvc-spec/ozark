@@ -65,8 +65,8 @@ public class EventObserver {
         eventBean.setView(event.getView());
         eventBean.setEngine(event.getEngine());
         // If an Ozark event, access cached information
-        if (event instanceof com.oracle.ozark.event.ViewEngineSelected) {
-            eventBean.setCached(((com.oracle.ozark.event.ViewEngineSelected) event).isCached());
+        if (event instanceof org.glassfish.ozark.event.ViewEngineSelected) {
+            eventBean.setCached(((org.glassfish.ozark.event.ViewEngineSelected) event).isCached());
         }
     }
 }

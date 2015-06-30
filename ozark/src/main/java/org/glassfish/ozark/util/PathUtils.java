@@ -37,32 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
-
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+package org.glassfish.ozark.util;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * Utility methods for path and URI handling.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+public final class PathUtils {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
-
-        TemplateResolver resolver = new ServletContextTemplateResolver();
-
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    /**
+     * Drops starting slash from path if present.
+     *
+     * @param path the path.
+     * @return the resulting path without a starting slash.
+     */
+    public static String noStartingSlash(String path) {
+        return hasStartingSlash(path) ? path.substring(1) : path;
     }
 
+    /**
+     * Determines of path starts with a slash.
+     *
+     * @param path the path to test.
+     * @return outcome of test.
+     */
+    public static boolean hasStartingSlash(String path) {
+        return path.charAt(0) == '/';
+    }
+
+    /**
+     * Drops a prefix from a path if it exists or returns original path if prefix does
+     * not match.
+     *
+     * @param path the path.
+     * @param prefix the prefix to drop.
+     * @return new path without prefix or old path if prefix does not exist.
+     */
+    public static String noPrefix(String path, String prefix) {
+        return path.startsWith(prefix) ? path.substring(prefix.length()) : path;
+    }
 }

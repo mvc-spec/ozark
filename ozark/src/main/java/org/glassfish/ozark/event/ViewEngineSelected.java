@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,32 +37,53 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.event;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.Dependent;
+import javax.mvc.engine.ViewEngine;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * An implementation of {@link javax.mvc.event.ViewEngineSelected}.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+@Dependent
+public class ViewEngineSelected implements javax.mvc.event.ViewEngineSelected {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    private String view;
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
+    private Class<? extends ViewEngine> engine;
 
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
+    private boolean cached;
 
+    public String getView() {
+        return view;
     }
 
+    public void setView(String view) {
+        this.view = view;
+    }
+
+    public Class<? extends ViewEngine> getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Class<? extends ViewEngine> engine) {
+        this.engine = engine;
+    }
+
+    public boolean isCached() {
+        return cached;
+    }
+
+    public void setCached(boolean cached) {
+        this.cached = cached;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[MVC Event] ViewEngineSelected:");
+        sb.append(view).append(":").append(engine.getName()).append(cached ? " (cached)" : "");
+        return sb.toString();
+    }
 }

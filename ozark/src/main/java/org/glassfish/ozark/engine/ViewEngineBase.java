@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,32 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.engine;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import javax.mvc.engine.ViewEngine;
+import javax.mvc.engine.ViewEngineContext;
 
-import javax.enterprise.inject.Produces;
+import static org.glassfish.ozark.util.PathUtils.hasStartingSlash;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * Base class for view engines that factors out all common logic.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+public abstract class ViewEngineBase implements ViewEngine {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
-
-        TemplateResolver resolver = new ServletContextTemplateResolver();
-
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    /**
+     * Resolves a view path based on {@link javax.mvc.engine.ViewEngine#VIEW_FOLDER}
+     * in the active configuration. If the view is absolute, starts with '/', then
+     * it is returned unchanged.
+     *
+     * @param context view engine context.
+     * @return resolved view.
+     */
+    protected String resolveView(ViewEngineContext context) {
+        final String view = context.getView();
+        if (!hasStartingSlash(view)) {        // Relative?
+            String viewFolder = (String) context.getConfiguration().getProperty(ViewEngine.VIEW_FOLDER);
+            if (viewFolder == null) {
+                viewFolder = ViewEngine.DEFAULT_VIEW_FOLDER;
+            }
+            return viewFolder + view;
+        }
+        return view;
     }
-
 }

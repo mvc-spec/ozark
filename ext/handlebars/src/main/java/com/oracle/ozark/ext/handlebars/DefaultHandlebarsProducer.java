@@ -40,7 +40,7 @@
 package com.oracle.ozark.ext.handlebars;
 
 import com.github.jknack.handlebars.Handlebars;
-import com.oracle.ozark.engine.ViewEngineConfig;
+import org.glassfish.ozark.engine.ViewEngineConfig;
 
 import javax.enterprise.inject.Produces;
 

@@ -39,7 +39,7 @@
  */
 package com.oracle.ozark.ext.velocity;
 
-import com.oracle.ozark.engine.ViewEngineConfig;
+import org.glassfish.ozark.engine.ViewEngineConfig;
 import org.apache.velocity.app.VelocityEngine;
 
 import javax.enterprise.inject.Produces;

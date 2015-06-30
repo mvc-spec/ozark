@@ -37,32 +37,36 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.security;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
+import javax.mvc.security.Csrf;
+import java.io.Serializable;
+import java.util.UUID;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * CSRF bean in session scope available for injection and via EL. Provides access to
+ * the CSRF header name (a constant) and the CSRF token value (one per session). It
+ * is accessible from EL using the name "csrf".
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+@Named("csrf")
+@SessionScoped
+public class CsrfImpl implements Csrf, Serializable {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    private static final String CSRF_HEADER = "X-Requested-By";
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
+    private static final long serialVersionUID = -403250971215462525L;
 
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
+    private UUID token = UUID.randomUUID();
 
+    public String getName() {
+        return CSRF_HEADER;
     }
 
+    public String getToken() {
+        return token.toString();
+    }
 }

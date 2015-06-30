@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,44 +37,67 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.velocity;
+package org.glassfish.ozark.engine;
 
-import org.glassfish.ozark.engine.ViewEngineBase;
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
-
-import javax.enterprise.context.ApplicationScoped;
+import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.mvc.Models;
+import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Class VelocityViewEngine.
+ * Implementation of JSP view engine. Uses a {@link javax.servlet.RequestDispatcher}
+ * to forward the request back to the servlet container. Location of JSP pages is
+ * assumed relative to the {@code WEB-INF} directory in the archive.
  *
- * @author Rodrigo Turini
+ * @author Santiago Pericas-Geertsen
  */
-@ApplicationScoped
-public class VelocityViewEngine extends ViewEngineBase {
+@Priority(Priorities.DEFAULT)
+public class JspViewEngine extends ViewEngineBase {
 
     @Inject
-    @ViewEngineConfig
-    private VelocityEngine velocityEngine;
+    private ServletContext servletContext;
 
+    /**
+     * Assumes that any view that ends with {@code .jsp} or {@code .jspx} is a JSP.
+     *
+     * @param view the name of the view.
+     * @return {@code true} if supported or {@code false} if not.
+     */
     @Override
     public boolean supports(String view) {
-        return view.endsWith(".vm");
+        return view.endsWith(".jsp") || view.endsWith(".jspx");
     }
 
+    /**
+     * Sets attributes in request based on {@link javax.mvc.Models} and forwards
+     * request to servlet container.
+     *
+     * @param context view engine context.
+     * @throws ViewEngineException if any error occurs.
+     */
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
+        final Models models = context.getModels();
+        final HttpServletRequest request = context.getRequest();
+        final HttpServletResponse response = context.getResponse();
+
+        // Set attributes in request
+        for (String name : models) {
+            request.setAttribute(name, models.get(name));
+        }
+        // Forward request to servlet engine to process JSP
+        final RequestDispatcher rd = servletContext.getRequestDispatcher(resolveView(context));
         try {
-            Template template = velocityEngine.getTemplate(resolveView(context));
-            VelocityContext velocityContext = new VelocityContext(context.getModels());
-            template.merge(velocityContext, context.getResponse().getWriter());
-        } catch (IOException e) {
+            rd.forward(request, response);
+        } catch (ServletException | IOException e) {
             throw new ViewEngineException(e);
         }
     }

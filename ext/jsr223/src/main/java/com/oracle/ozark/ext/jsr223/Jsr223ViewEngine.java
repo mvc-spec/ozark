@@ -39,7 +39,7 @@
  */
 package com.oracle.ozark.ext.jsr223;
 
-import com.oracle.ozark.engine.ViewEngineBase;
+import org.glassfish.ozark.engine.ViewEngineBase;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

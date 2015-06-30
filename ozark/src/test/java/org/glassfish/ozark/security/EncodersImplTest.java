@@ -37,32 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.security;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import org.glassfish.ozark.security.EncodersImpl;
+import org.junit.Test;
 
-import javax.enterprise.inject.Produces;
+import static org.junit.Assert.assertEquals;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * Test for EncodersImpl.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+public class EncodersImplTest {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    private EncodersImpl encoders = new EncodersImpl();
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
-
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    @Test
+    public void testEncoderJs() {
+        assertEquals("\\b \\t \\n \\f \\r", encoders.js("\b \t \n \f \r"));
+        assertEquals("\\/ \\\\ \\x22 \\x26 \\x27", encoders.js("/ \\ \" & '"));
+        assertEquals("\\x00 \\x0f \\x10 \\x1f", encoders.js("\u0000 \u000f \u0010 \u001f"));
+        assertEquals("\\tfunction() { return \\x27Hello World\\x27; }",
+                     encoders.js("\tfunction() { return 'Hello World'; }"));
     }
 
+    @Test
+    public void testEncoderHtml() {
+        assertEquals("&amp; &lt; &gt; &#39; &#34;", encoders.html("& < > ' \""));
+        assertEquals("&lt;html&gt;&lt;div id=&#34;foo&#34;&gt;&amp;&amp;&lt;/div&gt;&lt;/html&gt;",
+                     encoders.html("<html><div id=\"foo\">&&</div></html>"));
+    }
 }

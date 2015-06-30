@@ -39,7 +39,7 @@
  */
 package com.oracle.ozark.ext.freemarker;
 
-import com.oracle.ozark.engine.ViewEngineConfig;
+import org.glassfish.ozark.engine.ViewEngineConfig;
 import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 

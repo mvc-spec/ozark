@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,32 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.event;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.Dependent;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.UriInfo;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * An implementation of {@link javax.mvc.event.ControllerMatched}.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+@Dependent
+public class ControllerMatched implements javax.mvc.event.ControllerMatched {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    private UriInfo uriInfo;
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
+    private ResourceInfo resourceInfo;
 
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    public UriInfo getUriInfo() {
+        return uriInfo;
     }
 
+    public void setUriInfo(UriInfo uriInfo) {
+        this.uriInfo = uriInfo;
+    }
+
+    public ResourceInfo getResourceInfo() {
+        return resourceInfo;
+    }
+
+    public void setResourceInfo(ResourceInfo resourceInfo) {
+        this.resourceInfo = resourceInfo;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[MVC Event] ControllerMatched:");
+        sb.append(uriInfo.getRequestUri()).append(":").append(resourceInfo.getResourceMethod());
+        return sb.toString();
+    }
 }

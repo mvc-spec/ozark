@@ -39,12 +39,10 @@
  */
 package com.oracle.ozark.ext.thymeleaf;
 
-import com.oracle.ozark.engine.ViewEngineBase;
-import com.oracle.ozark.engine.ViewEngineConfig;
+import org.glassfish.ozark.engine.ViewEngineBase;
+import org.glassfish.ozark.engine.ViewEngineConfig;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

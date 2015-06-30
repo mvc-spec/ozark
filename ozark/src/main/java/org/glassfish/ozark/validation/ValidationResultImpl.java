@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,32 +37,62 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.validation;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.RequestScoped;
+import javax.mvc.validation.ValidationResult;
+import javax.validation.ConstraintViolation;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * Implementation for {@link javax.mvc.validation.ValidationResult} interface. Defines
+ * additional setter method to update constraint violations.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+@RequestScoped
+public class ValidationResultImpl implements ValidationResult {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    private Set<ConstraintViolation<?>> violations = Collections.emptySet();
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
-
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    @Override
+    public boolean isFailed() {
+        return violations.size() > 0;
     }
 
+    @Override
+    public int getViolationCount() {
+        return violations.size();
+    }
+
+    @Override
+    public Set<ConstraintViolation<?>> getAllViolations() {
+        return violations;
+    }
+
+    @Override
+    public Set<ConstraintViolation<?>> getViolations(String propertyPath) {
+        throw new UnsupportedOperationException("Not supported");
+    }
+
+    @Override
+    public ConstraintViolation<?> getViolation(String propertyPath) {
+        throw new UnsupportedOperationException("Not supported");
+    }
+
+    @Override
+    public Iterator<ConstraintViolation<?>> iterator() {
+        return violations.iterator();
+    }
+
+    /**
+     * Updates the set of of constraint violations.
+     *
+     * @param violations new set of constraint violations.
+     */
+    public void setViolations(Set<ConstraintViolation<?>> violations) {
+        this.violations = violations;
+    }
 }

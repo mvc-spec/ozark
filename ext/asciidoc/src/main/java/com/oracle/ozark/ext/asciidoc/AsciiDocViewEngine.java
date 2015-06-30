@@ -39,7 +39,7 @@
  */
 package com.oracle.ozark.ext.asciidoc;
 
-import com.oracle.ozark.engine.ViewEngineBase;
+import org.glassfish.ozark.engine.ViewEngineBase;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Asciidoctor.Factory;
 import org.asciidoctor.Options;

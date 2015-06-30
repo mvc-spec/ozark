@@ -37,32 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.util;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
+import java.util.Set;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * Utility class for CDI-related tasks. This is a CDI class itself and can be
+ * injected to call its methods.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+@ApplicationScoped
+public class CdiUtils {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    @Inject
+    private BeanManager bm;
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
-
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    /**
+     * Create a new CDI bean given its class. The bean is created in the context
+     * defined by the scope annotation on the class.
+     *
+     * @param clazz CDI class.
+     * @param <T>   class parameter.
+     * @return newly allocated CDI bean.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T newBean(Class<T> clazz) {
+        Set<Bean<?>> beans = bm.getBeans(clazz);
+        final Bean<T> bean = (Bean<T>) bm.resolve(beans);
+        final CreationalContext<T> ctx = bm.createCreationalContext(bean);
+        return (T) bm.getReference(bean, clazz, ctx);
     }
-
 }

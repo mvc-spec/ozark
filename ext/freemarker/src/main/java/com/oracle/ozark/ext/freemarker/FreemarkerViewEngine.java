@@ -39,8 +39,8 @@
  */
 package com.oracle.ozark.ext.freemarker;
 
-import com.oracle.ozark.engine.ViewEngineBase;
-import com.oracle.ozark.engine.ViewEngineConfig;
+import org.glassfish.ozark.engine.ViewEngineBase;
+import org.glassfish.ozark.engine.ViewEngineConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;

@@ -37,32 +37,95 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package com.oracle.ozark.ext.thymeleaf;
+package org.glassfish.ozark.core;
 
-import org.glassfish.ozark.engine.ViewEngineConfig;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
-
-import javax.enterprise.inject.Produces;
+import javax.enterprise.context.RequestScoped;
+import javax.mvc.Models;
+import java.util.*;
 
 /**
- * Producer for the TemplateEngine used by ThymeleafViewEngine.
+ * Implementation of {@link javax.mvc.Models} interface. A CDI class that delegates
+ * to a {@link java.util.Map} implementation.
  *
- * @author Christian Kaltepoth
+ * @author Santiago Pericas-Geertsen
  */
-public class DefaultTemplateEngineProducer {
+@RequestScoped
+public class ModelsImpl implements Models {
 
-    @Produces
-    @ViewEngineConfig
-    public TemplateEngine getTemplateEngine() {
+    private Map<String, Object> delegate = new HashMap<>();
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
-
-        TemplateEngine engine = new TemplateEngine();
-        engine.setTemplateResolver(resolver);
-        return engine;
-
+    @Override
+    public int size() {
+        return delegate.size();
     }
 
+    @Override
+    public boolean isEmpty() {
+        return delegate.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        return delegate.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(Object value) {
+        return delegate.containsValue(value);
+    }
+
+    @Override
+    public Object get(Object key) {
+        return delegate.get(key);
+    }
+
+    @Override
+    public Object put(String key, Object value) {
+        return delegate.put(key, value);
+    }
+
+    @Override
+    public Object remove(Object key) {
+        return delegate.remove(key);
+    }
+
+    @Override
+    public void putAll(Map<? extends String, ?> m) {
+        delegate.putAll(m);
+    }
+
+    @Override
+    public void clear() {
+        delegate.clear();
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return delegate.keySet();
+    }
+
+    @Override
+    public Collection<Object> values() {
+        return delegate.values();
+    }
+
+    @Override
+    public Set<Entry<String, Object>> entrySet() {
+        return delegate.entrySet();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return delegate.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return delegate.hashCode();
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return delegate.keySet().iterator();
+    }
 }
