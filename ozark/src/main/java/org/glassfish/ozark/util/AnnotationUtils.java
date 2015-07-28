@@ -39,6 +39,9 @@
  */
 package org.glassfish.ozark.util;
 
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -53,11 +56,10 @@ public final class AnnotationUtils {
 
     /**
      * Retrieve an annotation from a possibly proxied CDI/Weld class. First inspect
-     * the class and if that fails, try the super class. Note that there is no special
-     * processing required for method annotations in proxied classes. Ideally this
-     * method should be part of the CDI API.
+     * the class and if that fails, try using an annotated type obtained from CDI's
+     * bean manager.
      *
-     * @param clazz class to search annotation.
+     * @param clazz          class to search annotation.
      * @param annotationType type of annotation to search for.
      * @return annotation instance or {@code null} if none found.
      */
@@ -66,8 +68,9 @@ public final class AnnotationUtils {
         if (an != null) {
             return an;
         }
-        // Weld proxies require inspecting the superclass
-        return isWeldProxy(clazz) ? clazz.getSuperclass().getDeclaredAnnotation(annotationType) : null;
+        final BeanManager bm = CDI.current().getBeanManager();
+        final AnnotatedType<?> type = bm.createAnnotatedType(clazz);
+        return type != null ? type.getAnnotation(annotationType) : null;
     }
 
     /**
@@ -77,9 +80,9 @@ public final class AnnotationUtils {
      * not found, then look at the interface hierarchy. Note that this method implements
      * a depth-first search strategy.
      *
-     * @param method method to start search at.
+     * @param method         method to start search at.
      * @param annotationType annotation class to search for.
-     * @param <T> annotation subclass.
+     * @param <T>            annotation subclass.
      * @return annotation instances or {@code null} if not found.
      */
     public static <T extends Annotation> T getAnnotation(Method method, Class<T> annotationType) {
@@ -139,21 +142,5 @@ public final class AnnotationUtils {
     private static boolean hasMvcAnnotations(Method method) {
         final List<Annotation> ans = Arrays.asList(method.getDeclaredAnnotations());
         return ans.stream().anyMatch(a -> a.getClass().getName().startsWith("javax.mvc."));
-    }
-
-    /**
-     * All Weld proxies should implement this interface.
-     */
-    private static final String PROXY_OBJECT = "org.jboss.weld.bean.proxy.ProxyObject";
-
-    /**
-     * Determines if a class represents a Weld proxy. This code is naturally not portable
-     * across CDI implementations.
-     *
-     * @param clazz class to check if it is a Weld proxy.
-     * @return outcome of test.
-     */
-    private static boolean isWeldProxy(Class<?> clazz) {
-        return Arrays.asList(clazz.getInterfaces()).stream().anyMatch(in -> in.getName().equals(PROXY_OBJECT));
     }
 }
