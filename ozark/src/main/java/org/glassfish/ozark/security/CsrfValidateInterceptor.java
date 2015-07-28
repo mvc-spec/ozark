@@ -39,6 +39,8 @@
  */
 package org.glassfish.ozark.security;
 
+import org.glassfish.ozark.core.Messages;
+
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.security.Csrf;
@@ -53,7 +55,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ReaderInterceptor;
 import javax.ws.rs.ext.ReaderInterceptorContext;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 
@@ -92,6 +98,9 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     @Context
     private ResourceInfo resourceInfo;
 
+    @Inject
+    private Messages messages;
+
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
         // Validate if name bound or if CSRF property enabled and a POST
@@ -107,7 +116,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
             // Otherwise, it must be a form parameter
             final MediaType contentType = context.getMediaType();
             if (!contentType.equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
-                throw new ForbiddenException("Unable to validate CSRF with media type " + context.getMediaType());
+                throw new ForbiddenException(messages.get("UnableValidateCsrf", context.getMediaType()));
             }
 
             // Ensure stream can be restored for next interceptor
@@ -135,11 +144,11 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
                         validated = true;
                         break;
                     }
-                    throw new ForbiddenException("Validation of CSRF failed due to mismatching tokens");
+                    throw new ForbiddenException(messages.get("CsrfFailed", "mismatching tokens"));
                 }
             }
             if (!validated) {
-                throw new ForbiddenException("Validation of CSRF failed due to missing field");
+                throw new ForbiddenException(messages.get("CsrfFailed", "missing field"));
             }
 
             // Restore stream and proceed

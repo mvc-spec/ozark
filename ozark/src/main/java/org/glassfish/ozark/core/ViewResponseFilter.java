@@ -114,6 +114,9 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Inject
     private CdiUtils cdiUtils;
 
+    @Inject
+    private Messages messages;
+
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
@@ -141,8 +144,8 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 responseContext.setEntity(new Viewable(an.value()), null, contentType);
                 responseContext.setStatusInfo(OK);      // Needed for method returning void
             } else if (returnType == Void.class) {
-                throw new ServerErrorException("Void controller and no @View annotation? "
-                        + resourceInfo.getResourceMethod(), Response.Status.INTERNAL_SERVER_ERROR);
+                throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()),
+                    Response.Status.INTERNAL_SERVER_ERROR);
             }
         } else if (entityType != Viewable.class) {
             responseContext.setEntity(new Viewable(entity.toString()), null, responseContext.getMediaType());

@@ -48,6 +48,8 @@ import javax.mvc.Models;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +59,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.MessageBodyWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -66,8 +72,8 @@ import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
+
+import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
  * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
@@ -110,6 +116,9 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     @Context
     private Configuration configuration;
 
+    @Inject
+    private Messages messages;
+
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
         return aClass == Viewable.class;
@@ -137,12 +146,11 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                 try {
                     requestDispatcher.forward(request, response);
                 } catch (ServletException ex) {
-                    throw new ServerErrorException(Response.Status.INTERNAL_SERVER_ERROR, ex);
+                    throw new ServerErrorException(INTERNAL_SERVER_ERROR, ex);
                 }
             }
             else {
-                throw new ServerErrorException("Unable to find suitable view engine for '" + viewable + "'",
-                        Response.Status.INTERNAL_SERVER_ERROR);
+                throw new ServerErrorException(messages.get("NoViewEngine", viewable), INTERNAL_SERVER_ERROR);
             }
         }
         
@@ -188,7 +196,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper,
                     uriInfo, resourceInfo, configuration));
         } catch (ViewEngineException e) {
-            throw new ServerErrorException(Response.Status.INTERNAL_SERVER_ERROR, e);
+            throw new ServerErrorException(INTERNAL_SERVER_ERROR, e);
         } finally {
             responseWriter.flush();
         }
