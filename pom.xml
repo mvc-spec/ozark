@@ -18,14 +18,14 @@
         <module>ext</module>
         <module>test</module>
     </modules>
+    <properties>
+        <jersey.version>2.19</jersey.version>
+    </properties>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
     </reporting>    
     <scm>
         <connection>scm:git:git://java.net/ozark~sources</connection>
-        <developerConnection>scm:git:ssh://mriem@git.java.net/ozark~sources</developerConnection>
+        <developerConnection>scm:git:ssh://git.java.net/ozark~sources</developerConnection>
     </scm>
-    <properties>
-        <jersey.version>2.19</jersey.version>
-    </properties>
 </project>
