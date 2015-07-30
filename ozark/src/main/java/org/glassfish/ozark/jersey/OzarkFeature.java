@@ -48,7 +48,7 @@ import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
 
 import javax.annotation.Priority;
-import javax.mvc.Controller;
+import javax.mvc.annotation.Controller;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
@@ -60,7 +60,7 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 /**
  * <p>Jersey feature that sets up the JAX-RS pipeline for MVC processing using one
  * or more providers. This feature is enabled only if any of the classes or methods
- * in the application has an instance of the {@link javax.mvc.Controller} annotation.</p>
+ * in the application has an instance of the {@link javax.mvc.annotation.Controller} annotation.</p>
  *
  * <p>Takes advantage of the {@link org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable}
  * SPI in Jersey.</p>

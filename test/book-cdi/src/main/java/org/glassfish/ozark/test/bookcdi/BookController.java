@@ -40,8 +40,8 @@
 package org.glassfish.ozark.test.bookcdi;
 
 import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.View;
+import javax.mvc.annotation.Controller;
+import javax.mvc.annotation.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;

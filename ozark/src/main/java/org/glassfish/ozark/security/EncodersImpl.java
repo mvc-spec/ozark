@@ -41,7 +41,7 @@ package org.glassfish.ozark.security;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import javax.mvc.security.Encoders;
+import javax.mvc.util.Encoders;
 
 /**
  * Utility bean that provides encoders to <em>escape</em> code in JavaScript, HTML,

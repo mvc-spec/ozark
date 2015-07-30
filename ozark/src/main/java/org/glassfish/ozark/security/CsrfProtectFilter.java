@@ -43,7 +43,7 @@ import javax.annotation.Priority;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.security.Csrf;
-import javax.mvc.security.CsrfProtected;
+import javax.mvc.annotation.CsrfProtected;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -60,12 +60,12 @@ import static java.lang.Boolean.TRUE;
 /**
  * <p>Response filter that adds the CSRF header with a unique token value. Clients must
  * submit the header in subsequent form posts if validation is enabled on the controller
- * via {@link javax.mvc.security.CsrfValidated}. Alternatively, it is also possible to
+ * via {@link javax.mvc.annotation.CsrfValidated}. Alternatively, it is also possible to
  * inject hidden form fields returned by controllers, in which case the client does not
  * need any further processing before submitting a form.</p>
  * <p/>
  * <p>This filter is enabled only when either the annotation
- * {@link javax.mvc.security.CsrfProtected} decorates the matched controller or when
+ * {@link javax.mvc.annotation.CsrfProtected} decorates the matched controller or when
  * the global property {@link javax.mvc.security.Csrf#ENABLE_CSRF} is set to true
  * (defaults to false).</p>
  * <p/>

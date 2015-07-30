@@ -39,7 +39,7 @@
  */
 package org.glassfish.ozark.servlet;
 
-import javax.mvc.Controller;
+import javax.mvc.annotation.Controller;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

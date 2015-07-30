@@ -46,8 +46,8 @@ import org.glassfish.ozark.jersey.VariantSelector;
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.View;
+import javax.mvc.annotation.Controller;
+import javax.mvc.annotation.View;
 import javax.mvc.Viewable;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
@@ -82,7 +82,7 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  * {@code text/html}. If the method does not return void (has an entity), the computation
  * of the Content-Type is done by JAX-RS and is available via {@code responseContext}.</p>
  *
- * <p>Given that this filter is annotated by {@link javax.mvc.Controller}, it will
+ * <p>Given that this filter is annotated by {@link javax.mvc.annotation.Controller}, it will
  * be called after every controller method returns. Priority is set to
  * {@link javax.ws.rs.Priorities#ENTITY_CODER} which means it will be executed
  * after user-defined filters (response filters are sorted in reverse order).</p>

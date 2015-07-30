@@ -40,7 +40,7 @@
 package org.glassfish.ozark.test.requestdispatcher;
 
 import java.io.Serializable;
-import javax.mvc.Controller;
+import javax.mvc.annotation.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;

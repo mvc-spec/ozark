@@ -40,7 +40,7 @@
 package org.glassfish.ozark.test.conversation;
 
 import javax.inject.Inject;
-import javax.mvc.Controller;
+import javax.mvc.annotation.Controller;
 import javax.ws.rs.*;
 
 /**

@@ -39,8 +39,8 @@
  */
 package org.glassfish.ozark.test.exceptions;
 
-import javax.mvc.Controller;
-import javax.mvc.View;
+import javax.mvc.annotation.Controller;
+import javax.mvc.annotation.View;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

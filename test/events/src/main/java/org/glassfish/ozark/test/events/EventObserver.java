@@ -42,8 +42,8 @@ package org.glassfish.ozark.test.events;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.mvc.event.ControllerMatched;
-import javax.mvc.event.ViewEngineSelected;
+import javax.mvc.event.ControllerMatchedEvent;
+import javax.mvc.event.ViewEngineSelectedEvent;
 
 /**
  * Class EventObserver.
@@ -56,12 +56,12 @@ public class EventObserver {
     @Inject
     private EventBean eventBean;
 
-    public void onControllerMatched(@Observes ControllerMatched event) {
+    public void onControllerMatched(@Observes ControllerMatchedEvent event) {
         eventBean.setRequestUri(event.getUriInfo().getRequestUri());
         eventBean.setMethod(event.getResourceInfo().getResourceMethod());
     }
 
-    public void onViewEngineSelected(@Observes ViewEngineSelected event) {
+    public void onViewEngineSelected(@Observes ViewEngineSelectedEvent event) {
         eventBean.setView(event.getView());
         eventBean.setEngine(event.getEngine());
         // If an Ozark event, access cached information

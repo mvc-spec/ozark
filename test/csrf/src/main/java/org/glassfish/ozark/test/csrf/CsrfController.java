@@ -39,11 +39,11 @@
  */
 package org.glassfish.ozark.test.csrf;
 
-import javax.mvc.Controller;
-import javax.mvc.View;
+import javax.mvc.annotation.Controller;
+import javax.mvc.annotation.View;
 import javax.mvc.security.Csrf;
-import javax.mvc.security.CsrfProtected;
-import javax.mvc.security.CsrfValidated;
+import javax.mvc.annotation.CsrfProtected;
+import javax.mvc.annotation.CsrfValidated;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Application;
 import java.util.HashMap;

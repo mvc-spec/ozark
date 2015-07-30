@@ -44,7 +44,7 @@ import org.glassfish.jersey.server.model.Resource;
 import org.glassfish.jersey.server.model.ResourceMethod;
 import org.glassfish.jersey.server.model.ResourceModel;
 
-import javax.mvc.Controller;
+import javax.mvc.annotation.Controller;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.MediaType;
 

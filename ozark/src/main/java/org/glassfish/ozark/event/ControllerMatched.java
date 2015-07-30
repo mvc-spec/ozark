@@ -44,12 +44,12 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * An implementation of {@link javax.mvc.event.ControllerMatched}.
+ * An implementation of {@link javax.mvc.event.ControllerMatchedEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class ControllerMatched implements javax.mvc.event.ControllerMatched {
+public class ControllerMatched implements javax.mvc.event.ControllerMatchedEvent {
 
     private UriInfo uriInfo;
 

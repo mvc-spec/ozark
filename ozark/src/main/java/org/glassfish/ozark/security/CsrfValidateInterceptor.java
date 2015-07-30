@@ -44,7 +44,7 @@ import org.glassfish.ozark.core.Messages;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.security.Csrf;
-import javax.mvc.security.CsrfValidated;
+import javax.mvc.annotation.CsrfValidated;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;

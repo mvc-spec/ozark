@@ -43,12 +43,12 @@ import javax.enterprise.context.Dependent;
 import javax.mvc.engine.ViewEngine;
 
 /**
- * An implementation of {@link javax.mvc.event.ViewEngineSelected}.
+ * An implementation of {@link javax.mvc.event.ViewEngineSelectedEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class ViewEngineSelected implements javax.mvc.event.ViewEngineSelected {
+public class ViewEngineSelected implements javax.mvc.event.ViewEngineSelectedEvent {
 
     private String view;
 

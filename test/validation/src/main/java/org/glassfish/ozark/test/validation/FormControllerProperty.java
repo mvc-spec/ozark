@@ -40,7 +40,7 @@
 package org.glassfish.ozark.test.validation;
 
 import javax.inject.Inject;
-import javax.mvc.Controller;
+import javax.mvc.annotation.Controller;
 import javax.mvc.validation.ValidationResult;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
