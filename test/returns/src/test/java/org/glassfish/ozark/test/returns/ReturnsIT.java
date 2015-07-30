@@ -39,6 +39,7 @@
  */
 package org.glassfish.ozark.test.returns;
 
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -48,7 +49,7 @@ import org.junit.Test;
 
 import java.util.Iterator;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Tests all possible return types from a controller method, including an arbitrary
@@ -99,6 +100,17 @@ public class ReturnsIT {
         final HtmlPage page = webClient.getPage(webUrl + "resources/myviewable");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
         assertTrue(it.next().asText().contains("Hello World"));
+    }
+
+    @Test
+    public void testMyViewableNull() throws Exception {
+        try {
+            final HtmlPage page = webClient.getPage(webUrl + "resources/myviewable/null");
+        } catch (FailingHttpStatusCodeException e) {
+            assertEquals(e.getStatusCode(), 500);
+            return;
+        }
+        fail();
     }
 
     @Test

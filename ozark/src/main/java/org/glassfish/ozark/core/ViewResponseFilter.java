@@ -148,7 +148,12 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                     Response.Status.INTERNAL_SERVER_ERROR);
             }
         } else if (entityType != Viewable.class) {
-            responseContext.setEntity(new Viewable(entity.toString()), null, responseContext.getMediaType());
+            final String view = entity.toString();
+            if (view == null) {
+                throw new ServerErrorException(messages.get("EntityToStringNull", resourceInfo.getResourceMethod()),
+                        Response.Status.INTERNAL_SERVER_ERROR);
+            }
+            responseContext.setEntity(new Viewable(view), null, responseContext.getMediaType());
         }
 
         // Redirect logic, entity must be a Viewable if not null

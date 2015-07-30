@@ -40,7 +40,6 @@
 package org.glassfish.ozark.test.returns;
 
 import javax.mvc.annotation.Controller;
-import javax.mvc.annotation.View;
 import javax.mvc.Viewable;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -92,6 +91,12 @@ public class HelloController {
     @Path("myviewable")
     public MyViewable getMyViewable() {
         return new MyViewable("hello.jsp");
+    }
+
+    @GET
+    @Path("myviewable/null")
+    public MyViewable getMyViewableNull() {
+        return new MyViewable(null);        // Error condition
     }
 
     @GET
