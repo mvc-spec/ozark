@@ -99,7 +99,7 @@ public final class AnnotationUtils {
         }
 
         // Other MVC annotations on this method, then inheritance disabled
-        if (hasMvcAnnotations(method)) {
+        if (hasMvcOrJaxrsAnnotations(method)) {
             return null;
         } else {
             // Search for overridden method in super class
@@ -134,13 +134,16 @@ public final class AnnotationUtils {
     }
 
     /**
-     * Determines if a method has one or more MVC annotations on it.
+     * Determines if a method has one or more MVC or JAX-RS annotations on it.
      *
-     * @param method method to check for MVC annotations.
+     * @param method method to check for MVC or JAX-RS annotations.
      * @return outcome of test.
      */
-    private static boolean hasMvcAnnotations(Method method) {
+    private static boolean hasMvcOrJaxrsAnnotations(Method method) {
         final List<Annotation> ans = Arrays.asList(method.getDeclaredAnnotations());
-        return ans.stream().anyMatch(a -> a.getClass().getName().startsWith("javax.mvc."));
+        return ans.stream().anyMatch(a -> {
+            final String an = a.annotationType().getName();
+            return an.startsWith("javax.mvc.") || an.startsWith("javax.ws.rs.");
+        });
     }
 }

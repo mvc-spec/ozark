@@ -70,7 +70,7 @@ import static org.glassfish.ozark.util.PathUtils.noPrefix;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
- * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatched}
+ * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatchedEvent}
  * event. It also verifies the static return type of the controller method is correct,
  * and ensures that the entity is a {@link javax.mvc.Viewable} to be processed by
  * {@link org.glassfish.ozark.core.ViewableWriter}.</p>
@@ -132,7 +132,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         Object entity = responseContext.getEntity();
         final Class<?> entityType = entity != null ? entity.getClass() : null;
         if (entityType == null) {       // NO_CONTENT
-            View an = method.getAnnotation(View.class);
+            View an = getAnnotation(method, View.class);
             if (an == null) {
                 an = getAnnotation(resourceInfo.getResourceClass(), View.class);
             }
