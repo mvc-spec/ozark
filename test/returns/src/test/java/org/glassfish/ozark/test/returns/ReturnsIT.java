@@ -67,6 +67,7 @@ public class ReturnsIT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.getOptions().setPrintContentOnFailingStatusCode(false);
     }
 
     @After
