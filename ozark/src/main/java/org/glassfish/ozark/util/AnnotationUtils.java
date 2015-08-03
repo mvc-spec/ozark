@@ -61,6 +61,7 @@ public final class AnnotationUtils {
      *
      * @param clazz          class to search annotation.
      * @param annotationType type of annotation to search for.
+     * @param <T> annotation subclass.
      * @return annotation instance or {@code null} if none found.
      */
     public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationType) {
@@ -74,15 +75,27 @@ public final class AnnotationUtils {
     }
 
     /**
+     * Determines if an annotation is present on a class by calling {@link #getAnnotation(Class, Class)}.
+     *
+     * @param clazz class to search annotation.
+     * @param annotationType type of annotation to search for.
+     * @param <T> annotation subclass.
+     * @return outcome of test.
+     */
+    public static <T extends Annotation> boolean hasAnnotation(Class<?> clazz, Class<T> annotationType) {
+        return getAnnotation(clazz, annotationType) != null;
+    }
+
+    /**
      * Search for a method annotation following the inheritance rules defined by the
      * JAX-RS specification, and also stated in the MVC specification. If an annotation is
      * not defined on a method, check super methods along the class hierarchy first. If
      * not found, then look at the interface hierarchy. Note that this method implements
      * a depth-first search strategy.
      *
-     * @param method         method to start search at.
+     * @param method method to start search at.
      * @param annotationType annotation class to search for.
-     * @param <T>            annotation subclass.
+     * @param <T> annotation subclass.
      * @return annotation instances or {@code null} if not found.
      */
     public static <T extends Annotation> T getAnnotation(Method method, Class<T> annotationType) {
@@ -131,6 +144,18 @@ public final class AnnotationUtils {
             // Not found, return null
             return null;
         }
+    }
+
+    /**
+     * Determines if an annotation is present on a method by calling
+     * {@link #getAnnotation(java.lang.reflect.Method, Class)}.
+     *
+     * @param method method to start search at..
+     * @param annotationType type of annotation to search for.
+     * @return outcome of test.
+     */
+    public static <T extends Annotation> boolean hasAnnotation(Method method, Class<T> annotationType) {
+        return getAnnotation(method, annotationType) != null;
     }
 
     /**

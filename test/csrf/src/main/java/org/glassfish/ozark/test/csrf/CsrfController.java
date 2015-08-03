@@ -40,16 +40,12 @@
 package org.glassfish.ozark.test.csrf;
 
 import javax.mvc.annotation.Controller;
+import javax.mvc.annotation.CsrfValid;
 import javax.mvc.annotation.View;
-import javax.mvc.security.Csrf;
-import javax.mvc.annotation.CsrfProtected;
-import javax.mvc.annotation.CsrfValidated;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Application;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 
 /**
  * CsrfController test.
@@ -61,13 +57,12 @@ import java.util.Set;
 public class CsrfController {
 
     @GET
-    @CsrfProtected
     public String getForm() {
         return "csrf.jsp";
     }
 
     @POST
-    @CsrfValidated
+    @CsrfValid
     public String postForm(@FormParam("greeting") String greeting) {
         return "redirect:/csrf/ok";
     }

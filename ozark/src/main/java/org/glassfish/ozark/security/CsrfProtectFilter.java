@@ -43,34 +43,26 @@ import javax.annotation.Priority;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.security.Csrf;
-import javax.mvc.annotation.CsrfProtected;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
-import java.lang.reflect.Method;
-
-import static java.lang.Boolean.TRUE;
 
 /**
- * <p>Response filter that adds the CSRF header with a unique token value. Clients must
- * submit the header in subsequent form posts if validation is enabled on the controller
- * via {@link javax.mvc.annotation.CsrfValidated}. Alternatively, it is also possible to
- * inject hidden form fields returned by controllers, in which case the client does not
- * need any further processing before submitting a form.</p>
- * <p/>
- * <p>This filter is enabled only when either the annotation
- * {@link javax.mvc.annotation.CsrfProtected} decorates the matched controller or when
- * the global property {@link javax.mvc.security.Csrf#ENABLE_CSRF} is set to true
- * (defaults to false).</p>
- * <p/>
- * <p>Note that the CSRF header is added only if it is not already present in the
- * response.</p>
+ * <p>Response filter that adds the CSRF header with a unique token value. When CSRF
+ * is enabled, clients must submit this header or a form field of name
+ * {@link javax.mvc.security.Csrf#getName()} with the same token value for validation
+ * to succeed.</p>
+ *
+ * <p>CSRF can be enabled by setting the property {@link javax.mvc.security.Csrf#CSRF_PROTECTION}
+ * to {@link javax.mvc.security.Csrf.CsrfOptions#IMPLICIT}, to by setting it to
+ * {@link javax.mvc.security.Csrf.CsrfOptions#EXPLICIT} and annotating the desired
+ * controllers with {@link javax.mvc.annotation.CsrfValid}. Note that validation only
+ * applies to controllers also annotated by {@link javax.ws.rs.POST}.</p>
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -81,15 +73,19 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
     private Instance<Csrf> csrfInstance;
 
     @Context
-    private ResourceInfo resourceInfo;
-
-    @Context
     private Configuration config;
 
+    /**
+     * Inject CSRF header if enabled in the application.
+     *
+     * @param requestContext the request context.
+     * @param responseContext the response context.
+     * @throws IOException if a problem occurs writing a response.
+     */
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
-        if (TRUE.equals(config.getProperty(Csrf.ENABLE_CSRF)) || isNameBound(resourceInfo.getResourceMethod())) {
+        if (isCsrfEnabled()) {
             final Csrf csrf = csrfInstance.get();
             final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
             if (!headers.containsKey(csrf.getName())) {
@@ -98,7 +94,13 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
         }
     }
 
-    private static boolean isNameBound(Method controller) {
-        return (controller == null) ? false : controller.getAnnotation(CsrfProtected.class) != null;
+    /**
+     * Determines if CSRF is enabled in the application.
+     *
+     * @return outcome of test.
+     */
+    private boolean isCsrfEnabled() {
+        final Object value = config.getProperty(Csrf.CSRF_PROTECTION);
+        return value != null ? ((Csrf.CsrfOptions) value) != Csrf.CsrfOptions.OFF : false;
     }
 }

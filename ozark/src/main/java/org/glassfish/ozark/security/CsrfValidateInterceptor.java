@@ -43,8 +43,8 @@ import org.glassfish.ozark.core.Messages;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
+import javax.mvc.annotation.CsrfValid;
 import javax.mvc.security.Csrf;
-import javax.mvc.annotation.CsrfValidated;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;
@@ -63,7 +63,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
 
-import static java.lang.Boolean.TRUE;
+import static org.glassfish.ozark.util.AnnotationUtils.hasAnnotation;
 
 /**
  * <p>Reader interceptor that checks for the CSRF header and token. If not available as
@@ -105,7 +105,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     public Object aroundReadFrom(ReaderInterceptorContext context) throws IOException, WebApplicationException {
         // Validate if name bound or if CSRF property enabled and a POST
         final Method controller = resourceInfo.getResourceMethod();
-        if (isNameBound(controller) || (TRUE.equals(config.getProperty(Csrf.ENABLE_CSRF)) && isPost(controller))) {
+        if (needsValidation(controller)) {
             // First check if CSRF token is in header
             final String csrfHeader = csrf.getName();
             final String csrfToken = context.getHeaders().getFirst(csrfHeader);
@@ -177,11 +177,28 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
         return new String(bb, encoding);
     }
 
-    private static boolean isNameBound(Method controller) {
-        return (controller == null) ? false : controller.getAnnotation(CsrfValidated.class) != null;
-    }
-
-    private static boolean isPost(Method controller) {
-        return (controller == null) ? false : controller.getAnnotation(POST.class) != null;
+    /**
+     * Determines if a controller method needs CSRF validation based on the config options.
+     *
+     * @param controller controller to inspect.
+     * @return outcome of test.
+     */
+    private boolean needsValidation(Method controller) {
+        if (controller == null || !hasAnnotation(controller, POST.class)) {
+            return false;
+        }
+        final Object value = config.getProperty(Csrf.CSRF_PROTECTION);
+        if (value != null) {
+            final Csrf.CsrfOptions options = (Csrf.CsrfOptions) config.getProperty(Csrf.CSRF_PROTECTION);
+            switch (options) {
+                case OFF:
+                    return false;
+                case IMPLICIT:
+                    return true;
+                case EXPLICIT:
+                    return hasAnnotation(controller, CsrfValid.class);
+            }
+        }
+        return false;
     }
 }

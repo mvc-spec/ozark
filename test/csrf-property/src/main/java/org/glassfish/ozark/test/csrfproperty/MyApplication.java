@@ -65,7 +65,7 @@ public class MyApplication extends Application {
     @Override
     public Map<String, Object> getProperties() {
         final Map<String, Object> map = new HashMap<>();
-        map.put(Csrf.ENABLE_CSRF, Boolean.TRUE);
+        map.put(Csrf.CSRF_PROTECTION, Csrf.CsrfOptions.IMPLICIT);
         return map;
     }
 }
