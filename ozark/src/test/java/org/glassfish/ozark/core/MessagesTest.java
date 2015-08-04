@@ -39,6 +39,17 @@
  */
 package org.glassfish.ozark.core;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Locale;
+import javax.servlet.http.HttpServletRequest;
+import org.easymock.EasyMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -47,6 +58,7 @@ import static org.junit.Assert.assertTrue;
  * Test for MessagesTest.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Manfred Riem (manfred.riem at oracle.com)
  */
 public class MessagesTest {
 
@@ -58,5 +70,33 @@ public class MessagesTest {
         assertTrue(messages.get("VoidControllerNoView", "foo()").contains("'foo()'"));
         assertTrue(messages.get("UnableValidateCsrf", "foo").contains("'foo'"));
         assertTrue(messages.get("CsrfFailed", "some reason").contains("some reason"));
+    }
+    
+    /**
+     * Test get method.
+     */
+    @Test
+    public void testGet() {
+        assertNull(messages.get("Blabla", Locale.US, new Object[] {}));
+    }
+    
+    /**
+     * Test get method.
+     * 
+     * @throws Exception when an error occurs.
+     */
+    @Test
+    public void testGet2() throws Exception {
+        HttpServletRequest request = EasyMock.createStrictMock(HttpServletRequest.class);
+        Field field = messages.getClass().getDeclaredField("request");
+        field.setAccessible(true);
+        field.set(messages, request);
+        ArrayList<Locale> locales = new ArrayList<>();
+        locales.add(Locale.FRENCH);
+        locales.add(Locale.ENGLISH);
+        expect(request.getLocales()).andReturn(Collections.enumeration(locales));
+        replay(request);
+        assertEquals("Validation of CSRF failed due to {0}", messages.get("CsrfFailed", new Object[] {}));
+        verify(request);
     }
 }
