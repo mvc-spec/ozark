@@ -39,16 +39,16 @@
  */
 package org.glassfish.ozark.core;
 
-import org.glassfish.ozark.util.CdiUtils;
-import org.glassfish.ozark.event.ControllerMatched;
+import org.glassfish.ozark.event.AfterControllerEventImpl;
 import org.glassfish.ozark.jersey.VariantSelector;
+import org.glassfish.ozark.util.CdiUtils;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.mvc.Viewable;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
-import javax.mvc.Viewable;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.ServerErrorException;
@@ -65,12 +65,12 @@ import java.lang.reflect.Method;
 
 import static javax.ws.rs.core.Response.Status.FOUND;
 import static javax.ws.rs.core.Response.Status.OK;
-import static org.glassfish.ozark.util.PathUtils.noStartingSlash;
-import static org.glassfish.ozark.util.PathUtils.noPrefix;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
+import static org.glassfish.ozark.util.PathUtils.noPrefix;
+import static org.glassfish.ozark.util.PathUtils.noStartingSlash;
 
 /**
- * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.ControllerMatchedEvent}
+ * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.AfterControllerEvent}
  * event. It also verifies the static return type of the controller method is correct,
  * and ensures that the entity is a {@link javax.mvc.Viewable} to be processed by
  * {@link org.glassfish.ozark.core.ViewableWriter}.</p>
@@ -82,10 +82,10 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  * {@code text/html}. If the method does not return void (has an entity), the computation
  * of the Content-Type is done by JAX-RS and is available via {@code responseContext}.</p>
  *
- * <p>Given that this filter is annotated by {@link javax.mvc.annotation.Controller}, it will
- * be called after every controller method returns. Priority is set to
+ * <p>Given that this filter is annotated with {@link javax.mvc.annotation.Controller}, it
+ * will be called after every controller method returns. Priority is set to
  * {@link javax.ws.rs.Priorities#ENTITY_CODER} which means it will be executed
- * after user-defined filters (response filters are sorted in reverse order).</p>
+ * after user-defined response filters (response filters are sorted in reverse order).</p>
  *
  * @author Santiago Pericas-Geertsen
  */
@@ -106,10 +106,10 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     private HttpServletRequest request;
 
     @Inject
-    private Event<ControllerMatched> matchedEvent;
+    private Event<AfterControllerEventImpl> dispatcher;
 
     @Inject
-    private ControllerMatched matched;
+    private AfterControllerEventImpl event;
 
     @Inject
     private CdiUtils cdiUtils;
@@ -120,10 +120,12 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
-        // Fire ControllerMatched event
-        matched.setUriInfo(uriInfo);
-        matched.setResourceInfo(resourceInfo);
-        matchedEvent.fire(matched);
+        // Fire AfterControllerEvent event
+        event.setUriInfo(uriInfo);
+        event.setResourceInfo(resourceInfo);
+        event.setContainerRequestContext(requestContext);
+        event.setContainerResponseContext(responseContext);
+        dispatcher.fire(event);
 
         final Method method = resourceInfo.getResourceMethod();
         final Class<?> returnType = method.getReturnType();

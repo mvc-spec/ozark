@@ -1,11 +1,9 @@
 package org.glassfish.ozark.engine;
 
 import org.glassfish.ozark.util.CdiUtils;
-import org.glassfish.ozark.event.ViewEngineSelected;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -29,8 +27,7 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  *
  * <p>The resulting set of candidates is sorted based on its priority as
  * defined by the annotation {@link javax.annotation.Priority} on the view engine
- * implementation. Finally, a {@link javax.mvc.event.ViewEngineSelected} is fired to
- * inform applications about the selection.</p>
+ * implementation.</p>
  *
  * <p>This class implements a simple cache to avoid repeated look-ups for the same
  * view.</p>
@@ -43,12 +40,6 @@ public class ViewEngineFinder {
     @Inject
     @Any
     private Instance<ViewEngine> engines;
-
-    @Inject
-    private Event<ViewEngineSelected> selectedEvent;
-
-    @Inject
-    private ViewEngineSelected selected;
 
     @Inject
     private CdiUtils cdiUtils;
@@ -94,17 +85,8 @@ public class ViewEngineFinder {
                 if (engine.isPresent()) {
                     cache.put(view, engine.get());
                 }
-            } else {
-                selected.setCached(true);
             }
         }
-        if (engine.isPresent()) {
-            // Fire ViewEngineSelected event
-            selected.setView(view);
-            selected.setEngine(engine.get().getClass());
-            selectedEvent.fire(selected);
-            return engine.get();
-        }
-        return null;
+        return engine.isPresent() ? engine.get() : null;
     }
 }

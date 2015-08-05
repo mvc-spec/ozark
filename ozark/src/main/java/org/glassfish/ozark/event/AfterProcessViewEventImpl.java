@@ -41,20 +41,19 @@ package org.glassfish.ozark.event;
 
 import javax.enterprise.context.Dependent;
 import javax.mvc.engine.ViewEngine;
+import javax.mvc.event.AfterProcessViewEvent;
 
 /**
- * An implementation of {@link javax.mvc.event.ViewEngineSelectedEvent}.
+ * An implementation of {@link javax.mvc.event.AfterProcessViewEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class ViewEngineSelected implements javax.mvc.event.ViewEngineSelectedEvent {
+public class AfterProcessViewEventImpl implements AfterProcessViewEvent {
 
     private String view;
 
     private Class<? extends ViewEngine> engine;
-
-    private boolean cached;
 
     public String getView() {
         return view;
@@ -72,18 +71,10 @@ public class ViewEngineSelected implements javax.mvc.event.ViewEngineSelectedEve
         this.engine = engine;
     }
 
-    public boolean isCached() {
-        return cached;
-    }
-
-    public void setCached(boolean cached) {
-        this.cached = cached;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("[MVC Event] ViewEngineSelected:");
-        sb.append(view).append(":").append(engine.getName()).append(cached ? " (cached)" : "");
+        sb.append(view).append(":").append(engine.getName());
         return sb.toString();
     }
 }

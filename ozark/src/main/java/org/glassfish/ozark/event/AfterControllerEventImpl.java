@@ -40,21 +40,29 @@
 package org.glassfish.ozark.event;
 
 import javax.enterprise.context.Dependent;
+import javax.mvc.event.AfterControllerEvent;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.UriInfo;
 
 /**
- * An implementation of {@link javax.mvc.event.ControllerMatchedEvent}.
+ * An implementation of {@link javax.mvc.event.AfterControllerEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class ControllerMatched implements javax.mvc.event.ControllerMatchedEvent {
+public class AfterControllerEventImpl implements AfterControllerEvent {
 
     private UriInfo uriInfo;
 
     private ResourceInfo resourceInfo;
 
+    private ContainerRequestContext requestContext;
+
+    private ContainerResponseContext responseContext;
+
+    @Override
     public UriInfo getUriInfo() {
         return uriInfo;
     }
@@ -63,12 +71,29 @@ public class ControllerMatched implements javax.mvc.event.ControllerMatchedEvent
         this.uriInfo = uriInfo;
     }
 
+    @Override
     public ResourceInfo getResourceInfo() {
         return resourceInfo;
     }
 
     public void setResourceInfo(ResourceInfo resourceInfo) {
         this.resourceInfo = resourceInfo;
+    }
+
+    public ContainerRequestContext getContainerRequestContext() {
+        return requestContext;
+    }
+
+    public void setContainerRequestContext(ContainerRequestContext requestContext) {
+        this.requestContext = requestContext;
+    }
+
+    public ContainerResponseContext getContainerResponseContext() {
+        return responseContext;
+    }
+
+    public void setContainerResponseContext(ContainerResponseContext responseContext) {
+        this.responseContext = responseContext;
     }
 
     @Override

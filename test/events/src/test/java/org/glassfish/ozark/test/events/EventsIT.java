@@ -70,8 +70,10 @@ public class EventsIT {
     public void testEvents() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/event");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
-        assertTrue(it.next().asText().contains("resources/event"));
-        assertTrue(it.next().asText().contains("get()"));
+        assertTrue(it.next().asText().contains("test-events/resources/event"));
+        assertTrue(it.next().asText().contains("EventController.get()"));
+        assertTrue(it.next().asText().contains("test-events/resources/event"));
+        assertTrue(it.next().asText().contains("EventController.get()"));
         assertTrue(it.next().asText().contains("event.jsp"));
         assertTrue(it.next().asText().contains("JspViewEngine"));
     }

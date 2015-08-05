@@ -37,53 +37,46 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.events;
+package org.glassfish.ozark.event;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.mvc.event.AfterControllerEvent;
-import javax.mvc.event.AfterProcessViewEvent;
-import javax.mvc.event.BeforeControllerEvent;
+import javax.enterprise.context.Dependent;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.event.BeforeProcessViewEvent;
 
 /**
- * Class EventBean.
+ * An implementation of {@link javax.mvc.event.BeforeProcessViewEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("bean")
-@RequestScoped
-public class EventBean {
+@Dependent
+public class BeforeProcessViewEventImpl implements BeforeProcessViewEvent {
 
-    private BeforeControllerEvent beforeControllerEvent;
+    private String view;
 
-    private AfterControllerEvent afterControllerEvent;
+    private Class<? extends ViewEngine> engine;
 
-    private BeforeProcessViewEvent beforeProcessViewEvent;
-
-    private AfterProcessViewEvent afterProcessViewEvent;
-
-    public BeforeControllerEvent getBeforeControllerEvent() {
-        return beforeControllerEvent;
+    @Override
+    public String getView() {
+        return view;
     }
 
-    public void setBeforeControllerEvent(BeforeControllerEvent beforeControllerEvent) {
-        this.beforeControllerEvent = beforeControllerEvent;
+    public void setView(String view) {
+        this.view = view;
     }
 
-    public AfterControllerEvent getAfterControllerEvent() {
-        return afterControllerEvent;
+    @Override
+    public Class<? extends ViewEngine> getEngine() {
+        return engine;
     }
 
-    public void setAfterControllerEvent(AfterControllerEvent afterControllerEvent) {
-        this.afterControllerEvent = afterControllerEvent;
+    public void setEngine(Class<? extends ViewEngine> engine) {
+        this.engine = engine;
     }
 
-    public BeforeProcessViewEvent getBeforeProcessViewEvent() {
-        return beforeProcessViewEvent;
-    }
-
-    public void setBeforeProcessViewEvent(BeforeProcessViewEvent beforeProcessViewEvent) {
-        this.beforeProcessViewEvent = beforeProcessViewEvent;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[MVC Event] ViewEngineSelected:");
+        sb.append(view).append(":").append(engine.getName());
+        return sb.toString();
     }
 }

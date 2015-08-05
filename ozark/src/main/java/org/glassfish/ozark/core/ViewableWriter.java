@@ -41,7 +41,10 @@ package org.glassfish.ozark.core;
 
 import org.glassfish.ozark.engine.ViewEngineContext;
 import org.glassfish.ozark.engine.ViewEngineFinder;
+import org.glassfish.ozark.event.AfterProcessViewEventImpl;
+import org.glassfish.ozark.event.BeforeProcessViewEventImpl;
 
+import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Models;
@@ -119,6 +122,18 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     @Inject
     private Messages messages;
 
+    @Inject
+    private Event<BeforeProcessViewEventImpl> beforeDispatcher;
+
+    @Inject
+    private BeforeProcessViewEventImpl beforeEvent;
+
+    @Inject
+    private Event<AfterProcessViewEventImpl> afterDispatcher;
+
+    @Inject
+    private AfterProcessViewEventImpl afterEvent;
+
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
         return aClass == Viewable.class;
@@ -192,9 +207,24 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             if (models == null) {
                 models = modelsInstance.get();
             }
+
+            // Fire BeforeProcessView event
+            if (beforeEvent != null) {      // unit testing
+                beforeEvent.setEngine(engine.getClass());
+                beforeEvent.setView(viewable.getView());
+                beforeDispatcher.fire(beforeEvent);
+            }
+
             // Process view using selected engine
             engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper,
                     uriInfo, resourceInfo, configuration));
+
+            // Fire AfterProcessView event
+            if (afterEvent != null) {       // unit testing
+                afterEvent.setEngine(engine.getClass());
+                afterEvent.setView(viewable.getView());
+                afterDispatcher.fire(afterEvent);
+            }
         } catch (ViewEngineException e) {
             throw new ServerErrorException(INTERNAL_SERVER_ERROR, e);
         } finally {

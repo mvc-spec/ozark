@@ -6,9 +6,17 @@
 </head>
 <body>
     <h1>Event Information</h1>
-    <p>Request URI: ${event.requestUri}</p>
-    <p>Controller Method: ${event.method}</p>
-    <p>View: ${event.view}</p>
-    <p>View Engine: ${event.engine}</p>
-    <p>[Ozark] Cached: ${event.cached}</p>
+    <div id="beforeControllerEvent">
+        <p>Request URI: ${bean.beforeControllerEvent.uriInfo.requestUri}</p>
+        <p>Controller Method: ${bean.beforeControllerEvent.resourceInfo.resourceMethod}</p>
+    </div>
+    <div id="afterControllerEvent">
+        <p>Request URI: ${bean.afterControllerEvent.uriInfo.requestUri}</p>
+        <p>Controller Method: ${bean.afterControllerEvent.resourceInfo.resourceMethod}</p>
+    </div>
+    <div id="beforeProcessViewEvent">
+        <p>View: ${bean.beforeProcessViewEvent.view}</p>
+        <p>View Engine: ${bean.beforeProcessViewEvent.engine.name}</p>
+    </div>
+</body>
 </html>

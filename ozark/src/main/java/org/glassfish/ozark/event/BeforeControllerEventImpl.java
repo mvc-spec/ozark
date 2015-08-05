@@ -37,53 +37,58 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.events;
+package org.glassfish.ozark.event;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import javax.mvc.event.AfterControllerEvent;
-import javax.mvc.event.AfterProcessViewEvent;
+import javax.enterprise.context.Dependent;
 import javax.mvc.event.BeforeControllerEvent;
-import javax.mvc.event.BeforeProcessViewEvent;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.UriInfo;
 
 /**
- * Class EventBean.
+ * An implementation of {@link javax.mvc.event.BeforeControllerEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("bean")
-@RequestScoped
-public class EventBean {
+@Dependent
+public class BeforeControllerEventImpl implements BeforeControllerEvent {
 
-    private BeforeControllerEvent beforeControllerEvent;
+    private UriInfo uriInfo;
 
-    private AfterControllerEvent afterControllerEvent;
+    private ResourceInfo resourceInfo;
 
-    private BeforeProcessViewEvent beforeProcessViewEvent;
+    private ContainerRequestContext context;
 
-    private AfterProcessViewEvent afterProcessViewEvent;
-
-    public BeforeControllerEvent getBeforeControllerEvent() {
-        return beforeControllerEvent;
+    @Override
+    public UriInfo getUriInfo() {
+        return uriInfo;
     }
 
-    public void setBeforeControllerEvent(BeforeControllerEvent beforeControllerEvent) {
-        this.beforeControllerEvent = beforeControllerEvent;
+    public void setUriInfo(UriInfo uriInfo) {
+        this.uriInfo = uriInfo;
     }
 
-    public AfterControllerEvent getAfterControllerEvent() {
-        return afterControllerEvent;
+    @Override
+    public ResourceInfo getResourceInfo() {
+        return resourceInfo;
     }
 
-    public void setAfterControllerEvent(AfterControllerEvent afterControllerEvent) {
-        this.afterControllerEvent = afterControllerEvent;
+    public void setResourceInfo(ResourceInfo resourceInfo) {
+        this.resourceInfo = resourceInfo;
     }
 
-    public BeforeProcessViewEvent getBeforeProcessViewEvent() {
-        return beforeProcessViewEvent;
+    public ContainerRequestContext getContainerRequestContext() {
+        return context;
     }
 
-    public void setBeforeProcessViewEvent(BeforeProcessViewEvent beforeProcessViewEvent) {
-        this.beforeProcessViewEvent = beforeProcessViewEvent;
+    public void setContainerRequestContext(ContainerRequestContext context) {
+        this.context = context;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("[MVC Event] ControllerMatched:");
+        sb.append(uriInfo.getRequestUri()).append(":").append(resourceInfo.getResourceMethod());
+        return sb.toString();
     }
 }

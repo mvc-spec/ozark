@@ -39,6 +39,7 @@
  */
 package org.glassfish.ozark.jersey;
 
+import org.glassfish.ozark.core.ViewRequestFilter;
 import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
 import org.glassfish.ozark.core.ViewResponseFilter;
@@ -80,6 +81,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
         final boolean enableOzark = config.getClasses().stream().anyMatch(this::isController)
                 || config.getInstances().stream().map(o -> o.getClass()).anyMatch(this::isController);
         if (enableOzark) {
+            context.register(ViewRequestFilter.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
             context.register(ValidationInterceptorImpl.class);
