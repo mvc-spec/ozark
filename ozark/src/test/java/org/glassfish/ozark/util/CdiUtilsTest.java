@@ -37,34 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.security;
+package org.glassfish.ozark.util;
 
+import java.lang.reflect.Field;
+import javax.enterprise.inject.spi.BeanManager;
+import org.easymock.EasyMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
 /**
- * Test for EncodersImpl.
- *
- * @author Santiago Pericas-Geertsen
+ * The JUnit tests for the CdiUtils class.
+ * 
+ * @author Manfred Riem (manfred.riem at oracle.com)
  */
-public class EncodersImplTest {
-
-    private final EncodersImpl encoders = new EncodersImpl();
-
+public class CdiUtilsTest {
+    
+    /**
+     * Test newBean method.
+     * 
+     * @throws Exception when a serious error occurs.
+     */
     @Test
-    public void testEncoderJs() {
-        assertEquals("\\b \\t \\n \\f \\r", encoders.js("\b \t \n \f \r"));
-        assertEquals("\\/ \\\\ \\x22 \\x26 \\x27", encoders.js("/ \\ \" & '"));
-        assertEquals("\\x00 \\x0f \\x10 \\x1f", encoders.js("\u0000 \u000f \u0010 \u001f"));
-        assertEquals("\\tfunction() { return \\x27Hello World\\x27; }",
-                     encoders.js("\tfunction() { return 'Hello World'; }"));
-    }
-
-    @Test
-    public void testEncoderHtml() {
-        assertEquals("&amp; &lt; &gt; &#39; &#34;", encoders.html("& < > ' \""));
-        assertEquals("&lt;html&gt;&lt;div id=&#34;foo&#34;&gt;&amp;&amp;&lt;/div&gt;&lt;/html&gt;",
-                     encoders.html("<html><div id=\"foo\">&&</div></html>"));
+    public void testNewBean() throws Exception {
+        CdiUtils utils = new CdiUtils();
+        
+        Field bmField = utils.getClass().getDeclaredField("bm");
+        bmField.setAccessible(true);
+        BeanManager bm = EasyMock.createMock(BeanManager.class);
+        bmField.set(utils, bm);
+        
+        expect(bm.getBeans(CdiUtilsTest.class)).andReturn(null);
+        expect(bm.resolve(null)).andReturn(null);
+        expect(bm.createCreationalContext(null)).andReturn(null);
+        expect(bm.getReference(null, CdiUtilsTest.class, null)).andReturn(null);
+        replay(bm);
+        assertNull(utils.newBean(CdiUtilsTest.class));
+        verify(bm);
     }
 }
