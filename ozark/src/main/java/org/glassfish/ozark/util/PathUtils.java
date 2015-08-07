@@ -77,4 +77,14 @@ public final class PathUtils {
     public static String noPrefix(String path, String prefix) {
         return path.startsWith(prefix) ? path.substring(prefix.length()) : path;
     }
+
+    /**
+     * Ensures that a path always starts with a slash.
+     *
+     * @param path the path.
+     * @return path that starts with a slash.
+     */
+    public static String ensureStartingSlash(String path) {
+        return path.charAt(0) != '/' ? ("/" + path) : path;
+    }
 }

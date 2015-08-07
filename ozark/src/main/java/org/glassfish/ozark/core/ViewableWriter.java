@@ -80,6 +80,7 @@ import java.nio.charset.Charset;
 import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 import static org.glassfish.ozark.util.PropertyUtils.getProperty;
+import static org.glassfish.ozark.util.PathUtils.ensureStartingSlash;
 
 /**
  * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
@@ -150,7 +151,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         final ViewEngine engine = engineFinder.find(viewable);
         if (engine == null) {
             RequestDispatcher requestDispatcher =
-                    request.getServletContext().getRequestDispatcher(viewable.getView());
+                    request.getServletContext().getRequestDispatcher(ensureStartingSlash(viewable.getView()));
             if (requestDispatcher != null) {
                 try {
                     requestDispatcher.forward(request, response);
