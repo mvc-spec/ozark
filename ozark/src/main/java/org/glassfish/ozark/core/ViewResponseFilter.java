@@ -40,6 +40,7 @@
 package org.glassfish.ozark.core;
 
 import org.glassfish.ozark.event.AfterControllerEventImpl;
+import org.glassfish.ozark.event.ControllerRedirectEventImpl;
 import org.glassfish.ozark.jersey.VariantSelector;
 import org.glassfish.ozark.util.CdiUtils;
 
@@ -49,6 +50,7 @@ import javax.inject.Inject;
 import javax.mvc.Viewable;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
+import javax.mvc.event.MvcEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.ServerErrorException;
@@ -56,18 +58,25 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.URI;
 
-import static javax.ws.rs.core.Response.Status.FOUND;
+import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
 import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.FOUND;
+import static javax.ws.rs.core.Response.Status.SEE_OTHER;
+import static javax.ws.rs.core.Response.Status.TEMPORARY_REDIRECT;
+import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 import static org.glassfish.ozark.util.PathUtils.noPrefix;
 import static org.glassfish.ozark.util.PathUtils.noStartingSlash;
+import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.AfterControllerEvent}
@@ -105,11 +114,11 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Context
     private HttpServletRequest request;
 
-    @Inject
-    private Event<AfterControllerEventImpl> dispatcher;
+    @Context
+    private Configuration config;
 
     @Inject
-    private AfterControllerEventImpl event;
+    private Event<MvcEvent> dispatcher;
 
     @Inject
     private CdiUtils cdiUtils;
@@ -120,12 +129,17 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
+        final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
+
         // Fire AfterControllerEvent event
-        event.setUriInfo(uriInfo);
-        event.setResourceInfo(resourceInfo);
-        event.setContainerRequestContext(requestContext);
-        event.setContainerResponseContext(responseContext);
-        dispatcher.fire(event);
+        if (enableEvents) {
+            final AfterControllerEventImpl event = new AfterControllerEventImpl();
+            event.setUriInfo(uriInfo);
+            event.setResourceInfo(resourceInfo);
+            event.setContainerRequestContext(requestContext);
+            event.setContainerResponseContext(responseContext);
+            dispatcher.fire(event);
+        }
 
         final Method method = resourceInfo.getResourceMethod();
         final Class<?> returnType = method.getReturnType();
@@ -162,11 +176,24 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         entity = responseContext.getEntity();
         if (entity != null) {
             final String view = ((Viewable) entity).getView();
+            final String uri = uriInfo.getBaseUri() + noStartingSlash(noPrefix(view, REDIRECT));
             if (view.startsWith(REDIRECT)) {
-                final String uri = uriInfo.getBaseUri() + noStartingSlash(noPrefix(view, REDIRECT));
-                responseContext.setStatusInfo(FOUND);
+                responseContext.setStatusInfo(SEE_OTHER);
                 responseContext.getHeaders().putSingle(LOCATION_HEADER, uri);
                 responseContext.setEntity(null);
+            }
+        }
+
+        // Fire ControllerRedirectEvent event
+        if (enableEvents) {
+            final int status = responseContext.getStatus();
+            if (status == SEE_OTHER.getStatusCode() || status == MOVED_PERMANENTLY.getStatusCode()
+                    || status == FOUND.getStatusCode() || status == TEMPORARY_REDIRECT.getStatusCode()) {
+                final ControllerRedirectEventImpl event = new ControllerRedirectEventImpl();
+                event.setUriInfo(uriInfo);
+                event.setResourceInfo(resourceInfo);
+                event.setLocation(URI.create(responseContext.getHeaderString(LOCATION_HEADER)));
+                dispatcher.fire(event);
             }
         }
     }

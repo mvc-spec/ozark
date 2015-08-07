@@ -39,7 +39,10 @@
  */
 package org.glassfish.ozark.test.redirect;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 import javax.mvc.annotation.Controller;
+import javax.mvc.event.ControllerRedirectEvent;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -53,23 +56,29 @@ import java.net.URI;
  */
 @Path("redirect")
 @Controller
+@ApplicationScoped
 public class RedirectController {
+
+    private boolean eventReceived;
 
     @GET
     @Path("string")
     public String getString() {
+        eventReceived = false;
         return "redirect:/redirect/here";
     }
 
     @GET
     @Path("response1")
     public Response getResponse1() {
+        eventReceived = false;
         return Response.seeOther(URI.create("redirect/here")).build();
     }
 
     @GET
     @Path("response2")
     public Response getResponse2() {
+        eventReceived = false;
         return Response.status(Response.Status.FOUND)
                 .header("Location", "redirect/here")
                 .build();
@@ -79,6 +88,10 @@ public class RedirectController {
     @Path("here")
     @Produces("text/html")
     public String getSub() {
-        return "redirect.jsp";
+        return eventReceived ? "redirect.jsp" : "error.jsp";
+    }
+
+    public void beforeControllerEvent(@Observes ControllerRedirectEvent event) {
+        eventReceived = true;
     }
 }

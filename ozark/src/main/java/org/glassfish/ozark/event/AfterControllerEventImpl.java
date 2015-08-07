@@ -52,7 +52,7 @@ import javax.ws.rs.core.UriInfo;
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class AfterControllerEventImpl implements AfterControllerEvent {
+public class AfterControllerEventImpl extends MvcEventImpl implements AfterControllerEvent {
 
     private UriInfo uriInfo;
 
@@ -94,12 +94,5 @@ public class AfterControllerEventImpl implements AfterControllerEvent {
 
     public void setContainerResponseContext(ContainerResponseContext responseContext) {
         this.responseContext = responseContext;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("[MVC Event] ControllerMatched:");
-        sb.append(uriInfo.getRequestUri()).append(":").append(resourceInfo.getResourceMethod());
-        return sb.toString();
     }
 }

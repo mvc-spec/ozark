@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,33 +37,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.events;
+package org.glassfish.ozark.util;
 
-import javax.mvc.event.MvcEvent;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import javax.ws.rs.core.Configuration;
 
 /**
- * Class MyApplication.
+ * Utility methods for properties.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ApplicationPath("resources")
-public class MyApplication extends Application {
+public final class PropertyUtils {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        return Collections.singleton(EventController.class);
-    }
-
-    @Override
-    public Map<String, Object> getProperties() {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(MvcEvent.ENABLE_EVENTS, true);
-        return map;
+    /**
+     * Search for a property and return a default value if not found. Value
+     * returned is of same type as default value.
+     *
+     * @param config configuration to search for property.
+     * @param name property name.
+     * @param defaultValue default value.
+     * @param <T> type of default and return value.
+     * @return property or default value.
+     */
+    public static <T> T getProperty(Configuration config, String name, T defaultValue) {
+        final Object obj = config.getProperty(name);
+        return obj != null ? (T) obj : defaultValue;
     }
 }

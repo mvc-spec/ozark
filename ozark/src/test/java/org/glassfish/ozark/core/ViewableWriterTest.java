@@ -39,9 +39,11 @@
  */
 package org.glassfish.ozark.core;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import org.easymock.EasyMock;
+import org.glassfish.ozark.engine.ViewEngineFinder;
+import org.junit.Test;
+
+import javax.ws.rs.core.Configuration;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
@@ -49,14 +51,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
-import org.easymock.EasyMock;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+
 import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
-import org.glassfish.ozark.engine.ViewEngineFinder;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * The JUnit tests for the ViewableWriter class.
@@ -109,7 +114,12 @@ public class ViewableWriterTest {
         Field responseField = writer.getClass().getDeclaredField("response");
         responseField.setAccessible(true);
         responseField.set(writer, response);
-        
+
+        Configuration config = EasyMock.createStrictMock(Configuration.class);
+        Field configField = writer.getClass().getDeclaredField("config");
+        configField.setAccessible(true);
+        configField.set(writer, config);
+
         MultivaluedHashMap map = new MultivaluedHashMap();
         ArrayList<MediaType> contentTypes = new ArrayList<>();
         contentTypes.add(MediaType.TEXT_HTML_TYPE);

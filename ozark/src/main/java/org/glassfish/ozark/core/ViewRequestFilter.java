@@ -45,13 +45,18 @@ import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.mvc.annotation.Controller;
+import javax.mvc.event.BeforeControllerEvent;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
+
+import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
+import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * <p>A JAX-RS request filter that fires a {@link javax.mvc.event.BeforeControllerEvent}
@@ -75,17 +80,21 @@ public class ViewRequestFilter implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
     @Inject
-    private Event<BeforeControllerEventImpl> dispatcher;
+    private Event<BeforeControllerEvent> dispatcher;
 
-    @Inject
-    private BeforeControllerEventImpl event;
+    @Context
+    private Configuration config;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
         // Fire BeforeControllerEvent event
-        event.setUriInfo(uriInfo);
-        event.setResourceInfo(resourceInfo);
-        event.setContainerRequestContext(requestContext);
-        dispatcher.fire(event);
+        if (enableEvents) {
+            final BeforeControllerEventImpl event = new BeforeControllerEventImpl();
+            event.setUriInfo(uriInfo);
+            event.setResourceInfo(resourceInfo);
+            event.setContainerRequestContext(requestContext);
+            dispatcher.fire(event);
+        }
     }
 }

@@ -51,6 +51,7 @@ import javax.mvc.Models;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
+import javax.mvc.event.MvcEvent;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -76,7 +77,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
+import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
@@ -117,22 +120,13 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     private ViewEngineFinder engineFinder;
 
     @Context
-    private Configuration configuration;
+    private Configuration config;
 
     @Inject
     private Messages messages;
 
     @Inject
-    private Event<BeforeProcessViewEventImpl> beforeDispatcher;
-
-    @Inject
-    private BeforeProcessViewEventImpl beforeEvent;
-
-    @Inject
-    private Event<AfterProcessViewEventImpl> afterDispatcher;
-
-    @Inject
-    private AfterProcessViewEventImpl afterEvent;
+    private Event<MvcEvent> dispatcher;
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
@@ -208,22 +202,26 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                 models = modelsInstance.get();
             }
 
+            final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
+
             // Fire BeforeProcessView event
-            if (beforeEvent != null) {      // unit testing
-                beforeEvent.setEngine(engine.getClass());
-                beforeEvent.setView(viewable.getView());
-                beforeDispatcher.fire(beforeEvent);
+            if (enableEvents) {
+                final BeforeProcessViewEventImpl event = new BeforeProcessViewEventImpl();
+                event.setEngine(engine.getClass());
+                event.setView(viewable.getView());
+                dispatcher.fire(event);
             }
 
             // Process view using selected engine
             engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper,
-                    uriInfo, resourceInfo, configuration));
+                    uriInfo, resourceInfo, config));
 
             // Fire AfterProcessView event
-            if (afterEvent != null) {       // unit testing
-                afterEvent.setEngine(engine.getClass());
-                afterEvent.setView(viewable.getView());
-                afterDispatcher.fire(afterEvent);
+            if (enableEvents) {
+                final AfterProcessViewEventImpl event = new AfterProcessViewEventImpl();
+                event.setEngine(engine.getClass());
+                event.setView(viewable.getView());
+                dispatcher.fire(event);
             }
         } catch (ViewEngineException e) {
             throw new ServerErrorException(INTERNAL_SERVER_ERROR, e);

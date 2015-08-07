@@ -37,33 +37,29 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.events;
+package org.glassfish.ozark.event;
 
+import javax.enterprise.context.Dependent;
 import javax.mvc.event.MvcEvent;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
- * Class MyApplication.
+ * An implementation of {@link javax.mvc.event.MvcEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ApplicationPath("resources")
-public class MyApplication extends Application {
+@Dependent
+public class MvcEventImpl implements MvcEvent {
 
-    @Override
-    public Set<Class<?>> getClasses() {
-        return Collections.singleton(EventController.class);
+    private static long NEXT_ID = 0L;
+
+    private String id;
+
+    public MvcEventImpl() {
+        id = Long.toString(++NEXT_ID);
     }
 
     @Override
-    public Map<String, Object> getProperties() {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(MvcEvent.ENABLE_EVENTS, true);
-        return map;
+    public String getId() {
+        return id;
     }
 }

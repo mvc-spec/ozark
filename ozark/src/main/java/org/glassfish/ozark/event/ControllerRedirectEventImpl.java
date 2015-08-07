@@ -37,33 +37,52 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.events;
+package org.glassfish.ozark.event;
 
-import javax.mvc.event.MvcEvent;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import javax.enterprise.context.Dependent;
+import javax.mvc.event.ControllerRedirectEvent;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 /**
- * Class MyApplication.
+ * An implementation of {@link javax.mvc.event.ControllerRedirectEvent}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ApplicationPath("resources")
-public class MyApplication extends Application {
+@Dependent
+public class ControllerRedirectEventImpl extends MvcEventImpl implements ControllerRedirectEvent {
+
+    private UriInfo uriInfo;
+
+    private ResourceInfo resourceInfo;
+
+    private URI location;
 
     @Override
-    public Set<Class<?>> getClasses() {
-        return Collections.singleton(EventController.class);
+    public UriInfo getUriInfo() {
+        return uriInfo;
+    }
+
+    public void setUriInfo(UriInfo uriInfo) {
+        this.uriInfo = uriInfo;
     }
 
     @Override
-    public Map<String, Object> getProperties() {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(MvcEvent.ENABLE_EVENTS, true);
-        return map;
+    public ResourceInfo getResourceInfo() {
+        return resourceInfo;
+    }
+
+    public void setResourceInfo(ResourceInfo resourceInfo) {
+        this.resourceInfo = resourceInfo;
+    }
+
+    @Override
+    public URI getLocation() {
+        return null;
+    }
+
+    public void setLocation(URI location) {
+        this.location = location;
     }
 }

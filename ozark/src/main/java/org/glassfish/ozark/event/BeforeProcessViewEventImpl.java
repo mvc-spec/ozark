@@ -49,7 +49,7 @@ import javax.mvc.event.BeforeProcessViewEvent;
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class BeforeProcessViewEventImpl implements BeforeProcessViewEvent {
+public class BeforeProcessViewEventImpl extends MvcEventImpl implements BeforeProcessViewEvent {
 
     private String view;
 
@@ -71,12 +71,5 @@ public class BeforeProcessViewEventImpl implements BeforeProcessViewEvent {
 
     public void setEngine(Class<? extends ViewEngine> engine) {
         this.engine = engine;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("[MVC Event] ViewEngineSelected:");
-        sb.append(view).append(":").append(engine.getName());
-        return sb.toString();
     }
 }
