@@ -37,54 +37,61 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.engine;
+package org.glassfish.ozark.test.applicationpath;
 
-import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import javax.mvc.annotation.Controller;
+import javax.mvc.Models;
+import javax.mvc.annotation.View;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 
 /**
- * Implementation of the JSF Facelets engine. Uses a method in its base class to forward
- * a request back to the servlet container.
+ * BookController test.
  *
- * @author Manfred Riem
  * @author Santiago Pericas-Geertsen
- * @see org.glassfish.ozark.engine.ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine extends ServletViewEngine {
+@Path("book")
+@Controller
+public class BookController {
 
     @Inject
-    private ServletContext servletContext;
+    private Catalog catalog;
 
-    /**
-     * Assumes that any view that ends with {@code .xhtml} is a facelet.
-     *
-     * @param view the name of the view.
-     * @return {@code true} if supported or {@code false} if not.
-     */
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".xhtml");
+    @Inject
+    private Models models;
+
+    @GET
+    @Produces("text/html")
+    @Path("view1/{id}")
+    public String view1(@PathParam("id") String id) {
+        models.put("book", catalog.getBook(id));
+        return "book.xhtml";
     }
 
-    /**
-     * Forwards request to servlet container.
-     *
-     * @param context view engine context.
-     * @throws ViewEngineException if any error occurs.
-     */
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            forwardRequest(context, "*.xhtml");
-        } catch (ServletException | IOException e) {
-            throw new ViewEngineException(e);
-        }
+    @GET
+    @Produces("text/html")
+    @Path("view2/{id}")
+    @View("book.xhtml")
+    public void view2(@PathParam("id") String id) {
+        models.put("book", catalog.getBook(id));
+    }
+
+    @GET
+    @Produces("text/html")
+    @Path("view3/{id}")
+    public String view3(@PathParam("id") String id) {
+        models.put("book", catalog.getBook(id));
+        return "book.jsp";
+    }
+
+    @GET
+    @Produces("text/html")
+    @Path("view4/{id}")
+    @View("book.jsp")
+    public void view4(@PathParam("id") String id) {
+        models.put("book", catalog.getBook(id));
     }
 }

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,54 +37,40 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.engine;
-
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.IOException;
+package org.glassfish.ozark.test.applicationpath;
 
 /**
- * Implementation of the JSF Facelets engine. Uses a method in its base class to forward
- * a request back to the servlet container.
+ * Class Book.
  *
- * @author Manfred Riem
  * @author Santiago Pericas-Geertsen
- * @see org.glassfish.ozark.engine.ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine extends ServletViewEngine {
+public class Book {
 
-    @Inject
-    private ServletContext servletContext;
+    private String title;
+    private String author;
+    private String isbn;
 
-    /**
-     * Assumes that any view that ends with {@code .xhtml} is a facelet.
-     *
-     * @param view the name of the view.
-     * @return {@code true} if supported or {@code false} if not.
-     */
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".xhtml");
+    public String getTitle() {
+        return title;
     }
 
-    /**
-     * Forwards request to servlet container.
-     *
-     * @param context view engine context.
-     * @throws ViewEngineException if any error occurs.
-     */
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            forwardRequest(context, "*.xhtml");
-        } catch (ServletException | IOException e) {
-            throw new ViewEngineException(e);
-        }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }

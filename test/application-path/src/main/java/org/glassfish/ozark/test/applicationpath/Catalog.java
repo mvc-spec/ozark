@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,54 +37,23 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.engine;
+package org.glassfish.ozark.test.applicationpath;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
- * Implementation of the JSF Facelets engine. Uses a method in its base class to forward
- * a request back to the servlet container.
+ * Class Catalog.
  *
- * @author Manfred Riem
  * @author Santiago Pericas-Geertsen
- * @see org.glassfish.ozark.engine.ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine extends ServletViewEngine {
+@ApplicationScoped
+public class Catalog {
 
-    @Inject
-    private ServletContext servletContext;
-
-    /**
-     * Assumes that any view that ends with {@code .xhtml} is a facelet.
-     *
-     * @param view the name of the view.
-     * @return {@code true} if supported or {@code false} if not.
-     */
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".xhtml");
-    }
-
-    /**
-     * Forwards request to servlet container.
-     *
-     * @param context view engine context.
-     * @throws ViewEngineException if any error occurs.
-     */
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            forwardRequest(context, "*.xhtml");
-        } catch (ServletException | IOException e) {
-            throw new ViewEngineException(e);
-        }
+    public Book getBook(String id) {
+        final Book b = new Book();
+        b.setAuthor("Some author");
+        b.setTitle("Some title");
+        b.setIsbn("Some ISBN");
+        return b;
     }
 }

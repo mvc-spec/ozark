@@ -37,54 +37,26 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.engine;
+package org.glassfish.ozark.test.applicationpath;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import javax.mvc.engine.ViewEngine;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Implementation of the JSF Facelets engine. Uses a method in its base class to forward
- * a request back to the servlet container.
+ * Class MyApplication. Note empty application path.
  *
- * @author Manfred Riem
  * @author Santiago Pericas-Geertsen
- * @see org.glassfish.ozark.engine.ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine extends ServletViewEngine {
+@ApplicationPath("/")
+public class MyApplication extends Application {
 
-    @Inject
-    private ServletContext servletContext;
-
-    /**
-     * Assumes that any view that ends with {@code .xhtml} is a facelet.
-     *
-     * @param view the name of the view.
-     * @return {@code true} if supported or {@code false} if not.
-     */
     @Override
-    public boolean supports(String view) {
-        return view.endsWith(".xhtml");
-    }
-
-    /**
-     * Forwards request to servlet container.
-     *
-     * @param context view engine context.
-     * @throws ViewEngineException if any error occurs.
-     */
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            forwardRequest(context, "*.xhtml");
-        } catch (ServletException | IOException e) {
-            throw new ViewEngineException(e);
-        }
+    public Set<Class<?>> getClasses() {
+        return Collections.singleton(BookController.class);
     }
 }

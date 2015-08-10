@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,54 +37,50 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.engine;
+package org.glassfish.ozark.test.facelets;
 
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.mvc.engine.Priorities;
-import javax.mvc.engine.ViewEngineContext;
-import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import java.io.IOException;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
-/**
- * Implementation of the JSF Facelets engine. Uses a method in its base class to forward
- * a request back to the servlet container.
- *
- * @author Manfred Riem
- * @author Santiago Pericas-Geertsen
- * @see org.glassfish.ozark.engine.ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
- */
-@Priority(Priorities.DEFAULT)
-public class FaceletsViewEngine extends ServletViewEngine {
+import java.util.Iterator;
 
-    @Inject
-    private ServletContext servletContext;
+import static org.junit.Assert.assertTrue;
 
-    /**
-     * Assumes that any view that ends with {@code .xhtml} is a facelet.
-     *
-     * @param view the name of the view.
-     * @return {@code true} if supported or {@code false} if not.
-     */
-    @Override
-    public boolean supports(String view) {
-        return view.endsWith(".xhtml");
+public class FaceletsIT {
+
+    private String webUrl;
+    private WebClient webClient;
+
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    /**
-     * Forwards request to servlet container.
-     *
-     * @param context view engine context.
-     * @throws ViewEngineException if any error occurs.
-     */
-    @Override
-    public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
-            forwardRequest(context, "*.xhtml");
-        } catch (ServletException | IOException e) {
-            throw new ViewEngineException(e);
-        }
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
+    }
+
+    @Test
+    public void testView1() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "resources/book/view1/1");
+        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        assertTrue(it.next().asText().contains("Some title"));
+        assertTrue(it.next().asText().contains("Some author"));
+        assertTrue(it.next().asText().contains("Some ISBN"));
+    }
+
+    @Test
+    public void testView2() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "resources/book/view2/1");
+        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        assertTrue(it.next().asText().contains("Some title"));
+        assertTrue(it.next().asText().contains("Some author"));
+        assertTrue(it.next().asText().contains("Some ISBN"));
     }
 }

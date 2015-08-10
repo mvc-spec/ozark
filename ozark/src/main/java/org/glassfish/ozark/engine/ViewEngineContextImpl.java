@@ -40,6 +40,7 @@
 package org.glassfish.ozark.engine;
 
 import javax.mvc.Models;
+import javax.mvc.engine.ViewEngineContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ResourceInfo;
@@ -52,7 +53,7 @@ import javax.ws.rs.core.UriInfo;
  *
  * @author Santiago Pericas-Geertsen
  */
-public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
+public class ViewEngineContextImpl implements ViewEngineContext {
 
     private final String view;
 
@@ -79,8 +80,8 @@ public class ViewEngineContext implements javax.mvc.engine.ViewEngineContext {
      * @param resourceInfo Resource matched info.
      * @param configuration
      */
-    public ViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
-                             UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {
+    public ViewEngineContextImpl(String view, Models models, HttpServletRequest request, HttpServletResponse response,
+                                 UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {
         this.view = view;
         this.models = models;
         this.request = request;

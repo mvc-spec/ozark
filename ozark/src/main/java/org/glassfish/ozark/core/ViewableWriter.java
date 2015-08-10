@@ -39,7 +39,7 @@
  */
 package org.glassfish.ozark.core;
 
-import org.glassfish.ozark.engine.ViewEngineContext;
+import org.glassfish.ozark.engine.ViewEngineContextImpl;
 import org.glassfish.ozark.engine.ViewEngineFinder;
 import org.glassfish.ozark.event.AfterProcessViewEventImpl;
 import org.glassfish.ozark.event.BeforeProcessViewEventImpl;
@@ -214,7 +214,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             }
 
             // Process view using selected engine
-            engine.processView(new ViewEngineContext(viewable.getView(), models, request, responseWrapper,
+            engine.processView(new ViewEngineContextImpl(viewable.getView(), models, request, responseWrapper,
                     uriInfo, resourceInfo, config));
 
             // Fire AfterProcessView event

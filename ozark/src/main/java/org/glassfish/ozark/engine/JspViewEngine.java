@@ -40,30 +40,21 @@
 package org.glassfish.ozark.engine;
 
 import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.mvc.Models;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Implementation of JSP view engine. Uses a {@link javax.servlet.RequestDispatcher}
- * to forward the request back to the servlet container. Location of JSP pages is
- * assumed relative to the {@code WEB-INF} directory in the archive.
+ * Implementation of the JSP view engine. Uses a method in its base class to forward
+ * a request back to the servlet container.
  *
  * @author Santiago Pericas-Geertsen
+ * @see org.glassfish.ozark.engine.ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
 @Priority(Priorities.DEFAULT)
-public class JspViewEngine extends ViewEngineBase {
-
-    @Inject
-    private ServletContext servletContext;
+public class JspViewEngine extends ServletViewEngine {
 
     /**
      * Assumes that any view that ends with {@code .jsp} or {@code .jspx} is a JSP.
@@ -77,26 +68,15 @@ public class JspViewEngine extends ViewEngineBase {
     }
 
     /**
-     * Sets attributes in request based on {@link javax.mvc.Models} and forwards
-     * request to servlet container.
+     * Forwards request to servlet container.
      *
      * @param context view engine context.
      * @throws ViewEngineException if any error occurs.
      */
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        final Models models = context.getModels();
-        final HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
-
-        // Set attributes in request
-        for (String name : models) {
-            request.setAttribute(name, models.get(name));
-        }
-        // Forward request to servlet engine to process JSP
-        final RequestDispatcher rd = servletContext.getRequestDispatcher(resolveView(context));
         try {
-            rd.forward(request, response);
+            forwardRequest(context, "*.jsp", "*.jspx");
         } catch (ServletException | IOException e) {
             throw new ViewEngineException(e);
         }
