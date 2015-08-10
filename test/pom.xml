@@ -49,7 +49,7 @@
     </dependencies>
     <modules>
         <module>annotations</module>
-        <module>application-path</module>
+        <!--module>application-path</module-->
         <module>asciidoc</module>
         <module>book-cdi</module>
         <module>book-models</module>
