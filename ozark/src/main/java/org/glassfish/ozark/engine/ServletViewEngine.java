@@ -99,7 +99,8 @@ public abstract class ServletViewEngine extends ViewEngineBase {
             final Collection<String> mappings = e.getValue().getMappings();
             if (mappings.containsAll(Arrays.asList(extensions))) {
                 rd = servletContext.getNamedDispatcher(e.getKey());     // by servlet name
-                // Need new request with updated URI
+
+                // Need new request with updated URI and extension matching semantics
                 request = new HttpServletRequestWrapper(context.getRequest()) {
                     @Override
                     public String getRequestURI() {
@@ -108,12 +109,12 @@ public abstract class ServletViewEngine extends ViewEngineBase {
 
                     @Override
                     public String getServletPath() {
-                        return DEFAULT_VIEW_FOLDER;
+                        return resolveView(context);
                     }
 
                     @Override
                     public String getPathInfo() {
-                        return context.getView();
+                        return null;
                     }
 
                     @Override

@@ -42,7 +42,9 @@ package org.glassfish.ozark.engine;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 
+import static org.glassfish.ozark.util.PathUtils.ensureEndingSlash;
 import static org.glassfish.ozark.util.PathUtils.hasStartingSlash;
+import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * Base class for view engines that factors out all common logic.
@@ -62,11 +64,8 @@ public abstract class ViewEngineBase implements ViewEngine {
     protected String resolveView(ViewEngineContext context) {
         final String view = context.getView();
         if (!hasStartingSlash(view)) {        // Relative?
-            String viewFolder = (String) context.getConfiguration().getProperty(ViewEngine.VIEW_FOLDER);
-            if (viewFolder == null) {
-                viewFolder = ViewEngine.DEFAULT_VIEW_FOLDER;
-            }
-            return viewFolder + view;
+            final String viewFolder = getProperty(context.getConfiguration(), VIEW_FOLDER, DEFAULT_VIEW_FOLDER);
+            return ensureEndingSlash(viewFolder) + view;
         }
         return view;
     }

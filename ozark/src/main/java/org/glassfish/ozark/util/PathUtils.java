@@ -87,4 +87,14 @@ public final class PathUtils {
     public static String ensureStartingSlash(String path) {
         return path.charAt(0) != '/' ? ("/" + path) : path;
     }
+
+    /**
+     * Ensures that a path always ends with a slash.
+     *
+     * @param path the path.
+     * @return path that starts with a slash.
+     */
+    public static String ensureEndingSlash(String path) {
+        return path.charAt(path.length() - 1) != '/' ? (path + "/") : path;
+    }
 }

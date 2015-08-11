@@ -39,12 +39,9 @@
  */
 package org.glassfish.ozark.test.applicationpath;
 
-import javax.mvc.engine.ViewEngine;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
