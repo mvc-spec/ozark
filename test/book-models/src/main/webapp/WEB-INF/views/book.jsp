@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Book Information</title>
-    <link rel="stylesheet" type="text/css" href="../../../ozark.css">
+    <link rel="stylesheet" type="text/css" href="${mvc.contextPath}/ozark.css"/>
 </head>
 <body>
 <h1>Book Information</h1>

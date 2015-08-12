@@ -97,4 +97,27 @@ public final class PathUtils {
     public static String ensureEndingSlash(String path) {
         return path.charAt(path.length() - 1) != '/' ? (path + "/") : path;
     }
+
+    /**
+     * Ensures that a path does not end with a slash. May return an
+     * empty string.
+     *
+     * @param path the path.
+     * @return path not ending with slash or empty string.
+     */
+    public static String ensureNotEndingSlash(String path) {
+        final int length = path.length();
+        return path.charAt(length - 1) == '/' ? path.substring(0, length - 1) : path;
+    }
+
+    /**
+     * Returns a normalized path. If the path is empty or "/*", then "/" is returned.
+     * Otherwise, the path returned always starts with a "/" but does not end with one.
+     *
+     * @param path the path to normalize.
+     * @return normalized path.
+     */
+    public static String normalizePath(String path) {
+        return (path.isEmpty() || path.equals("/*")) ? "/" : ensureNotEndingSlash(ensureStartingSlash(path));
+    }
 }

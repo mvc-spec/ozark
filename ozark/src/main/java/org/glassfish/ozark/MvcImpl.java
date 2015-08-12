@@ -37,43 +37,73 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.servlet;
+package org.glassfish.ozark;
 
-import org.glassfish.ozark.MvcImpl;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.mvc.Mvc;
+import javax.mvc.security.Csrf;
+import javax.mvc.security.Encoders;
+import javax.ws.rs.core.Configuration;
 
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-import javax.ws.rs.ApplicationPath;
-import java.util.Set;
-
-import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
-import static org.glassfish.ozark.util.CdiUtils.newBean;
+import static org.glassfish.ozark.util.PathUtils.normalizePath;
 
 /**
- * Initializes the Mvc class with the application and context path. Note that the
- * application path is only initialized if there is an application sub-class that
- * is annotated by {@link javax.ws.rs.ApplicationPath}.
+ * Implementation of {@link javax.mvc.Mvc}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@HandlesTypes({ ApplicationPath.class })
-public class OzarkContainerInitializer implements ServletContainerInitializer {
+@Named("mvc")
+@ApplicationScoped
+public class MvcImpl implements Mvc {
+
+    @Inject
+    private Csrf csrf;
+
+    @Inject
+    private Encoders encoders;
+
+    private String contextPath;
+
+    private String applicationPath;
+
+    private Configuration config;
 
     @Override
-    public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        if (!classes.isEmpty()) {
-            final Class<?> appClass = classes.iterator().next();    // must be a singleton
-            final BeanManager bm = CDI.current().getBeanManager();
-            final MvcImpl mvc = (MvcImpl) newBean(bm, MvcImpl.class);
-            mvc.setContextPath(servletContext.getContextPath());
-            final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
-            if (ap != null) {
-                mvc.setApplicationPath(ap.value());
-            }
-        }
+    public String getContextPath() {
+        return contextPath;
+    }
+
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;     // normalized by servlet
+    }
+
+    @Override
+    public String getApplicationPath() {
+        return applicationPath;
+    }
+
+    public void setApplicationPath(String applicationPath) {
+        this.applicationPath = normalizePath(applicationPath);
+    }
+
+    @Override
+    public Csrf getCsrf() {
+        return csrf;
+    }
+
+    @Override
+    public Encoders getEncoders() {
+        return encoders;
+    }
+
+    @Override
+    public Configuration getConfig() {
+        return config;
+    }
+
+    public void setConfig(Configuration config) {
+        this.config = config;
     }
 }

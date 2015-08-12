@@ -40,19 +40,17 @@
 package org.glassfish.ozark.security;
 
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
 import javax.mvc.security.Csrf;
 import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * CSRF bean in session scope available for injection and via EL. Provides access to
- * the CSRF header name (a constant) and the CSRF token value (one per session). It
- * is accessible from EL using the name "csrf".
+ * CSRF bean in session scope available for injection and in EL via the {@link javax.mvc.Mvc}
+ * object as {@code mvc.csrf}. Provides access to the CSRF header name (a constant) and the
+ * CSRF token value (one per session).
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("csrf")
 @SessionScoped
 public class CsrfImpl implements Csrf, Serializable {
 

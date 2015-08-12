@@ -48,6 +48,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Models;
+import javax.mvc.Mvc;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
@@ -79,8 +80,8 @@ import java.nio.charset.Charset;
 
 import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
-import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 import static org.glassfish.ozark.util.PathUtils.ensureStartingSlash;
+import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
@@ -128,6 +129,9 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     @Inject
     private Event<MvcEvent> dispatcher;
+
+    @Inject
+    private Mvc mvc;
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
@@ -202,6 +206,9 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             if (models == null) {
                 models = modelsInstance.get();
             }
+
+            // Bind EL 'mvc' object in models
+            models.put("mvc", mvc);
 
             final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
 

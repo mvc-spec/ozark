@@ -39,24 +39,30 @@
  */
 package org.glassfish.ozark.jersey;
 
-import org.glassfish.ozark.core.ViewRequestFilter;
-import org.glassfish.ozark.security.CsrfProtectFilter;
-import org.glassfish.ozark.security.CsrfValidateInterceptor;
-import org.glassfish.ozark.core.ViewResponseFilter;
-import org.glassfish.ozark.core.ViewableWriter;
-import org.glassfish.ozark.validation.ValidationInterceptorImpl;
 import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
+import org.glassfish.ozark.MvcImpl;
+import org.glassfish.ozark.core.ViewRequestFilter;
+import org.glassfish.ozark.core.ViewResponseFilter;
+import org.glassfish.ozark.core.ViewableWriter;
+import org.glassfish.ozark.security.CsrfProtectFilter;
+import org.glassfish.ozark.security.CsrfValidateInterceptor;
+import org.glassfish.ozark.validation.ValidationInterceptorImpl;
 
 import javax.annotation.Priority;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.FeatureContext;
 import java.util.Arrays;
 
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
+import static org.glassfish.ozark.util.CdiUtils.newBean;
 
 /**
  * <p>Jersey feature that sets up the JAX-RS pipeline for MVC processing using one
@@ -71,6 +77,9 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 @ConstrainedTo(RuntimeType.SERVER)
 @Priority(AutoDiscoverable.DEFAULT_PRIORITY)
 public class OzarkFeature implements ForcedAutoDiscoverable {
+
+    @Context
+    private Application application;
 
     @Override
     public void configure(FeatureContext context) {
@@ -88,6 +97,11 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(OzarkModelProcessor.class);
             context.register(CsrfValidateInterceptor.class);
             context.register(CsrfProtectFilter.class);
+
+            // Initialize application config object in Mvc class
+            final BeanManager bm = CDI.current().getBeanManager();
+            final MvcImpl mvc = (MvcImpl) newBean(bm, MvcImpl.class);
+            mvc.setConfig(config);
         }
     }
 

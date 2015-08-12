@@ -40,18 +40,16 @@
 package org.glassfish.ozark.security;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
-import javax.mvc.util.Encoders;
+import javax.mvc.security.Encoders;
 
 /**
  * Utility bean that provides encoders to <em>escape</em> code in JavaScript, HTML,
  * CSS, etc. Encoding data that may be mis-interpreted in a client (e.g., a browser)
- * can prevent XSS attacks. Injectable bean that is also accessible from EL using
- * the name {@code encoders}.
+ * can prevent XSS attacks. Injectable bean that is also accessible in EL via
+ * the {@link javax.mvc.Mvc} object as {@code mvc.encoders}.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Named("encoders")
 @ApplicationScoped
 public class EncodersImpl implements Encoders {
 

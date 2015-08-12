@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Success</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${mvc.contextPath}/ozark.css"/>
 </head>
 <body>
     <h1>Success</h1>

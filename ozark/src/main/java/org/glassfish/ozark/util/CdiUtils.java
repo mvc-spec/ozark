@@ -56,7 +56,7 @@ import java.util.Set;
 public class CdiUtils {
 
     @Inject
-    private BeanManager bm;
+    private BeanManager beanManager;
 
     /**
      * Create a new CDI bean given its class. The bean is created in the context
@@ -68,6 +68,18 @@ public class CdiUtils {
      */
     @SuppressWarnings("unchecked")
     public <T> T newBean(Class<T> clazz) {
+        return newBean(beanManager, clazz);
+    }
+
+    /**
+     * Create a new CDI bean given its class and a bean manager. The bean is created
+     * in the context defined by the scope annotation on the class.
+     *
+     * @param clazz CDI class.
+     * @param <T>   class parameter.
+     * @return newly allocated CDI bean.
+     */
+    public static <T> T newBean(BeanManager bm, Class<T> clazz) {
         Set<Bean<?>> beans = bm.getBeans(clazz);
         final Bean<T> bean = (Bean<T>) bm.resolve(beans);
         final CreationalContext<T> ctx = bm.createCreationalContext(bean);

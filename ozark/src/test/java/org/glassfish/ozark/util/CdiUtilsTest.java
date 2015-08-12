@@ -39,14 +39,16 @@
  */
 package org.glassfish.ozark.util;
 
-import java.lang.reflect.Field;
-import javax.enterprise.inject.spi.BeanManager;
 import org.easymock.EasyMock;
+import org.junit.Test;
+
+import javax.enterprise.inject.spi.BeanManager;
+import java.lang.reflect.Field;
+
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertNull;
-import org.junit.Test;
 
 /**
  * The JUnit tests for the CdiUtils class.
@@ -64,7 +66,7 @@ public class CdiUtilsTest {
     public void testNewBean() throws Exception {
         CdiUtils utils = new CdiUtils();
         
-        Field bmField = utils.getClass().getDeclaredField("bm");
+        Field bmField = utils.getClass().getDeclaredField("beanManager");
         bmField.setAccessible(true);
         BeanManager bm = EasyMock.createMock(BeanManager.class);
         bmField.set(utils, bm);
