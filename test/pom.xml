@@ -65,6 +65,7 @@
         <module>mustache</module>
         <module>produces</module>
         <module>redirect</module>
+        <module>redirectScope</module>
         <module>requestDispatcher</module>
         <module>returns</module>
         <module>samples</module>
