@@ -50,13 +50,11 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 
-import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
-import static org.glassfish.ozark.util.PropertyUtils.getProperty;
+import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
 
 /**
  * <p>A JAX-RS request filter that fires a {@link javax.mvc.event.BeforeControllerEvent}
@@ -82,14 +80,10 @@ public class ViewRequestFilter implements ContainerRequestFilter {
     @Inject
     private Event<BeforeControllerEvent> dispatcher;
 
-    @Context
-    private Configuration config;
-
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
         // Fire BeforeControllerEvent event
-        if (enableEvents) {
+        if (isEventObserved(BeforeControllerEvent.class)) {
             final BeforeControllerEventImpl event = new BeforeControllerEventImpl();
             event.setUriInfo(uriInfo);
             event.setResourceInfo(resourceInfo);

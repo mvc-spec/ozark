@@ -53,6 +53,7 @@ import javax.annotation.Priority;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.mvc.annotation.Controller;
+import javax.servlet.ServletContext;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Application;
@@ -81,6 +82,9 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
     @Context
     private Application application;
 
+    @Context
+    private ServletContext servletContext;
+
     @Override
     public void configure(FeatureContext context) {
         final Configuration config = context.getConfiguration();
@@ -102,6 +106,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             final BeanManager bm = CDI.current().getBeanManager();
             final MvcImpl mvc = (MvcImpl) newBean(bm, MvcImpl.class);
             mvc.setConfig(config);
+            mvc.setContextPath(servletContext.getContextPath());
         }
     }
 

@@ -52,6 +52,8 @@ import javax.mvc.Mvc;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
+import javax.mvc.event.AfterProcessViewEvent;
+import javax.mvc.event.BeforeProcessViewEvent;
 import javax.mvc.event.MvcEvent;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -78,10 +80,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
-import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
+import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
 import static org.glassfish.ozark.util.PathUtils.ensureStartingSlash;
-import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
@@ -210,10 +211,8 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             // Bind EL 'mvc' object in models
             models.put("mvc", mvc);
 
-            final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
-
             // Fire BeforeProcessView event
-            if (enableEvents) {
+            if (isEventObserved(BeforeProcessViewEvent.class)) {
                 final BeforeProcessViewEventImpl event = new BeforeProcessViewEventImpl();
                 event.setEngine(engine.getClass());
                 event.setView(viewable.getView());
@@ -225,7 +224,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                     uriInfo, resourceInfo, config));
 
             // Fire AfterProcessView event
-            if (enableEvents) {
+            if (isEventObserved(AfterProcessViewEvent.class)) {
                 final AfterProcessViewEventImpl event = new AfterProcessViewEventImpl();
                 event.setEngine(engine.getClass());
                 event.setView(viewable.getView());

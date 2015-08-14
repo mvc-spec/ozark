@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,23 +39,34 @@
  */
 package org.glassfish.ozark.cdi;
 
-import javax.mvc.annotation.RedirectScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
 import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessObserverMethod;
+import javax.mvc.annotation.RedirectScoped;
+import javax.mvc.event.MvcEvent;
+import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Our sole CDI extension
- * 
- * @author Manfred Riem (manfred.riem at oracle.com)
+ * Class OzarkCdiExtension. Initialize redirect scope as CDI scope. Collect information
+ * about all MVC events being observed by the application to optimize event creation
+ * and firing.
+ *
+ * @author Santiago Pericas-Geertsen
+ * @author Manfred Riem
  */
-public class CdiExtension implements Extension {
-    
+@SuppressWarnings("ALL")
+public class OzarkCdiExtension implements Extension {
+
+    private static Set<Class<? extends MvcEvent>> observedEvents;
+
     /**
      * Before bean discovery.
-     * 
+     *
      * @param event the event.
      * @param beanManager the bean manager.
      */
@@ -65,11 +76,52 @@ public class CdiExtension implements Extension {
 
     /**
      * After bean discovery.
-     * 
+     *
      * @param event the event.
      * @param beanManager the bean manager.
      */
     public void afterBeanDiscovery(@Observes final AfterBeanDiscovery event, BeanManager beanManager) {
         event.addContext(new RedirectScopeContext());
+    }
+
+    /**
+     * Gather set of event types that are observed by MVC application. This info is later
+     * used to optimize event creation and firing.
+     *
+     * @param pom process observer method object.
+     * @param beanManager the bean manager.
+     * @param <T> the type of the event being observed.
+     * @param <X> the bean type containing the observer method.
+     */
+    public <T, X> void processObserverMethod(@Observes ProcessObserverMethod<T, X> pom, BeanManager beanManager) {
+        final Type type = pom.getObserverMethod().getObservedType();
+        if (type instanceof Class<?>) {
+            final Class<?> clazz = (Class<?>) type;
+            if (MvcEvent.class.isAssignableFrom(clazz)) {
+                addObservedEvent((Class<? extends MvcEvent>) type);
+            }
+        }
+    }
+
+    /**
+     * Add MVC event type to set of observed events.
+     *
+     * @param eventType event type.
+     */
+    public static void addObservedEvent(Class<? extends MvcEvent> eventType) {
+        if (observedEvents == null) {
+            observedEvents = new HashSet<>();
+        }
+        observedEvents.add(eventType);
+    }
+
+    /**
+     * Determine if an event type is being observed.
+     *
+     * @param eventType event type.
+     * @return outcome of test.
+     */
+    public static boolean isEventObserved(Class<? extends MvcEvent> eventType) {
+        return observedEvents == null ? false : observedEvents.contains(eventType);
     }
 }

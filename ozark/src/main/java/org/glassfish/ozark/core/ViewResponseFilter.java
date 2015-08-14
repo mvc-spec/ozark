@@ -50,6 +50,8 @@ import javax.inject.Inject;
 import javax.mvc.Viewable;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
+import javax.mvc.event.AfterControllerEvent;
+import javax.mvc.event.ControllerRedirectEvent;
 import javax.mvc.event.MvcEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
@@ -67,16 +69,15 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
-import static javax.mvc.event.MvcEvent.ENABLE_EVENTS;
-import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.FOUND;
+import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
+import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.SEE_OTHER;
 import static javax.ws.rs.core.Response.Status.TEMPORARY_REDIRECT;
-import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
+import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 import static org.glassfish.ozark.util.PathUtils.noPrefix;
 import static org.glassfish.ozark.util.PathUtils.noStartingSlash;
-import static org.glassfish.ozark.util.PropertyUtils.getProperty;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.AfterControllerEvent}
@@ -129,10 +130,8 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext requestContext,
                        ContainerResponseContext responseContext) throws IOException {
-        final boolean enableEvents = getProperty(config, ENABLE_EVENTS, false);
-
         // Fire AfterControllerEvent event
-        if (enableEvents) {
+        if (isEventObserved(AfterControllerEvent.class)) {
             final AfterControllerEventImpl event = new AfterControllerEventImpl();
             event.setUriInfo(uriInfo);
             event.setResourceInfo(resourceInfo);
@@ -185,7 +184,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         }
 
         // Fire ControllerRedirectEvent event
-        if (enableEvents) {
+        if (isEventObserved(ControllerRedirectEvent.class)) {
             final int status = responseContext.getStatus();
             if (status == SEE_OTHER.getStatusCode() || status == MOVED_PERMANENTLY.getStatusCode()
                     || status == FOUND.getStatusCode() || status == TEMPORARY_REDIRECT.getStatusCode()) {

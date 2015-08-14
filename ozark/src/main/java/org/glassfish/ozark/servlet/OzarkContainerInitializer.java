@@ -65,11 +65,10 @@ public class OzarkContainerInitializer implements ServletContainerInitializer {
 
     @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        if (!classes.isEmpty()) {
+        if (classes != null && !classes.isEmpty()) {
             final Class<?> appClass = classes.iterator().next();    // must be a singleton
             final BeanManager bm = CDI.current().getBeanManager();
             final MvcImpl mvc = (MvcImpl) newBean(bm, MvcImpl.class);
-            mvc.setContextPath(servletContext.getContextPath());
             final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
             if (ap != null) {
                 mvc.setApplicationPath(ap.value());

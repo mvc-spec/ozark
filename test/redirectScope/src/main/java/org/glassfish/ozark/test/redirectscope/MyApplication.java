@@ -39,13 +39,10 @@
  */
 package org.glassfish.ozark.test.redirectscope;
 
-import java.util.HashMap;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import javax.mvc.event.MvcEvent;
 
 /**
  * Class MyApplication.
@@ -60,13 +57,5 @@ public class MyApplication extends Application {
         final Set<Class<?>> set = new HashSet<>();
         set.add(RedirectController.class);
         return set;
-    }
-    
-    
-    @Override
-    public Map<String, Object> getProperties() {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(MvcEvent.ENABLE_EVENTS, true);
-        return map;
     }
 }
