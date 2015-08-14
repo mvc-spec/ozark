@@ -10,7 +10,7 @@
     <packaging>war</packaging>
     <name>Ozark ${project.version} RedirectScope Tests</name>
     <build>
-        <finalName>test-redirect</finalName>
+        <finalName>test-redirectscope</finalName>
     </build>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
