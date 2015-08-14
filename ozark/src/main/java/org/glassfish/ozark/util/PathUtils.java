@@ -111,13 +111,14 @@ public final class PathUtils {
     }
 
     /**
-     * Returns a normalized path. If the path is empty or "/*", then "/" is returned.
-     * Otherwise, the path returned always starts with a "/" but does not end with one.
+     * Returns a normalized path. If the path is empty or "/*", then an empty string
+     * is returned. Otherwise, the path returned always starts with a "/" but does not
+     * end with one.
      *
      * @param path the path to normalize.
      * @return normalized path.
      */
     public static String normalizePath(String path) {
-        return (path.isEmpty() || path.equals("/*")) ? "/" : ensureNotEndingSlash(ensureStartingSlash(path));
+        return (path.isEmpty() || path.equals("/*")) ? "" : ensureNotEndingSlash(ensureStartingSlash(path));
     }
 }
