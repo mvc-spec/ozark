@@ -43,8 +43,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.mvc.event.AfterControllerEvent;
+import javax.mvc.event.AfterProcessViewEvent;
 import javax.mvc.event.BeforeControllerEvent;
 import javax.mvc.event.BeforeProcessViewEvent;
+import javax.ws.rs.WebApplicationException;
 
 /**
  * Class EventObserver.
@@ -62,10 +64,23 @@ public class EventObserver {
     }
 
     public void afterControllerEvent(@Observes AfterControllerEvent event) {
+        if (eventBean.getBeforeControllerEvent() == null) {
+            throw new WebApplicationException("BeforeController event not fired?");
+        }
         eventBean.setAfterControllerEvent(event);
     }
 
     public void beforeProcessViewEvent(@Observes BeforeProcessViewEvent event) {
+        if (eventBean.getAfterControllerEvent() == null) {
+            throw new WebApplicationException("AfterController event not fired?");
+        }
         eventBean.setBeforeProcessViewEvent(event);
+    }
+
+    public void afterProcessViewEvent(@Observes AfterProcessViewEvent event) {
+        if (eventBean.getBeforeProcessViewEvent() == null) {
+            throw new WebApplicationException("AfterController event not fired?");
+        }
+        // Too late for view to render this event
     }
 }
