@@ -39,9 +39,10 @@
  */
 package org.glassfish.ozark.cdi;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import org.glassfish.ozark.Properties;
+import org.glassfish.ozark.event.ControllerRedirectEventImpl;
+import org.glassfish.ozark.util.PropertyUtils;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
@@ -58,12 +59,20 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.container.ContainerResponseContext;
+import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.UriBuilder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * The ApplicationScoped redirect scope manager.
  *
  * @author Manfred Riem (manfred.riem at oracle.com)
+ * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
 public class RedirectScopeManager {
@@ -91,13 +100,25 @@ public class RedirectScopeManager {
      */
     @Context
     private HttpServletResponse response;
+
+    /**
+     * Application's configuration.
+     */
+    @Context
+    private Configuration config;
     
     /**
      * Stores the MVC context.
      */
     @Inject
     private Mvc mvc;
-    
+
+    /**
+     * Initialize scope manager.
+     */
+    public RedirectScopeManager() {
+    }
+
     /**
      * Destroy the instance.
      *
@@ -108,7 +129,8 @@ public class RedirectScopeManager {
         if (null != scopeId) {
             HttpSession session = request.getSession();
             PassivationCapable pc = (PassivationCapable) contextual;
-            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(scopeId);
+            final String sessionKey = SCOPE_ID + "-" + scopeId;
+            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);
             if (null != scopeMap) {
                 Object instance = scopeMap.get(INSTANCE + pc.getId());
                 CreationalContext<?> creational = (CreationalContext<?>) scopeMap.get(CREATIONAL + pc.getId());
@@ -134,7 +156,8 @@ public class RedirectScopeManager {
         if (null != scopeId) {
             HttpSession session = request.getSession();
             PassivationCapable pc = (PassivationCapable) contextual;
-            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(scopeId);
+            final String sessionKey = SCOPE_ID + "-" + scopeId;
+            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);
             if (null != scopeMap) {
                 result = (T) scopeMap.get(INSTANCE + pc.getId());
             } else {
@@ -164,9 +187,10 @@ public class RedirectScopeManager {
             HttpSession session = request.getSession();
             result = contextual.create(creational);
             PassivationCapable pc = (PassivationCapable) contextual;
-            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(scopeId);
+            final String sessionKey = SCOPE_ID + "-" + scopeId;
+            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);
             if (null != scopeMap) {
-                session.setAttribute(scopeId, scopeMap);
+                session.setAttribute(sessionKey, scopeMap);
                 scopeMap.put(INSTANCE + pc.getId(), result);
                 scopeMap.put(CREATIONAL + pc.getId(), creational);
             }
@@ -176,17 +200,26 @@ public class RedirectScopeManager {
     }
     
     /**
-     * Perform the work we need to do before a controller is called.
+     * Update SCOPE_ID request attribute based on either cookie or URL query param
+     * information received in the request.
      * 
      * @param event the event.
      */
     public void beforeProcessControllerEvent(@Observes BeforeControllerEvent event) {
-        Cookie[] cookies = request.getCookies();
-        if (null != cookies) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals(COOKIE_NAME)) {
-                    request.setAttribute(SCOPE_ID, cookie.getValue());
+        if (usingCookies()) {
+            final Cookie[] cookies = request.getCookies();
+            if (null != cookies) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals(COOKIE_NAME)) {
+                        request.setAttribute(SCOPE_ID, cookie.getValue());
+                        return;     // we're done
+                    }
                 }
+            }
+        } else {
+            final String scopeId = event.getUriInfo().getQueryParameters().getFirst(SCOPE_ID);
+            if (scopeId != null) {
+                request.setAttribute(SCOPE_ID, scopeId);
             }
         }
     }
@@ -200,7 +233,8 @@ public class RedirectScopeManager {
         if (request.getAttribute(SCOPE_ID) != null) {
             String scopeId = (String) request.getAttribute(SCOPE_ID);
             HttpSession session = request.getSession();
-            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(scopeId);
+            final String sessionKey = SCOPE_ID + "-" + scopeId;
+            Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);
             if (null != scopeMap) {
                 scopeMap.entrySet().stream().forEach((entrySet) -> {
                     String key = entrySet.getKey();
@@ -211,23 +245,31 @@ public class RedirectScopeManager {
                     }
                 });
                 scopeMap.clear();
-                session.removeAttribute(scopeId);
+                session.removeAttribute(sessionKey);
             }
         }
     }
 
     /**
-     * Perform the work we need to do at ControllerRedirectEvent time.
+     * Upon detecting a redirect, either add cookie to response or re-write URL of new
+     * location to co-relate next request.
      *
      * @param event the event.
      */
     public void controllerRedirectEvent(@Observes ControllerRedirectEvent event) {
         if (request.getAttribute(SCOPE_ID) != null) {
-            Cookie cookie = new Cookie(COOKIE_NAME, request.getAttribute(SCOPE_ID).toString());
-            cookie.setPath(mvc.getContextPath());
-            cookie.setMaxAge(600);
-            cookie.setHttpOnly(true);
-            response.addCookie(cookie);
+            if (usingCookies()) {
+                Cookie cookie = new Cookie(COOKIE_NAME, request.getAttribute(SCOPE_ID).toString());
+                cookie.setPath(mvc.getContextPath());
+                cookie.setMaxAge(600);
+                cookie.setHttpOnly(true);
+                response.addCookie(cookie);
+            } else {
+                final ContainerResponseContext crc = ((ControllerRedirectEventImpl) event).getContainerResponseContext();
+                final UriBuilder builder = UriBuilder.fromUri(crc.getStringHeaders().getFirst(HttpHeaders.LOCATION));
+                builder.queryParam(SCOPE_ID, request.getAttribute(SCOPE_ID).toString());
+                crc.getHeaders().putSingle(HttpHeaders.LOCATION, builder.build());
+            }
         }
     }
 
@@ -238,14 +280,25 @@ public class RedirectScopeManager {
      */
     private String generateScopeId() {
         HttpSession session = request.getSession();
-        String result = SCOPE_ID + "-" + UUID.randomUUID().toString();
+        String scopeId = UUID.randomUUID().toString();
+        String sessionKey = SCOPE_ID + "-" + scopeId;
         synchronized (this) {
-            while (session.getAttribute(result) != null) {
-                result = SCOPE_ID + "-" + UUID.randomUUID().toString();
+            while (session.getAttribute(sessionKey) != null) {
+                scopeId = UUID.randomUUID().toString();
+                sessionKey = SCOPE_ID + "-" + scopeId;
             }
-            session.setAttribute(result, new HashMap<>());
-            request.setAttribute(SCOPE_ID, result);
+            session.setAttribute(sessionKey, new HashMap<>());
+            request.setAttribute(SCOPE_ID, scopeId);
         }
-        return result;
+        return scopeId;
+    }
+
+    /**
+     * Checks application configuration to see if cookies should be used.
+     *
+     * @return value of property.
+     */
+    private boolean usingCookies() {
+        return PropertyUtils.getProperty(config, Properties.REDIRECT_SCOPE_COOKIES, false);
     }
 }

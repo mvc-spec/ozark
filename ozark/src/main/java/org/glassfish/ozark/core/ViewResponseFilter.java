@@ -62,6 +62,7 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -104,7 +105,6 @@ import static org.glassfish.ozark.util.PathUtils.noStartingSlash;
 public class ViewResponseFilter implements ContainerResponseFilter {
 
     private static final String REDIRECT = "redirect:";
-    private static final String LOCATION_HEADER = "Location";
 
     @Context
     private UriInfo uriInfo;
@@ -178,7 +178,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
             final String uri = uriInfo.getBaseUri() + noStartingSlash(noPrefix(view, REDIRECT));
             if (view.startsWith(REDIRECT)) {
                 responseContext.setStatusInfo(SEE_OTHER);
-                responseContext.getHeaders().putSingle(LOCATION_HEADER, uri);
+                responseContext.getHeaders().putSingle(HttpHeaders.LOCATION, uri);
                 responseContext.setEntity(null);
             }
         }
@@ -191,7 +191,9 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 final ControllerRedirectEventImpl event = new ControllerRedirectEventImpl();
                 event.setUriInfo(uriInfo);
                 event.setResourceInfo(resourceInfo);
-                event.setLocation(URI.create(responseContext.getHeaderString(LOCATION_HEADER)));
+                event.setLocation(URI.create(responseContext.getHeaderString(HttpHeaders.LOCATION)));
+                event.setContainerRequestContext(requestContext);
+                event.setContainerResponseContext(responseContext);
                 dispatcher.fire(event);
             }
         }

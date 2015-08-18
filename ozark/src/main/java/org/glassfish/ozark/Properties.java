@@ -37,74 +37,19 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.event;
-
-import javax.enterprise.context.Dependent;
-import javax.mvc.event.ControllerRedirectEvent;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
+package org.glassfish.ozark;
 
 /**
- * An implementation of {@link javax.mvc.event.ControllerRedirectEvent}.
+ * Interface Properties. Application-level properties used to configure Ozark.
  *
  * @author Santiago Pericas-Geertsen
  */
-@Dependent
-public class ControllerRedirectEventImpl extends MvcEventImpl implements ControllerRedirectEvent {
+public interface Properties {
 
-    private UriInfo uriInfo;
-
-    private ResourceInfo resourceInfo;
-
-    private URI location;
-
-    private ContainerRequestContext requestContext;
-
-    private ContainerResponseContext responseContext;
-
-    @Override
-    public UriInfo getUriInfo() {
-        return uriInfo;
-    }
-
-    public void setUriInfo(UriInfo uriInfo) {
-        this.uriInfo = uriInfo;
-    }
-
-    @Override
-    public ResourceInfo getResourceInfo() {
-        return resourceInfo;
-    }
-
-    public void setResourceInfo(ResourceInfo resourceInfo) {
-        this.resourceInfo = resourceInfo;
-    }
-
-    @Override
-    public URI getLocation() {
-        return location;
-    }
-
-    public void setLocation(URI location) {
-        this.location = location;
-    }
-
-    public ContainerRequestContext getContainerRequestContext() {
-        return requestContext;
-    }
-
-    public void setContainerRequestContext(ContainerRequestContext requestContext) {
-        this.requestContext = requestContext;
-    }
-
-    public ContainerResponseContext getContainerResponseContext() {
-        return responseContext;
-    }
-
-    public void setContainerResponseContext(ContainerResponseContext responseContext) {
-        this.responseContext = responseContext;
-    }
+    /**
+     * Boolean property that when set to {@code true} indicates Ozark to
+     * use cookies instead of the default URL re-write mechanism to implement
+     * redirect scope.
+     */
+    public static final String REDIRECT_SCOPE_COOKIES = "org.glassfish.ozark.redirectScopeCookies";
 }
