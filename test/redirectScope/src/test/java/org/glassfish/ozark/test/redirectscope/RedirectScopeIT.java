@@ -42,10 +42,10 @@ package org.glassfish.ozark.test.redirectscope;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertTrue;
 
 public class RedirectScopeIT {
 
@@ -64,8 +64,16 @@ public class RedirectScopeIT {
     }
 
     @Test
-    public void testRedirectScope() throws Exception {
+    public void testSingleRequest() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "resources/redirect/from");
+        assertTrue(page.asXml().contains("Redirect about to happen"));
+    }
+
+    @Test
+    public void testDoubleRequest() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "resources/redirect/from");
+        assertTrue(page.asXml().contains("Redirect about to happen"));
+        page = webClient.getPage(webUrl + "resources/redirect/from");
         assertTrue(page.asXml().contains("Redirect about to happen"));
     }
 }
