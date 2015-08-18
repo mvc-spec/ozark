@@ -50,6 +50,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.PassivationCapable;
 import javax.inject.Inject;
+import javax.mvc.Mvc;
 import javax.mvc.event.AfterProcessViewEvent;
 import javax.mvc.event.BeforeControllerEvent;
 import javax.mvc.event.ControllerRedirectEvent;
@@ -68,9 +69,10 @@ import javax.ws.rs.core.Context;
 public class RedirectScopeManager {
 
     private static final String PREFIX = "org.glassfish.ozark.redirect.";
-    private static final String SCOPE_ID = PREFIX + "scopeId";
+    private static final String SCOPE_ID = PREFIX + "ScopeId";
     private static final String INSTANCE = "Instance-";
     private static final String CREATIONAL = "Creational-";
+    private static final String COOKIE_NAME = PREFIX + "Cookie";
 
     /**
      * Stores the beanManager.
@@ -89,6 +91,12 @@ public class RedirectScopeManager {
      */
     @Context
     private HttpServletResponse response;
+    
+    /**
+     * Stores the MVC context.
+     */
+    @Inject
+    private Mvc mvc;
     
     /**
      * Destroy the instance.
@@ -129,6 +137,8 @@ public class RedirectScopeManager {
             Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(scopeId);
             if (null != scopeMap) {
                 result = (T) scopeMap.get(INSTANCE + pc.getId());
+            } else {
+                request.setAttribute(SCOPE_ID, null);       // old cookie, force new scope generation
             }
         }
 
@@ -174,13 +184,13 @@ public class RedirectScopeManager {
         Cookie[] cookies = request.getCookies();
         if (null != cookies) {
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("REDIRECT")) {
+                if (cookie.getName().equals(COOKIE_NAME)) {
                     request.setAttribute(SCOPE_ID, cookie.getValue());
                 }
             }
         }
     }
-
+    
     /**
      * Perform the work we need to do at AfterProcessViewEvent time.
      *
@@ -213,8 +223,10 @@ public class RedirectScopeManager {
      */
     public void controllerRedirectEvent(@Observes ControllerRedirectEvent event) {
         if (request.getAttribute(SCOPE_ID) != null) {
-            Cookie cookie = new Cookie("REDIRECT", request.getAttribute(SCOPE_ID).toString());
-            cookie.setPath("/");
+            Cookie cookie = new Cookie(COOKIE_NAME, request.getAttribute(SCOPE_ID).toString());
+            cookie.setPath(mvc.getContextPath());
+            cookie.setMaxAge(600);
+            cookie.setHttpOnly(true);
             response.addCookie(cookie);
         }
     }

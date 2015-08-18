@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,52 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.event;
+package org.glassfish.ozark.test.redirectscope;
 
-import javax.enterprise.context.Dependent;
-import javax.mvc.event.ControllerRedirectEvent;
-import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.UriInfo;
-import java.net.URI;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
+import static org.junit.Assert.assertTrue;
+import org.junit.Before;
+import org.junit.Test;
 
-/**
- * An implementation of {@link javax.mvc.event.ControllerRedirectEvent}.
- *
- * @author Santiago Pericas-Geertsen
- */
-@Dependent
-public class ControllerRedirectEventImpl extends MvcEventImpl implements ControllerRedirectEvent {
 
-    private UriInfo uriInfo;
+public class RedirectScopeIT {
 
-    private ResourceInfo resourceInfo;
+    private String webUrl;
+    private WebClient webClient;
 
-    private URI location;
-
-    @Override
-    public UriInfo getUriInfo() {
-        return uriInfo;
+    @Before
+    public void setUp() {
+        webUrl = System.getProperty("integration.url");
+        webClient = new WebClient();
     }
 
-    public void setUriInfo(UriInfo uriInfo) {
-        this.uriInfo = uriInfo;
+    @After
+    public void tearDown() {
+        webClient.closeAllWindows();
     }
 
-    @Override
-    public ResourceInfo getResourceInfo() {
-        return resourceInfo;
-    }
-
-    public void setResourceInfo(ResourceInfo resourceInfo) {
-        this.resourceInfo = resourceInfo;
-    }
-
-    @Override
-    public URI getLocation() {
-        return location;
-    }
-
-    public void setLocation(URI location) {
-        this.location = location;
+    @Test
+    public void testRedirectScope() throws Exception {
+        HtmlPage page = webClient.getPage(webUrl + "resources/redirect/from");
+        assertTrue(page.asXml().contains("Redirect about to happen"));
     }
 }
