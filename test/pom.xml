@@ -63,6 +63,7 @@
         <module>handlebars</module>
         <module>jade</module>
         <module>jsr223</module>
+        <module>mvc</module>
         <module>mustache</module>
         <module>produces</module>
         <module>redirect</module>
