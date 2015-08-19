@@ -51,5 +51,5 @@ public interface Properties {
      * use cookies instead of the default URL re-write mechanism to implement
      * redirect scope.
      */
-    public static final String REDIRECT_SCOPE_COOKIES = "org.glassfish.ozark.redirectScopeCookies";
+    String REDIRECT_SCOPE_COOKIES = "org.glassfish.ozark.redirectScopeCookies";
 }

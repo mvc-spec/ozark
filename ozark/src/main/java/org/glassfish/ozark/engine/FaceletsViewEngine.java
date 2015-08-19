@@ -40,11 +40,9 @@
 package org.glassfish.ozark.engine;
 
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import java.io.IOException;
 
@@ -58,9 +56,6 @@ import java.io.IOException;
  */
 @Priority(Priorities.DEFAULT)
 public class FaceletsViewEngine extends ServletViewEngine {
-
-    @Inject
-    private ServletContext servletContext;
 
     /**
      * Assumes that any view that ends with {@code .xhtml} is a facelet.

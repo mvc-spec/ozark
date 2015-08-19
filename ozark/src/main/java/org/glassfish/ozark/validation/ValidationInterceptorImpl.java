@@ -47,6 +47,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.security.AccessController;
 
 /**
  * CDI backed interceptor to handle validation issues.
@@ -82,7 +83,9 @@ public class ValidationInterceptorImpl implements ValidationInterceptor {
                 final Field vr = ValidationResultUtils.getValidationResultField(resource);
                 if (vr != null) {
                     try {
-                        vr.setAccessible(true);
+                        AccessController.doPrivileged((java.security.PrivilegedAction<Void>) () -> {
+                            vr.setAccessible(true); return null;
+                        });
                         final ValidationResultImpl value = (ValidationResultImpl) vr.get(resource);
                         value.setViolations(cve.getConstraintViolations());
                     } catch (IllegalAccessException e) {

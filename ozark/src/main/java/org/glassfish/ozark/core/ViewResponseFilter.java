@@ -60,7 +60,6 @@ import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -70,11 +69,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
-import static javax.ws.rs.core.Response.Status.FOUND;
-import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
-import static javax.ws.rs.core.Response.Status.OK;
-import static javax.ws.rs.core.Response.Status.SEE_OTHER;
-import static javax.ws.rs.core.Response.Status.TEMPORARY_REDIRECT;
+import static javax.ws.rs.core.Response.Status.*;
 import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 import static org.glassfish.ozark.util.PathUtils.noPrefix;
@@ -114,9 +109,6 @@ public class ViewResponseFilter implements ContainerResponseFilter {
 
     @Context
     private HttpServletRequest request;
-
-    @Context
-    private Configuration config;
 
     @Inject
     private Event<MvcEvent> dispatcher;

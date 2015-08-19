@@ -56,7 +56,6 @@ import javax.mvc.annotation.Controller;
 import javax.servlet.ServletContext;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.FeatureContext;
@@ -78,9 +77,6 @@ import static org.glassfish.ozark.util.CdiUtils.newBean;
 @ConstrainedTo(RuntimeType.SERVER)
 @Priority(AutoDiscoverable.DEFAULT_PRIORITY)
 public class OzarkFeature implements ForcedAutoDiscoverable {
-
-    @Context
-    private Application application;
 
     @Context
     private ServletContext servletContext;

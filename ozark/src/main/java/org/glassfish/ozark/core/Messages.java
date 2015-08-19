@@ -71,7 +71,6 @@ public class Messages {
      * @return Message or {@code null} if bundle or key not found for any locale.
      */
     public String get(String key, Object... params) {
-        ResourceBundle rb;
         if (request != null) {
             final Enumeration<Locale> locales = request.getLocales();
             while (locales.hasMoreElements()) {

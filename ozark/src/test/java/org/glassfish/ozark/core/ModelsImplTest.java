@@ -39,15 +39,22 @@
  */
 package org.glassfish.ozark.core;
 
-import java.util.HashMap;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.HashMap;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * The JUnit tests for the ModelsImpl class.
  * 
  * @author Manfred Riem (manfred.riem at oracle.com)
  */
+@SuppressWarnings("unchecked")
 public class ModelsImplTest {
     
     /**

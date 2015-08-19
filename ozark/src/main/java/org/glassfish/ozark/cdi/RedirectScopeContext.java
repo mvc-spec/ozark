@@ -39,14 +39,14 @@
  */
 package org.glassfish.ozark.cdi;
 
-import javax.mvc.annotation.RedirectScoped;
-import java.io.Serializable;
-import java.lang.annotation.Annotation;
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.AlterableContext;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.CDI;
+import javax.mvc.annotation.RedirectScoped;
+import java.io.Serializable;
+import java.lang.annotation.Annotation;
 
 /**
  * The CDI context for RedirectScoped beans.
@@ -63,7 +63,7 @@ public class RedirectScopeContext implements AlterableContext, Serializable {
     /**
      * Stores the manager.
      */
-    private RedirectScopeManager manager;
+    private transient RedirectScopeManager manager;
 
     /**
      * Destroy the given contextual.

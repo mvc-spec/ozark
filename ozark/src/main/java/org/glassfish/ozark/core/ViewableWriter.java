@@ -167,6 +167,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             else {
                 throw new ServerErrorException(messages.get("NoViewEngine", viewable), INTERNAL_SERVER_ERROR);
             }
+            return;     // null engine, can't proceed
         }
         
         // Create wrapper for response

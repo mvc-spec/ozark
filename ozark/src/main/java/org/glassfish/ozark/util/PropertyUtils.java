@@ -58,6 +58,7 @@ public final class PropertyUtils {
      * @param <T> type of default and return value.
      * @return property or default value.
      */
+    @SuppressWarnings("unchecked")
     public static <T> T getProperty(Configuration config, String name, T defaultValue) {
         final Object obj = config.getProperty(name);
         return obj != null ? (T) obj : defaultValue;

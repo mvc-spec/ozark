@@ -41,6 +41,8 @@ package org.glassfish.ozark.event;
 
 import javax.enterprise.context.Dependent;
 import javax.mvc.event.MvcEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * An implementation of {@link javax.mvc.event.MvcEvent}.
@@ -50,12 +52,10 @@ import javax.mvc.event.MvcEvent;
 @Dependent
 public class MvcEventImpl implements MvcEvent {
 
-    private static long NEXT_ID = 0L;
-
     private String id;
 
     public MvcEventImpl() {
-        id = Long.toString(++NEXT_ID);
+        id = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
     }
 
     @Override

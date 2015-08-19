@@ -59,7 +59,7 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  * @author Manfred Riem
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("unchecked")
 public class OzarkCdiExtension implements Extension {
 
     private static Set<Class<? extends MvcEvent>> observedEvents;
@@ -108,7 +108,7 @@ public class OzarkCdiExtension implements Extension {
      *
      * @param eventType event type.
      */
-    public static void addObservedEvent(Class<? extends MvcEvent> eventType) {
+    public static synchronized void addObservedEvent(Class<? extends MvcEvent> eventType) {
         if (observedEvents == null) {
             observedEvents = new HashSet<>();
         }
@@ -121,7 +121,7 @@ public class OzarkCdiExtension implements Extension {
      * @param eventType event type.
      * @return outcome of test.
      */
-    public static boolean isEventObserved(Class<? extends MvcEvent> eventType) {
+    public static synchronized boolean isEventObserved(Class<? extends MvcEvent> eventType) {
         return observedEvents == null ? false : observedEvents.contains(eventType);
     }
 }

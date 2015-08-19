@@ -53,6 +53,7 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
+@SuppressWarnings("unchecked")
 public class CdiUtils {
 
     @Inject

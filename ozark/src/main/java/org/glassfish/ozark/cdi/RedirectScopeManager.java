@@ -75,6 +75,7 @@ import java.util.UUID;
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
+@SuppressWarnings("unchecked")
 public class RedirectScopeManager {
 
     private static final String PREFIX = "org.glassfish.ozark.redirect.";
@@ -114,12 +115,6 @@ public class RedirectScopeManager {
     private Mvc mvc;
 
     /**
-     * Initialize scope manager.
-     */
-    public RedirectScopeManager() {
-    }
-
-    /**
      * Destroy the instance.
      *
      * @param contextual the contextual.
@@ -128,6 +123,9 @@ public class RedirectScopeManager {
         String scopeId = (String) request.getAttribute(SCOPE_ID);
         if (null != scopeId) {
             HttpSession session = request.getSession();
+            if (contextual instanceof PassivationCapable == false) {
+                throw new RuntimeException("Unexpected type for contextual");
+            }
             PassivationCapable pc = (PassivationCapable) contextual;
             final String sessionKey = SCOPE_ID + "-" + scopeId;
             Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);
@@ -155,6 +153,9 @@ public class RedirectScopeManager {
         String scopeId = (String) request.getAttribute(SCOPE_ID);
         if (null != scopeId) {
             HttpSession session = request.getSession();
+            if (contextual instanceof PassivationCapable == false) {
+                throw new RuntimeException("Unexpected type for contextual");
+            }
             PassivationCapable pc = (PassivationCapable) contextual;
             final String sessionKey = SCOPE_ID + "-" + scopeId;
             Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);
@@ -186,6 +187,9 @@ public class RedirectScopeManager {
             }
             HttpSession session = request.getSession();
             result = contextual.create(creational);
+            if (contextual instanceof PassivationCapable == false) {
+                throw new RuntimeException("Unexpected type for contextual");
+            }
             PassivationCapable pc = (PassivationCapable) contextual;
             final String sessionKey = SCOPE_ID + "-" + scopeId;
             Map<String, Object> scopeMap = (Map<String, Object>) session.getAttribute(sessionKey);

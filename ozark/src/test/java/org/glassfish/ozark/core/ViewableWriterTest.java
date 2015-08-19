@@ -68,6 +68,7 @@ import static org.junit.Assert.assertTrue;
  * 
  * @author Manfred Riem (manfred.riem at oracle.com)
  */
+@SuppressWarnings("unchecked")
 public class ViewableWriterTest {
     
     /**
