@@ -38,6 +38,7 @@
         <module>asciidoc</module>
         <module>freemarker</module>
         <module>handlebars</module>
+        <module>jade</module>
         <module>jsr223</module>
         <module>mustache</module>
         <module>velocity</module>
