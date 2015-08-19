@@ -42,7 +42,6 @@ package org.glassfish.ozark.core;
 import org.glassfish.ozark.event.AfterControllerEventImpl;
 import org.glassfish.ozark.event.ControllerRedirectEventImpl;
 import org.glassfish.ozark.jersey.VariantSelector;
-import org.glassfish.ozark.util.CdiUtils;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -69,7 +68,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
-import static javax.ws.rs.core.Response.Status.*;
+import static javax.ws.rs.core.Response.Status.FOUND;
+import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
+import static javax.ws.rs.core.Response.Status.OK;
+import static javax.ws.rs.core.Response.Status.SEE_OTHER;
+import static javax.ws.rs.core.Response.Status.TEMPORARY_REDIRECT;
 import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 import static org.glassfish.ozark.util.PathUtils.noPrefix;
@@ -112,9 +115,6 @@ public class ViewResponseFilter implements ContainerResponseFilter {
 
     @Inject
     private Event<MvcEvent> dispatcher;
-
-    @Inject
-    private CdiUtils cdiUtils;
 
     @Inject
     private Messages messages;
