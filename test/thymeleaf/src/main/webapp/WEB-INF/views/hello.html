@@ -1,7 +1,7 @@
 <html>
     <head>
       <title>Hello</title>
-      <!-- link rel="stylesheet" type="text/css" th:href="@{${mvc.contextPath}/ozark.css}"/ -->
+      <link rel="stylesheet" type="text/css" th:href="@{~{cp}/ozark.css(cp=${mvc.contextPath})}" />
     </head>
     <body>
       <h1>Hello <span th:text="${user}"/>!</h1>
