@@ -51,7 +51,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.PassivationCapable;
 import javax.inject.Inject;
-import javax.mvc.Mvc;
+import javax.mvc.MvcContext;
 import javax.mvc.event.AfterProcessViewEvent;
 import javax.mvc.event.BeforeControllerEvent;
 import javax.mvc.event.ControllerRedirectEvent;
@@ -112,7 +112,7 @@ public class RedirectScopeManager {
      * Stores the MVC context.
      */
     @Inject
-    private Mvc mvc;
+    private MvcContext mvc;
 
     /**
      * Destroy the instance.

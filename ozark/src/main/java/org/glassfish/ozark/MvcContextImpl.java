@@ -42,7 +42,7 @@ package org.glassfish.ozark;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mvc.Mvc;
+import javax.mvc.MvcContext;
 import javax.mvc.security.Csrf;
 import javax.mvc.security.Encoders;
 import javax.ws.rs.core.Configuration;
@@ -50,13 +50,13 @@ import javax.ws.rs.core.Configuration;
 import static org.glassfish.ozark.util.PathUtils.normalizePath;
 
 /**
- * Implementation of {@link javax.mvc.Mvc}.
+ * Implementation of {@link javax.mvc.MvcContext}.
  *
  * @author Santiago Pericas-Geertsen
  */
 @Named("mvc")
 @ApplicationScoped
-public class MvcImpl implements Mvc {
+public class MvcContextImpl implements MvcContext {
 
     @Inject
     private Csrf csrf;

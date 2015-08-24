@@ -39,7 +39,7 @@
  */
 package org.glassfish.ozark.servlet;
 
-import org.glassfish.ozark.MvcImpl;
+import org.glassfish.ozark.MvcContextImpl;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
@@ -68,7 +68,7 @@ public class OzarkContainerInitializer implements ServletContainerInitializer {
         if (classes != null && !classes.isEmpty()) {
             final Class<?> appClass = classes.iterator().next();    // must be a singleton
             final BeanManager bm = CDI.current().getBeanManager();
-            final MvcImpl mvc = (MvcImpl) newBean(bm, MvcImpl.class);
+            final MvcContextImpl mvc = (MvcContextImpl) newBean(bm, MvcContextImpl.class);
             final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
             if (ap != null) {
                 mvc.setApplicationPath(ap.value());

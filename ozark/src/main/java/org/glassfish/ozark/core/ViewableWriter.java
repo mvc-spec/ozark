@@ -48,7 +48,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Models;
-import javax.mvc.Mvc;
+import javax.mvc.MvcContext;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
@@ -132,7 +132,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     private Event<MvcEvent> dispatcher;
 
     @Inject
-    private Mvc mvc;
+    private MvcContext mvc;
 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType) {
