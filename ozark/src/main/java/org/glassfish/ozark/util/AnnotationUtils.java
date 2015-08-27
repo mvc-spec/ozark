@@ -117,14 +117,16 @@ public final class AnnotationUtils {
         } else {
             // Search for overridden method in super class
             final Class<?> superClass = method.getDeclaringClass().getSuperclass();
-            try {
-                final Method superMethod = superClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
-                an = getAnnotation(superMethod, annotationType);
-            } catch (NoSuchMethodException e) {
-                // falls through
-            }
-            if (an != null) {
-                return an;
+            if (superClass != null) {
+                try {
+                    final Method superMethod = superClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
+                    an = getAnnotation(superMethod, annotationType);
+                } catch (NoSuchMethodException e) {
+                    // falls through
+                }
+                if (an != null) {
+                    return an;
+                }
             }
 
             // Now search for overridden method in super interfaces
