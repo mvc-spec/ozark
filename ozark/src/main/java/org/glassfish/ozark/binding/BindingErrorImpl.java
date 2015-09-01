@@ -37,27 +37,41 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.validation;
+package org.glassfish.ozark.binding;
 
-import javax.inject.Inject;
-import javax.mvc.binding.BindingResult;
+import javax.mvc.binding.BindingError;
 
 /**
- * Class FormControllerBase. Base class for controllers that inherit a BindingResult
- * property.
+ * Implementation for {@link javax.mvc.binding.BindingError} interface.
  *
  * @author Santiago Pericas-Geertsen
  */
-public class FormControllerBase {
+public class BindingErrorImpl implements BindingError {
 
-    private BindingResult br;
+    private String message;
 
-    public BindingResult getVr() {
-        return br;
+    private String paramName;
+
+    public BindingErrorImpl(String message, String paramName) {
+        this.message = message;
+        this.paramName = paramName;
     }
 
-    @Inject
-    public void setVr(BindingResult br) {
-        this.br = br;
+    @Override
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String getParamName() {
+        return paramName;
+    }
+
+    public void setParamName(String paramName) {
+        this.paramName = paramName;
     }
 }

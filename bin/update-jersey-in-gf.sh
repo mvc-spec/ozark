@@ -1,9 +1,9 @@
 #!/bin/bash
  
-JERSEY_VERSION=2.18-SNAPSHOT
-HK2_VERSION=2.4.0-b10
+JERSEY_VERSION=2.22-SNAPSHOT
+HK2_VERSION=2.4.0-31
 JAVASSIST_VERSION=3.18.1-GA
-JACKSON_VERSION=2.5.2
+JACKSON_VERSION=2.5.4
  
 MODULES_DIR=$GF_HOME/glassfish/modules
 OSGI_CACHE_DIR=$GF_HOME/glassfish/domains/domain1/osgi-cache/felix
@@ -48,7 +48,7 @@ processLocalArtifact() {
 
 # Backup and download new Jersey
  
-processLocalArtifact jersey-gf-cdi.jar $HOME/.m2/repository/org/glassfish/jersey/containers/glassfish/jersey-gf-cdi/${JERSEY_VERSION}/jersey-gf-cdi-${JERSEY_VERSION}.jar
+# processLocalArtifact jersey-gf-cdi.jar $HOME/.m2/repository/org/glassfish/jersey/containers/glassfish/jersey-gf-cdi/${JERSEY_VERSION}/jersey-gf-cdi-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-gf-ejb.jar $HOME/.m2/repository/org/glassfish/jersey/containers/glassfish/jersey-gf-ejb/${JERSEY_VERSION}/jersey-gf-ejb-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-container-grizzly2-http.jar $HOME/.m2/repository/org/glassfish/jersey/containers/jersey-container-grizzly2-http/${JERSEY_VERSION}/jersey-container-grizzly2-http-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-container-servlet-core.jar $HOME/.m2/repository/org/glassfish/jersey/containers/jersey-container-servlet-core/${JERSEY_VERSION}/jersey-container-servlet-core-${JERSEY_VERSION}.jar
@@ -68,26 +68,27 @@ processLocalArtifact jersey-media-multipart.jar $HOME/.m2/repository/org/glassfi
 processLocalArtifact jersey-media-sse.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-sse/${JERSEY_VERSION}/jersey-media-sse-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-guava.jar $HOME/.m2/repository/org/glassfish/jersey/bundles/repackaged/jersey-guava/${JERSEY_VERSION}/jersey-guava-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-cdi1x-transaction.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x-transaction/${JERSEY_VERSION}/jersey-cdi1x-transaction-${JERSEY_VERSION}.jar
+processLocalArtifact jersey-cdi1x-servlet.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x-servlet/${JERSEY_VERSION}/jersey-cdi1x-servlet-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-cdi1x.jar $HOME/.m2/repository/org/glassfish/jersey/ext/cdi/jersey-cdi1x/${JERSEY_VERSION}/jersey-cdi1x-${JERSEY_VERSION}.jar
 processLocalArtifact jersey-media-jaxb.jar $HOME/.m2/repository/org/glassfish/jersey/media/jersey-media-jaxb/${JERSEY_VERSION}/jersey-media-jaxb-${JERSEY_VERSION}.jar
 
 # Backup and download new HK2
  
-processArtifact hk2-api.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-api/${HK2_VERSION}/hk2-api-${HK2_VERSION}.jar
-processArtifact class-model.jar http://central.maven.org/maven2/org/glassfish/hk2/class-model/${HK2_VERSION}/class-model-${HK2_VERSION}.jar
-processArtifact core.jar http://central.maven.org/maven2/org/glassfish/hk2/core/${HK2_VERSION}/core-${HK2_VERSION}.jar
-processArtifact hk2-locator.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-locator/${HK2_VERSION}/hk2-locator-${HK2_VERSION}.jar
-processArtifact hk2-utils.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-utils/${HK2_VERSION}/hk2-utils-${HK2_VERSION}.jar
-processArtifact hk2.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2/${HK2_VERSION}/hk2-${HK2_VERSION}.jar
-processArtifact hk2-runlevel.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-runlevel/${HK2_VERSION}/hk2-runlevel-${HK2_VERSION}.jar
-processArtifact hk2-config.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-config/${HK2_VERSION}/hk2-config-${HK2_VERSION}.jar
-processArtifact osgi-adapter.jar http://central.maven.org/maven2/org/glassfish/hk2/osgi-adapter/${HK2_VERSION}/osgi-adapter-${HK2_VERSION}.jar
+#processArtifact hk2-api.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-api/${HK2_VERSION}/hk2-api-${HK2_VERSION}.jar
+#processArtifact class-model.jar http://central.maven.org/maven2/org/glassfish/hk2/class-model/${HK2_VERSION}/class-model-${HK2_VERSION}.jar
+#processArtifact core.jar http://central.maven.org/maven2/org/glassfish/hk2/core/${HK2_VERSION}/core-${HK2_VERSION}.jar
+#processArtifact hk2-locator.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-locator/${HK2_VERSION}/hk2-locator-${HK2_VERSION}.jar
+#processArtifact hk2-utils.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-utils/${HK2_VERSION}/hk2-utils-${HK2_VERSION}.jar
+#processArtifact hk2.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2/${HK2_VERSION}/hk2-${HK2_VERSION}.jar
+#processArtifact hk2-runlevel.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-runlevel/${HK2_VERSION}/hk2-runlevel-${HK2_VERSION}.jar
+#processArtifact hk2-config.jar http://central.maven.org/maven2/org/glassfish/hk2/hk2-config/${HK2_VERSION}/hk2-config-${HK2_VERSION}.jar
+#processArtifact osgi-adapter.jar http://central.maven.org/maven2/org/glassfish/hk2/osgi-adapter/${HK2_VERSION}/osgi-adapter-${HK2_VERSION}.jar
 
-processArtifact bean-validator-cdi.jar http://central.maven.org/maven2/org/glassfish/hk2/external/bean-validator-cdi/${HK2_VERSION}/bean-validator-cdi-${HK2_VERSION}.jar
-processArtifact bean-validator.jar http://central.maven.org/maven2/org/glassfish/hk2/external/bean-validator/${HK2_VERSION}/bean-validator-${HK2_VERSION}.jar
-processArtifact aopalliance-repackaged.jar http://central.maven.org/maven2/org/glassfish/hk2/external/aopalliance-repackaged/${HK2_VERSION}/aopalliance-repackaged-${HK2_VERSION}.jar
-processArtifact asm-all-repackaged.jar http://central.maven.org/maven2/org/glassfish/hk2/external/asm-all-repackaged/${HK2_VERSION}/asm-all-repackaged-${HK2_VERSION}.jar
-processArtifact javax.inject.jar http://central.maven.org/maven2/org/glassfish/hk2/external/javax.inject/${HK2_VERSION}/javax.inject-${HK2_VERSION}.jar
+#processArtifact bean-validator-cdi.jar http://central.maven.org/maven2/org/glassfish/hk2/external/bean-validator-cdi/${HK2_VERSION}/bean-validator-cdi-${HK2_VERSION}.jar
+#processArtifact bean-validator.jar http://central.maven.org/maven2/org/glassfish/hk2/external/bean-validator/${HK2_VERSION}/bean-validator-${HK2_VERSION}.jar
+#processArtifact aopalliance-repackaged.jar http://central.maven.org/maven2/org/glassfish/hk2/external/aopalliance-repackaged/${HK2_VERSION}/aopalliance-repackaged-${HK2_VERSION}.jar
+#processArtifact asm-all-repackaged.jar http://central.maven.org/maven2/org/glassfish/hk2/external/asm-all-repackaged/${HK2_VERSION}/asm-all-repackaged-${HK2_VERSION}.jar
+#processArtifact javax.inject.jar http://central.maven.org/maven2/org/glassfish/hk2/external/javax.inject/${HK2_VERSION}/javax.inject-${HK2_VERSION}.jar
  
 processArtifact javassist.jar http://repo.maven.apache.org/maven2/org/javassist/javassist/${JAVASSIST_VERSION}/javassist-${JAVASSIST_VERSION}.jar
 

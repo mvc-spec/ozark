@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -37,75 +37,94 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.validation;
+package org.glassfish.ozark.binding;
 
+import org.glassfish.jersey.server.model.Parameter;
 import org.glassfish.jersey.server.spi.ValidationInterceptor;
 import org.glassfish.jersey.server.spi.ValidationInterceptorContext;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.mvc.binding.BindingError;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.security.AccessController;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.glassfish.ozark.binding.BindingResultUtils.getValidInstanceForType;
+import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResultErrors;
+import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResultViolations;
 
 /**
- * CDI backed interceptor to handle validation issues.
+ * CDI backed interceptor to handle validation and binding issues.
  *
  * @author Santiago Pericas-Geertsen
  * @author Jakub Podlesak
  */
 @ApplicationScoped
-public class ValidationInterceptorImpl implements ValidationInterceptor {
+public class BindingInterceptorImpl implements ValidationInterceptor {
 
     @Override
     public void onValidate(ValidationInterceptorContext ctx) throws ValidationException {
+        final Object[] args = ctx.getArgs();
+
+        // Unwrap if necessary
         Object resource = ctx.getResource();
-        if (ValidationResultUtils.isTargetInstanceProxy(resource)) {
-            resource = ValidationResultUtils.getTargetInstance(resource);
+        if (BindingResultUtils.isTargetInstanceProxy(resource)) {
+            resource = BindingResultUtils.getTargetInstance(resource);
             ctx.setResource(resource);
+        }
+
+        // If any of the args is a RuntimeException, collect and report errors
+        final BindingResultImpl bindingResult = getBindingResultInArgs(args);
+        RuntimeException firstException = null;
+        final Set<BindingError> errors = new HashSet<>();
+        final Parameter[] paramsInfo = ctx.getInvocable().getParameters().toArray(new Parameter[0]);
+
+        for (int i = 0; i < args.length; i++) {
+            final Object arg = args[i];
+            if (arg instanceof RuntimeException) {
+                final Parameter paramInfo = paramsInfo[i];
+                final RuntimeException ex = ((RuntimeException) arg);
+                errors.add(new BindingErrorImpl(ex.getCause().toString(), paramInfo.getSourceName()));
+                if (firstException == null) {
+                    firstException = ex;
+                }
+                // Replace parameter with a valid instance or null
+                args[i] = getValidInstanceForType(paramInfo.getRawType());
+            }
+        }
+
+        // Update binding result or re-throw first exception if not present
+        if (errors.size() > 0) {
+            if (!updateBindingResultErrors(resource, errors, bindingResult)) {
+                throw firstException;
+            }
         }
 
         try {
             ctx.proceed();
         } catch (ConstraintViolationException cve) {
-            // First check if a parameter
-            final ValidationResultImpl arg = getValidationResultInArgs(ctx.getArgs());
-            if (arg != null) {
-                arg.setViolations(cve.getConstraintViolations());
-            } else if (ValidationResultUtils.hasValidationResultProperty(resource)) {
-                // Next check if a property
-                final Method validationResultGetter = ValidationResultUtils.getValidationResultGetter(resource);
-                ValidationResultUtils.updateValidationResultProperty(resource, validationResultGetter,
-                        cve.getConstraintViolations());
-            } else {
-                // Then check for a field
-                final Field vr = ValidationResultUtils.getValidationResultField(resource);
-                if (vr != null) {
-                    try {
-                        AccessController.doPrivileged((java.security.PrivilegedAction<Void>) () -> {
-                            vr.setAccessible(true); return null;
-                        });
-                        final ValidationResultImpl value = (ValidationResultImpl) vr.get(resource);
-                        value.setViolations(cve.getConstraintViolations());
-                    } catch (IllegalAccessException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    // Re-throw if everything else failed
-                    throw cve;
-                }
+            // Update binding result or re-throw exception if not present
+            if (!updateBindingResultViolations(resource, cve.getConstraintViolations(), bindingResult)) {
+                throw cve;
             }
         }
     }
 
-    private ValidationResultImpl getValidationResultInArgs(Object[] args) {
+    /**
+     * Finds the first argument of type {@code org.glassfish.ozark.binding.BindingResultImpl}.
+     * Inspects superclasses in case of proxies.
+     *
+     * @param args list of arguments to search.
+     * @return argument found or {@code null}.
+     */
+    private BindingResultImpl getBindingResultInArgs(Object[] args) {
         for (Object a : args) {
             if (a != null) {
                 Class<?> argClass = a.getClass();
                 do {
-                    if (ValidationResultImpl.class.isAssignableFrom(argClass)) {
-                        return (ValidationResultImpl) a;
+                    if (BindingResultImpl.class.isAssignableFrom(argClass)) {
+                        return (BindingResultImpl) a;
                     }
                     argClass = argClass.getSuperclass();
                 } while (argClass != Object.class);

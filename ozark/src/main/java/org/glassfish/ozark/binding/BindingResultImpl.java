@@ -37,34 +37,55 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.validation;
+package org.glassfish.ozark.binding;
 
 import javax.enterprise.context.RequestScoped;
-import javax.mvc.validation.ValidationResult;
+import javax.mvc.binding.BindingError;
+import javax.mvc.binding.BindingResult;
 import javax.validation.ConstraintViolation;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
- * Implementation for {@link javax.mvc.validation.ValidationResult} interface. Defines
- * additional setter method to update constraint violations.
+ * Implementation for {@link javax.mvc.binding.BindingResult} interface.
  *
  * @author Santiago Pericas-Geertsen
  */
 @RequestScoped
-public class ValidationResultImpl implements ValidationResult {
+public class BindingResultImpl implements BindingResult {
+
+    private Set<BindingError> errors = Collections.emptySet();
 
     private Set<ConstraintViolation<?>> violations = Collections.emptySet();
 
     @Override
     public boolean isFailed() {
-        return violations.size() > 0;
+        return violations.size() > 0 || errors.size() > 0;
     }
 
     @Override
-    public int getViolationCount() {
-        return violations.size();
+    public List<String> getAllMessages() {
+        final List<String> result = new ArrayList<>();
+        errors.forEach(error -> result.add(error.getMessage()));
+        violations.forEach(violation -> result.add(violation.getMessage()));
+        return result;
+    }
+
+    @Override
+    public Set<BindingError> getAllBindingErrors() {
+        return errors;
+    }
+
+    @Override
+    public BindingError getBindingError(String param) {
+        for (BindingError error : errors) {
+            if (param.equals(error.getParamName())) {
+                return error;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -82,17 +103,11 @@ public class ValidationResultImpl implements ValidationResult {
         throw new UnsupportedOperationException("Not supported");
     }
 
-    @Override
-    public Iterator<ConstraintViolation<?>> iterator() {
-        return violations.iterator();
-    }
-
-    /**
-     * Updates the set of of constraint violations.
-     *
-     * @param violations new set of constraint violations.
-     */
     public void setViolations(Set<ConstraintViolation<?>> violations) {
         this.violations = violations;
+    }
+
+    public void setErrors(Set<BindingError> errors) {
+        this.errors = errors;
     }
 }

@@ -44,6 +44,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -131,5 +132,14 @@ public class ValidationIT {
             assertTrue(e.getStatusCode() == 400);
             assertTrue(e.getResponse().getContentAsString().contains("<h1>Form Error</h1>"));
         }
+    }
+
+    @Test
+    @Ignore         // Waiting for Jersey 2.22
+    public void testBindingErrorFail() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "resources/form?n=j");
+        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("p").iterator();
+        assertTrue(it.next().asText().contains("Param: n"));
+        assertTrue(it.next().asText().contains("Message: java.lang.NumberFormatException: For input string: \"j\""));
     }
 }

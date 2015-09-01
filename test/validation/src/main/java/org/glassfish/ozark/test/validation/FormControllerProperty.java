@@ -41,7 +41,7 @@ package org.glassfish.ozark.test.validation;
 
 import javax.inject.Inject;
 import javax.mvc.annotation.Controller;
-import javax.mvc.validation.ValidationResult;
+import javax.mvc.binding.BindingResult;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.executable.ExecutableType;
@@ -73,7 +73,7 @@ public class FormControllerProperty extends FormControllerBase {
     @POST
     @ValidateOnExecution(type = ExecutableType.NONE)
     public Response formPost(@Valid @BeanParam FormDataBean form) {
-        final ValidationResult vr = getVr();
+        final BindingResult vr = getVr();
         if (vr.isFailed()) {
             final Set<ConstraintViolation<?>> set = vr.getAllViolations();
             final ConstraintViolation<?> cv = set.iterator().next();

@@ -47,7 +47,7 @@ import org.glassfish.ozark.core.ViewResponseFilter;
 import org.glassfish.ozark.core.ViewableWriter;
 import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
-import org.glassfish.ozark.validation.ValidationInterceptorImpl;
+import org.glassfish.ozark.binding.BindingInterceptorImpl;
 
 import javax.annotation.Priority;
 import javax.enterprise.inject.spi.BeanManager;
@@ -93,7 +93,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(ViewRequestFilter.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
-            context.register(ValidationInterceptorImpl.class);
+            context.register(BindingInterceptorImpl.class);
             context.register(OzarkModelProcessor.class);
             context.register(CsrfValidateInterceptor.class);
             context.register(CsrfProtectFilter.class);

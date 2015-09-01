@@ -19,7 +19,7 @@
         <module>test</module>
     </modules>
     <properties>
-        <jersey.version>2.19</jersey.version>
+        <jersey.version>2.22-SNAPSHOT</jersey.version>
     </properties>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
