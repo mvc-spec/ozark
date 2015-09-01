@@ -89,6 +89,11 @@ public class MvcContextImpl implements MvcContext {
     }
 
     @Override
+    public String getBasePath() {
+        return applicationPath == null ? contextPath : contextPath + applicationPath;
+    }
+
+    @Override
     public Csrf getCsrf() {
         return csrf;
     }
