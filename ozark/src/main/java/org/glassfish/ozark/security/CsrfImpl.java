@@ -45,9 +45,9 @@ import java.io.Serializable;
 import java.util.UUID;
 
 /**
- * CSRF bean in session scope available for injection and in EL via the {@link javax.mvc.Mvc}
- * object as {@code mvc.csrf}. Provides access to the CSRF header name (a constant) and the
- * CSRF token value (one per session).
+ * CSRF bean in session scope available for injection and in EL via the {@link
+ * javax.mvc.MvcContext} object as {@code mvc.csrf}. Provides access to the CSRF
+ * header name (a constant) and the CSRF token value (one per session).
  *
  * @author Santiago Pericas-Geertsen
  */

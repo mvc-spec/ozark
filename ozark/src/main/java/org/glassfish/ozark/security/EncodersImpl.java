@@ -46,7 +46,7 @@ import javax.mvc.security.Encoders;
  * Utility bean that provides encoders to <em>escape</em> code in JavaScript, HTML,
  * CSS, etc. Encoding data that may be mis-interpreted in a client (e.g., a browser)
  * can prevent XSS attacks. Injectable bean that is also accessible in EL via
- * the {@link javax.mvc.Mvc} object as {@code mvc.encoders}.
+ * the {@link javax.mvc.MvcContext} object as {@code mvc.encoders}.
  *
  * @author Santiago Pericas-Geertsen
  */
