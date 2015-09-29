@@ -60,8 +60,7 @@ import java.util.Properties;
  * <code>org.glassfish.ozark.ext.jade</code>. Following precedence is used:
  * <ol>
  * <li>System Properties</li>
- * <li>Properties defined in a file named
- * <code>jade.properties<code> in the classpath.</li>
+ * <li>Properties defined in a file named jade.properties in the classpath.</li>
  * <li>Defaults</li>
  * </ol>
  *
@@ -92,8 +91,6 @@ public class JadeOzarkConfiguration {
      * value should be a fully qualified class name of the filter. Example:      <code>
 	 * org.glassfish.ozark.ext.jade.filter.shiny=com.foo.bar.ShinyFilter
      * </code> Jade4J by default registers following filters: cdata, css, js
-     *
-     * @see https://github.com/neuland/jade4j#filters
      */
     public static final String FILTER_QUALIFIER = "org.glassfish.ozark.ext.jade.filter";
 
@@ -103,8 +100,6 @@ public class JadeOzarkConfiguration {
      * the filter.      <code>
 	 * org.glassfish.ozark.ext.jade.helper.math=com.foo.bar.MathHelper
      * </code>
-     *
-     * @see https://github.com/neuland/jade4j#helpers
      */
     public static final String HELPER_QUALIFIER = "org.glassfish.ozark.ext.jade.helper";
 
