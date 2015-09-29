@@ -315,7 +315,7 @@ public final class VariantSelector {
     /**
      * Get a list of media types that are acceptable for a request.
      *
-     * @param request
+     * @param request the HTTP request.
      * @return a read-only list of requested response media types sorted according
      * to their q-value, with highest preference first.
      */
@@ -336,7 +336,7 @@ public final class VariantSelector {
     /**
      * Get a list of languages that are acceptable for the message.
      *
-     * @param request
+     * @param request the HTTP request.
      * @return a read-only list of acceptable languages sorted according
      * to their q-value, with highest preference first.
      */
@@ -357,7 +357,7 @@ public final class VariantSelector {
     /**
      * Get the list of language tag from the "Accept-Charset" of an HTTP request.
      *
-     * @param request
+     * @param request the HTTP request.
      * @return The list of AcceptableToken. This list
      * is ordered with the highest quality acceptable charset occurring first.
      */
@@ -376,7 +376,7 @@ public final class VariantSelector {
     /**
      * Get the list of language tag from the "Accept-Encoding" of an HTTP request.
      *
-     * @param request
+     * @param request the HTTP request.
      * @return The list of AcceptableToken. This list
      * is ordered with the highest quality acceptable charset occurring first.
      */

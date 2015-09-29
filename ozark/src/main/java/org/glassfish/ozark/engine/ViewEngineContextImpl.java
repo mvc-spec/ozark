@@ -78,7 +78,7 @@ public class ViewEngineContextImpl implements ViewEngineContext {
      * @param response HTTP servlet response.
      * @param uriInfo URI info about the request.
      * @param resourceInfo Resource matched info.
-     * @param configuration
+     * @param configuration the configuration.
      */
     public ViewEngineContextImpl(String view, Models models, HttpServletRequest request, HttpServletResponse response,
                                  UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {

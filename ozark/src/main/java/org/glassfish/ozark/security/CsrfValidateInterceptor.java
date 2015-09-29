@@ -70,11 +70,12 @@ import static org.glassfish.ozark.util.AnnotationUtils.hasAnnotation;
  * an HTTP header, it looks for it as a form parameter in which case the media type must be
  * {@link javax.ws.rs.core.MediaType#APPLICATION_FORM_URLENCODED_TYPE}. If validation
  * fails, a 403 error is returned.
- * <p/>
+ * </p>
+ * 
  * <p>Because this interceptor is bound by name and not globally, it does not check
  * the HTTP method (note that CSRF validation should only apply to non-idempotent
  * requests).</p>
- * <p/>
+ * 
  * <p>Stream buffering is required to restore the entity for the next interceptor.
  * If validation succeeds, it calls the next interceptor in the chain. Default
  * character encoding is utf-8. Even though none of the main browsers send a
