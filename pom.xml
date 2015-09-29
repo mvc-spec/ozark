@@ -3,7 +3,7 @@
     <groupId>org.glassfish.ozark</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-m03-SNAPSHOT</version>
+    <version>1.0.0-m02-SNAPSHOT</version>
     <name>Ozark ${project.version} Parent Project</name>
     <parent>
         <groupId>net.java</groupId>
