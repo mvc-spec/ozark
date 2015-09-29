@@ -71,7 +71,6 @@
         <module>redirectScope2</module>
         <module>requestDispatcher</module>
         <module>returns</module>
-        <module>samples</module>
         <module>thymeleaf</module>
         <module>validation</module>
         <module>velocity</module>
