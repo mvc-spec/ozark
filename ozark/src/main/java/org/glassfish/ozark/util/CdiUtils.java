@@ -76,6 +76,7 @@ public class CdiUtils {
      * Create a new CDI bean given its class and a bean manager. The bean is created
      * in the context defined by the scope annotation on the class.
      *
+     * @param bm The BeanManager.
      * @param clazz CDI class.
      * @param <T>   class parameter.
      * @return newly allocated CDI bean.

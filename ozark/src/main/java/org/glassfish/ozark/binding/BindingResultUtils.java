@@ -102,7 +102,7 @@ public final class BindingResultUtils {
      * @param resource the resource instance.
      * @param errors   set of errors.
      * @param arg argument in invocation or {@code null}.
-     * @returns {@code true} if arg, property or field updated, or {@code false} otherwise.
+     * @return {@code true} if arg, property or field updated, or {@code false} otherwise.
      */
     public static boolean updateBindingResultErrors(Object resource, Set<BindingError> errors,
                                                     BindingResultImpl arg) {
@@ -144,7 +144,7 @@ public final class BindingResultUtils {
      * @param resource   the resource instance.
      * @param violations set of constraint violations.
      * @param arg argument in invocation or {@code null}.
-     * @returns {@code true} if arg, property or field updated, or {@code false} otherwise.
+     * @return {@code true} if arg, property or field updated, or {@code false} otherwise.
      */
     public static boolean updateBindingResultViolations(Object resource, Set<ConstraintViolation<?>> violations,
                                                         BindingResultImpl arg) {

@@ -152,6 +152,7 @@ public final class AnnotationUtils {
      * Determines if an annotation is present on a method by calling
      * {@link #getAnnotation(java.lang.reflect.Method, Class)}.
      *
+     * @param <T> the type.
      * @param method method to start search at..
      * @param annotationType type of annotation to search for.
      * @return outcome of test.

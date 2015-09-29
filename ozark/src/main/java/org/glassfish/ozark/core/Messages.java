@@ -88,6 +88,7 @@ public class Messages {
      * Get a message given its key and a locale.
      *
      * @param key The key to search.
+     * @param locale The locale.
      * @param params Message parameters.
      * @return Formatted message or {@code null} if bundle or key not found.
      */
