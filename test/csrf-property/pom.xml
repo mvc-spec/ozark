@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.glassfish.ozark.test</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m03-SNAPSHOT</version>
+        <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
     <artifactId>csrf-property</artifactId>
     <packaging>war</packaging>
@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
-            <version>1.0.0-m03-SNAPSHOT</version>
+            <version>1.0.0-m02-SNAPSHOT</version>
         </dependency>
     </dependencies>
     <properties>

@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.glassfish.ozark.ext</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m03-SNAPSHOT</version>
+        <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
     <artifactId>ozark-mustache</artifactId>
     <packaging>jar</packaging>
