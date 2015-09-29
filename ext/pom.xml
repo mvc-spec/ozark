@@ -4,11 +4,11 @@
     <parent>
         <groupId>org.glassfish.ozark</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m02</version>
+        <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
     <groupId>org.glassfish.ozark.ext</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.0-m02</version>
+    <version>1.0.0-m03-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ozark ${project.version} Extensions</name>
     <dependencies>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
-            <version>1.0.0-m02</version>
+            <version>1.0.0-m03-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
