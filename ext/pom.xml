@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project 
-    xmlns="http://maven.apache.org/POM/4.0.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.glassfish.ozark</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m02-SNAPSHOT</version>
+        <version>1.0.0-m02</version>
     </parent>
     <groupId>org.glassfish.ozark.ext</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.0-m02-SNAPSHOT</version>
+    <version>1.0.0-m02</version>
     <packaging>pom</packaging>
     <name>Ozark ${project.version} Extensions</name>
     <dependencies>
@@ -24,7 +21,7 @@
         <dependency>
             <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
-            <version>1.0.0-m02-SNAPSHOT</version>
+            <version>1.0.0-m02</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
