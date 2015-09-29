@@ -26,6 +26,6 @@
     </reporting>    
     <scm>
         <connection>scm:git:git://java.net/ozark~sources</connection>
-        <developerConnection>scm:git:ssh://git.java.net/ozark~sources</developerConnection>
+        <developerConnection>scm:git:ssh://mriem@git.java.net/mvc-spec~git</developerConnection>
     </scm>
 </project>
