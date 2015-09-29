@@ -43,7 +43,6 @@ package org.glassfish.ozark.test.jade;
  * A MathHelper (registered via jade.properties)
  *
  * @author Florian Hirsch
- * @see https://github.com/neuland/jade4j#helpers
  */
 public class MathHelper {
 
