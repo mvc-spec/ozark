@@ -70,8 +70,6 @@ public class JadeOzarkConfiguration {
 
     /**
      * One of HTML, XML, XHTML. Default: XHTML
-     *
-     * @see {@link Mode}
      */
     public static final String MODE = "org.glassfish.ozark.ext.jade.mode";
 
