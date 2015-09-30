@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.glassfish.ozark</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m02-SNAPSHOT</version>
+        <version>1.0.0-m02</version>
     </parent>
     <groupId>org.glassfish.ozark.ext</groupId>
     <artifactId>parent</artifactId>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
-            <version>1.0.0-m02-SNAPSHOT</version>
+            <version>1.0.0-m02</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
