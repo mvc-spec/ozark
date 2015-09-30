@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.glassfish.ozark.ext</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m02</version>
+        <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
     <artifactId>ozark-handlebars</artifactId>
     <packaging>jar</packaging>
