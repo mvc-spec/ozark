@@ -5,10 +5,9 @@
     <parent>
         <groupId>org.glassfish.ozark</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m03-SNAPSHOT</version>
+        <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
     <artifactId>ozark</artifactId>
-    <version>1.0.0-m03-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Ozark ${project.version} MVC RI</name>
     <build>

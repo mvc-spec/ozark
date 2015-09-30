@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.glassfish.ozark</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0-m03-SNAPSHOT</version>
+        <version>1.0.0-m02-SNAPSHOT</version>
     </parent>
     <groupId>org.glassfish.ozark.test</groupId>
     <artifactId>parent</artifactId>
@@ -60,14 +60,15 @@
         <module>handlebars</module>
         <module>jade</module>
         <module>jsr223</module>
-        <module>mvc</module>
         <module>mustache</module>
+        <module>mvc</module>
         <module>produces</module>
         <module>redirect</module>
         <module>redirectScope</module>
         <module>redirectScope2</module>
         <module>requestDispatcher</module>
         <module>returns</module>
+        <module>stringtemplate</module>
         <module>thymeleaf</module>
         <module>validation</module>
         <module>velocity</module>
