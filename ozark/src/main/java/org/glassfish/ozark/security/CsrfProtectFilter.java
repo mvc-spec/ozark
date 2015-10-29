@@ -42,6 +42,7 @@ package org.glassfish.ozark.security;
 import javax.annotation.Priority;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import javax.mvc.annotation.Controller;
 import javax.mvc.security.Csrf;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -66,6 +67,7 @@ import java.io.IOException;
  *
  * @author Santiago Pericas-Geertsen
  */
+@Controller
 @Priority(Priorities.HEADER_DECORATOR)
 public class CsrfProtectFilter implements ContainerResponseFilter {
 

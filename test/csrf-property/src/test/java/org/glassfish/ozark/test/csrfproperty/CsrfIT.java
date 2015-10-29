@@ -39,7 +39,11 @@
  */
 package org.glassfish.ozark.test.csrfproperty;
 
-import com.gargoylesoftware.htmlunit.*;
+import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
+import com.gargoylesoftware.htmlunit.HttpMethod;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebRequest;
+import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -52,9 +56,11 @@ import org.junit.Test;
 import javax.ws.rs.core.Response;
 import java.net.URL;
 import java.util.Iterator;
-import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Tests CSRF implementation. Ensures hidden field is returned and that a form submitted
@@ -72,6 +78,9 @@ public class CsrfIT {
     @Before
     public void setUp() {
         webUrl = System.getProperty("integration.url");
+        if (webUrl == null) {
+            webUrl = "http://localhost:8080/test-csrf-property/";
+        }
         webClient = new WebClient();
         webClient.getOptions().setRedirectEnabled(true);        // enable redirect!
     }
@@ -148,6 +157,19 @@ public class CsrfIT {
         req.setHttpMethod(HttpMethod.POST);
         req.setAdditionalHeader(CSRF_HEADER, res.getResponseHeaderValue(CSRF_HEADER));
         res = webClient.loadWebResponse(req);
+        assertEquals(Response.Status.OK.getStatusCode(), res.getStatusCode());
+    }
+
+    /**
+     * Checks that regular JAX-RS resource method is not protected for CSRF.
+     *
+     * @throws Exception an error occurs or validation fails.
+     */
+    @Test
+    public void testJaxrsOk() throws Exception {
+        WebRequest req = new WebRequest(new URL(webUrl + "resources/csrf/jaxrs"));
+        req.setHttpMethod(HttpMethod.POST);
+        WebResponse res = webClient.loadWebResponse(req);
         assertEquals(Response.Status.OK.getStatusCode(), res.getStatusCode());
     }
 }

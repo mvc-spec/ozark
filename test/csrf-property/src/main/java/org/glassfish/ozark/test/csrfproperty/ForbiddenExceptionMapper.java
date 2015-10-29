@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 2015 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014-2015 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -39,34 +39,26 @@
  */
 package org.glassfish.ozark.test.csrfproperty;
 
-import javax.mvc.security.Csrf;
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import javax.inject.Inject;
+import javax.mvc.Models;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 
 /**
- * Class MyApplication.
+ * Class ForbiddenExceptionMapper.
  *
  * @author Santiago Pericas-Geertsen
  */
-@ApplicationPath("resources")
-public class MyApplication extends Application {
+public class ForbiddenExceptionMapper implements ExceptionMapper<ForbiddenException> {
+
+    @Inject
+    private Models models;
 
     @Override
-    public Set<Class<?>> getClasses() {
-        final Set<Class<?>> set = new HashSet<>();
-        set.add(CsrfController.class);
-        set.add(ForbiddenExceptionMapper.class);
-        return set;
-    }
-
-    @Override
-    public Map<String, Object> getProperties() {
-        final Map<String, Object> map = new HashMap<>();
-        map.put(Csrf.CSRF_PROTECTION, Csrf.CsrfOptions.IMPLICIT);
-        return map;
+    public Response toResponse(ForbiddenException exception) {
+        models.put("message", exception.getMessage());
+        return Response.status(Response.Status.FORBIDDEN).type(MediaType.TEXT_HTML_TYPE).entity("error.jsp").build();
     }
 }

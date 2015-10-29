@@ -52,15 +52,16 @@ import javax.ws.rs.Path;
  * @author Santiago Pericas-Geertsen
  */
 @Path("csrf")
-@Controller
 public class CsrfController {
 
     @GET
+    @Controller
     public String getForm() {
         return "csrf.jsp";
     }
 
     @POST
+    @Controller
     public String postForm(@FormParam("greeting") String greeting) {
         return "redirect:/csrf/ok";
     }
@@ -68,6 +69,17 @@ public class CsrfController {
     @GET
     @Path("ok")
     @View("ok.jsp")
+    @Controller
     public void getOk() {
+    }
+
+    /**
+     * JAX-RS resource method that should NOT be protected for CSRF attacks.
+     * Should always be accessible without checking for CSRF token.
+     */
+    @POST
+    @Path("jaxrs")
+    public String postJaxrs(@FormParam("greeting") String greeting) {
+        return "OK";
     }
 }
