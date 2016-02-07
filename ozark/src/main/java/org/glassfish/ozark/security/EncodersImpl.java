@@ -54,6 +54,9 @@ import javax.mvc.security.Encoders;
 public class EncodersImpl implements Encoders {
 
     public String js(String s) {
+        if (s == null) {
+            return null;
+        }
         final int l = s.length();
         final StringBuffer sb = new StringBuffer(l);
         for (int i = 0; i < l; i++) {
@@ -101,6 +104,9 @@ public class EncodersImpl implements Encoders {
     }
 
     public String html(String s) {
+        if (s == null) {
+            return null;
+        }
         final int l = s.length();
         final StringBuffer sb = new StringBuffer(l);
         for (int i = 0; i < l; i++) {

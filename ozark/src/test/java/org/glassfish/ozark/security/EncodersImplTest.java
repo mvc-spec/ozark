@@ -42,6 +42,7 @@ package org.glassfish.ozark.security;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Test for EncodersImpl.
@@ -59,6 +60,7 @@ public class EncodersImplTest {
         assertEquals("\\x00 \\x0f \\x10 \\x1f", encoders.js("\u0000 \u000f \u0010 \u001f"));
         assertEquals("\\tfunction() { return \\x27Hello World\\x27; }",
                      encoders.js("\tfunction() { return 'Hello World'; }"));
+        assertNull(encoders.js(null));
     }
 
     @Test
@@ -66,5 +68,6 @@ public class EncodersImplTest {
         assertEquals("&amp; &lt; &gt; &#39; &#34;", encoders.html("& < > ' \""));
         assertEquals("&lt;html&gt;&lt;div id=&#34;foo&#34;&gt;&amp;&amp;&lt;/div&gt;&lt;/html&gt;",
                      encoders.html("<html><div id=\"foo\">&&</div></html>"));
+        assertNull(encoders.html(null));
     }
 }
