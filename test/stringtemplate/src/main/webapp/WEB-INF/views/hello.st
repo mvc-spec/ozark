@@ -6,7 +6,7 @@ hello(user, mvc) ::= <<
       <link rel="stylesheet" type="text/css" href="$mvc.contextPath$/ozark.css" />
     </head>
     <body>
-      <h1>Hello $user$!</h1>
+      <h1>Hello $user; format="xml-encode"$!</h1>
     </body>
 </html>
 

@@ -89,7 +89,9 @@ public class StringTemplateViewEngine extends ViewEngineBase {
 		if (matcher.find()) {
 			String viewFolder = servletContext.getRealPath(matcher.group(1));
 			String viewName = matcher.group(2);
-			ST template = new STGroupDir(viewFolder, '$', '$').getInstanceOf(viewName);
+			STGroup stGroup = new STGroupDir(viewFolder, '$', '$');
+			stGroup.registerRenderer(String.class, new StringRenderer());
+			ST template = stGroup.getInstanceOf(viewName);
 			if (template != null) return template;
 		}
 		throw new ViewEngineException("Couldn't find view " + resolvedView);

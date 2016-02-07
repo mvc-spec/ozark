@@ -6,6 +6,6 @@
 </head>
 <body>
     <h1>Form Validation</h1>
-    <p>Name: ${data.name}</p>
+    <p>Name: ${mvc.encoders.html(data.name)}</p>
     <p>Age: ${data.age}</p>
 </html>

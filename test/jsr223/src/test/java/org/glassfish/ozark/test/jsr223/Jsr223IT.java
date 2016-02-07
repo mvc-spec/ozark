@@ -71,7 +71,7 @@ public class Jsr223IT {
 
     @Test
     public void testNashorn() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "mvc/nashorn");
+        final HtmlPage page = webClient.getPage(webUrl + "mvc/nashorn?name=Nashorn");
         assertTrue(page.asXml().contains("Hello Nashorn"));
     }
 
