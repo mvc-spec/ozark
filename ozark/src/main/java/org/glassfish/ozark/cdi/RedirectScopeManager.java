@@ -43,6 +43,7 @@ import org.glassfish.ozark.Properties;
 import org.glassfish.ozark.event.ControllerRedirectEventImpl;
 import org.glassfish.ozark.util.PropertyUtils;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
@@ -113,6 +114,19 @@ public class RedirectScopeManager {
      */
     @Inject
     private MvcContext mvc;
+
+    /**
+     * Check that {@literal @}Context injection worked correctly
+     */
+    @PostConstruct
+    public void init() {
+
+        if (config == null || response == null) {
+            throw new IllegalStateException("It looks like @Context injection doesn't work for CDI beans. Please " +
+                "make sure you are using a recent version of Jersey.");
+        }
+
+    }
 
     /**
      * Destroy the instance.
