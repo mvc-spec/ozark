@@ -118,7 +118,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
 
             // Otherwise, it must be a form parameter
             final MediaType contentType = context.getMediaType();
-            if (!contentType.equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+            if (!contentType.isCompatible(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
                 throw new ForbiddenException(messages.get("UnableValidateCsrf", context.getMediaType()));
             }
 
