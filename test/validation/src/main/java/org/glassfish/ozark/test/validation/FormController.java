@@ -82,8 +82,7 @@ public class FormController {
     @ValidateOnExecution(type = ExecutableType.NONE)
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         if (br.isFailed()) {
-            final Set<ConstraintViolation<?>> set = br.getAllViolations();
-            final ConstraintViolation<?> cv = set.iterator().next();
+            final ConstraintViolation<?> cv = br.getAllValidationErrors().iterator().next().getViolation();
             final String property = cv.getPropertyPath().toString();
             error.setProperty(property.substring(property.lastIndexOf('.') + 1));
             error.setValue(cv.getInvalidValue());

@@ -42,11 +42,13 @@ package org.glassfish.ozark.binding;
 import javax.enterprise.context.RequestScoped;
 import javax.mvc.binding.BindingError;
 import javax.mvc.binding.BindingResult;
-import javax.validation.ConstraintViolation;
+import javax.mvc.binding.ValidationError;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Implementation for {@link javax.mvc.binding.BindingResult} interface.
@@ -58,18 +60,18 @@ public class BindingResultImpl implements BindingResult {
 
     private Set<BindingError> errors = Collections.emptySet();
 
-    private Set<ConstraintViolation<?>> violations = Collections.emptySet();
+    private Set<ValidationError> validationErrors = Collections.emptySet();
 
     @Override
     public boolean isFailed() {
-        return violations.size() > 0 || errors.size() > 0;
+        return validationErrors.size() > 0 || errors.size() > 0;
     }
 
     @Override
     public List<String> getAllMessages() {
         final List<String> result = new ArrayList<>();
         errors.forEach(error -> result.add(error.getMessage()));
-        violations.forEach(violation -> result.add(violation.getMessage()));
+        validationErrors.forEach(violation -> result.add(violation.getMessage()));
         return result;
     }
 
@@ -89,22 +91,26 @@ public class BindingResultImpl implements BindingResult {
     }
 
     @Override
-    public Set<ConstraintViolation<?>> getAllViolations() {
-        return violations;
+    public Set<ValidationError> getAllValidationErrors() {
+        return Collections.unmodifiableSet(validationErrors);
     }
 
     @Override
-    public Set<ConstraintViolation<?>> getViolations(String propertyPath) {
-        throw new UnsupportedOperationException("Not supported");
+    public Set<ValidationError> getValidationErrors(String param) {
+        return validationErrors.stream()
+                .filter(ve -> Objects.equals(ve.getParamName(), param))
+                .collect(Collectors.toSet());
     }
 
     @Override
-    public ConstraintViolation<?> getViolation(String propertyPath) {
-        throw new UnsupportedOperationException("Not supported");
+    public ValidationError getValidationError(String param) {
+        return validationErrors.stream()
+                .filter(ve -> Objects.equals(ve.getParamName(), param))
+                .findFirst().orElse(null);
     }
 
-    public void setViolations(Set<ConstraintViolation<?>> violations) {
-        this.violations = violations;
+    public void setValidationErrors(Set<ValidationError> validationErrors) {
+        this.validationErrors = validationErrors;
     }
 
     public void setErrors(Set<BindingError> errors) {
