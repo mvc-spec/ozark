@@ -49,8 +49,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.logging.Logger;
 
 /**
  * Helper class to implement support for {@code javax.mvc.binding.BindingResult}.
@@ -60,6 +61,8 @@ import java.util.stream.Collectors;
  * @author Santiago Pericas-Geertsen
  */
 public final class BindingResultUtils {
+
+    private static final Logger LOG = Logger.getLogger(BindingResultUtils.class.getName());
 
     private static Class<?> TARGET_INSTANCE;
 
@@ -151,10 +154,18 @@ public final class BindingResultUtils {
     public static boolean updateBindingResultViolations(Object resource, Set<ConstraintViolation<?>> violations,
                                                         BindingResultImpl arg) {
 
-        // TODO: We need to get the parameter name here
-        Set<ValidationError> validationErrors = violations.stream()
-                .map(cv -> new ValidationErrorImpl(cv, null))
-                .collect(Collectors.toSet());
+        Set<ValidationError> validationErrors = new LinkedHashSet<>();
+
+        for (ConstraintViolation<?> violation : violations) {
+
+            String paramName = ConstraintViolationUtils.getParamName(violation);
+            if (paramName == null) {
+                LOG.warning("Cannot resolve paramName for violation: " + violation);
+            }
+
+            validationErrors.add(new ValidationErrorImpl(violation, paramName));
+
+        }
 
         // Is it in an argument position
         if (arg != null) {
