@@ -42,22 +42,28 @@ package org.glassfish.ozark.ext.thymeleaf;
 import org.glassfish.ozark.engine.ViewEngineConfig;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
 
 /**
  * Producer for the TemplateEngine used by ThymeleafViewEngine.
  *
  * @author Christian Kaltepoth
+ * @author Eddú Meléndez
  */
 public class DefaultTemplateEngineProducer {
+
+    @Inject
+    private ServletContext servletContext;
 
     @Produces
     @ViewEngineConfig
     public TemplateEngine getTemplateEngine() {
 
-        TemplateResolver resolver = new ServletContextTemplateResolver();
+        ITemplateResolver resolver = new ServletContextTemplateResolver(this.servletContext);
 
         TemplateEngine engine = new TemplateEngine();
         engine.setTemplateResolver(resolver);
