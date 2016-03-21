@@ -46,7 +46,6 @@ import javax.inject.Inject;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.CsrfValid;
 import javax.mvc.security.Csrf;
-import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
@@ -119,7 +118,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
             // Otherwise, it must be a form parameter
             final MediaType contentType = context.getMediaType();
             if (!isSupportedMediaType(contentType)) {
-                throw new ForbiddenException(messages.get("UnableValidateCsrf", context.getMediaType()));
+                throw new CsrfValidationException(messages.get("UnableValidateCsrf", context.getMediaType()));
             }
 
             // Ensure stream can be restored for next interceptor
@@ -147,11 +146,11 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
                         validated = true;
                         break;
                     }
-                    throw new ForbiddenException(messages.get("CsrfFailed", "mismatching tokens"));
+                    throw new CsrfValidationException(messages.get("CsrfFailed", "mismatching tokens"));
                 }
             }
             if (!validated) {
-                throw new ForbiddenException(messages.get("CsrfFailed", "missing field"));
+                throw new CsrfValidationException(messages.get("CsrfFailed", "missing field"));
             }
 
             // Restore stream and proceed
