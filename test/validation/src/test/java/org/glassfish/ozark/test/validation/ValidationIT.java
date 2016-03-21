@@ -98,6 +98,7 @@ public class ValidationIT {
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getStatusCode() == 400);
             assertTrue(e.getResponse().getContentAsString().contains("<h1>Form Error</h1>"));
+            assertTrue(e.getResponse().getContentAsString().contains("<p>Param: age</p>"));
         }
     }
 
@@ -131,6 +132,7 @@ public class ValidationIT {
         } catch (FailingHttpStatusCodeException e) {
             assertTrue(e.getStatusCode() == 400);
             assertTrue(e.getResponse().getContentAsString().contains("<h1>Form Error</h1>"));
+            assertTrue(e.getResponse().getContentAsString().contains("<p>Param: age</p>"));
         }
     }
 

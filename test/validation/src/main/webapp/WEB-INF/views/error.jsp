@@ -7,6 +7,7 @@
 <body>
     <h1>Form Error</h1>
     <p>Property: ${error.property}</p>
+    <p>Param: ${error.param}</p>
     <p>Value: ${error.value}</p>
     <p>Message: ${error.message}</p>
 </html>

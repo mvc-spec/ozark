@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import javax.mvc.annotation.Controller;
 import javax.mvc.binding.BindingError;
 import javax.mvc.binding.BindingResult;
+import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.executable.ExecutableType;
@@ -56,7 +57,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
-import java.util.Set;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -82,11 +82,13 @@ public class FormController {
     @ValidateOnExecution(type = ExecutableType.NONE)
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         if (br.isFailed()) {
-            final ConstraintViolation<?> cv = br.getAllValidationErrors().iterator().next().getViolation();
+            ValidationError validationError = br.getAllValidationErrors().iterator().next();
+            final ConstraintViolation<?> cv = validationError.getViolation();
             final String property = cv.getPropertyPath().toString();
             error.setProperty(property.substring(property.lastIndexOf('.') + 1));
             error.setValue(cv.getInvalidValue());
             error.setMessage(cv.getMessage());
+            error.setParam(validationError.getParamName());
             return Response.status(BAD_REQUEST).entity("error.jsp").build();
         }
         return Response.status(OK).entity("data.jsp").build();

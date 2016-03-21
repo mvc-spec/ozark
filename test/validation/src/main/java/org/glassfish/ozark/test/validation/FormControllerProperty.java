@@ -42,6 +42,7 @@ package org.glassfish.ozark.test.validation;
 import javax.inject.Inject;
 import javax.mvc.annotation.Controller;
 import javax.mvc.binding.BindingResult;
+import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.executable.ExecutableType;
@@ -51,7 +52,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import java.util.Set;
 
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.OK;
@@ -75,11 +75,13 @@ public class FormControllerProperty extends FormControllerBase {
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         final BindingResult vr = getVr();
         if (vr.isFailed()) {
-            final ConstraintViolation<?> cv = vr.getAllValidationErrors().iterator().next().getViolation();
+            ValidationError validationError = vr.getAllValidationErrors().iterator().next();
+            final ConstraintViolation<?> cv = validationError.getViolation();
             final String property = cv.getPropertyPath().toString();
             error.setProperty(property.substring(property.lastIndexOf('.') + 1));
             error.setValue(cv.getInvalidValue());
             error.setMessage(cv.getMessage());
+            error.setParam(validationError.getParamName());
             return Response.status(BAD_REQUEST).entity("error.jsp").build();
         }
         return Response.status(OK).entity("data.jsp").build();
