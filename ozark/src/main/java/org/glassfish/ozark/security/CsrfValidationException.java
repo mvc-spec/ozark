@@ -50,6 +50,8 @@ import javax.ws.rs.core.Response;
  */
 public class CsrfValidationException extends ForbiddenException {
 
+    private static final long serialVersionUID = 303250971213462525L;
+
     public CsrfValidationException(String message) {
         super(message, Response.status(new CsrfValidationStatusType(message)).build());
     }
