@@ -39,70 +39,46 @@
  */
 package org.glassfish.ozark;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.mvc.MvcContext;
-import javax.mvc.security.Csrf;
-import javax.mvc.security.Encoders;
+import org.glassfish.ozark.util.PathUtils;
+
+import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.core.Configuration;
 
-import java.util.Locale;
-
 /**
- * Implementation of {@link javax.mvc.MvcContext}.
- *
- * @author Santiago Pericas-Geertsen
+ * This application scoped class holds all the global configuration like the
+ * context and application path and is used by {@link MvcContextImpl} to expose
+ * this information to the user.
  */
-@Named("mvc")
-@RequestScoped
-public class MvcContextImpl implements MvcContext {
+@ApplicationScoped
+public class MvcAppConfig {
 
-    @Inject
-    private Csrf csrf;
+    private String contextPath;
 
-    @Inject
-    private Encoders encoders;
+    private String applicationPath;
 
-    @Inject
-    private MvcAppConfig appConfig;
+    private Configuration config;
 
-    @Override
     public String getContextPath() {
-        return appConfig.getContextPath();
+        return contextPath;
     }
 
-    @Override
+    public void setContextPath(String contextPath) {
+        this.contextPath = contextPath;     // normalized by servlet
+    }
+
     public String getApplicationPath() {
-        return appConfig.getApplicationPath();
+        return applicationPath;
     }
 
-    @Override
-    public String getBasePath() {
-        if (getApplicationPath() != null) {
-            return getContextPath() + getApplicationPath();
-        }
-        return getContextPath();
+    public void setApplicationPath(String applicationPath) {
+        this.applicationPath = PathUtils.normalizePath(applicationPath);
     }
 
-    @Override
-    public Csrf getCsrf() {
-        return csrf;
-    }
-
-    @Override
-    public Encoders getEncoders() {
-        return encoders;
-    }
-
-    @Override
     public Configuration getConfig() {
-        return appConfig.getConfig();
+        return config;
     }
 
-    @Override
-    public Locale getLocale() {
-        // TODO; Implement later
-        return Locale.ENGLISH;
+    public void setConfig(Configuration config) {
+        this.config = config;
     }
 }
