@@ -37,77 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark;
+package org.glassfish.ozark.locale;
 
-import javax.enterprise.context.RequestScoped;
+import org.glassfish.ozark.MvcContextImpl;
+
+import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.inject.Named;
-import javax.mvc.MvcContext;
-import javax.mvc.security.Csrf;
-import javax.mvc.security.Encoders;
-import javax.ws.rs.core.Configuration;
-
+import javax.ws.rs.Priorities;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.PreMatching;
+import java.io.IOException;
 import java.util.Locale;
 
 /**
- * Implementation of {@link javax.mvc.MvcContext}.
+ * Implementation of {@link ContainerRequestFilter} responsible for the resolving
+ * of the request locale.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@Named("mvc")
-@RequestScoped
-public class MvcContextImpl implements MvcContext {
+@PreMatching
+@Priority(Priorities.AUTHENTICATION)
+public class LocaleRequestFilter implements ContainerRequestFilter {
 
     @Inject
-    private Csrf csrf;
+    private LocaleResolverChain localeResolverChain;
 
     @Inject
-    private Encoders encoders;
-
-    @Inject
-    private MvcAppConfig appConfig;
-
-    private Locale locale;
+    private MvcContextImpl mvc;
 
     @Override
-    public String getContextPath() {
-        return appConfig.getContextPath();
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+
+        // resolve the locale as described in the spec
+        Locale locale = localeResolverChain.resolve();
+
+        // update the MvcContext
+        mvc.setLocale(locale);
+
     }
 
-    @Override
-    public String getApplicationPath() {
-        return appConfig.getApplicationPath();
-    }
-
-    @Override
-    public String getBasePath() {
-        if (getApplicationPath() != null) {
-            return getContextPath() + getApplicationPath();
-        }
-        return getContextPath();
-    }
-
-    @Override
-    public Csrf getCsrf() {
-        return csrf;
-    }
-
-    @Override
-    public Encoders getEncoders() {
-        return encoders;
-    }
-
-    @Override
-    public Configuration getConfig() {
-        return appConfig.getConfig();
-    }
-
-    @Override
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
 }

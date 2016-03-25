@@ -45,6 +45,7 @@ import org.glassfish.ozark.MvcAppConfig;
 import org.glassfish.ozark.core.ViewRequestFilter;
 import org.glassfish.ozark.core.ViewResponseFilter;
 import org.glassfish.ozark.core.ViewableWriter;
+import org.glassfish.ozark.locale.LocaleRequestFilter;
 import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
 import org.glassfish.ozark.binding.BindingInterceptorImpl;
@@ -97,6 +98,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(OzarkModelProcessor.class);
             context.register(CsrfValidateInterceptor.class);
             context.register(CsrfProtectFilter.class);
+            context.register(LocaleRequestFilter.class);
 
             // Initialize application config object in Mvc class
             final BeanManager bm = CDI.current().getBeanManager();

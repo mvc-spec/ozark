@@ -37,77 +37,35 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark;
+package org.glassfish.ozark.locale;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.mvc.MvcContext;
-import javax.mvc.security.Csrf;
-import javax.mvc.security.Encoders;
-import javax.ws.rs.core.Configuration;
-
+import javax.annotation.Priority;
+import javax.enterprise.context.ApplicationScoped;
+import javax.mvc.locale.LocaleResolver;
+import javax.mvc.locale.LocaleResolverContext;
 import java.util.Locale;
 
 /**
- * Implementation of {@link javax.mvc.MvcContext}.
+ * Default implementation of {@link LocaleResolver} as defined in the spec.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@Named("mvc")
-@RequestScoped
-public class MvcContextImpl implements MvcContext {
-
-    @Inject
-    private Csrf csrf;
-
-    @Inject
-    private Encoders encoders;
-
-    @Inject
-    private MvcAppConfig appConfig;
-
-    private Locale locale;
+@ApplicationScoped
+@Priority(0)
+public class DefaultLocaleResolver implements LocaleResolver {
 
     @Override
-    public String getContextPath() {
-        return appConfig.getContextPath();
-    }
+    public Locale resolveLocale(LocaleResolverContext context) {
 
-    @Override
-    public String getApplicationPath() {
-        return appConfig.getApplicationPath();
-    }
-
-    @Override
-    public String getBasePath() {
-        if (getApplicationPath() != null) {
-            return getContextPath() + getApplicationPath();
+        // Get locale from the "Accept-Language" header
+        Locale locale = context.getRequest().getLocale();
+        if (locale != null) {
+            return locale;
         }
-        return getContextPath();
+
+        // Fallback
+        return Locale.ENGLISH;
+
     }
 
-    @Override
-    public Csrf getCsrf() {
-        return csrf;
-    }
-
-    @Override
-    public Encoders getEncoders() {
-        return encoders;
-    }
-
-    @Override
-    public Configuration getConfig() {
-        return appConfig.getConfig();
-    }
-
-    @Override
-    public Locale getLocale() {
-        return locale;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
 }
