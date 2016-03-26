@@ -106,7 +106,7 @@ public class LocaleResolverChain {
             }
         }
 
-        throw new IllegalStateException("Could not resolve with any of the " + candidates.size()
+        throw new IllegalStateException("Could not resolve locale with any of the " + candidates.size()
                 + " resolver implementations");
 
     }
