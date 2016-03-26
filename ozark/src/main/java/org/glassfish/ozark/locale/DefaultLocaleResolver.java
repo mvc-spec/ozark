@@ -57,14 +57,25 @@ public class DefaultLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(LocaleResolverContext context) {
 
-        // Get locale from the "Accept-Language" header
-        Locale locale = context.getRequest().getLocale();
+        /*
+         * We check if there is a "Accept-Language" header sent. If so, we can use
+         * HttpServletRequest#getLocale() to get the locale. We must check for the header
+         * because HttpServletRequest#getLocale() returns the system default locale if
+         * the client didn't send this header.
+         */
+        String header = context.getRequest().getHeader("Accept-Language");
+        if (header != null && header.trim().length() > 0) {
+            return context.getRequest().getLocale();
+        }
+
+        // Lookup application default locale
+        Locale locale = (Locale) context.getConfiguration().getProperty(LocaleResolver.DEFAULT_LOCALE);
         if (locale != null) {
             return locale;
         }
 
-        // Fallback
-        return Locale.ENGLISH;
+        // Fallback to system default locale
+        return Locale.getDefault();
 
     }
 

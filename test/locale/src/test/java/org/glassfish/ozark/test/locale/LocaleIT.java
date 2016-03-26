@@ -53,6 +53,8 @@ import static org.junit.Assert.assertThat;
  */
 public class LocaleIT {
 
+    public static final String ACCEPT_LANGUAGE = "Accept-Language";
+
     private String webUrl;
     private WebClient webClient;
 
@@ -68,12 +70,15 @@ public class LocaleIT {
     }
 
     @Test
-    public void testDefaultLocaleIsEnglish() throws Exception {
+    public void testApplicationDefaultLocale() throws Exception {
 
-        // No "Accept-Language" header -> English as default
+        // Send request with an invalid/missing "Accept-Language" header
+        webClient.addRequestHeader(ACCEPT_LANGUAGE, "");
+
+        // The default resolver returns the application default locale -> fr
         HtmlPage page = webClient.getPage(webUrl + "resources/locale");
         assertThat(page.getWebResponse().getContentAsString(),
-                CoreMatchers.containsString("<p>Locale: en_US</p>"));
+                CoreMatchers.containsString("<p>Locale: fr</p>"));
 
     }
 
