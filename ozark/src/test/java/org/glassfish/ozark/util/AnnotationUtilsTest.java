@@ -66,38 +66,41 @@ import static org.junit.Assert.assertTrue;
 public class AnnotationUtilsTest {
 
 	@Inject
-	private Provider<SomeBean> someBeanProvider;
+	private SomeController someController;
+	
+	@Inject
+	private SomeBean someBean;
 
 	@Test
 	public void getAnnotation() {
-		Path path = AnnotationUtils.getAnnotation(SomeController.class, Path.class);
+		Path path = AnnotationUtils.getAnnotation(someController.getClass(), Path.class);
 		assertThat(path.value(), is("start"));
-		Named named = AnnotationUtils.getAnnotation(SomeBean.class, Named.class);
+		Named named = AnnotationUtils.getAnnotation(someBean.getClass(), Named.class);
 		assertThat(named.value(), is("someBean"));
 	}
 
 	@Test
 	public void hasAnnotation() {
-		assertTrue(AnnotationUtils.hasAnnotation(SomeController.class, Path.class));
-		assertFalse(AnnotationUtils.hasAnnotation(SomeController.class, Named.class));
-		assertTrue(AnnotationUtils.hasAnnotation(SomeBean.class, Named.class));
-		assertFalse(AnnotationUtils.hasAnnotation(SomeBean.class, Path.class));
+		assertTrue(AnnotationUtils.hasAnnotation(someController.getClass(), Path.class));
+		assertFalse(AnnotationUtils.hasAnnotation(someController.getClass(), Named.class));
+		assertTrue(AnnotationUtils.hasAnnotation(someBean.getClass(), Named.class));
+		assertFalse(AnnotationUtils.hasAnnotation(someBean.getClass(), Path.class));
 	}
 
 	@Test
 	public void getAnnotationOnMethod() throws NoSuchMethodException {
-		View view = AnnotationUtils.getAnnotation(SomeController.class.getMethod("start"), View.class);
+		View view = AnnotationUtils.getAnnotation(someController.getClass().getMethod("start"), View.class);
 		assertThat(view.value(), is("start.jsp"));
-		NotNull notNull = AnnotationUtils.getAnnotation(SomeBean.class.getMethod("notNull"), NotNull.class);
+		NotNull notNull = AnnotationUtils.getAnnotation(someBean.getClass().getMethod("notNull"), NotNull.class);
 		assertThat(notNull.message(), is("notNull"));
 	}
 
 	@Test
 	public void hasAnnotationOnMethod() throws NoSuchMethodException {
-		assertTrue(AnnotationUtils.hasAnnotation(SomeController.class.getMethod("start"), View.class));
-		assertFalse(AnnotationUtils.hasAnnotation(SomeController.class.getMethod("start"), NotNull.class));
-		assertTrue(AnnotationUtils.hasAnnotation(SomeBean.class.getMethod("notNull"), NotNull.class));
-		assertFalse(AnnotationUtils.hasAnnotation(SomeBean.class.getMethod("notNull"), View.class));
+		assertTrue(AnnotationUtils.hasAnnotation(someController.getClass().getMethod("start"), View.class));
+		assertFalse(AnnotationUtils.hasAnnotation(someController.getClass().getMethod("start"), NotNull.class));
+		assertTrue(AnnotationUtils.hasAnnotation(someBean.getClass().getMethod("notNull"), NotNull.class));
+		assertFalse(AnnotationUtils.hasAnnotation(someBean.getClass().getMethod("notNull"), View.class));
 	}
 
 	@Controller

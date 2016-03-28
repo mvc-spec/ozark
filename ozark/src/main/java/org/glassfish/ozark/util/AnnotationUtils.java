@@ -65,7 +65,11 @@ public final class AnnotationUtils {
      * @return annotation instance or {@code null} if none found.
      */
     public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationType) {
-        final T an = clazz.getDeclaredAnnotation(annotationType);
+        T an = clazz.getDeclaredAnnotation(annotationType);
+        if (an == null && clazz.getName().endsWith("$$_WeldClientProxy")) {
+            // Weld-specific workaround for dynamic proxies
+            an = clazz.getSuperclass().getDeclaredAnnotation(annotationType);
+        }
         if (an != null) {
             return an;
         }
