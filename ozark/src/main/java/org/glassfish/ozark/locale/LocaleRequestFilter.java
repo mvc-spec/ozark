@@ -57,7 +57,7 @@ import java.util.Locale;
  * @author Christian Kaltepoth
  */
 @PreMatching
-@Priority(Priorities.AUTHENTICATION)
+@Priority(Priorities.HEADER_DECORATOR)
 public class LocaleRequestFilter implements ContainerRequestFilter {
 
     @Inject
