@@ -59,6 +59,7 @@ public class PathUtilsTest {
 		assertThat(PathUtils.noStartingSlash("/foo"), is("foo"));
 		assertThat(PathUtils.noStartingSlash("/foo/"), is("foo/"));
 		assertThat(PathUtils.noStartingSlash("/"), is(""));
+		assertThat(PathUtils.noStartingSlash(""), is(""));
 	}
 
 	@Test
@@ -66,12 +67,14 @@ public class PathUtilsTest {
 		assertTrue(PathUtils.hasStartingSlash("/foo"));
 		assertTrue(PathUtils.hasStartingSlash("/"));
 		assertFalse(PathUtils.hasStartingSlash("foo"));
+		assertFalse(PathUtils.hasStartingSlash(""));
 	}
 
 	@Test
 	public void noPrefix() {
 		assertThat(PathUtils.noPrefix("redirect:foo", "redirect:"), is("foo"));
 		assertThat(PathUtils.noPrefix("foo:bar", "bar"), is("foo:bar"));
+		assertThat(PathUtils.noPrefix("", ""), is(""));
 	}
 
 	@Test
@@ -80,6 +83,7 @@ public class PathUtilsTest {
 		assertThat(PathUtils.ensureStartingSlash("/foo"), is("/foo"));
 		assertThat(PathUtils.ensureStartingSlash("/foo/"), is("/foo/"));
 		assertThat(PathUtils.ensureStartingSlash("/"), is("/"));
+		assertThat(PathUtils.ensureStartingSlash(""), is("/"));
 	}
 
 	@Test
@@ -88,6 +92,7 @@ public class PathUtilsTest {
 		assertThat(PathUtils.ensureEndingSlash("/foo"), is("/foo/"));
 		assertThat(PathUtils.ensureEndingSlash("/foo/"), is("/foo/"));
 		assertThat(PathUtils.ensureStartingSlash("/"), is("/"));
+		assertThat(PathUtils.ensureStartingSlash(""), is("/"));
 	}
 
 	@Test
@@ -95,6 +100,7 @@ public class PathUtilsTest {
 		assertThat(PathUtils.ensureNotEndingSlash("foo/"), is("foo"));
 		assertThat(PathUtils.ensureNotEndingSlash("/foo/"), is("/foo"));
 		assertThat(PathUtils.ensureNotEndingSlash("/"), is(""));
+		assertThat(PathUtils.ensureNotEndingSlash(""), is(""));
 	}
 
 	@Test

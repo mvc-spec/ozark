@@ -39,6 +39,8 @@
  */
 package org.glassfish.ozark.util;
 
+import java.util.Objects;
+
 /**
  * Utility methods for path and URI handling.
  *
@@ -53,6 +55,7 @@ public final class PathUtils {
      * @return the resulting path without a starting slash.
      */
     public static String noStartingSlash(String path) {
+        Objects.requireNonNull(path, "path must not be null");
         return hasStartingSlash(path) ? path.substring(1) : path;
     }
 
@@ -63,7 +66,8 @@ public final class PathUtils {
      * @return outcome of test.
      */
     public static boolean hasStartingSlash(String path) {
-        return path.charAt(0) == '/';
+        Objects.requireNonNull(path, "path must not be null");
+        return !"".equals(path) && path.charAt(0) == '/';
     }
 
     /**
@@ -75,6 +79,8 @@ public final class PathUtils {
      * @return new path without prefix or old path if prefix does not exist.
      */
     public static String noPrefix(String path, String prefix) {
+        Objects.requireNonNull(path, "path must not be null");
+        Objects.requireNonNull(prefix, "prefix must not be null");
         return path.startsWith(prefix) ? path.substring(prefix.length()) : path;
     }
 
@@ -85,7 +91,8 @@ public final class PathUtils {
      * @return path that starts with a slash.
      */
     public static String ensureStartingSlash(String path) {
-        return path.charAt(0) != '/' ? ("/" + path) : path;
+        Objects.requireNonNull(path, "path must not be null");
+        return "".equals(path) || path.charAt(0) != '/' ? ("/" + path) : path;
     }
 
     /**
@@ -95,7 +102,8 @@ public final class PathUtils {
      * @return path that starts with a slash.
      */
     public static String ensureEndingSlash(String path) {
-        return path.charAt(path.length() - 1) != '/' ? (path + "/") : path;
+        Objects.requireNonNull(path, "path must not be null");
+        return "".equals(path) || path.charAt(path.length() - 1) != '/' ? (path + "/") : path;
     }
 
     /**
@@ -106,6 +114,10 @@ public final class PathUtils {
      * @return path not ending with slash or empty string.
      */
     public static String ensureNotEndingSlash(String path) {
+        Objects.requireNonNull(path, "path must not be null");
+        if ("".equals(path)) {
+            return path;
+        }
         final int length = path.length();
         return path.charAt(length - 1) == '/' ? path.substring(0, length - 1) : path;
     }
@@ -119,6 +131,8 @@ public final class PathUtils {
      * @return normalized path.
      */
     public static String normalizePath(String path) {
+        Objects.requireNonNull(path, "path must not be null");
         return (path.isEmpty() || path.equals("/*")) ? "" : ensureNotEndingSlash(ensureStartingSlash(path));
     }
+    
 }
