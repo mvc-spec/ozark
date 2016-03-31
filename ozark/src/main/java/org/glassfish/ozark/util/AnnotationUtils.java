@@ -66,8 +66,7 @@ public final class AnnotationUtils {
      */
     public static <T extends Annotation> T getAnnotation(Class<?> clazz, Class<T> annotationType) {
         T an = clazz.getDeclaredAnnotation(annotationType);
-        if (an == null && clazz.getName().endsWith("$$_WeldClientProxy")) {
-            // Weld-specific workaround for dynamic proxies
+        if (an == null && isProxy(clazz)) {
             an = clazz.getSuperclass().getDeclaredAnnotation(annotationType);
         }
         if (an != null) {
@@ -76,6 +75,21 @@ public final class AnnotationUtils {
         final BeanManager bm = CDI.current().getBeanManager();
         final AnnotatedType<?> type = bm.createAnnotatedType(clazz);
         return type != null ? type.getAnnotation(annotationType) : null;
+    }
+
+    /**
+     * Checks if the supplied type is a proxy. This method works with both
+     * Weld and OpenWebBeans.
+     *
+     * @param clazz Type to check
+     * @return whether the class is a proxy or not
+     */
+    private static boolean isProxy(Class<?> clazz) {
+        Class<?> parent = clazz.getSuperclass();
+        if (parent != null) {
+            return clazz.getName().contains("$$") && clazz.getName().startsWith(parent.getName());
+        }
+        return false;
     }
 
     /**
