@@ -52,6 +52,7 @@ import javax.ws.rs.core.UriInfo;
  * needed for a view engine to process a view.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Ivar Grimstad
  */
 public class ViewEngineContextImpl implements ViewEngineContext {
 
@@ -101,12 +102,10 @@ public class ViewEngineContextImpl implements ViewEngineContext {
         return models;
     }
 
-    @Override
     public HttpServletRequest getRequest() {
         return request;
     }
 
-    @Override
     public HttpServletResponse getResponse() {
         return response;
     }
