@@ -46,7 +46,9 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.locale.LocaleResolver;
+import javax.mvc.locale.LocaleResolverContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import java.lang.annotation.Annotation;
@@ -80,12 +82,10 @@ public class LocaleResolverChain {
                 "Please make sure you are using a recent version of Jersey.");
     }
 
-    public Locale resolve() {
+    public Locale resolve(ContainerRequestContext requestContext) {
 
         // prepare context instance
-        LocaleResolverContextImpl context = new LocaleResolverContextImpl();
-        context.setConfiguration(configuration);
-        context.setRequest(request);
+        LocaleResolverContext context = new LocaleResolverContextImpl(configuration, requestContext);
 
         // candidates as sorted list
         List<LocaleResolver> candidates = StreamSupport.stream(resolvers.spliterator(), false)

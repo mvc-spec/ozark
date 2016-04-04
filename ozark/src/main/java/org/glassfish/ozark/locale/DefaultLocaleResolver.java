@@ -43,7 +43,6 @@ import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.mvc.locale.LocaleResolver;
 import javax.mvc.locale.LocaleResolverContext;
-import javax.ws.rs.core.HttpHeaders;
 import java.util.Locale;
 
 /**
@@ -58,15 +57,13 @@ public class DefaultLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(LocaleResolverContext context) {
 
-        /*
-         * We check if there is a "Accept-Language" header sent. If so, we can use
-         * HttpServletRequest#getLocale() to get the locale. We must check for the header
-         * because HttpServletRequest#getLocale() returns the system default locale if
-         * the client didn't send this header.
-         */
-        String header = context.getRequest().getHeader(HttpHeaders.ACCEPT_LANGUAGE);
-        if (header != null && header.trim().length() > 0) {
-            return context.getRequest().getLocale();
+        // Prefer language from "Accept-Language" header
+        Locale clientLocale = context.getAcceptableLanguages().stream()
+                .filter(l -> !"*".equals(l.getLanguage()))
+                .findFirst()
+                .orElse(null);
+        if (clientLocale != null) {
+            return clientLocale;
         }
 
         // Lookup application default locale

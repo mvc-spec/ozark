@@ -43,6 +43,7 @@ import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.mvc.locale.LocaleResolver;
 import javax.mvc.locale.LocaleResolverContext;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -57,9 +58,9 @@ public class QueryLocaleResolver implements LocaleResolver {
     @Override
     public Locale resolveLocale(LocaleResolverContext context) {
 
-        String lang = context.getRequest().getParameter("lang");
-        if (lang != null) {
-            return new Locale(lang);
+        List<String> lang = context.getUriInfo().getQueryParameters().get("lang");
+        if (lang != null && !lang.isEmpty()) {
+            return new Locale(lang.get(0));
         }
 
         return null;

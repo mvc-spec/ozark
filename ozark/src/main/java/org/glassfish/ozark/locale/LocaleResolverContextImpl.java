@@ -40,8 +40,13 @@
 package org.glassfish.ozark.locale;
 
 import javax.mvc.locale.LocaleResolverContext;
-import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.UriInfo;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Implementation of the {@link LocaleResolverContext} interface.
@@ -50,25 +55,42 @@ import javax.ws.rs.core.Configuration;
  */
 public class LocaleResolverContextImpl implements LocaleResolverContext {
 
-    private HttpServletRequest request;
+    private final Configuration config;
+    private final ContainerRequestContext context;
 
-    private Configuration configuration;
-
-    @Override
-    public HttpServletRequest getRequest() {
-        return request;
-    }
-
-    public void setRequest(HttpServletRequest request) {
-        this.request = request;
+    public LocaleResolverContextImpl(Configuration config, ContainerRequestContext context) {
+        this.config = config;
+        this.context = context;
     }
 
     @Override
     public Configuration getConfiguration() {
-        return configuration;
+        return config;
     }
 
-    public void setConfiguration(Configuration configuration) {
-        this.configuration = configuration;
+    @Override
+    public List<Locale> getAcceptableLanguages() {
+        return context.getAcceptableLanguages();
     }
+
+    @Override
+    public Request getRequest() {
+        return context.getRequest();
+    }
+
+    @Override
+    public UriInfo getUriInfo() {
+        return context.getUriInfo();
+    }
+
+    @Override
+    public Cookie getCookie(String name) {
+        return context.getCookies().get(name);
+    }
+
+    @Override
+    public String getHeaderString(String name) {
+        return context.getHeaderString(name);
+    }
+
 }

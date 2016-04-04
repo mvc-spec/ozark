@@ -70,7 +70,7 @@ public class LocaleRequestFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) throws IOException {
 
         // resolve the locale as described in the spec
-        Locale locale = localeResolverChain.resolve();
+        Locale locale = localeResolverChain.resolve(requestContext);
 
         // update the MvcContext
         mvc.setLocale(locale);
