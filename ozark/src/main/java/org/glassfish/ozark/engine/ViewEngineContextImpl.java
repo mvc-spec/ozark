@@ -39,6 +39,9 @@
  */
 package org.glassfish.ozark.engine;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import javax.mvc.Models;
 import javax.mvc.engine.ViewEngineContext;
 import javax.servlet.http.HttpServletRequest;
@@ -123,5 +126,15 @@ public class ViewEngineContextImpl implements ViewEngineContext {
     @Override
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return response.getOutputStream();
+    }
+
+    @Override
+    public PrintWriter getWriter() throws IOException {
+        return response.getWriter();
     }
 }
