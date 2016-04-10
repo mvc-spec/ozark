@@ -55,6 +55,7 @@ import java.io.Writer;
  * Class MustacheViewEngine.
  *
  * @author Rodrigo Turini
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class MustacheViewEngine extends ViewEngineBase {
@@ -72,7 +73,7 @@ public class MustacheViewEngine extends ViewEngineBase {
     public void processView(ViewEngineContext context) throws ViewEngineException {
         Mustache mustache = factory.compile(resolveView(context));
         try {
-            Writer writer = context.getResponse().getWriter();
+            Writer writer = context.getWriter();
             mustache.execute(writer, context.getModels()).flush();
         } catch (IOException e) {
             throw new ViewEngineException(e);

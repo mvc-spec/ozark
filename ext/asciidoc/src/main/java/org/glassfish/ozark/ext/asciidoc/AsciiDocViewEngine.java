@@ -45,7 +45,6 @@ import org.asciidoctor.Asciidoctor.Factory;
 import org.asciidoctor.Options;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
@@ -55,6 +54,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import javax.inject.Inject;
 
 /**
  * Class AsciiDocViewEngine.
@@ -80,7 +80,7 @@ public class AsciiDocViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        try (PrintWriter writer = context.getResponse().getWriter();
+        try (PrintWriter writer = context.getWriter();
              InputStream is = servletContext.getResourceAsStream(resolveView(context));
              InputStreamReader isr = new InputStreamReader(is, "UTF-8");
              BufferedReader reader = new BufferedReader(isr)) {

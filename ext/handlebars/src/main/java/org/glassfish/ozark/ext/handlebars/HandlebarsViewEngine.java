@@ -57,6 +57,7 @@ import java.util.stream.Collectors;
  * Class HandlebarsViewEngine
  *
  * @author Rahman Usta
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class HandlebarsViewEngine extends ViewEngineBase {
@@ -78,7 +79,7 @@ public class HandlebarsViewEngine extends ViewEngineBase {
         Models models = context.getModels();
         String viewName = context.getView();
 
-        try (PrintWriter writer = context.getResponse().getWriter();
+        try (PrintWriter writer = context.getWriter();
             InputStream resourceAsStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(in);) {

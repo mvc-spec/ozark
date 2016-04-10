@@ -55,6 +55,7 @@ import static java.util.regex.Pattern.compile;
  * Class StringTemplateViewEngine.
  *
  * @author Rodrigo Turini
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class StringTemplateViewEngine extends ViewEngineBase {
@@ -72,7 +73,7 @@ public class StringTemplateViewEngine extends ViewEngineBase {
 		ST stringTemplate = getStringTemplate(resolveView(context));
 		context.getModels().forEach((key, value) -> add(key, value, stringTemplate));
 		try {
-			PrintWriter writer = context.getResponse().getWriter();
+			PrintWriter writer = context.getWriter();
 			stringTemplate.write(new AutoIndentWriter(writer));
 			stringTemplate.render();
 		} catch (Exception e) {
