@@ -57,7 +57,7 @@ import javax.ws.rs.core.UriInfo;
  * @author Santiago Pericas-Geertsen
  * @author Ivar Grimstad
  */
-public class ViewEngineContextImpl implements ViewEngineContext {
+public class OzarkViewEngineContext implements ViewEngineContext {
 
     private final String view;
 
@@ -84,7 +84,7 @@ public class ViewEngineContextImpl implements ViewEngineContext {
      * @param resourceInfo Resource matched info.
      * @param configuration the configuration.
      */
-    public ViewEngineContextImpl(String view, Models models, HttpServletRequest request, HttpServletResponse response,
+    public OzarkViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
                                  UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {
         this.view = view;
         this.models = models;
