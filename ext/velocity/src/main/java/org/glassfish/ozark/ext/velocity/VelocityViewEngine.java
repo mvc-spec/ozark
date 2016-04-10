@@ -55,6 +55,7 @@ import java.io.IOException;
  * Class VelocityViewEngine.
  *
  * @author Rodrigo Turini
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class VelocityViewEngine extends ViewEngineBase {
@@ -73,7 +74,7 @@ public class VelocityViewEngine extends ViewEngineBase {
         try {
             Template template = velocityEngine.getTemplate(resolveView(context));
             VelocityContext velocityContext = new VelocityContext(context.getModels());
-            template.merge(velocityContext, context.getResponse().getWriter());
+            template.merge(velocityContext, context.getWriter());
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }

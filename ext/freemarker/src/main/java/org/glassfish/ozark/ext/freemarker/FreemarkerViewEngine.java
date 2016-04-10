@@ -56,6 +56,7 @@ import java.io.OutputStreamWriter;
  * Class FreemarkerViewEngine.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class FreemarkerViewEngine extends ViewEngineBase {
@@ -74,7 +75,7 @@ public class FreemarkerViewEngine extends ViewEngineBase {
         try {
             final Template template = configuration.getTemplate(resolveView(context));
             template.process(context.getModels(),
-                    new OutputStreamWriter(context.getResponse().getOutputStream()));
+                    new OutputStreamWriter(context.getOutputStream()));
         } catch (TemplateException | IOException e) {
             throw new ViewEngineException(e);
         }

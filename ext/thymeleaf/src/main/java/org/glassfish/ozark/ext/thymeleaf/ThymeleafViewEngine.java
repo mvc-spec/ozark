@@ -49,40 +49,41 @@ import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.glassfish.ozark.engine.OzarkViewEngineContext;
 
 /**
  * Class Thymeleaf ViewEngine.
  *
  * @author Rodrigo Turini
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class ThymeleafViewEngine extends ViewEngineBase {
 
-	@Inject
-	private ServletContext servletContext;
+    @Inject
+    private ServletContext servletContext;
 
-	@Inject
-	@ViewEngineConfig
-	private TemplateEngine engine;
+    @Inject
+    @ViewEngineConfig
+    private TemplateEngine engine;
 
-	@Override
-	public boolean supports(String view) {
-		return view.endsWith(".html");
-	}
+    @Override
+    public boolean supports(String view) {
+        return view.endsWith(".html");
+    }
 
-	@Override
-	public void processView(ViewEngineContext context) throws ViewEngineException {
-		try {
-			HttpServletRequest request = context.getRequest();
-			HttpServletResponse response = context.getResponse();
-			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariables(context.getModels());
-			engine.process(resolveView(context), ctx, response.getWriter());
-		} catch (IOException e) {
-			throw new ViewEngineException(e);
-		}
-	}
+    @Override
+    public void processView(ViewEngineContext context) throws ViewEngineException {
+        try {
+            final OzarkViewEngineContext viewEngineContext = (OzarkViewEngineContext) context;
+            HttpServletResponse response = viewEngineContext.getResponse();
+            WebContext ctx = new WebContext(viewEngineContext.getRequest(), response, servletContext, viewEngineContext.getRequest().getLocale());
+            ctx.setVariables(context.getModels());
+            engine.process(resolveView(context), ctx, response.getWriter());
+        } catch (IOException e) {
+            throw new ViewEngineException(e);
+        }
+    }
 }

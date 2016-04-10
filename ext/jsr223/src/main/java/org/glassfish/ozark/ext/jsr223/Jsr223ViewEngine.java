@@ -44,20 +44,26 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.servlet.ServletContext;
 
 /**
  * The JSR-223 ViewEngine.
  *
  * @author Manfred Riem (manfred.riem@oracle.com)
+ * @author Ivar Grimstad
  */
 @ApplicationScoped
 public class Jsr223ViewEngine extends ViewEngineBase {
+
+    @Inject
+    private ServletContext servletContext;
 
     /**
      * Stores our global ScriptEngineManager.
@@ -74,10 +80,10 @@ public class Jsr223ViewEngine extends ViewEngineBase {
     public boolean supports(String view) {
         return getScriptEngine(view) != null;
     }
-    
+
     /**
      * Get the script engine by extension.
-     * 
+     *
      * @param view the view.
      * @return the script engine, or null if not found.
      */
@@ -101,8 +107,7 @@ public class Jsr223ViewEngine extends ViewEngineBase {
         ScriptEngine scriptEngine = getScriptEngine(context.getView());
         Object responseObject;
         try {
-            InputStream inputStream = context.getRequest()
-                    .getServletContext().getResourceAsStream(resolveView(context));
+            InputStream inputStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader reader = new InputStreamReader(inputStream);
             Bindings bindings = scriptEngine.createBindings();
             bindings.put("models", context.getModels());
@@ -112,7 +117,7 @@ public class Jsr223ViewEngine extends ViewEngineBase {
         }
 
         try {
-            context.getResponse().getWriter().print(responseObject.toString());
+            context.getWriter().print(responseObject.toString());
         } catch (IOException exception) {
             throw new ViewEngineException("Unable to write response", exception);
         }
