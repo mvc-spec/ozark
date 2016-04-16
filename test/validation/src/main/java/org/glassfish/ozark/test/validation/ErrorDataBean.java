@@ -57,6 +57,8 @@ public class ErrorDataBean {
 
     private String message;
 
+    private String param;
+
     public String getProperty() {
         return property;
     }
@@ -79,5 +81,13 @@ public class ErrorDataBean {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getParam() {
+        return param;
+    }
+
+    public void setParam(String param) {
+        this.param = param;
     }
 }

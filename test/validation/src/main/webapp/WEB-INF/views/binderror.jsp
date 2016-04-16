@@ -6,6 +6,7 @@
 </head>
 <body>
     <h1>Binding Error</h1>
-    <p>Param: ${error.property}</p>
+    <p>Property: ${error.property}</p>
+    <p>Param: ${error.param}</p>
     <p>Message: ${error.message}</p>
 </html>

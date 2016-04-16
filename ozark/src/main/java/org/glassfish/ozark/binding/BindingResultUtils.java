@@ -42,13 +42,16 @@ package org.glassfish.ozark.binding;
 import javax.inject.Inject;
 import javax.mvc.binding.BindingError;
 import javax.mvc.binding.BindingResult;
+import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.security.AccessController;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Helper class to implement support for {@code javax.mvc.binding.BindingResult}.
@@ -58,6 +61,8 @@ import java.util.Set;
  * @author Santiago Pericas-Geertsen
  */
 public final class BindingResultUtils {
+
+    private static final Logger LOG = Logger.getLogger(BindingResultUtils.class.getName());
 
     private static Class<?> TARGET_INSTANCE;
 
@@ -148,9 +153,23 @@ public final class BindingResultUtils {
      */
     public static boolean updateBindingResultViolations(Object resource, Set<ConstraintViolation<?>> violations,
                                                         BindingResultImpl arg) {
+
+        Set<ValidationError> validationErrors = new LinkedHashSet<>();
+
+        for (ConstraintViolation<?> violation : violations) {
+
+            String paramName = ConstraintViolationUtils.getParamName(violation);
+            if (paramName == null) {
+                LOG.warning("Cannot resolve paramName for violation: " + violation);
+            }
+
+            validationErrors.add(new ValidationErrorImpl(violation, paramName));
+
+        }
+
         // Is it in an argument position
         if (arg != null) {
-            arg.setViolations(violations);
+            arg.setValidationErrors(validationErrors);
             return true;
         }
 
@@ -158,7 +177,7 @@ public final class BindingResultUtils {
         try {
             if (hasBindingResultProperty(resource)) {
                 final Object obj = getBindingResultGetter(resource).invoke(resource);
-                getSetterMethod(obj, "setViolations").invoke(obj, violations);
+                getSetterMethod(obj, "setValidationErrors").invoke(obj, validationErrors);
             } else {
                 // Then check for a field
                 final Field vr = getBindingResultField(resource);
@@ -168,7 +187,7 @@ public final class BindingResultUtils {
                         return null;
                     });
                     final BindingResultImpl value = (BindingResultImpl) vr.get(resource);
-                    value.setViolations(violations);
+                    value.setValidationErrors(validationErrors);
                 } else {
                     return false;
                 }

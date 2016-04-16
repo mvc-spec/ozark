@@ -37,53 +37,39 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.test.validation;
+package org.glassfish.ozark.binding;
 
-import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
-import javax.mvc.binding.BindingResult;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.executable.ExecutableType;
-import javax.validation.executable.ValidateOnExecution;
-import javax.ws.rs.BeanParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
-import static javax.ws.rs.core.Response.Status.OK;
 
 /**
- * FormController class. Defines ValidationResult as a property inherited
- * from a base class.
+ * Implementation of the {@link ValidationError} interface.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@Controller
-@Path("formprop")
-@Produces("text/html")
-public class FormControllerProperty extends FormControllerBase {
+public class ValidationErrorImpl implements ValidationError {
 
-    @Inject
-    private ErrorDataBean error;
+    private final ConstraintViolation<?> violation;
+    private final String param;
 
-    @POST
-    @ValidateOnExecution(type = ExecutableType.NONE)
-    public Response formPost(@Valid @BeanParam FormDataBean form) {
-        final BindingResult vr = getVr();
-        if (vr.isFailed()) {
-            ValidationError validationError = vr.getAllValidationErrors().iterator().next();
-            final ConstraintViolation<?> cv = validationError.getViolation();
-            final String property = cv.getPropertyPath().toString();
-            error.setProperty(property.substring(property.lastIndexOf('.') + 1));
-            error.setValue(cv.getInvalidValue());
-            error.setMessage(cv.getMessage());
-            error.setParam(validationError.getParamName());
-            return Response.status(BAD_REQUEST).entity("error.jsp").build();
-        }
-        return Response.status(OK).entity("data.jsp").build();
+    public ValidationErrorImpl(ConstraintViolation<?> violation, String param) {
+        this.violation = violation;
+        this.param = param;
     }
+
+    @Override
+    public String getParamName() {
+        return param;
+    }
+
+    @Override
+    public ConstraintViolation<?> getViolation() {
+        return violation;
+    }
+
+    @Override
+    public String getMessage() {
+        return violation.getMessage();
+    }
+
 }
