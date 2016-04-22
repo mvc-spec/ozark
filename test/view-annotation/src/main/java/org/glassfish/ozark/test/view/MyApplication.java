@@ -39,8 +39,6 @@
  */
 package org.glassfish.ozark.test.view;
 
-import org.glassfish.ozark.test.view.HelloController;
-
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.Collections;

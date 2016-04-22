@@ -41,13 +41,9 @@ package org.glassfish.ozark.test.view;
 
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
-import javax.mvc.Viewable;
+import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Response;
-import java.util.Locale;
 
 /**
  * Tests uses of {@code View} annotation with void and non-void methods. If a method
@@ -126,4 +122,45 @@ public class HelloController {
     public String nullControllerClass() {
         return null;
     }
+
+    /**
+     * Void method that throws a ForbiddenException. View 'hello.jsp' should be rendered.
+     */
+    @GET
+    @Path("void/forbidden")
+    @View("hello.jsp")
+    public void voidForbiddenException() {
+        throw new ForbiddenException();
+    }
+
+    /**
+     * Void method that throws a IllegalArgumentException. Error page defined in web.xml should be rendered.
+     */
+    @GET
+    @Path("void/illegal-argument")
+    @View("hello.jsp")
+    public void voidIllegalArgumentException() {
+        throw new IllegalArgumentException("the general error page should be displayed");
+    }
+
+    /**
+     * Method that throws a ForbiddenException. View 'hello.jsp' should be rendered.
+     */
+    @GET
+    @Path("string/forbidden")
+    @View("hello.jsp")
+    public String stringForbiddenException() {
+        throw new ForbiddenException();
+    }
+
+    /**
+     * Method that throws a IllegalArgumentException. Error page defined in web.xml should be rendered.
+     */
+    @GET
+    @Path("string/illegal-argument")
+    @View("hello.jsp")
+    public String stringIllegalArgumentException() {
+        throw new IllegalArgumentException("the general error page should be displayed");
+    }
+
 }
