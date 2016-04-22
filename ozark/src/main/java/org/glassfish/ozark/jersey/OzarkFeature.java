@@ -42,16 +42,20 @@ package org.glassfish.ozark.jersey;
 import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
 import org.glassfish.ozark.MvcContextImpl;
+import org.glassfish.ozark.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.core.ViewRequestFilter;
 import org.glassfish.ozark.core.ViewResponseFilter;
 import org.glassfish.ozark.core.ViewableWriter;
 import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
-import org.glassfish.ozark.binding.BindingInterceptorImpl;
+import org.glassfish.ozark.util.AnnotationUtils;
 
 import javax.annotation.Priority;
+import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
+import javax.faces.bean.ManagedBean;
 import javax.mvc.annotation.Controller;
 import javax.servlet.ServletContext;
 import javax.ws.rs.ConstrainedTo;
@@ -59,7 +63,13 @@ import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.FeatureContext;
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 import static org.glassfish.ozark.util.CdiUtils.newBean;
@@ -78,6 +88,10 @@ import static org.glassfish.ozark.util.CdiUtils.newBean;
 @Priority(AutoDiscoverable.DEFAULT_PRIORITY)
 public class OzarkFeature implements ForcedAutoDiscoverable {
 
+    private static final Logger LOG = Logger.getLogger(OzarkFeature.class.getName());
+
+    private static final List<Class<? extends Annotation>> UNSUPPORTED_TYPES = Arrays.asList(Stateless.class, Stateful.class, ManagedBean.class);
+
     @Context
     private ServletContext servletContext;
 
@@ -87,27 +101,47 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
         if (config.isRegistered(ViewResponseFilter.class)) {
             return;     // already registered!
         }
-        final boolean enableOzark = config.getClasses().stream().anyMatch(this::isController)
-                || config.getInstances().stream().map(o -> o.getClass()).anyMatch(this::isController);
-        if (enableOzark) {
-            context.register(ViewRequestFilter.class);
-            context.register(ViewResponseFilter.class);
-            context.register(ViewableWriter.class);
-            context.register(BindingInterceptorImpl.class);
-            context.register(OzarkModelProcessor.class);
-            context.register(CsrfValidateInterceptor.class);
-            context.register(CsrfProtectFilter.class);
-
-            // Initialize application config object in Mvc class
-            final BeanManager bm = CDI.current().getBeanManager();
-            final MvcContextImpl mvc = (MvcContextImpl) newBean(bm, MvcContextImpl.class);
-            mvc.setConfig(config);
-            mvc.setContextPath(servletContext.getContextPath());
+        Set<Class<?>> controllers = Stream.concat(config.getClasses().stream(), config.getInstances().stream().map(o -> o.getClass()))
+                .filter(this::isController).collect(Collectors.toSet());
+        if (controllers.isEmpty() || hasUnsupportedTypes(controllers)) {
+            return;
         }
+        context.register(ViewRequestFilter.class);
+        context.register(ViewResponseFilter.class);
+        context.register(ViewableWriter.class);
+        context.register(BindingInterceptorImpl.class);
+        context.register(OzarkModelProcessor.class);
+        context.register(CsrfValidateInterceptor.class);
+        context.register(CsrfProtectFilter.class);
+
+        // Initialize application config object in Mvc class
+        final BeanManager bm = CDI.current().getBeanManager();
+        final MvcContextImpl mvc = newBean(bm, MvcContextImpl.class);
+        mvc.setConfig(config);
+        mvc.setContextPath(servletContext.getContextPath());
     }
 
-    private boolean isController(Class<?> c) {
+    boolean isController(Class<?> c) {
         return getAnnotation(c, Controller.class) != null ||
                 Arrays.asList(c.getMethods()).stream().anyMatch(m -> getAnnotation(m, Controller.class) != null);
     }
+
+    /**
+     * <p>MVC classes are required to be CDI-managed beans only.
+     * Managed Beans or EJBs are not allowed (MCV-Spec ch. 2.1.1).</p>
+     */
+    boolean hasUnsupportedTypes(Set<Class<?>> controllers) {
+        Set<Class<?>> unsupportedControllers = controllers.stream()
+                .filter(bean -> UNSUPPORTED_TYPES.stream().anyMatch(type -> AnnotationUtils.hasAnnotation(bean, type)))
+                .collect(Collectors.toSet());
+        if (unsupportedControllers.isEmpty()) {
+            return false;
+        }
+        // Jersey will swallow every Exception so we'll at least log an error.
+        LOG.severe(String.format(
+                "MVC controllers are required to be CDI-managed beans only. EJBs or ManagedBeans are not allowed. Unsupported annotations were found on: %s",
+                unsupportedControllers));
+        return true;
+    }
+
 }
