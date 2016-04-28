@@ -37,42 +37,44 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.servlet;
+package org.glassfish.ozark.locale;
 
-import org.glassfish.ozark.MvcAppConfig;
+import org.glassfish.ozark.MvcContextImpl;
 
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-import javax.ws.rs.ApplicationPath;
-import java.util.Set;
-
-import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
-import static org.glassfish.ozark.util.CdiUtils.newBean;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.ws.rs.Priorities;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.container.PreMatching;
+import java.io.IOException;
+import java.util.Locale;
 
 /**
- * Initializes the Mvc class with the application and context path. Note that the
- * application path is only initialized if there is an application sub-class that
- * is annotated by {@link javax.ws.rs.ApplicationPath}.
+ * Implementation of {@link ContainerRequestFilter} responsible for the resolving
+ * of the request locale.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@HandlesTypes({ ApplicationPath.class })
-public class OzarkContainerInitializer implements ServletContainerInitializer {
+@PreMatching
+@Priority(Priorities.HEADER_DECORATOR)
+public class LocaleRequestFilter implements ContainerRequestFilter {
+
+    @Inject
+    private LocaleResolverChain localeResolverChain;
+
+    @Inject
+    private MvcContextImpl mvc;
 
     @Override
-    public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        if (classes != null && !classes.isEmpty()) {
-            final Class<?> appClass = classes.iterator().next();    // must be a singleton
-            final BeanManager bm = CDI.current().getBeanManager();
-            final MvcAppConfig appConfig = newBean(bm, MvcAppConfig.class);
-            final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
-            if (ap != null) {
-                appConfig.setApplicationPath(ap.value());
-            }
-        }
+    public void filter(ContainerRequestContext requestContext) throws IOException {
+
+        // resolve the locale as described in the spec
+        Locale locale = localeResolverChain.resolve(requestContext);
+
+        // update the MvcContext
+        mvc.setLocale(locale);
+
     }
+
 }

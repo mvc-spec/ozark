@@ -37,42 +37,37 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.servlet;
+package org.glassfish.ozark.test.locale;
 
-import org.glassfish.ozark.MvcAppConfig;
-
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
+import javax.mvc.locale.LocaleResolver;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
-import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
-import static org.glassfish.ozark.util.CdiUtils.newBean;
-
 /**
- * Initializes the Mvc class with the application and context path. Note that the
- * application path is only initialized if there is an application sub-class that
- * is annotated by {@link javax.ws.rs.ApplicationPath}.
+ * Class MyApplication.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@HandlesTypes({ ApplicationPath.class })
-public class OzarkContainerInitializer implements ServletContainerInitializer {
+@ApplicationPath("resources")
+public class MyApplication extends Application {
 
     @Override
-    public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        if (classes != null && !classes.isEmpty()) {
-            final Class<?> appClass = classes.iterator().next();    // must be a singleton
-            final BeanManager bm = CDI.current().getBeanManager();
-            final MvcAppConfig appConfig = newBean(bm, MvcAppConfig.class);
-            final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
-            if (ap != null) {
-                appConfig.setApplicationPath(ap.value());
-            }
-        }
+    public Set<Class<?>> getClasses() {
+        final Set<Class<?>> set = new HashSet<>();
+        set.add(LocaleController.class);
+        return set;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        // Application default locale: fr
+        properties.put(LocaleResolver.DEFAULT_LOCALE, Locale.FRENCH);
+        return properties;
     }
 }

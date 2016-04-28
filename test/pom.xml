@@ -60,6 +60,7 @@
         <module>handlebars</module>
         <module>jade</module>
         <module>jsr223</module>
+        <module>locale</module>
         <module>mustache</module>
         <module>mvc</module>
         <module>produces</module>

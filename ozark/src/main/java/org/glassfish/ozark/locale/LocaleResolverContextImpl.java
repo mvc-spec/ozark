@@ -37,42 +37,60 @@
  * only if the new code is made subject to such option by the copyright
  * holder.
  */
-package org.glassfish.ozark.servlet;
+package org.glassfish.ozark.locale;
 
-import org.glassfish.ozark.MvcAppConfig;
-
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-import javax.ws.rs.ApplicationPath;
-import java.util.Set;
-
-import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
-import static org.glassfish.ozark.util.CdiUtils.newBean;
+import javax.mvc.locale.LocaleResolverContext;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.Cookie;
+import javax.ws.rs.core.Request;
+import javax.ws.rs.core.UriInfo;
+import java.util.List;
+import java.util.Locale;
 
 /**
- * Initializes the Mvc class with the application and context path. Note that the
- * application path is only initialized if there is an application sub-class that
- * is annotated by {@link javax.ws.rs.ApplicationPath}.
+ * Implementation of the {@link LocaleResolverContext} interface.
  *
- * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
-@HandlesTypes({ ApplicationPath.class })
-public class OzarkContainerInitializer implements ServletContainerInitializer {
+public class LocaleResolverContextImpl implements LocaleResolverContext {
+
+    private final Configuration config;
+    private final ContainerRequestContext context;
+
+    public LocaleResolverContextImpl(Configuration config, ContainerRequestContext context) {
+        this.config = config;
+        this.context = context;
+    }
 
     @Override
-    public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        if (classes != null && !classes.isEmpty()) {
-            final Class<?> appClass = classes.iterator().next();    // must be a singleton
-            final BeanManager bm = CDI.current().getBeanManager();
-            final MvcAppConfig appConfig = newBean(bm, MvcAppConfig.class);
-            final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
-            if (ap != null) {
-                appConfig.setApplicationPath(ap.value());
-            }
-        }
+    public Configuration getConfiguration() {
+        return config;
     }
+
+    @Override
+    public List<Locale> getAcceptableLanguages() {
+        return context.getAcceptableLanguages();
+    }
+
+    @Override
+    public Request getRequest() {
+        return context.getRequest();
+    }
+
+    @Override
+    public UriInfo getUriInfo() {
+        return context.getUriInfo();
+    }
+
+    @Override
+    public Cookie getCookie(String name) {
+        return context.getCookies().get(name);
+    }
+
+    @Override
+    public String getHeaderString(String name) {
+        return context.getHeaderString(name);
+    }
+
 }
