@@ -60,6 +60,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.Produces;
@@ -159,7 +160,15 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                     request.getServletContext().getRequestDispatcher(ensureStartingSlash(viewable.getView()));
             if (requestDispatcher != null) {
                 try {
-                    requestDispatcher.forward(request, response);
+                    /*
+                     * The RequestDispatcher contract requires us to pass in the original request/response
+                     * instances or standard wrapper classes. As we get the request/response via injection,
+                     * we end up with proxies, so we must wrap the proxies in wrapper classes.
+                     */
+                    requestDispatcher.forward(
+                            new HttpServletRequestWrapper(request),
+                            new HttpServletResponseWrapper(response)
+                    );
                 } catch (ServletException ex) {
                     throw new ServerErrorException(INTERNAL_SERVER_ERROR, ex);
                 }
