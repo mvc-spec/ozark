@@ -70,6 +70,7 @@ import java.net.URI;
 
 import static javax.ws.rs.core.Response.Status.FOUND;
 import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static javax.ws.rs.core.Response.Status.OK;
 import static javax.ws.rs.core.Response.Status.SEE_OTHER;
 import static javax.ws.rs.core.Response.Status.TEMPORARY_REDIRECT;
@@ -149,7 +150,9 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                     contentType = MediaType.TEXT_HTML_TYPE;     // default
                 }
                 responseContext.setEntity(new Viewable(an.value()), null, contentType);
-                responseContext.setStatusInfo(OK);      // Needed for method returning void
+                // If the entity is null the status will be set to 204 by Jersey. For void methods we need to
+                // set the status to 200 unless no other status was set by e.g. throwing an Exception.
+                responseContext.setStatusInfo(responseContext.getStatusInfo() == NO_CONTENT ? OK : responseContext.getStatusInfo());
             } else if (returnType == Void.class) {
                 throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()),
                     Response.Status.INTERNAL_SERVER_ERROR);
