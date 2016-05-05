@@ -179,7 +179,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     private String toString(ByteArrayInputStream bais, String encoding) throws UnsupportedEncodingException {
         int n = 0;
         final byte[] bb = new byte[bais.available()];
-        while ((n = bais.read(bb, n, bb.length - n)) >= 0) ;
+        while ((n = bais.read(bb, n, bb.length - n)) >= 0); // NOPMD ignore empty while block
         bais.reset();
         return new String(bb, encoding);
     }

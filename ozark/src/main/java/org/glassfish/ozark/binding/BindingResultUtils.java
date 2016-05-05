@@ -342,13 +342,12 @@ public final class BindingResultUtils {
      */
     public static Object getValidInstanceForType(Class<?> type) {
         if (type.isPrimitive()) {
-            Class<?> boxed = null;
             if (type == boolean.class) {
-                return new Boolean(true);
+                return Boolean.TRUE;
             } else if (type == char.class) {
-                return new Character(' ');
+                return Character.valueOf(' ');
             } else if (type == byte.class || type == short.class || type == int.class || type == long.class) {
-                return new Byte((byte) 0);
+                return Byte.valueOf((byte) 0);
             } else if (type == double.class || type == float.class) {
                 return new Float(0.0);
             }

@@ -62,22 +62,15 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 
-import static javax.ws.rs.core.Response.Status.FOUND;
-import static javax.ws.rs.core.Response.Status.MOVED_PERMANENTLY;
-import static javax.ws.rs.core.Response.Status.NO_CONTENT;
-import static javax.ws.rs.core.Response.Status.OK;
-import static javax.ws.rs.core.Response.Status.SEE_OTHER;
-import static javax.ws.rs.core.Response.Status.TEMPORARY_REDIRECT;
+import static javax.ws.rs.core.Response.Status.*;
 import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
-import static org.glassfish.ozark.util.PathUtils.noPrefix;
-import static org.glassfish.ozark.util.PathUtils.noStartingSlash;
+import static org.glassfish.ozark.util.PathUtils.*;
 
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.AfterControllerEvent}
@@ -154,14 +147,12 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 // set the status to 200 unless no other status was set by e.g. throwing an Exception.
                 responseContext.setStatusInfo(responseContext.getStatusInfo() == NO_CONTENT ? OK : responseContext.getStatusInfo());
             } else if (returnType == Void.class) {
-                throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()),
-                    Response.Status.INTERNAL_SERVER_ERROR);
+                throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()), INTERNAL_SERVER_ERROR);
             }
         } else if (entityType != Viewable.class) {
             final String view = entity.toString();
             if (view == null) {
-                throw new ServerErrorException(messages.get("EntityToStringNull", resourceInfo.getResourceMethod()),
-                        Response.Status.INTERNAL_SERVER_ERROR);
+                throw new ServerErrorException(messages.get("EntityToStringNull", resourceInfo.getResourceMethod()), INTERNAL_SERVER_ERROR);
             }
             responseContext.setEntity(new Viewable(view), null, responseContext.getMediaType());
         }
