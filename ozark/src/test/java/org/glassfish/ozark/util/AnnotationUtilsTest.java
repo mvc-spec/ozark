@@ -39,14 +39,13 @@
  */
 package org.glassfish.ozark.util;
 
-import org.jglue.cdiunit.CdiRunner;
+import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
 import javax.validation.constraints.NotNull;
@@ -62,7 +61,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author Florian Hirsch
  */
-@RunWith(CdiRunner.class)
+@RunWith(CdiTestRunner.class)
 public class AnnotationUtilsTest {
 
 	@Inject
