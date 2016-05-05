@@ -43,6 +43,8 @@ import org.easymock.EasyMock;
 import org.glassfish.ozark.engine.ViewEngineFinder;
 import org.junit.Test;
 
+import javax.enterprise.event.Event;
+import javax.mvc.event.MvcEvent;
 import javax.ws.rs.core.Configuration;
 import javax.mvc.Viewable;
 import javax.mvc.engine.ViewEngine;
@@ -108,6 +110,11 @@ public class ViewableWriterTest {
         Field requestField = writer.getClass().getDeclaredField("request");
         requestField.setAccessible(true);
         requestField.set(writer, request);
+
+        Event<MvcEvent> dispatcher = EasyMock.createStrictMock(Event.class);
+        Field dispatcherField = writer.getClass().getDeclaredField("dispatcher");
+        dispatcherField.setAccessible(true);
+        dispatcherField.set(writer, dispatcher);
         
         ViewEngine viewEngine = EasyMock.createStrictMock(ViewEngine.class);
         
@@ -131,7 +138,7 @@ public class ViewableWriterTest {
 
         expect(finder.find(anyObject())).andReturn(viewEngine);
         viewEngine.processView((ViewEngineContext) anyObject());
-        
+
         replay(finder, request, viewEngine, response);
         writer.writeTo(viewable, null, null, new Annotation[] {}, MediaType.WILDCARD_TYPE, map, null);
         verify(finder, request, viewEngine, response);
