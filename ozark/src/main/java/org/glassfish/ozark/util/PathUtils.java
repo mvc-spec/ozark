@@ -132,7 +132,7 @@ public final class PathUtils {
      */
     public static String normalizePath(String path) {
         Objects.requireNonNull(path, "path must not be null");
-        return (path.isEmpty() || path.equals("/*")) ? "" : ensureNotEndingSlash(ensureStartingSlash(path));
+        return path.isEmpty() || path.equals("/*") ? "" : ensureNotEndingSlash(ensureStartingSlash(path));
     }
     
 }

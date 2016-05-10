@@ -139,7 +139,7 @@ public final class AnnotationUtils {
                 try {
                     final Method superMethod = superClass.getDeclaredMethod(method.getName(), method.getParameterTypes());
                     an = getAnnotation(superMethod, annotationType);
-                } catch (NoSuchMethodException e) {
+                } catch (NoSuchMethodException e) { // NOPMD ignore empty catch block
                     // falls through
                 }
                 if (an != null) {
@@ -153,7 +153,7 @@ public final class AnnotationUtils {
                 try {
                     final Method superMethod = in.getDeclaredMethod(method.getName(), method.getParameterTypes());
                     an = getAnnotation(superMethod, annotationType);
-                } catch (NoSuchMethodException e) {
+                } catch (NoSuchMethodException e) { // NOPMD ignore empty catch block
                     // falls through
                 }
                 if (an != null) {

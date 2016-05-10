@@ -47,7 +47,6 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.locale.LocaleResolver;
 import javax.mvc.locale.LocaleResolverContext;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
@@ -69,9 +68,6 @@ public class LocaleResolverChain {
     @Inject
     @Any
     private Instance<LocaleResolver> resolvers;
-
-    @Inject
-    private HttpServletRequest request;
 
     @Context
     private Configuration configuration;

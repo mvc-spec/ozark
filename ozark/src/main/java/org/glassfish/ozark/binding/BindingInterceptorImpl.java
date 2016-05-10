@@ -95,10 +95,8 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
         }
 
         // Update binding result or re-throw first exception if not present
-        if (errors.size() > 0) {
-            if (!updateBindingResultErrors(resource, errors, bindingResult)) {
-                throw firstException;
-            }
+        if (errors.size() > 0 && !updateBindingResultErrors(resource, errors, bindingResult)) {
+            throw firstException;
         }
 
         try {
