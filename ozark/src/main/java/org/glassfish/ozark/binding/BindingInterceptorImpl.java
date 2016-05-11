@@ -44,11 +44,17 @@ import org.glassfish.jersey.server.spi.ValidationInterceptor;
 import org.glassfish.jersey.server.spi.ValidationInterceptorContext;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.mvc.MvcContext;
 import javax.mvc.binding.BindingError;
+import javax.mvc.binding.ValidationError;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import static org.glassfish.ozark.binding.BindingResultUtils.getValidInstanceForType;
 import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResultErrors;
@@ -62,6 +68,14 @@ import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResult
  */
 @ApplicationScoped
 public class BindingInterceptorImpl implements ValidationInterceptor {
+
+    private static final Logger LOG = Logger.getLogger(BindingInterceptorImpl.class.getName());
+
+    @Inject
+    private ConstraintViolationTranslator violationTranslator;
+
+    @Inject
+    private MvcContext mvcContext;
 
     @Override
     public void onValidate(ValidationInterceptorContext ctx) throws ValidationException {
@@ -103,10 +117,37 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
             ctx.proceed();
         } catch (ConstraintViolationException cve) {
             // Update binding result or re-throw exception if not present
-            if (!updateBindingResultViolations(resource, cve.getConstraintViolations(), bindingResult)) {
+            if (!updateBindingResultViolations(resource, buildViolationErrors(cve), bindingResult)) {
                 throw cve;
             }
         }
+    }
+
+    /**
+     * Creates a set of violation errors from a {@link ConstraintViolationException}.
+     *
+     * @param cve the exception containing the violations
+     * @return the set of validation errors
+     */
+    private Set<ValidationError> buildViolationErrors(ConstraintViolationException cve) {
+
+        Set<ValidationError> validationErrors = new LinkedHashSet<>();
+
+        for (ConstraintViolation<?> violation : cve.getConstraintViolations()) {
+
+            String paramName = ConstraintViolationUtils.getParamName(violation);
+            if (paramName == null) {
+                LOG.warning("Cannot resolve paramName for violation: " + violation);
+            }
+
+            String message = violationTranslator.translate(violation, mvcContext.getLocale());
+
+            validationErrors.add(new ValidationErrorImpl(violation, paramName, message));
+
+        }
+
+        return validationErrors;
+
     }
 
     /**

@@ -51,10 +51,12 @@ public class ValidationErrorImpl implements ValidationError {
 
     private final ConstraintViolation<?> violation;
     private final String param;
+    private final String message;
 
-    public ValidationErrorImpl(ConstraintViolation<?> violation, String param) {
+    public ValidationErrorImpl(ConstraintViolation<?> violation, String param, String message) {
         this.violation = violation;
         this.param = param;
+        this.message = message;
     }
 
     @Override
@@ -69,7 +71,7 @@ public class ValidationErrorImpl implements ValidationError {
 
     @Override
     public String getMessage() {
-        return violation.getMessage();
+        return message;
     }
 
 }
