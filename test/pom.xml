@@ -72,6 +72,7 @@
         <module>stringtemplate</module>
         <module>thymeleaf</module>
         <module>validation</module>
+        <module>validation-i18n</module>
         <module>velocity</module>
         <module>view-annotation</module>
     </modules>
