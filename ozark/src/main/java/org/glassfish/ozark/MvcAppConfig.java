@@ -39,10 +39,15 @@
  */
 package org.glassfish.ozark;
 
+import org.glassfish.ozark.servlet.OzarkContainerInitializer;
 import org.glassfish.ozark.util.PathUtils;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.ws.rs.core.Configuration;
+import java.util.logging.Logger;
 
 /**
  * This application scoped class holds all the global configuration like the
@@ -52,12 +57,30 @@ import javax.ws.rs.core.Configuration;
 @ApplicationScoped
 public class MvcAppConfig {
 
+    private static final Logger log = Logger.getLogger(MvcAppConfig.class.getName());
+
     private String contextPath;
 
     private String applicationPath;
 
     private Configuration config;
 
+    @Inject
+    private ServletContext servletContext;
+
+    @PostConstruct
+    public void init() {
+
+        Object appPath = servletContext.getAttribute(OzarkContainerInitializer.APP_PATH_CONTEXT_KEY);
+        if (appPath != null) {
+            this.applicationPath = PathUtils.normalizePath(appPath.toString());
+        } else {
+            log.warning("Unable to detect application path. " +
+                    "This means that ${mvc.applicationPath} and ${mvc.basePath} will not work correctly");
+        }
+
+    }
+    
     public String getContextPath() {
         return contextPath;
     }
@@ -68,10 +91,6 @@ public class MvcAppConfig {
 
     public String getApplicationPath() {
         return applicationPath;
-    }
-
-    public void setApplicationPath(String applicationPath) {
-        this.applicationPath = PathUtils.normalizePath(applicationPath);
     }
 
     public Configuration getConfig() {

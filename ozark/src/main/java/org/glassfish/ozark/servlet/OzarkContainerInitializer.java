@@ -39,10 +39,6 @@
  */
 package org.glassfish.ozark.servlet;
 
-import org.glassfish.ozark.MvcAppConfig;
-
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -51,7 +47,6 @@ import javax.ws.rs.ApplicationPath;
 import java.util.Set;
 
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
-import static org.glassfish.ozark.util.CdiUtils.newBean;
 
 /**
  * Initializes the Mvc class with the application and context path. Note that the
@@ -63,15 +58,15 @@ import static org.glassfish.ozark.util.CdiUtils.newBean;
 @HandlesTypes({ ApplicationPath.class })
 public class OzarkContainerInitializer implements ServletContainerInitializer {
 
+    public static final String APP_PATH_CONTEXT_KEY = OzarkContainerInitializer.class.getName() + ".APP_PATH";
+
     @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
         if (classes != null && !classes.isEmpty()) {
             final Class<?> appClass = classes.iterator().next();    // must be a singleton
-            final BeanManager bm = CDI.current().getBeanManager();
-            final MvcAppConfig appConfig = newBean(bm, MvcAppConfig.class);
             final ApplicationPath ap = getAnnotation(appClass, ApplicationPath.class);
             if (ap != null) {
-                appConfig.setApplicationPath(ap.value());
+                servletContext.setAttribute(APP_PATH_CONTEXT_KEY, ap.value());
             }
         }
     }
