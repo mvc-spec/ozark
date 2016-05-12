@@ -12,3 +12,5 @@ script:
   - mvn -Pintegration -Dintegration.serverPort=8080 verify
   - glassfish4/bin/asadmin stop-domain
   - sleep 10
+after_success:
+  - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
