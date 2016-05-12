@@ -81,7 +81,7 @@ public final class BindingResultUtils {
      * @param resource resource instance.
      * @return field or {@code null} if none is found.
      */
-    public static Field getBindingResultField(final Object resource) {
+    private static Field getBindingResultField(final Object resource) {
         Class<?> clazz = resource.getClass();
         do {
             for (Field f : clazz.getDeclaredFields()) {
@@ -208,7 +208,7 @@ public final class BindingResultUtils {
      * @param resource resource instance.
      * @return outcome of test.
      */
-    public static boolean hasBindingResultProperty(final Object resource) {
+    private static boolean hasBindingResultProperty(final Object resource) {
         return getBindingResultGetter(resource) != null && getBindingResultSetter(resource) != null;
     }
 
@@ -219,7 +219,7 @@ public final class BindingResultUtils {
      * @param resource resource instance.
      * @return getter or {@code null} if not available.
      */
-    public static Method getBindingResultGetter(final Object resource) {
+    private static Method getBindingResultGetter(final Object resource) {
         Class<?> clazz = resource.getClass();
         do {
             for (Method m : clazz.getDeclaredMethods()) {
@@ -251,7 +251,7 @@ public final class BindingResultUtils {
      * @param resource resource instance.
      * @return setter or {@code null} if not available.
      */
-    public static Method getBindingResultSetter(final Object resource) {
+    private static Method getBindingResultSetter(final Object resource) {
         return getBindingResultSetter(resource.getClass());
     }
 
