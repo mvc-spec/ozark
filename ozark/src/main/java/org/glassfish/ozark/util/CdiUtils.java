@@ -43,8 +43,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeBeanDiscovery;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import java.lang.annotation.Annotation;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Utility class for CDI-related tasks. This is a CDI class itself and can be
@@ -86,5 +91,37 @@ public class CdiUtils {
         final Bean<T> bean = (Bean<T>) bm.resolve(beans);
         final CreationalContext<T> ctx = bm.createCreationalContext(bean);
         return (T) bm.getReference(bean, clazz, ctx);
+    }
+
+    /**
+     * Gets CDI beans from current BeanManager
+     * @param clazz
+     * @param qualifiers
+     * @param <T>
+     * @return found class instances
+     */
+    public static <T> List<T> getInstances(Class<T> clazz, Annotation... qualifiers) {
+        BeanManager bm = CDI.current().getBeanManager();
+        Set<Bean<?>> beans = bm.getBeans(clazz, qualifiers);
+
+        return beans
+            .stream()
+            .map(bean -> {
+                CreationalContext<?> ctx = bm.createCreationalContext(bean);
+                T t = (T) bm.getReference(bean, clazz, ctx);
+                return t;
+            })
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * @param beforeBean  The BeforeBeanDiscovery.
+     * @param beanManager The BeanManager.
+     * @param types       annotated types to register
+     */
+    public static void addAnnotatedTypes(BeforeBeanDiscovery beforeBean, BeanManager beanManager, Class<?>... types) {
+        for (Class<?> type : types) {
+            beforeBean.addAnnotatedType(beanManager.createAnnotatedType(type), null);
+        }
     }
 }

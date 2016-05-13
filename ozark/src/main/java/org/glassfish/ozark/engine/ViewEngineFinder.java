@@ -4,17 +4,11 @@ import org.glassfish.ozark.util.CdiUtils;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Viewable;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 
@@ -36,10 +30,6 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  */
 @ApplicationScoped
 public class ViewEngineFinder {
-
-    @Inject
-    @Any
-    private Instance<ViewEngine> engines;
 
     @Inject
     private CdiUtils cdiUtils;
@@ -67,9 +57,12 @@ public class ViewEngineFinder {
             if (!engine.isPresent()) {
                 // Gather set of candidates
                 final Set<ViewEngine> candidates = new HashSet<>();
-                for (ViewEngine e : engines) {
-                    if (e.supports(view)) {
-                        candidates.add(e);
+
+                List<ViewEngine> viewEngines = CdiUtils.getInstances(ViewEngine.class);
+
+                for (ViewEngine viewEngine : viewEngines) {
+                    if (viewEngine.supports(view)) {
+                        candidates.add(viewEngine);
                     }
                 }
                 // Find candidate with highest priority
