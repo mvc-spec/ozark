@@ -50,6 +50,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.PassivationCapable;
 import javax.inject.Inject;
 import javax.mvc.MvcContext;
@@ -108,7 +109,7 @@ public class RedirectScopeManager {
      */
     @Context
     private Configuration config;
-    
+
     /**
      * Stores the MVC context.
      */
@@ -216,11 +217,11 @@ public class RedirectScopeManager {
 
         return result;
     }
-    
+
     /**
      * Update SCOPE_ID request attribute based on either cookie or URL query param
      * information received in the request.
-     * 
+     *
      * @param event the event.
      */
     public void beforeProcessControllerEvent(@Observes BeforeControllerEvent event) {
@@ -241,7 +242,7 @@ public class RedirectScopeManager {
             }
         }
     }
-    
+
     /**
      * Perform the work we need to do at AfterProcessViewEvent time.
      *
@@ -258,7 +259,9 @@ public class RedirectScopeManager {
                     String key = entrySet.getKey();
                     Object value = entrySet.getValue();
                     if (key.startsWith(INSTANCE)) {
-                        Bean<?> bean = beanManager.resolve(beanManager.getBeans(value.getClass()));
+                        BeanManager beanManager = CDI.current().getBeanManager();
+                        Bean<?> bean = beanManager
+                                .resolve(beanManager.getBeans(value.getClass()));
                         destroy(bean);
                     }
                 });

@@ -39,6 +39,25 @@
  */
 package org.glassfish.ozark.cdi;
 
+import org.glassfish.ozark.MvcAppConfig;
+import org.glassfish.ozark.MvcContextImpl;
+import org.glassfish.ozark.binding.BindingInterceptorImpl;
+import org.glassfish.ozark.binding.BindingResultImpl;
+import org.glassfish.ozark.binding.ConstraintViolationTranslator;
+import org.glassfish.ozark.core.*;
+import org.glassfish.ozark.engine.FaceletsViewEngine;
+import org.glassfish.ozark.engine.JspViewEngine;
+import org.glassfish.ozark.engine.ViewEngineFinder;
+import org.glassfish.ozark.event.*;
+import org.glassfish.ozark.locale.DefaultLocaleResolver;
+import org.glassfish.ozark.locale.LocaleRequestFilter;
+import org.glassfish.ozark.locale.LocaleResolverChain;
+import org.glassfish.ozark.security.CsrfImpl;
+import org.glassfish.ozark.security.CsrfProtectFilter;
+import org.glassfish.ozark.security.CsrfValidateInterceptor;
+import org.glassfish.ozark.security.EncodersImpl;
+import org.glassfish.ozark.util.CdiUtils;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
@@ -72,6 +91,56 @@ public class OzarkCdiExtension implements Extension {
      */
     public void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event, BeanManager beanManager) {
         event.addScope(RedirectScoped.class, true, true);
+
+        CdiUtils.addAnnotatedTypes(event, beanManager,
+
+                // .
+                MvcAppConfig.class,
+                MvcContextImpl.class,
+
+                // binding
+                BindingResultImpl.class,
+                BindingInterceptorImpl.class,
+                ConstraintViolationTranslator.class,
+
+                // core
+                Messages.class,
+                ModelsImpl.class,
+                ViewableWriter.class,
+                ViewRequestFilter.class,
+                ViewResponseFilter.class,
+
+                // engine
+                FaceletsViewEngine.class,
+                JspViewEngine.class,
+                ViewEngineFinder.class,
+
+                // security
+                CsrfImpl.class,
+                CsrfProtectFilter.class,
+                CsrfValidateInterceptor.class,
+                EncodersImpl.class,
+
+                // util
+                CdiUtils.class,
+
+                // cdi
+                RedirectScopeManager.class,
+
+                //event
+                AfterControllerEventImpl.class,
+                AfterProcessViewEventImpl.class,
+                BeforeControllerEventImpl.class,
+                BeforeProcessViewEventImpl.class,
+                ControllerRedirectEventImpl.class,
+                MvcEventImpl.class,
+
+                //locale
+                LocaleRequestFilter.class,
+                LocaleResolverChain.class,
+                DefaultLocaleResolver.class
+
+        );
     }
 
     /**
@@ -124,4 +193,5 @@ public class OzarkCdiExtension implements Extension {
     public static synchronized boolean isEventObserved(Class<? extends MvcEvent> eventType) {
         return observedEvents == null ? false : observedEvents.contains(eventType);
     }
+
 }

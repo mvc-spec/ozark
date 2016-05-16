@@ -89,13 +89,13 @@
                     <groupId>javax.mvc</groupId>
                     <artifactId>javax.mvc-api</artifactId>
                     <version>1.0-SNAPSHOT</version>
-                    <scope>compile</scope>
+                    <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.glassfish.ozark</groupId>
                     <artifactId>ozark</artifactId>
                     <version>${project.version}</version>
-                    <scope>runtime</scope>
+                    <scope>provided</scope>
                 </dependency>
                 <dependency>
                     <groupId>org.glassfish.jersey.core</groupId>
@@ -361,7 +361,7 @@
                 <failOnError>false</failOnError>
                 <timeout>60</timeout>
             </properties>
-        </profile>    
+        </profile>
     </profiles>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
