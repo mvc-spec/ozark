@@ -4,17 +4,13 @@ import org.glassfish.ozark.util.CdiUtils;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
-import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.mvc.Viewable;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 
@@ -36,10 +32,6 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  */
 @ApplicationScoped
 public class ViewEngineFinder {
-
-    @Inject
-    @Any
-    private Instance<ViewEngine> engines;
 
     @Inject
     private CdiUtils cdiUtils;
@@ -67,6 +59,10 @@ public class ViewEngineFinder {
             if (!engine.isPresent()) {
                 // Gather set of candidates
                 final Set<ViewEngine> candidates = new HashSet<>();
+
+                BeanManager beanManager = CDI.current().getBeanManager();
+                List<ViewEngine> engines = CdiUtils.getAllBeans(beanManager, ViewEngine.class);
+
                 for (ViewEngine e : engines) {
                     if (e.supports(view)) {
                         candidates.add(e);
