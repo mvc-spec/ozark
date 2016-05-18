@@ -50,6 +50,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.enterprise.inject.spi.PassivationCapable;
 import javax.inject.Inject;
 import javax.mvc.MvcContext;
@@ -84,12 +85,6 @@ public class RedirectScopeManager {
     private static final String INSTANCE = "Instance-";
     private static final String CREATIONAL = "Creational-";
     private static final String COOKIE_NAME = PREFIX + "Cookie";
-
-    /**
-     * Stores the beanManager.
-     */
-    @Inject
-    BeanManager beanManager;
 
     /**
      * Stores the HTTP servlet request we are working for.
@@ -258,6 +253,7 @@ public class RedirectScopeManager {
                     String key = entrySet.getKey();
                     Object value = entrySet.getValue();
                     if (key.startsWith(INSTANCE)) {
+                        BeanManager beanManager = CDI.current().getBeanManager();
                         Bean<?> bean = beanManager.resolve(beanManager.getBeans(value.getClass()));
                         destroy(bean);
                     }
