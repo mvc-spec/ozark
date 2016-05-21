@@ -44,6 +44,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.BeforeBeanDiscovery;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -93,25 +94,6 @@ public class CdiUtils {
     }
 
     /**
-     * Gets CDI beans from passed BeanManager
-     * @param clazz CDI class
-     * @param qualifiers Qualifier(s)
-     * @param <T> found class instances
-     */
-    public static <T> List<T> getAllBeans(BeanManager bm, Class<T> clazz, Annotation... qualifiers) {
-        Set<Bean<?>> beans = bm.getBeans(clazz, qualifiers);
-
-        return beans
-            .stream()
-            .map(bean -> {
-                CreationalContext<?> ctx = bm.createCreationalContext(bean);
-                T t = (T) bm.getReference(bean, clazz, ctx);
-                return t;
-            })
-            .collect(Collectors.toList());
-    }
-
-    /**
      * @param beforeBean  The BeforeBeanDiscovery.
      * @param bm The BeanManager.
      * @param types annotated types to register
@@ -121,4 +103,26 @@ public class CdiUtils {
             beforeBean.addAnnotatedType(bm.createAnnotatedType(type), type.getName());
         }
     }
+
+    /**
+     * Returns a list of CDI beans with the specified bean type and qualifiers.
+     * Please note that this method supports looking up beans deployed with the application
+     * even if Ozark is deployed as a container archive.
+     */
+    public static <T> List<T> getApplicationBeans(Class<T> type, Annotation... qualifiers) {
+        BeanManager manager = getApplicationBeanManager();
+        return manager.getBeans(type, qualifiers).stream()
+                .map(bean -> (T) manager.getReference(bean, type, manager.createCreationalContext(bean)))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * This method returns a {@link BeanManager} which can resolve beans defined in the application.
+     * In case of Glassfish the injected {@link BeanManager} doesn't work here as it only resolves
+     * beans in the Ozark archive if Ozark is installed as part of the container.
+     */
+    public static BeanManager getApplicationBeanManager() {
+        return CDI.current().getBeanManager();
+    }
+
 }

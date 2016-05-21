@@ -39,12 +39,11 @@
  */
 package org.glassfish.ozark.locale;
 
+import org.glassfish.ozark.util.CdiUtils;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
-import org.glassfish.ozark.util.CdiUtils;
 import javax.mvc.locale.LocaleResolver;
 import javax.mvc.locale.LocaleResolverContext;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -79,8 +78,7 @@ public class LocaleResolverChain {
         // prepare context instance
         LocaleResolverContext context = new LocaleResolverContextImpl(configuration, requestContext);
 
-        BeanManager beanManager = CDI.current().getBeanManager();
-        List<LocaleResolver> resolvers = CdiUtils.getAllBeans(beanManager, LocaleResolver.class);
+        List<LocaleResolver> resolvers = CdiUtils.getApplicationBeans(LocaleResolver.class);
 
         // candidates as sorted list
         List<LocaleResolver> candidates = StreamSupport.stream(resolvers.spliterator(), false)
