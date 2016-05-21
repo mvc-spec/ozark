@@ -39,7 +39,6 @@
  */
 package org.glassfish.ozark.cdi;
 
-import org.glassfish.ozark.MvcAppConfig;
 import org.glassfish.ozark.MvcContextImpl;
 import org.glassfish.ozark.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.binding.BindingResultImpl;
@@ -95,7 +94,6 @@ public class OzarkCdiExtension implements Extension {
         CdiUtils.addAnnotatedTypes(event, beanManager,
 
                 // .
-                MvcAppConfig.class,
                 MvcContextImpl.class,
 
                 // binding
