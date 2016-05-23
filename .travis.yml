@@ -1,16 +1,13 @@
 language: java
 jdk: oraclejdk8
+env:
+  - TYPE=glassfish-module
+  - TYPE=glassfish-bundled
 install:
   - mvn dependency:get -Dartifact=javax.mvc:javax.mvc-api:1.0-SNAPSHOT -DremoteRepositories=central::default::https://repo1.maven.org/maven2,javanet::default::https://maven.java.net/content/repositories/snapshots
   - curl -s -o glassfish41.zip http://download.oracle.com/glassfish/4.1/nightly/glassfish-4.1-web-b17-09_16_2015.zip
   - unzip -q glassfish41.zip
 script:
-  - mvn clean install -B -V
-  - find ./test/ -name \*.war -exec cp {} ./glassfish4/glassfish/domains/domain1/autodeploy/ \;
-  - glassfish4/bin/asadmin start-domain
-  - sleep 120
-  - mvn -Pintegration -Dintegration.serverPort=8080 verify
-  - glassfish4/bin/asadmin stop-domain
-  - sleep 10
+  - ./.travis-build.sh ${TYPE}
 after_success:
   - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
