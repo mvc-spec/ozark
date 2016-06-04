@@ -61,6 +61,7 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  * @author Paul Sandoz
  * @author Marek Potociar (marek.potociar at oracle.com)
  * @author Santiago Pericas-Geertsen
+ * @author Eddú Meléndez
  */
 public final class VariantSelector {
 
@@ -425,7 +426,7 @@ public final class VariantSelector {
         }
         if (produces != null) {
             final String[] mediaTypes = produces.value();
-            final List<Variant> variants = Arrays.asList(mediaTypes).stream().map((String mt) -> {
+            final List<Variant> variants = Arrays.stream(mediaTypes).map((String mt) -> {
                 return Variant.mediaTypes(MediaType.valueOf(mt)).build().get(0);
             }).collect(Collectors.toList());
             return selectVariant(request, variants);

@@ -51,6 +51,7 @@ import java.util.List;
  * Utility methods to lookup annotations.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Eddú Meléndez
  */
 public final class AnnotationUtils {
 
@@ -186,8 +187,7 @@ public final class AnnotationUtils {
      * @return outcome of test.
      */
     private static boolean hasMvcOrJaxrsAnnotations(Method method) {
-        final List<Annotation> ans = Arrays.asList(method.getDeclaredAnnotations());
-        return ans.stream().anyMatch(a -> {
+        return Arrays.stream(method.getDeclaredAnnotations()).anyMatch(a -> {
             final String an = a.annotationType().getName();
             return an.startsWith("javax.mvc.") || an.startsWith("javax.ws.rs.");
         });
