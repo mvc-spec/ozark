@@ -70,6 +70,7 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  * SPI in Jersey.</p>
  *
  * @author Santiago Pericas-Geertsen
+ * @author Eddú Meléndez
  */
 @ConstrainedTo(RuntimeType.SERVER)
 @Priority(AutoDiscoverable.DEFAULT_PRIORITY)
@@ -100,6 +101,6 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
 
     private boolean isController(Class<?> c) {
         return getAnnotation(c, Controller.class) != null ||
-                Arrays.asList(c.getMethods()).stream().anyMatch(m -> getAnnotation(m, Controller.class) != null);
+                Arrays.stream(c.getMethods()).anyMatch(m -> getAnnotation(m, Controller.class) != null);
     }
 }

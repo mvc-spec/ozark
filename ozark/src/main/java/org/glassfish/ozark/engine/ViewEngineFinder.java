@@ -9,12 +9,12 @@ import javax.mvc.Viewable;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toSet;
 import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
@@ -32,6 +32,7 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
  * view.</p>
  *
  * @author Santiago Pericas-Geertsen
+ * @author Eddú Meléndez
  */
 @ApplicationScoped
 public class ViewEngineFinder {
@@ -60,16 +61,12 @@ public class ViewEngineFinder {
             engine = Optional.ofNullable(cache.get(view));
 
             if (!engine.isPresent()) {
-                // Gather set of candidates
-                final Set<ViewEngine> candidates = new HashSet<>();
-
                 List<ViewEngine> engines = CdiUtils.getApplicationBeans(ViewEngine.class);
 
-                for (ViewEngine e : engines) {
-                    if (e.supports(view)) {
-                        candidates.add(e);
-                    }
-                }
+                // Gather set of candidates
+                final Set<ViewEngine> candidates = engines.stream()
+                        .filter(e -> e.supports(view)).collect(toSet());
+
                 // Find candidate with highest priority
                 engine = candidates.stream().max(
                         (e1, e2) -> {
