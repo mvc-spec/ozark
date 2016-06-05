@@ -52,12 +52,12 @@ import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -106,15 +106,6 @@ public class VariantSelectorTest {
 				new AcceptableLanguageTag("en;q=0.4")
 		));
 		verify(request);
-	}
-
-	// org.glassfish.jersey.message.internal.LanguageTag#equals is broken (JERSEY-3069)
-	public void assertEquals(List<AcceptableLanguageTag> expected, List<AcceptableLanguageTag> actual) {
-		for (int i = 0; i < expected.size(); i++) {
-			assertThat(expected.get(i).getPrimaryTag(), is(actual.get(i).getPrimaryTag()));
-			assertThat(expected.get(i).getSubTags(), is(actual.get(i).getSubTags()));
-			assertThat(expected.get(i).getQuality(), is(actual.get(i).getQuality()));
-		}
 	}
 
 	@Test
