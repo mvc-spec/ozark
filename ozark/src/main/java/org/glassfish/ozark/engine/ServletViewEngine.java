@@ -60,6 +60,7 @@ import java.util.Map;
  * first looking at servlets that handle the specified extensions directly.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Ivar Grimstad
  */
 public abstract class ServletViewEngine extends ViewEngineBase {
 
@@ -85,8 +86,9 @@ public abstract class ServletViewEngine extends ViewEngineBase {
     protected void forwardRequest(ViewEngineContext context, String... extensions)
             throws ServletException, IOException {
         RequestDispatcher rd = null;
-        HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
+        final OzarkViewEngineContext viewEngineContext = (OzarkViewEngineContext) context;
+        HttpServletRequest request = viewEngineContext.getRequest();
+        final HttpServletResponse response = viewEngineContext.getResponse();
 
         // Set attributes in request before forward
         final Models models = context.getModels();
@@ -101,7 +103,7 @@ public abstract class ServletViewEngine extends ViewEngineBase {
                 rd = servletContext.getNamedDispatcher(e.getKey());     // by servlet name
 
                 // Need new request with updated URI and extension matching semantics
-                request = new HttpServletRequestWrapper(context.getRequest()) {
+                request = new HttpServletRequestWrapper(viewEngineContext.getRequest()) {
                     @Override
                     public String getRequestURI() {
                         return resolveView(context);

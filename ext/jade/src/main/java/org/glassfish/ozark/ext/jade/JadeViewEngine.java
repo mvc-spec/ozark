@@ -54,6 +54,7 @@ import java.io.IOException;
  * The Jade View Engine.
  *
  * @author Florian Hirsch
+ * @author Ivar Grimstad
  * @see <a href="http://jade-lang.com/">Jade</a>
  * @see <a href="https://github.com/neuland/jade4j">Jade4J</a>
  */
@@ -73,7 +74,7 @@ public class JadeViewEngine extends ViewEngineBase {
     public void processView(ViewEngineContext context) throws ViewEngineException {
         String viewPath = resolveView(context);
         try {
-            jade.renderTemplate(jade.getTemplate(viewPath), context.getModels(), context.getResponse().getWriter());
+            jade.renderTemplate(jade.getTemplate(viewPath), context.getModels(), context.getWriter());
         } catch (JadeException | IOException ex) {
             throw new ViewEngineException(String.format("Could not process view %s.", context.getView()), ex);
         }

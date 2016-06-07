@@ -39,6 +39,9 @@
  */
 package org.glassfish.ozark.engine;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import javax.mvc.Models;
 import javax.mvc.engine.ViewEngineContext;
 import javax.servlet.http.HttpServletRequest;
@@ -52,8 +55,9 @@ import javax.ws.rs.core.UriInfo;
  * needed for a view engine to process a view.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Ivar Grimstad
  */
-public class ViewEngineContextImpl implements ViewEngineContext {
+public class OzarkViewEngineContext implements ViewEngineContext {
 
     private final String view;
 
@@ -80,7 +84,7 @@ public class ViewEngineContextImpl implements ViewEngineContext {
      * @param resourceInfo Resource matched info.
      * @param configuration the configuration.
      */
-    public ViewEngineContextImpl(String view, Models models, HttpServletRequest request, HttpServletResponse response,
+    public OzarkViewEngineContext(String view, Models models, HttpServletRequest request, HttpServletResponse response,
                                  UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {
         this.view = view;
         this.models = models;
@@ -101,12 +105,10 @@ public class ViewEngineContextImpl implements ViewEngineContext {
         return models;
     }
 
-    @Override
     public HttpServletRequest getRequest() {
         return request;
     }
 
-    @Override
     public HttpServletResponse getResponse() {
         return response;
     }
@@ -124,5 +126,15 @@ public class ViewEngineContextImpl implements ViewEngineContext {
     @Override
     public Configuration getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public OutputStream getOutputStream() throws IOException {
+        return response.getOutputStream();
+    }
+
+    @Override
+    public PrintWriter getWriter() throws IOException {
+        return response.getWriter();
     }
 }
