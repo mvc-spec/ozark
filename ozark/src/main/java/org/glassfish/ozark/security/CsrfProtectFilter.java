@@ -39,6 +39,8 @@
  */
 package org.glassfish.ozark.security;
 
+import org.glassfish.ozark.OzarkConfig;
+
 import javax.annotation.Priority;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -48,8 +50,6 @@ import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.core.Configuration;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
 
@@ -74,8 +74,8 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
     @Inject
     private Instance<Csrf> csrfInstance;
 
-    @Context
-    private Configuration config;
+    @Inject
+    private OzarkConfig ozarkConfig;
 
     /**
      * Inject CSRF header if enabled in the application.
@@ -102,7 +102,6 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
      * @return outcome of test.
      */
     private boolean isCsrfEnabled() {
-        final Object value = config.getProperty(Csrf.CSRF_PROTECTION);
-        return value != null ? ((Csrf.CsrfOptions) value) != Csrf.CsrfOptions.OFF : false;
+        return ozarkConfig.getCsrfOptions() != Csrf.CsrfOptions.OFF;
     }
 }

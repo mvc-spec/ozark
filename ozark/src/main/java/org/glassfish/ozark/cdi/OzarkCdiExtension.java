@@ -40,6 +40,7 @@
 package org.glassfish.ozark.cdi;
 
 import org.glassfish.ozark.MvcContextImpl;
+import org.glassfish.ozark.OzarkConfig;
 import org.glassfish.ozark.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.binding.BindingResultImpl;
 import org.glassfish.ozark.binding.ConstraintViolationTranslator;
@@ -95,6 +96,7 @@ public class OzarkCdiExtension implements Extension {
 
                 // .
                 MvcContextImpl.class,
+                OzarkConfig.class,
 
                 // binding
                 BindingResultImpl.class,

@@ -39,6 +39,7 @@
  */
 package org.glassfish.ozark.security;
 
+import org.glassfish.ozark.OzarkConfig;
 import org.glassfish.ozark.core.Messages;
 
 import javax.annotation.Priority;
@@ -50,7 +51,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ResourceInfo;
-import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ReaderInterceptor;
@@ -94,8 +94,8 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     @Inject
     private Csrf csrf;
 
-    @Context
-    private Configuration config;
+    @Inject
+    private OzarkConfig ozarkConfig;
 
     @Context
     private ResourceInfo resourceInfo;
@@ -194,17 +194,13 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
         if (controller == null || !hasAnnotation(controller, POST.class)) {
             return false;
         }
-        final Object value = config.getProperty(Csrf.CSRF_PROTECTION);
-        if (value != null) {
-            final Csrf.CsrfOptions options = (Csrf.CsrfOptions) config.getProperty(Csrf.CSRF_PROTECTION);
-            switch (options) {
-                case OFF:
-                    return false;
-                case IMPLICIT:
-                    return true;
-                case EXPLICIT:
-                    return hasAnnotation(controller, CsrfValid.class);
-            }
+        switch (ozarkConfig.getCsrfOptions()) {
+            case OFF:
+                return false;
+            case IMPLICIT:
+                return true;
+            case EXPLICIT:
+                return hasAnnotation(controller, CsrfValid.class);
         }
         return false;
     }
