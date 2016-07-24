@@ -52,6 +52,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -65,10 +67,10 @@ import static org.junit.Assert.assertTrue;
 public class AnnotationUtilsTest {
 
 	@Inject
-	private SomeController someController;
-	
+	private SomeController someController; // not proxied
+
 	@Inject
-	private SomeBean someBean;
+	private SomeBean someBean; // proxied
 
 	@Test
 	public void getAnnotation() {
@@ -76,7 +78,11 @@ public class AnnotationUtilsTest {
 		assertThat(path.value(), is("start"));
 		Named named = AnnotationUtils.getAnnotation(someBean.getClass(), Named.class);
 		assertThat(named.value(), is("someBean"));
-	}
+        assertThat(AnnotationUtils.getAnnotation(BaseController.class, Controller.class), is(notNullValue()));
+        // inheritance of class or interface annotations is not supported
+        assertThat(AnnotationUtils.getAnnotation(InheritedController.class, Controller.class), is(nullValue()));
+        assertThat(AnnotationUtils.getAnnotation(ControllerImpl.class, Controller.class), is(nullValue()));
+    }
 
 	@Test
 	public void hasAnnotation() {
@@ -84,6 +90,10 @@ public class AnnotationUtilsTest {
 		assertFalse(AnnotationUtils.hasAnnotation(someController.getClass(), Named.class));
 		assertTrue(AnnotationUtils.hasAnnotation(someBean.getClass(), Named.class));
 		assertFalse(AnnotationUtils.hasAnnotation(someBean.getClass(), Path.class));
+        assertTrue(AnnotationUtils.hasAnnotation(BaseController.class, Controller.class));
+        // inheritance of class or interface annotations is not supported
+        assertFalse(AnnotationUtils.hasAnnotation(InheritedController.class, Controller.class));
+        assertFalse(AnnotationUtils.hasAnnotation(ControllerImpl.class, Controller.class));
 	}
 
 	@Test
@@ -92,6 +102,15 @@ public class AnnotationUtilsTest {
 		assertThat(view.value(), is("start.jsp"));
 		NotNull notNull = AnnotationUtils.getAnnotation(someBean.getClass().getMethod("notNull"), NotNull.class);
 		assertThat(notNull.message(), is("notNull"));
+        assertThat(AnnotationUtils.getAnnotation(BaseController.class.getMethod("start"), View.class), is(notNullValue()));
+        assertThat(AnnotationUtils.getAnnotation(InheritedController.class.getMethod("start"), View.class), is(notNullValue()));
+        assertThat(AnnotationUtils.getAnnotation(ControllerImpl.class.getMethod("start"), View.class), is(notNullValue()));
+        View inheritedView = AnnotationUtils.getAnnotation(InheritedControllerImpl.class.getMethod("start"), View.class);
+        // Annotations on a super-class take precedence over those on an implemented interface
+        assertThat(inheritedView.value(), is("start-base.jsp"));
+        // if a subclass or implementation method has any MVC or JAX-RS annotations
+        // then all of the annotations on the superclass or interface method are ignored
+        assertThat(AnnotationUtils.getAnnotation(NoInheritanceController.class.getMethod("start"), Path.class), is(nullValue()));
 	}
 
 	@Test
@@ -100,19 +119,49 @@ public class AnnotationUtilsTest {
 		assertFalse(AnnotationUtils.hasAnnotation(someController.getClass().getMethod("start"), NotNull.class));
 		assertTrue(AnnotationUtils.hasAnnotation(someBean.getClass().getMethod("notNull"), NotNull.class));
 		assertFalse(AnnotationUtils.hasAnnotation(someBean.getClass().getMethod("notNull"), View.class));
+        assertTrue(AnnotationUtils.hasAnnotation(BaseController.class.getMethod("start"), View.class));
+        assertTrue(AnnotationUtils.hasAnnotation(InheritedController.class.getMethod("start"), View.class));
+        assertTrue(AnnotationUtils.hasAnnotation(ControllerImpl.class.getMethod("start"), View.class));
+        // if a subclass or implementation method has any MVC or JAX-RS annotations
+        // then all of the annotations on the superclass or interface method are ignored
+        assertFalse(AnnotationUtils.hasAnnotation(NoInheritanceController.class.getMethod("start"), Path.class));
 	}
 
 	@Controller
 	@Path("start")
-	public static class SomeController {
+	static class SomeController {
 		@View("start.jsp") public void start() {}
 	}
 
 	@Named("someBean")
 	@RequestScoped
-	public static class SomeBean {
-		@NotNull(message = "notNull") public void notNull() {}
+	static class SomeBean {
+		@NotNull(message = "notNull") public String notNull() {
+            return "something";
+        }
 	}
+
+    @Controller
+    private static class BaseController {
+        @View("start-base.jsp") @Path("/base") public void start() {}
+    }
+
+    private static class InheritedController extends BaseController {}
+
+    @Controller
+    private interface ControllerInterface {
+        @View("start-interface.jsp") void start();
+    }
+
+    private static class ControllerImpl implements ControllerInterface {
+        public void start() {}
+    }
+
+    private static class InheritedControllerImpl extends BaseController implements ControllerInterface {}
+
+    private static class NoInheritanceController extends BaseController {
+        @View("start.jsp") public void start() {}
+    }
 
 }
 
