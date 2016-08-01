@@ -39,13 +39,9 @@
  */
 package org.glassfish.ozark.util;
 
-import javax.enterprise.inject.spi.AnnotatedType;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Utility methods to lookup annotations.
@@ -70,12 +66,7 @@ public final class AnnotationUtils {
         if (an == null && isProxy(clazz)) {
             an = clazz.getSuperclass().getDeclaredAnnotation(annotationType);
         }
-        if (an != null) {
-            return an;
-        }
-        final BeanManager bm = CDI.current().getBeanManager();
-        final AnnotatedType<?> type = bm.createAnnotatedType(clazz);
-        return type != null ? type.getAnnotation(annotationType) : null;
+        return an;
     }
 
     /**
