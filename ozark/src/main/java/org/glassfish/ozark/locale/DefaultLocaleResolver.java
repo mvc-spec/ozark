@@ -66,12 +66,6 @@ public class DefaultLocaleResolver implements LocaleResolver {
             return clientLocale;
         }
 
-        // Lookup application default locale
-        Locale locale = (Locale) context.getConfiguration().getProperty(LocaleResolver.DEFAULT_LOCALE);
-        if (locale != null) {
-            return locale;
-        }
-
         // Fallback to system default locale
         return Locale.getDefault();
 

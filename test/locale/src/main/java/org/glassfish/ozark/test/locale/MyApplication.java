@@ -39,13 +39,9 @@
  */
 package org.glassfish.ozark.test.locale;
 
-import javax.mvc.locale.LocaleResolver;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -63,11 +59,4 @@ public class MyApplication extends Application {
         return set;
     }
 
-    @Override
-    public Map<String, Object> getProperties() {
-        Map<String, Object> properties = new HashMap<>();
-        // Application default locale: fr
-        properties.put(LocaleResolver.DEFAULT_LOCALE, Locale.FRENCH);
-        return properties;
-    }
 }
