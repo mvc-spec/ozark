@@ -47,12 +47,16 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mvc.MvcContext;
+import javax.mvc.MvcUriBuilder;
 import javax.mvc.security.Csrf;
 import javax.mvc.security.Encoders;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
+import java.net.URI;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -140,4 +144,25 @@ public class MvcContextImpl implements MvcContext {
     public void setLocale(Locale locale) {
         this.locale = locale;
     }
+
+    @Override
+    public URI uri(String s) {
+        throw new UnsupportedOperationException("Not implemented yet!");
+    }
+
+    @Override
+    public URI uri(String s, List<Object> list) {
+        throw new UnsupportedOperationException("Not implemented yet!");
+    }
+
+    @Override
+    public URI uri(String s, Map<String, Object> map) {
+        throw new UnsupportedOperationException("Not implemented yet!");
+    }
+
+    @Override
+    public MvcUriBuilder uriBuilder(String s) {
+        throw new UnsupportedOperationException("Not implemented yet!");
+    }
+    
 }
