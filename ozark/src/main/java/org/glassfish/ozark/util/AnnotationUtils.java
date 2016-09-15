@@ -153,7 +153,7 @@ public final class AnnotationUtils {
      * @param method method to check for MVC or JAX-RS annotations.
      * @return outcome of test.
      */
-    private static boolean hasMvcOrJaxrsAnnotations(Method method) {
+    static boolean hasMvcOrJaxrsAnnotations(Method method) {
         return Arrays.stream(method.getDeclaredAnnotations()).anyMatch(a -> {
             final String an = a.annotationType().getName();
             return an.startsWith("javax.mvc.") || an.startsWith("javax.ws.rs.");

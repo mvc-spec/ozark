@@ -17,6 +17,7 @@ package org.glassfish.ozark;
 
 import org.glassfish.ozark.jaxrs.JaxRsContext;
 import org.glassfish.ozark.servlet.OzarkContainerInitializer;
+import org.glassfish.ozark.uri.ApplicationUris;
 import org.glassfish.ozark.util.PathUtils;
 
 import javax.annotation.PostConstruct;
@@ -55,6 +56,9 @@ public class MvcContextImpl implements MvcContext {
 
     @Inject
     private ServletContext servletContext;
+
+    @Inject
+    private ApplicationUris applicationUris;
 
     @Inject
     @JaxRsContext
@@ -124,23 +128,23 @@ public class MvcContextImpl implements MvcContext {
     }
 
     @Override
-    public URI uri(String s) {
+    public URI uri(String identifier) {
+        return applicationUris.get(identifier);
+    }
+
+    @Override
+    public URI uri(String identifier, Map<String, Object> params) {
+        return applicationUris.get(identifier, params);
+    }
+
+    @Override
+    public URI uri(String identifier, List<Object> params) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
 
     @Override
-    public URI uri(String s, List<Object> list) {
-        throw new UnsupportedOperationException("Not implemented yet!");
-    }
-
-    @Override
-    public URI uri(String s, Map<String, Object> map) {
-        throw new UnsupportedOperationException("Not implemented yet!");
-    }
-
-    @Override
-    public MvcUriBuilder uriBuilder(String s) {
-        throw new UnsupportedOperationException("Not implemented yet!");
+    public MvcUriBuilder uriBuilder(String identifier) {
+        return applicationUris.getUriBuilder(identifier);
     }
 
 }

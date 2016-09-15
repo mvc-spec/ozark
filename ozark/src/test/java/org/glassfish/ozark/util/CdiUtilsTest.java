@@ -28,25 +28,25 @@ import static org.junit.Assert.assertNull;
 
 /**
  * The JUnit tests for the CdiUtils class.
- * 
+ *
  * @author Manfred Riem (manfred.riem at oracle.com)
  */
 public class CdiUtilsTest {
-    
+
     /**
      * Test newBean method.
-     * 
+     *
      * @throws Exception when a serious error occurs.
      */
     @Test
     public void testNewBean() throws Exception {
         CdiUtils utils = new CdiUtils();
-        
+
         Field bmField = utils.getClass().getDeclaredField("beanManager");
         bmField.setAccessible(true);
         BeanManager bm = EasyMock.createMock(BeanManager.class);
         bmField.set(utils, bm);
-        
+
         expect(bm.getBeans(CdiUtilsTest.class)).andReturn(null);
         expect(bm.resolve(null)).andReturn(null);
         expect(bm.createCreationalContext(null)).andReturn(null);
@@ -55,4 +55,5 @@ public class CdiUtilsTest {
         assertNull(utils.newBean(CdiUtilsTest.class));
         verify(bm);
     }
+
 }
