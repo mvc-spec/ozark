@@ -84,6 +84,7 @@
         <module>velocity</module>
         <module>view-annotation</module>
         <module>pebble</module>
+        <module>uri-builder</module>
     </modules>
     <profiles>
         <profile>

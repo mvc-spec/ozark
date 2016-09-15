@@ -35,6 +35,8 @@ import org.glassfish.ozark.security.CsrfImpl;
 import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
 import org.glassfish.ozark.security.EncodersImpl;
+import org.glassfish.ozark.uri.ApplicationUris;
+import org.glassfish.ozark.uri.UriTemplateParser;
 import org.glassfish.ozark.util.CdiUtils;
 import org.glassfish.ozark.validation.ValidationInterceptor;
 
@@ -130,7 +132,11 @@ public class OzarkCdiExtension implements Extension {
 
                 // jaxrs
                 JaxRsContextFilter.class,
-                JaxRsContextProducer.class
+                JaxRsContextProducer.class,
+
+                // uri
+                ApplicationUris.class,
+                UriTemplateParser.class
 
         );
     }
