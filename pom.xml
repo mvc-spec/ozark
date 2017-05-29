@@ -40,8 +40,8 @@
         <excludeDefaults>true</excludeDefaults>
     </reporting>    
     <scm>
-        <connection>scm:git:git://java.net/ozark~sources</connection>
-        <developerConnection>scm:git:ssh://mriem@git.java.net/ozark~sources</developerConnection>
+        <connection>scm:git:https://github.com/mvc-spec/ozark.git</connection>
+        <developerConnection>scm:git:https://github.com/mvc-spec/ozark.git</developerConnection>
       <tag>HEAD</tag>
     </scm>
     <build>
