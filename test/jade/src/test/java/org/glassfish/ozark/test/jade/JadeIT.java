@@ -64,7 +64,7 @@ public class JadeIT {
     public void testIncludesViews() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "jade");
         HtmlParagraph footer = page.getFirstByXPath("//p[@class='footer']");
-        assertTrue(footer.asText().contains("Oracle"));
+        assertTrue(footer.asText().contains("Ivar Grimstad"));
     }
 
     @Test
