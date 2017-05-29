@@ -7,7 +7,7 @@ Release Notes for Milestone 2
  (1) Milestone of Ozark corresponds to EDR2 of MVC, except as described below. For more
      information about EDR2 see:
 
-     https://java.net/projects/mvc-spec/
+     https://www.mvc-spec.org/
 
  (2) This version has been tested with GlassFish 4.1 Nightly Sept 15, 2015 which is 
      available here:
@@ -21,5 +21,5 @@ Release Notes for Milestone 2
 
  (4) The JIRA release notes for this milestone are available here:
 
-     https://java.net/jira/secure/ReleaseNote.jspa?projectId=14160&version=17216
+     https://github.com/mvc-spec/ozark/milestone/1?closed=1
 
