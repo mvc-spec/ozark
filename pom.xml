@@ -26,5 +26,40 @@
         <connection>scm:git:git://java.net/ozark~sources</connection>
         <developerConnection>scm:git:ssh://mriem@git.java.net/ozark~sources</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>3.0</version>
+                <configuration>
+                    <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+                    <properties>
+                        <owner>Ivar Grimstad</owner>
+                        <email>ivar.grimstad@gmail.com</email>
+                        <project.inceptionYear>2017</project.inceptionYear>
+                    </properties>
+                    <includes>
+                        <include>src/**/*.java</include>
+                        <include>src/**/*.xml</include>
+                        <include>findbugs-exclude.xml</include>
+                        <include>pom.xml</include>
+                    </includes>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>license-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
