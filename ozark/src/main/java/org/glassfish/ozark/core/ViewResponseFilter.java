@@ -17,7 +17,6 @@ package org.glassfish.ozark.core;
 
 import org.glassfish.ozark.event.AfterControllerEventImpl;
 import org.glassfish.ozark.event.ControllerRedirectEventImpl;
-import org.glassfish.ozark.jersey.VariantSelector;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -53,13 +52,6 @@ import static org.glassfish.ozark.util.PathUtils.*;
  * event. It also verifies the static return type of the controller method is correct,
  * and ensures that the entity is a {@link javax.mvc.Viewable} to be processed by
  * {@link org.glassfish.ozark.core.ViewableWriter}.</p>
- *
- * <p>A {@link org.glassfish.ozark.jersey.VariantSelector} implements the algorithm in
- * Section 3.8 of the JAX-RS specification to compute the final Content-Type when
- * the method returns void (no entity). If unable to compute the final Content-Type,
- * e.g. if the controller method is not annotated by {@code @Produces}, it defaults to
- * {@code text/html}. If the method does not return void (has an entity), the computation
- * of the Content-Type is done by JAX-RS and is available via {@code responseContext}.</p>
  *
  * <p>Given that this filter is annotated with {@link javax.mvc.annotation.Controller}, it
  * will be called after every controller method returns. Priority is set to
@@ -114,11 +106,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 an = getAnnotation(resourceInfo.getResourceClass(), View.class);
             }
             if (an != null) {
-                MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
-                if (contentType == null) {
-                    contentType = MediaType.TEXT_HTML_TYPE;     // default
-                }
-                responseContext.setEntity(new Viewable(an.value()), null, contentType);
+                responseContext.setEntity(new Viewable(an.value()), null, MediaType.TEXT_HTML_TYPE );
                 // If the entity is null the status will be set to 204 by Jersey. For void methods we need to
                 // set the status to 200 unless no other status was set by e.g. throwing an Exception.
                 responseContext.setStatusInfo(responseContext.getStatusInfo() == NO_CONTENT ? OK : responseContext.getStatusInfo());
