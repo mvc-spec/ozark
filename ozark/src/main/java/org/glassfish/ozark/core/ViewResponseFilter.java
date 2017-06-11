@@ -17,7 +17,6 @@ package org.glassfish.ozark.core;
 
 import org.glassfish.ozark.event.AfterControllerEventImpl;
 import org.glassfish.ozark.event.ControllerRedirectEventImpl;
-import org.glassfish.ozark.jersey.VariantSelector;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -30,6 +29,7 @@ import javax.mvc.event.ControllerRedirectEvent;
 import javax.mvc.event.MvcEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
+import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -38,10 +38,16 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Variant;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.*;
 import static org.glassfish.ozark.cdi.OzarkCdiExtension.isEventObserved;
@@ -54,7 +60,7 @@ import static org.glassfish.ozark.util.PathUtils.*;
  * and ensures that the entity is a {@link javax.mvc.Viewable} to be processed by
  * {@link org.glassfish.ozark.core.ViewableWriter}.</p>
  *
- * <p>A {@link org.glassfish.ozark.jersey.VariantSelector} implements the algorithm in
+ * <p>The class uses {@link javax.ws.rs.core.Request} which implements the algorithm in
  * Section 3.8 of the JAX-RS specification to compute the final Content-Type when
  * the method returns void (no entity). If unable to compute the final Content-Type,
  * e.g. if the controller method is not annotated by {@code @Produces}, it defaults to
@@ -114,7 +120,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 an = getAnnotation(resourceInfo.getResourceClass(), View.class);
             }
             if (an != null) {
-                MediaType contentType = VariantSelector.selectVariant(request, resourceInfo);
+                MediaType contentType = selectVariant(requestContext.getRequest(), resourceInfo);
                 if (contentType == null) {
                     contentType = MediaType.TEXT_HTML_TYPE;     // default
                 }
@@ -160,4 +166,29 @@ public class ViewResponseFilter implements ContainerResponseFilter {
             }
         }
     }
+
+    private static MediaType selectVariant(Request request, ResourceInfo resourceInfo) {
+
+        Produces produces = resourceInfo.getResourceMethod().getAnnotation(Produces.class);
+        if (produces == null) {
+            produces = getAnnotation(resourceInfo.getResourceClass(), Produces.class);
+        }
+
+        if (produces != null) {
+
+            List<Variant> variants = Arrays.stream(produces.value())
+                .map((String mt) -> Variant.mediaTypes(MediaType.valueOf(mt)).build().get(0))
+                .collect(Collectors.toList());
+
+            Variant variant = request.selectVariant(variants);
+            if (variant != null) {
+                return variant.getMediaType();
+            }
+
+        }
+
+        return null;
+
+    }
+
 }
