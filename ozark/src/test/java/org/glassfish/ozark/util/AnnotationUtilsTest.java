@@ -119,6 +119,10 @@ public class AnnotationUtilsTest {
 
     @Controller
     private static class BaseController {
+
+        public BaseController() {
+        }
+
         @View("start-base.jsp") @Path("/base") public void start() {}
     }
 
