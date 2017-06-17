@@ -13,57 +13,63 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glassfish.ozark.jersey;
+package org.glassfish.ozark.jaxrs;
 
-import org.glassfish.jersey.internal.spi.AutoDiscoverable;
-import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
-import org.glassfish.ozark.binding.BindingInterceptorImpl;
-import org.glassfish.ozark.core.ViewRequestFilter;
-import org.glassfish.ozark.core.ViewResponseFilter;
-import org.glassfish.ozark.core.ViewableWriter;
-import org.glassfish.ozark.locale.LocaleRequestFilter;
-import org.glassfish.ozark.security.CsrfProtectFilter;
-import org.glassfish.ozark.security.CsrfValidateInterceptor;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Priority;
-import javax.mvc.annotation.Controller;
+import javax.mvc.engine.Priorities;
 import javax.servlet.ServletContext;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
-import java.util.Arrays;
-
-import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
+import javax.ws.rs.ext.Provider;
+import org.glassfish.ozark.binding.BindingInterceptorImpl;
+import org.glassfish.ozark.core.ViewRequestFilter;
+import org.glassfish.ozark.core.ViewResponseFilter;
+import org.glassfish.ozark.core.ViewableWriter;
+import org.glassfish.ozark.jersey.OzarkModelProcessor;
+import org.glassfish.ozark.locale.LocaleRequestFilter;
+import org.glassfish.ozark.security.CsrfProtectFilter;
+import org.glassfish.ozark.security.CsrfValidateInterceptor;
+import static org.glassfish.ozark.servlet.OzarkContainerInitializer.OZARK_ENABLE_FEATURES_KEY;
 
 /**
- * <p>Jersey feature that sets up the JAX-RS pipeline for MVC processing using one
+ * <p>JAX-RS feature that sets up the JAX-RS pipeline for MVC processing using one
  * or more providers. This feature is enabled only if any of the classes or methods
  * in the application has an instance of the {@link javax.mvc.annotation.Controller} annotation.</p>
  *
- * <p>Takes advantage of the {@link org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable}
- * SPI in Jersey.</p>
- *
  * @author Santiago Pericas-Geertsen
  * @author Eddú Meléndez
+ * @author Dmytro Maidaniuk
  */
+@Provider
 @ConstrainedTo(RuntimeType.SERVER)
-@Priority(AutoDiscoverable.DEFAULT_PRIORITY)
-public class OzarkFeature implements ForcedAutoDiscoverable {
+@Priority(Priorities.DEFAULT)
+public class OzarkFeature implements Feature {
+
+    private static final Logger LOG = Logger.getLogger(OzarkFeature.class.getName());
 
     @Context
     private ServletContext servletContext;
 
     @Override
-    public void configure(FeatureContext context) {
+    public boolean configure(FeatureContext context) {
+        LOG.log(Level.INFO, "Started feature configuration for {0}", getClass().getName());
         final Configuration config = context.getConfiguration();
         if (config.isRegistered(ViewResponseFilter.class)) {
-            return;     // already registered!
+            LOG.log(Level.FINE, "Ozark providers already registered. Skipping.");
+            return false;     // already registered!
         }
-        final boolean enableOzark = config.getClasses().stream().anyMatch(this::isController)
-                || config.getInstances().stream().map(o -> o.getClass()).anyMatch(this::isController);
+
+        boolean enableOzark = (Boolean) servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY);
+
+        LOG.log(Level.FINE, "Is Ozark need to be enabled: {0}", enableOzark);
         if (enableOzark) {
+            LOG.log(Level.INFO, "Registering Ozark providers.");
             context.register(ViewRequestFilter.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
@@ -73,10 +79,7 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(CsrfProtectFilter.class);
             context.register(LocaleRequestFilter.class);
         }
+        return true;
     }
 
-    private boolean isController(Class<?> c) {
-        return getAnnotation(c, Controller.class) != null ||
-                Arrays.stream(c.getMethods()).anyMatch(m -> getAnnotation(m, Controller.class) != null);
-    }
 }
