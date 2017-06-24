@@ -30,11 +30,12 @@ import static org.glassfish.ozark.util.AnnotationUtils.getAnnotation;
 import static org.glassfish.ozark.util.AnnotationUtils.hasAnnotationOnClassOrMethod;
 
 /**
- * Initializes the Mvc class with the application and context path. Note that the
+ * Initializes the MVC class with the application and context path. Note that the
  * application path is only initialized if there is an application sub-class that
  * is annotated by {@link javax.ws.rs.ApplicationPath}.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Dmytro Maidaniuk
  */
 @HandlesTypes({ ApplicationPath.class, Path.class })
 public class OzarkContainerInitializer implements ServletContainerInitializer {
@@ -60,6 +61,10 @@ public class OzarkContainerInitializer implements ServletContainerInitializer {
                 if (hasAnnotationOnClassOrMethod(clazz, Path.class) 
                         && hasAnnotationOnClassOrMethod(clazz, Controller.class)) {
                     servletContext.setAttribute(OZARK_ENABLE_FEATURES_KEY, true);
+                }
+                if (servletContext.getAttribute(APP_PATH_CONTEXT_KEY) != null && 
+                        (Boolean)servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY) == true) {
+                    break;  // no need to loop further
                 }
             }
         }
