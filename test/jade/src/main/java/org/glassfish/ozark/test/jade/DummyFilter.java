@@ -16,6 +16,8 @@
 package org.glassfish.ozark.test.jade;
 
 import de.neuland.jade4j.filter.Filter;
+import de.neuland.jade4j.parser.node.Attr;
+import java.util.List;
 
 import java.util.Map;
 
@@ -27,7 +29,7 @@ import java.util.Map;
 public class DummyFilter implements Filter {
 
     @Override
-    public String convert(String source, Map<String, Object> attributes, Map<String, Object> model) {
+    public String convert(String source, List<Attr> attributes, Map<String, Object> model) {
         String content = source.trim();
         return String.format("<p class='%s'>%s</p>", content, content);
     }
