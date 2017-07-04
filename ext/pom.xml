@@ -57,5 +57,6 @@
         <module>stringtemplate</module>
         <module>thymeleaf</module>
         <module>velocity</module>
+        <module>pebble</module>
     </modules>
 </project>
