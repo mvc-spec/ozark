@@ -92,6 +92,7 @@
         <module>validation-i18n</module>
         <module>velocity</module>
         <module>view-annotation</module>
+        <module>pebble</module>
     </modules>
     <profiles>
         <profile>
