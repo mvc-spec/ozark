@@ -35,4 +35,11 @@ public class PebbleController {
     models.put("websiteTitle", "Pebble's home page");
     models.put("content", "Rock solid!");
   }
+
+  @GET
+  @Path("filter")
+  @View("filter.peb")
+  public void filter() {
+    models.put("text", "To be filtered");
+  }
 }
