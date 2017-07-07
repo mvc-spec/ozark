@@ -15,28 +15,25 @@
  */
 package org.glassfish.ozark.ext.pebble;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import com.mitchellbosecke.pebble.loader.ServletLoader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
-import org.glassfish.ozark.engine.ViewEngineConfig;
-
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import javax.servlet.ServletContext;
 
-public class PebbleEngineProducer {
-
-  @Inject
-  private Properties pebbleProperties;
-
-  @Inject
-  private ServletContext servletContext;
+@ApplicationScoped
+public class ConfigurationProducer {
 
   @Produces
-  @ViewEngineConfig
-  public PebbleEngine pebbleEngine() {
-    return new PebbleEngine.Builder()
-        .loader(new ServletLoader(servletContext))
-        .build();
+  public Properties pebbleConfiguration() {
+    Properties configurationProperties = new Properties();
+
+    try (InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream("pebble.properties")) {
+      configurationProperties.load(config);
+    } catch (IOException e) {
+      // ignore exception
+    }
+
+    return configurationProperties;
   }
 }
