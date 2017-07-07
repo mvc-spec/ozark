@@ -17,6 +17,7 @@ package org.glassfish.ozark.test.pebble;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import java.io.IOException;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -42,8 +43,20 @@ public class PebbleIT {
   public void testUsesModel() throws Exception {
     String path = webUrl + "pebble";
     HtmlPage page = webClient.getPage(String.format(path, 0));
+
     assertTrue(page.asText().contains("Pebble's home page"));
     assertTrue(page.asText().contains("Rock solid"));
+  }
+
+  @Test
+  public void testUsesFilter() throws IOException {
+    String path = webUrl + "pebble/filter";
+    String text = "To be filtered";
+
+    HtmlPage page = webClient.getPage(String.format(path, 0));
+
+    assertFalse(page.asText().contains(text));
+    assertTrue(page.asText().contains(text.toUpperCase()));
   }
 
 }
