@@ -17,7 +17,6 @@ package org.glassfish.ozark.ext.pebble;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.error.PebbleException;
-import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import org.glassfish.ozark.engine.ViewEngineBase;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -35,7 +34,7 @@ public class PebbleViewEngine extends ViewEngineBase {
 
   @Inject
   @ViewEngineConfig
-  private PebbleEngine pebbleEngine;
+  PebbleEngine pebbleEngine;
 
   @Override
   public boolean supports(String view) {
@@ -47,8 +46,7 @@ public class PebbleViewEngine extends ViewEngineBase {
     String viewPath = resolveView(context);
 
     try {
-      PebbleTemplate compiledTemplate = pebbleEngine.getTemplate(viewPath);
-      compiledTemplate.evaluate(context.getResponse().getWriter(), context.getModels());
+      pebbleEngine.getTemplate(viewPath).evaluate(context.getResponse().getWriter(), context.getModels());
     } catch (PebbleException | IOException ex) {
       throw new ViewEngineException(String.format("Could not process view %s.", context.getView()), ex);
     }
