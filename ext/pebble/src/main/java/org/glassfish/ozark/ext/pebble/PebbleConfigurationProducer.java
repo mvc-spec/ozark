@@ -17,6 +17,7 @@ package org.glassfish.ozark.ext.pebble;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Stream;
 import javax.enterprise.context.ApplicationScoped;
@@ -27,7 +28,7 @@ public class PebbleConfigurationProducer {
 
   @Produces
   public Properties pebbleConfiguration() {
-    Properties pebbleProperties = loadFromFile();
+    Properties pebbleProperties = loadFromFile("pebble.properties");
 
     Stream.of(PebbleProperty.values())
         .forEach(property
@@ -37,11 +38,13 @@ public class PebbleConfigurationProducer {
     return pebbleProperties;
   }
 
-  public Properties loadFromFile() {
+  public Properties loadFromFile(String fileName) {
     Properties props = new Properties();
 
-    try (InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream("pebble.properties")) {
-      props.load(config);
+    try (InputStream config = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName)) {
+      if (Objects.nonNull(config)) {
+        props.load(config);
+      }
     } catch (IOException e) {
       // ignore exception
     }
