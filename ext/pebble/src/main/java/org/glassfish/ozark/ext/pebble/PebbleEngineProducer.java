@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+
 import org.glassfish.ozark.engine.ViewEngineConfig;
 
 public class PebbleEngineProducer {
@@ -109,7 +110,7 @@ public class PebbleEngineProducer {
     });
 
     engine.loader(new ServletLoader(servletContext));
-    
+
     return engine.build();
   }
 
