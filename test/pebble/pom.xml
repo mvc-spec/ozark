@@ -40,7 +40,7 @@
             <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <properties>
