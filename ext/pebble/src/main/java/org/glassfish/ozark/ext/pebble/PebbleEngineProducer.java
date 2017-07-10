@@ -23,7 +23,6 @@ import com.mitchellbosecke.pebble.loader.ServletLoader;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.inject.Produces;
@@ -34,11 +33,14 @@ import org.glassfish.ozark.engine.ViewEngineConfig;
 
 public class PebbleEngineProducer {
 
-  @Inject
   private Properties pebbleConfiguration;
+  private ServletContext servletContext;
 
   @Inject
-  private ServletContext servletContext;
+  public PebbleEngineProducer(Properties pebbleConfiguration, ServletContext servletContext) {
+    this.pebbleConfiguration = pebbleConfiguration;
+    this.servletContext = servletContext;
+  }
 
   @Produces
   @ViewEngineConfig
@@ -55,8 +57,9 @@ public class PebbleEngineProducer {
           break;
         case ESCAPING_STRATEGY:
           try {
-            engine.addEscapingStrategy("userDefinedEscapingStrategy", (EscapingStrategy) Class.forName(String.valueOf(value)).newInstance());
-            engine.defaultEscapingStrategy("userDefinedEscapingStrategy");
+            String escapingStrategyKey = "userDefinedEscapingStrategy";
+            engine.addEscapingStrategy(escapingStrategyKey, (EscapingStrategy) Class.forName(String.valueOf(value)).newInstance());
+            engine.defaultEscapingStrategy(escapingStrategyKey);
           } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
             String msg = String.format("Pebble initialization error: Could not register escaping strategy '%s' of type %s", key, value);
             throw new IllegalArgumentException(msg, ex);
@@ -82,17 +85,15 @@ public class PebbleEngineProducer {
         case EXTENSION:
           String[] extensions = String.valueOf(value).split(",");
 
-          Extension[] extensionArray = (Extension[]) Stream.of(extensions)
+          Extension[] extensionArray = Stream.of(extensions)
               .map(clazzName -> {
                 try {
-                  return (Extension) Class.forName(clazzName).newInstance();
+                  return (Extension) Class.forName(clazzName.trim()).newInstance();
                 } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ex) {
                   String msg = String.format("Pebble initialization error: Could not register extension of type %s", clazzName);
                   throw new IllegalArgumentException(msg, ex);
                 }
-              })
-              .collect(Collectors.toList())
-              .toArray();
+              }).toArray(Extension[]::new);
 
           engine.extension(extensionArray);
           break;

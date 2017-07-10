@@ -32,9 +32,12 @@ import org.glassfish.ozark.engine.ViewEngineConfig;
 @ApplicationScoped
 public class PebbleViewEngine extends ViewEngineBase {
 
+  private PebbleEngine pebbleEngine;
+
   @Inject
-  @ViewEngineConfig
-  PebbleEngine pebbleEngine;
+  public PebbleViewEngine(@ViewEngineConfig PebbleEngine pebbleEngine) {
+    this.pebbleEngine = pebbleEngine;
+  }
 
   @Override
   public boolean supports(String view) {
