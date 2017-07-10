@@ -18,7 +18,6 @@ package org.glassfish.ozark.test.pebble;
 import com.google.common.cache.Cache;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.cache.BaseTagCacheKey;
-import com.mitchellbosecke.pebble.extension.NodeVisitor;
 import com.mitchellbosecke.pebble.extension.escaper.EscapeFilter;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
