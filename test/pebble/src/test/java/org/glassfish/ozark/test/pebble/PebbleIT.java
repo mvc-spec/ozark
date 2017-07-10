@@ -44,7 +44,7 @@ public class PebbleIT {
   @Test
   public void testUsesModel() throws Exception {
     String path = webUrl + "pebble";
-    HtmlPage page = webClient.getPage(String.format(path, 0));
+    HtmlPage page = webClient.getPage(path);
 
     assertTrue(page.asText().contains("Pebble's home page"));
     assertTrue(page.asText().contains("Rock solid"));
@@ -55,7 +55,7 @@ public class PebbleIT {
     String path = webUrl + "pebble/filter";
     String text = "To be filtered";
 
-    HtmlPage page = webClient.getPage(String.format(path, 0));
+    HtmlPage page = webClient.getPage(path);
 
     assertFalse(page.asText().contains(text));
     assertTrue(page.asText().contains(text.toUpperCase()));
