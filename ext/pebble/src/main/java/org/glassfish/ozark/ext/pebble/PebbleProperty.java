@@ -28,8 +28,8 @@ public enum PebbleProperty {
   STRICT_VARIABLES("strictVariables"),
   EXECUTOR_SERVICE("executorService"),
   EXTENSION("extension"),
-  TAG_CACHE_MAX("tagCache"),
-  TEMPLATE_CACHE_MAX("templateCache"),
+  TAG_CACHE_MAX("tagCacheMax"),
+  TEMPLATE_CACHE_MAX("templateCacheMax"),
   UNKNOWN("unknown");
 
   private static final String GROUP_PREFIX = "org.glassfish.ozark.ext.pebble.";
