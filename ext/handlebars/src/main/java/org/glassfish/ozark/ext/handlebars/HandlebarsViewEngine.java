@@ -52,7 +52,6 @@ public class HandlebarsViewEngine extends ViewEngineBase {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         Models models = context.getModels();
-        String viewName = context.getView();
 
         try (PrintWriter writer = context.getResponse().getWriter();
             InputStream resourceAsStream = servletContext.getResourceAsStream(resolveView(context));
