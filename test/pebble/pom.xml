@@ -16,47 +16,37 @@
     limitations under the License.
 
 -->
+
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.glassfish.ozark</groupId>
+        <groupId>org.glassfish.ozark.test</groupId>
         <artifactId>parent</artifactId>
         <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
-    <groupId>org.glassfish.ozark.ext</groupId>
-    <artifactId>parent</artifactId>
-    <packaging>pom</packaging>
-    <name>Ozark ${project.version} Extensions</name>
+    <artifactId>pebble</artifactId>
+    <packaging>war</packaging>
+    <name>Ozark ${project.version} Pebble Tests</name>
+    <build>
+        <finalName>test-pebble</finalName>
+    </build>
     <dependencies>
         <dependency>
-            <groupId>javax.mvc</groupId>
-            <artifactId>javax.mvc-api</artifactId>
-            <version>${spec.version}</version>
-            <scope>provided</scope>
+            <groupId>org.glassfish.ozark.ext</groupId>
+            <artifactId>ozark-pebble</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.ozark</groupId>
             <artifactId>ozark</artifactId>
-            <version>1.0.0-m03-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
+            <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
-    <modules>
-        <module>asciidoc</module>
-        <module>freemarker</module>
-        <module>handlebars</module>
-        <module>jade</module>
-        <module>jsr223</module>
-        <module>mustache</module>
-        <module>stringtemplate</module>
-        <module>thymeleaf</module>
-        <module>velocity</module>
-        <module>pebble</module>
-    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
 </project>
