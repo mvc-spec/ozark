@@ -22,6 +22,7 @@ import com.mitchellbosecke.pebble.extension.escaper.EscapeFilter;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
+
 import org.glassfish.ozark.ext.pebble.PebbleEngineProducer;
 import org.glassfish.ozark.ext.pebble.PebbleProperty;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import java.util.Properties;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
+
 
 public class PebbleEngineProducerTest {
 

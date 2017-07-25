@@ -4,8 +4,7 @@ env:
   - TYPE=glassfish-module
   - TYPE=glassfish-bundled
 install:
-  - mvn dependency:get -Dartifact=javax.mvc:javax.mvc-api:1.0-SNAPSHOT -DremoteRepositories=central::default::https://repo1.maven.org/maven2,javanet::default::https://maven.java.net/content/repositories/snapshots
-  - curl -s -o glassfish5.zip http://download.oracle.com/glassfish/5.0/promoted/latest-web.zip
+  - curl -s -o glassfish5.zip http://download.oracle.com/glassfish/5.0/nightly/glassfish-5.0-web-b10-06_29_2017.zip
   - unzip -q glassfish5.zip
 script:
   - ./.travis-build.sh ${TYPE}

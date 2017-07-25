@@ -42,7 +42,7 @@ public class DefaultConfigurationProducer {
     @ViewEngineConfig
     public Configuration getConfiguration() {
 
-        Configuration configuration = new Configuration();
+        Configuration configuration = new Configuration(Configuration.VERSION_2_3_26);
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateLoader(new TemplateLoader() {
 
