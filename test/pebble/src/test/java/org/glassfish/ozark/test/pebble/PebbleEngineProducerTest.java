@@ -22,14 +22,16 @@ import com.mitchellbosecke.pebble.extension.escaper.EscapeFilter;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
+import org.glassfish.ozark.ext.pebble.PebbleEngineProducer;
+import org.glassfish.ozark.ext.pebble.PebbleProperty;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.util.Locale;
 import java.util.Properties;
 import java.util.stream.IntStream;
-import org.glassfish.ozark.ext.pebble.PebbleEngineProducer;
-import org.glassfish.ozark.ext.pebble.PebbleProperty;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
-import org.junit.Test;
 
 public class PebbleEngineProducerTest {
 
@@ -45,6 +47,19 @@ public class PebbleEngineProducerTest {
   @Test
   public void shouldCreateAnInstanceOfPebbleEngine() {
     assertTrue(pebbleEngineProducer.pebbleEngine() instanceof PebbleEngine);
+  }
+
+  @Test
+  public void shouldIgnoreEmptyValueAndUseDefaultValue() {
+    properties.put(PebbleProperty.TAG_CACHE_MAX.key(), "");
+    properties.put(PebbleProperty.CACHE_ACTIVE.key(), "true");
+
+    Cache<BaseTagCacheKey, Object> tagCache = pebbleEngineProducer.pebbleEngine().getTagCache();
+
+    IntStream.range(0, 250).forEach(i -> tagCache.put(new BaseTagCacheKey(String.valueOf(i)) {
+    }, i));
+
+    assertEquals(200, tagCache.size());
   }
 
   @Test
