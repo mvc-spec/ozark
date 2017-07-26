@@ -16,7 +16,8 @@ Available properties:
         org.glassfish.ozark.ext.pebble.tagCacheMax      // e.q. 150
         org.glassfish.ozark.ext.pebble.templateCacheMax // e.q. 150
 
-    
+
+Properties with value equal to empty string will be ignored.   
 All the default values are the same as described in Pebble's documentation except one:
     
     loader is forced to ServletLoader as it is recommended for application server usage
