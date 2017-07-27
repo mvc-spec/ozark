@@ -20,7 +20,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.glassfish.ozark.test</groupId>
+        <groupId>org.mvc-spec.ozark.test</groupId>
         <artifactId>parent</artifactId>
         <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
@@ -32,7 +32,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>org.glassfish.ozark.ext</groupId>
+            <groupId>org.mvc-spec.ozark.ext</groupId>
             <artifactId>ozark-freemarker</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>

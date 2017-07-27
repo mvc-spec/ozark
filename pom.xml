@@ -17,7 +17,7 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.glassfish.ozark</groupId>
+    <groupId>org.mvc-spec.ozark</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-m03-SNAPSHOT</version>
@@ -38,7 +38,7 @@
     </properties>
     <reporting>
         <excludeDefaults>true</excludeDefaults>
-    </reporting>    
+    </reporting>
     <scm>
         <connection>scm:git:https://github.com/mvc-spec/ozark.git</connection>
         <developerConnection>scm:git:https://github.com/mvc-spec/ozark.git</developerConnection>
