@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glassfish.ozark.test.pebble;
+package org.glassfish.ozark.ext.pebble;
 
 import com.mitchellbosecke.pebble.extension.Extension;
 import com.mitchellbosecke.pebble.extension.Filter;

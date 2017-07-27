@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glassfish.ozark.test.pebble;
+package org.glassfish.ozark.ext.pebble;
 
 import java.util.Collection;
 import java.util.List;
