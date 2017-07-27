@@ -45,7 +45,6 @@ public class PebbleConfigurationProducerTest {
     Properties pebbleConfiguration = pebbleConfigurationProducer.loadFromFile("pebble.properties");
 
     assertNotNull(pebbleConfiguration);
-    assertTrue(pebbleConfiguration.size() == 1);
     assertEquals(pebbleConfiguration.getProperty("org.glassfish.ozark.ext.pebble.autoEscaping"), "true");
   }
 
@@ -54,7 +53,6 @@ public class PebbleConfigurationProducerTest {
     Properties pebbleConfiguration = pebbleConfigurationProducer.pebbleConfiguration();
 
     assertNotNull(pebbleConfiguration);
-    assertTrue(pebbleConfiguration.size() == 1);
     assertEquals(pebbleConfiguration.getProperty("org.glassfish.ozark.ext.pebble.autoEscaping"), "true");
   }
 
@@ -65,7 +63,6 @@ public class PebbleConfigurationProducerTest {
     Properties pebbleConfiguration = pebbleConfigurationProducer.pebbleConfiguration();
 
     assertNotNull(pebbleConfiguration);
-    assertTrue(pebbleConfiguration.size() == 1);
     assertEquals(pebbleConfiguration.getProperty(PebbleProperty.AUTO_ESCAPING.key()), "false-override");
   }
 }
