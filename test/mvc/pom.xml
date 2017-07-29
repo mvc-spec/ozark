@@ -32,7 +32,7 @@
     <dependencies>
         <dependency>
             <groupId>org.mvc-spec.ozark</groupId>
-            <artifactId>ozark</artifactId>
+            <artifactId>ozark-core</artifactId>
             <version>1.0.0-m03-SNAPSHOT</version>
         </dependency>
     </dependencies>

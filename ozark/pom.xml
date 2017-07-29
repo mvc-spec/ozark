@@ -24,9 +24,9 @@
         <artifactId>parent</artifactId>
         <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
-    <artifactId>ozark</artifactId>
+    <artifactId>ozark-core</artifactId>
     <packaging>bundle</packaging>
-    <name>Ozark ${project.version} MVC RI</name>
+    <name>Ozark ${project.version} Core</name>
     <build>
         <plugins>
             <plugin>
