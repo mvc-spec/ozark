@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mvc-spec.ozark</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>ozark-parent</artifactId>
         <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
     <artifactId>ozark-core</artifactId>

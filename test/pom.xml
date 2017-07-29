@@ -21,13 +21,13 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.mvc-spec.ozark</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>ozark-parent</artifactId>
         <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
     <groupId>org.mvc-spec.ozark.test</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>ozark-parent-test</artifactId>
     <packaging>pom</packaging>
-    <name>Ozark ${project.version} Integration Tests</name>
+    <name>Ozark ${project.version} Integration Tests Parent</name>
     <build>
         <plugins>
             <plugin>
