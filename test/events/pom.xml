@@ -34,7 +34,7 @@
         <!-- Access Ozark's extended MVC events -->
         <dependency>
             <groupId>org.mvc-spec.ozark</groupId>
-            <artifactId>ozark</artifactId>
+            <artifactId>ozark-core</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
