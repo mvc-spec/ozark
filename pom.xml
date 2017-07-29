@@ -18,10 +18,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mvc-spec.ozark</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>ozark-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-m03-SNAPSHOT</version>
-    <name>Ozark ${project.version} Parent Project</name>
+    <name>Ozark ${project.version} Parent</name>
     <parent>
         <groupId>net.java</groupId>
         <artifactId>jvnet-parent</artifactId>
