@@ -15,9 +15,9 @@
  */
 package org.glassfish.ozark.cdi;
 
+import java.lang.annotation.Annotation;
 import org.glassfish.ozark.MvcContextImpl;
 import org.glassfish.ozark.OzarkConfig;
-import org.glassfish.ozark.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.binding.BindingResultImpl;
 import org.glassfish.ozark.binding.ConstraintViolationTranslator;
 import org.glassfish.ozark.core.*;
@@ -45,6 +45,15 @@ import javax.mvc.event.MvcEvent;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.WithAnnotations;
+import javax.mvc.annotation.Controller;
+import javax.ws.rs.Path;
+import static org.glassfish.ozark.util.AnnotationUtils.hasAnnotation;
+import static org.glassfish.ozark.util.AnnotationUtils.hasAnnotationOnClassOrMethod;
 
 /**
  * Class OzarkCdiExtension. Initialize redirect scope as CDI scope. Collect information
@@ -57,6 +66,7 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class OzarkCdiExtension implements Extension {
 
+    private static final Logger LOG = Logger.getLogger(OzarkCdiExtension.class.getName());
     private static Set<Class<? extends MvcEvent>> observedEvents;
 
     /**
@@ -66,6 +76,7 @@ public class OzarkCdiExtension implements Extension {
      * @param beanManager the bean manager.
      */
     public void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event, BeanManager beanManager) {
+        LOG.log(Level.FINE, "Starting OzarkCdiExtension...");
         event.addScope(RedirectScoped.class, true, true);
 
         CdiUtils.addAnnotatedTypes(event, beanManager,
@@ -76,7 +87,7 @@ public class OzarkCdiExtension implements Extension {
 
                 // binding
                 BindingResultImpl.class,
-                BindingInterceptorImpl.class,
+                ValidationInterceptor.class,
                 ConstraintViolationTranslator.class,
 
                 // core
@@ -127,6 +138,36 @@ public class OzarkCdiExtension implements Extension {
      */
     public void afterBeanDiscovery(@Observes final AfterBeanDiscovery event, BeanManager beanManager) {
         event.addContext(new RedirectScopeContext());
+    }
+
+    /**
+     * Search for {@link javax.mvc.annotation.Controller} annotation on class level and mirror it with 
+     * @{link org.glassfish.ozark.cdi.MvcValidation}.
+     * 
+     * @param <T>
+     * @param processAnnotatedType 
+     */
+    public <T> void processAnnotatedType(
+            @Observes @WithAnnotations({Controller.class}) ProcessAnnotatedType<T> processAnnotatedType) {
+
+        AnnotatedType<T> annotatedType = processAnnotatedType
+                .getAnnotatedType();
+        Class<T> targetClass = annotatedType.getJavaClass();
+        
+        LOG.log(Level.FINE, "Scanning class {0} for MVC Controller annotation", targetClass.getName());
+
+        if (hasAnnotation(targetClass, Controller.class) && hasAnnotationOnClassOrMethod(targetClass, Path.class)) {
+
+            LOG.log(Level.FINE, "Attaching annotation MvcValidation for class {0}", targetClass.getName());
+            Annotation validateAnnotation = () -> MvcValidation.class;
+
+            AnnotatedTypeWrapper<T> wrapper = new AnnotatedTypeWrapper<>(
+                    annotatedType, annotatedType.getAnnotations());
+            wrapper.addAnnotation(validateAnnotation);
+
+            processAnnotatedType.setAnnotatedType(wrapper);
+        }
+
     }
 
     /**

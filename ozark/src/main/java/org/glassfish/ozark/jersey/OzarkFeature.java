@@ -17,7 +17,6 @@ package org.glassfish.ozark.jersey;
 
 import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
-import org.glassfish.ozark.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.core.ViewRequestFilter;
 import org.glassfish.ozark.core.ViewResponseFilter;
 import org.glassfish.ozark.core.ViewableWriter;
@@ -67,7 +66,6 @@ public class OzarkFeature implements ForcedAutoDiscoverable {
             context.register(ViewRequestFilter.class);
             context.register(ViewResponseFilter.class);
             context.register(ViewableWriter.class);
-            context.register(BindingInterceptorImpl.class);
             context.register(OzarkModelProcessor.class);
             context.register(CsrfValidateInterceptor.class);
             context.register(CsrfProtectFilter.class);
