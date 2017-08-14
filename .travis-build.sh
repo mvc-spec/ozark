@@ -14,7 +14,8 @@ if [ "$1" == "glassfish-bundled" ]; then
 elif [ "$1" == "glassfish-module" ]; then
 
   mvn -P\!bundled,module clean install -B -V
-  cp ozark/target/ozark-*.jar ./glassfish5/glassfish/modules/
+  cp ozark/target/ozark-core-*.jar ./glassfish5/glassfish/modules/
+  cp jersey/target/ozark-jersey-*.jar ./glassfish5/glassfish/modules/
   cp ~/.m2/repository/javax/mvc/javax.mvc-api/1.0-SNAPSHOT/*.jar ./glassfish5/glassfish/modules/
   find ./test/ -name \*.war -exec cp {} ./glassfish5/glassfish/domains/domain1/autodeploy/ \;
   glassfish5/bin/asadmin start-domain

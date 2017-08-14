@@ -111,7 +111,7 @@
                 </dependency>
                 <dependency>
                     <groupId>org.mvc-spec.ozark</groupId>
-                    <artifactId>ozark-core</artifactId>
+                    <artifactId>ozark-jersey</artifactId>
                     <version>${project.version}</version>
                     <scope>runtime</scope>
                 </dependency>
