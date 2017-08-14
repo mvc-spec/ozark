@@ -29,6 +29,7 @@
     </parent>
     <modules>
         <module>ozark</module>
+        <module>jersey</module>
         <module>ext</module>
         <module>test</module>
     </modules>
