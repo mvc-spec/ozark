@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Kaltepoth
  */
-public class OzarkInitializer {
+public final class OzarkInitializer {
 
     private static final Logger log = Logger.getLogger(OzarkInitializer.class.getName());
 
