@@ -28,54 +28,16 @@
     </parent>
 
     <artifactId>ozark-jersey</artifactId>
-    <packaging>bundle</packaging>
     <name>Ozark ${project.version} Jersey</name>
 
     <properties>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
-        <api_package>javax.mvc</api_package>
-        <impl_namespace>org.mvc-spec.ozark</impl_namespace>
-
-        <spec_version>1.0</spec_version>
-        <spec_impl_version>1.0-SNAPSHOT</spec_impl_version>
-        <impl_version>${project.version}</impl_version>
-
-        <packages.export>
-            org.glassfish.ozark.jersey.*
-        </packages.export>
-
     </properties>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.glassfish.build</groupId>
-                <artifactId>spec-version-maven-plugin</artifactId>
-                <version>1.2</version>
-                <configuration>
-                    <spec>
-                        <nonFinal>true</nonFinal>
-                        <jarType>impl</jarType>
-                        <specVersion>${spec_version}</specVersion>
-                        <specImplVersion>${spec_impl_version}</specImplVersion>
-                        <implVersion>${impl_version}</implVersion>
-                        <apiPackage>${api_package}</apiPackage>
-                        <implNamespace>${impl_namespace}</implNamespace>
-                    </spec>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>set-spec-properties</goal>
-                            <!--<goal>check-module</goal>-->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -93,6 +55,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -118,28 +85,24 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
-            <!--
-             This plugin is reponsible for packaging artifacts
-             as OSGi bundles.  Please refer to
-             http://felix.apache.org/site/apache-felix-maven-bundle-plugin-bnd.html
-             for more information about how to use this plugin.
-           -->
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <version>3.0.1</version>
                 <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <instructions>
-                        <!-- TODO: is it spec plugin bug ? the spec.bundle.version returns 1.0 ?
-                                                <Bundle-Version>${spec.bundle.version}</Bundle-Version>
-                        -->
-                        <Bundle-Version>${spec.implementation.version}</Bundle-Version>
-                        <Bundle-SymbolicName>${spec.bundle.symbolic-name}</Bundle-SymbolicName>
-                        <Extension-Name>${spec.extension.name}</Extension-Name>
-                        <Implementation-Version>${spec.implementation.version}</Implementation-Version>
-                        <Specification-Version>${spec.specification.version}</Specification-Version>
-                        <Export-Package>${packages.export}</Export-Package>
+                        <Bundle-SymbolicName>org.mvc-spec.ozark.jersey</Bundle-SymbolicName>
+                        <Export-Package>org.glassfish.ozark.jersey.*</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
