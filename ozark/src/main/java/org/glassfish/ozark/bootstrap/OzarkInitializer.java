@@ -34,6 +34,10 @@ public class OzarkInitializer {
 
     private static final Logger log = Logger.getLogger(OzarkInitializer.class.getName());
 
+    private OzarkInitializer() {
+        // static methods only
+    }
+
     /**
      * Registers all required provides for Ozark. Please note that the initialization is
      * only performed if at least one controller is detected for the application and if the
