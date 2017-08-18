@@ -21,21 +21,23 @@ import javax.mvc.annotation.RedirectScoped;
 
 /**
  * A simple RedirectScoped bean.
- * 
+ *
  * @author Manfred Riem (manfred.riem at oracle.com)
  */
 @Named("redirectBean")
 @RedirectScoped
 public class RedirectBean implements Serializable {
 
+    private static final long serialVersionUID = 3829085257656402865L;
+
     /**
      * Stores the value.
      */
     private String value = "Initial value";
-    
+
     /**
      * Get the value.
-     * 
+     *
      * @return the value.
      */
     public String getValue() {
@@ -44,8 +46,8 @@ public class RedirectBean implements Serializable {
 
     /**
      * Set the value.
-     * 
-     * @param value the value. 
+     *
+     * @param value the value.
      */
     public void setValue(String value) {
         this.value = value;

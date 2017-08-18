@@ -30,10 +30,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class RequestDispatcherServlet extends HttpServlet {
 
+    private static final long serialVersionUID = -7432404273284989083L;
+
     @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) 
+    protected void service(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         PrintWriter writer = response.getWriter();
         writer.println("<html><head></head><body>RequestDispatcher defaulting</body></html>");
     }

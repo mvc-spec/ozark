@@ -30,6 +30,8 @@ import javax.ws.rs.Produces;
 @Path("requestDispatcher")
 public class RequestDispatcherController implements Serializable {
 
+    private static final long serialVersionUID = -5489226641437501938L;
+
     /**
      * MVC controller to render a book in HTML.
      * @param id ID of the book given in URI.
