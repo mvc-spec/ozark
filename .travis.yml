@@ -1,12 +1,14 @@
 language: java
 jdk: oraclejdk8
-env:
-  - TYPE=glassfish-module
-  - TYPE=glassfish-bundled
-install:
-  - curl -s -o glassfish5.zip http://download.oracle.com/glassfish/5.0/nightly/glassfish-5.0-web-b10-06_29_2017.zip
-  - unzip -q glassfish5.zip
-script:
-  - ./.travis-build.sh ${TYPE}
-after_success:
-  - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
+jobs:
+  include:
+    - stage: build
+      script: mvn -B -V -DskipTests clean install
+    - stage: test
+      env:
+        - TYPE=glassfish-module
+      script: ./.travis/tests.sh ${TYPE}
+    - stage: test
+      env:
+        - TYPE=glassfish-bundled
+      script: ./.travis/tests.sh ${TYPE}
