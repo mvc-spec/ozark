@@ -16,6 +16,7 @@
 package org.glassfish.ozark.jersey.bootstrap;
 
 import org.glassfish.ozark.bootstrap.ConfigProvider;
+import org.glassfish.ozark.jersey.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.jersey.model.OzarkModelProcessor;
 
 import javax.ws.rs.core.FeatureContext;
@@ -30,6 +31,7 @@ public class JerseyConfigProvider implements ConfigProvider {
     @Override
     public void configure(FeatureContext context) {
         context.register(OzarkModelProcessor.class);
+        context.register(BindingInterceptorImpl.class);
     }
 
 }

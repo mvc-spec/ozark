@@ -20,7 +20,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlSubmitInput;
-import org.glassfish.jersey.client.filter.CsrfProtectionFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -70,7 +69,7 @@ public class CsrfIT {
         // Check hidden input field
         HtmlElement input = form.getHtmlElementsByTagName("input").get(1);
         assertTrue(input.getAttribute("type").equals("hidden"));
-        assertTrue(input.getAttribute("name").equals(CsrfProtectionFilter.HEADER_NAME));
+        assertTrue(input.getAttribute("name").equals("X-Requested-By"));
         assertTrue(input.hasAttribute("value"));        // token
 
         // Submit form

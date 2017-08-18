@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.glassfish.ozark.binding;
+package org.glassfish.ozark.jersey.binding;
 
 import org.glassfish.jersey.server.model.Parameter;
 import org.glassfish.jersey.server.spi.ValidationInterceptor;
 import org.glassfish.jersey.server.spi.ValidationInterceptorContext;
+import org.glassfish.ozark.binding.*;
+import org.glassfish.ozark.util.CdiUtils;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import javax.mvc.MvcContext;
 import javax.mvc.binding.BindingError;
@@ -29,6 +32,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -42,16 +46,10 @@ import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResult
  * @author Santiago Pericas-Geertsen
  * @author Jakub Podlesak
  */
-@ApplicationScoped
 public class BindingInterceptorImpl implements ValidationInterceptor {
 
     private static final Logger LOG = Logger.getLogger(BindingInterceptorImpl.class.getName());
 
-    @Inject
-    private ConstraintViolationTranslator violationTranslator;
-
-    @Inject
-    private MvcContext mvcContext;
 
     @Override
     public void onValidate(ValidationInterceptorContext ctx) throws ValidationException {
@@ -116,6 +114,9 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
                 LOG.warning("Cannot resolve paramName for violation: " + violation);
             }
 
+            MvcContext mvcContext = lookupBean(MvcContext.class);
+            ConstraintViolationTranslator violationTranslator = lookupBean(ConstraintViolationTranslator.class);
+
             String message = violationTranslator.translate(violation, mvcContext.getLocale());
 
             validationErrors.add(new ValidationErrorImpl(violation, paramName, message));
@@ -147,5 +148,18 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
         }
         return null;
     }
+
+    /**
+     * This method is a bit dirty but we will remove the class soon
+     */
+    private <T> T lookupBean(Class<T> type) {
+        List<T> result = CdiUtils.getApplicationBeans(type);
+        if (result.size() == 1) {
+            return result.get(0);
+        }
+        throw new IllegalStateException("Expected a single bean of type " + type.getName() +
+            " but found: " + result.size());
+    }
+
 }
 

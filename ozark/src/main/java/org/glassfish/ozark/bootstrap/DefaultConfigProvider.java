@@ -15,7 +15,6 @@
  */
 package org.glassfish.ozark.bootstrap;
 
-import org.glassfish.ozark.binding.BindingInterceptorImpl;
 import org.glassfish.ozark.core.ViewRequestFilter;
 import org.glassfish.ozark.core.ViewResponseFilter;
 import org.glassfish.ozark.core.ViewableWriter;
@@ -38,7 +37,6 @@ public class DefaultConfigProvider implements ConfigProvider {
         context.register(ViewRequestFilter.class);
         context.register(ViewResponseFilter.class);
         context.register(ViewableWriter.class);
-        context.register(BindingInterceptorImpl.class);
         context.register(CsrfValidateInterceptor.class);
         context.register(CsrfProtectFilter.class);
         context.register(LocaleRequestFilter.class);
