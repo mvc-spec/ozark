@@ -26,7 +26,7 @@
     </parent>
     <artifactId>validation</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Validation Tests</name>
+    <name>Ozark Validation Tests</name>
     <build>
         <finalName>test-validation</finalName>
     </build>
@@ -38,9 +38,4 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

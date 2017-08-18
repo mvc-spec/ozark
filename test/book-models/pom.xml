@@ -26,13 +26,8 @@
     </parent>
     <artifactId>book-models</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Book Models Tests</name>
+    <name>Ozark Book Models Tests</name>
     <build>
         <finalName>test-book-models</finalName>
     </build>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

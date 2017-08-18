@@ -26,7 +26,7 @@
     </parent>
     <artifactId>thymeleaf</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Thymeleaf Tests</name>
+    <name>Ozark Thymeleaf Tests</name>
     <build>
         <finalName>test-thymeleaf</finalName>
     </build>
@@ -37,9 +37,4 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

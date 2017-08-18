@@ -25,7 +25,7 @@
     </parent>
     <artifactId>ozark-thymeleaf</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark ${project.version} Thymeleaf Extension</name>
+    <name>Ozark Thymeleaf Extension</name>
     <dependencies>
         <dependency>
             <groupId>org.thymeleaf</groupId>
@@ -33,9 +33,4 @@
             <version>3.0.6.RELEASE</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

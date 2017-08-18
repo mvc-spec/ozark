@@ -25,7 +25,7 @@
     </parent>
     <artifactId>ozark-stringtemplate</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark ${project.version} StringTemplate Extension</name>
+    <name>Ozark StringTemplate Extension</name>
     <dependencies>
         <dependency>
             <groupId>org.antlr</groupId>
@@ -34,9 +34,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

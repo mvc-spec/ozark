@@ -26,10 +26,5 @@
     </parent>
     <artifactId>ozark-jsr223</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark ${project.version} JSR-223 Extension</name>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
+    <name>Ozark JSR-223 Extension</name>
 </project>

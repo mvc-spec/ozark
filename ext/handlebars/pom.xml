@@ -25,7 +25,7 @@
     </parent>
     <artifactId>ozark-handlebars</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark ${project.version} Handlebars Extension</name>
+    <name>Ozark Handlebars Extension</name>
     <dependencies>
         <dependency>
             <groupId>com.github.jknack</groupId>
@@ -33,9 +33,4 @@
             <version>4.0.6</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

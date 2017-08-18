@@ -18,35 +18,18 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.mvc-spec.ozark</groupId>
         <artifactId>ozark-parent</artifactId>
         <version>1.0.0-m03-SNAPSHOT</version>
     </parent>
+
     <groupId>org.mvc-spec.ozark.ext</groupId>
     <artifactId>ozark-parent-ext</artifactId>
     <packaging>pom</packaging>
-    <name>Ozark ${project.version} Extensions Parent</name>
-    <dependencies>
-        <dependency>
-            <groupId>javax.mvc</groupId>
-            <artifactId>javax.mvc-api</artifactId>
-            <version>${spec.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mvc-spec.ozark</groupId>
-            <artifactId>ozark-core</artifactId>
-            <version>1.0.0-m03-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <name>Ozark Extensions Parent</name>
+
     <modules>
         <module>asciidoc</module>
         <module>freemarker</module>
@@ -59,4 +42,25 @@
         <module>velocity</module>
         <module>pebble</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.mvc</groupId>
+            <artifactId>javax.mvc-api</artifactId>
+            <version>${spec.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mvc-spec.ozark</groupId>
+            <artifactId>ozark-core</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

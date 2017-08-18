@@ -25,7 +25,7 @@
     </parent>
     <artifactId>mvc</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Mvc Tests</name>
+    <name>Ozark Mvc Tests</name>
     <build>
         <finalName>test-mvc</finalName>
     </build>
@@ -36,9 +36,4 @@
             <version>1.0.0-m03-SNAPSHOT</version>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

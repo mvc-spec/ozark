@@ -25,7 +25,7 @@
     </parent>
     <artifactId>handlebars</artifactId>
     <packaging>war</packaging>
-    <name>Ozark ${project.version} Handlebars Tests</name>
+    <name>Ozark Handlebars Tests</name>
     <build>
         <finalName>test-handlebars</finalName>
     </build>
@@ -37,9 +37,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>

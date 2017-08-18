@@ -25,7 +25,7 @@
     </parent>
     <artifactId>ozark-mustache</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark ${project.version} Mustache Extension</name>
+    <name>Ozark Mustache Extension</name>
     <dependencies>
         <dependency>
             <groupId>com.github.spullara.mustache.java</groupId>
@@ -34,9 +34,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 </project>
