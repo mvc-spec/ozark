@@ -28,6 +28,9 @@
     <artifactId>ozark-parent-test</artifactId>
     <packaging>pom</packaging>
     <name>Ozark Integration Tests Parent</name>
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>javax</groupId>

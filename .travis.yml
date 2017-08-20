@@ -7,8 +7,20 @@ jobs:
     - stage: test
       env:
         - TYPE=glassfish-module
-      script: ./.travis/tests.sh ${TYPE}
+      script: .travis/tests.sh ${TYPE}
     - stage: test
       env:
         - TYPE=glassfish-bundled
-      script: ./.travis/tests.sh ${TYPE}
+      script: .travis/tests.sh ${TYPE}
+    - stage: deploy
+      script: skip
+      deploy:
+        provider: script
+        script: mvn -s .travis/deploy.xml -DperformRelease -DskipTests -Dgpg.skip=true deploy
+        on:
+          repo: mvc-spec/ozark
+          branch: master
+env:
+  global:
+    - secure: "APavkBDaNnz8r5CtZt5acSJQ+4yP1Sut1J9dDqDq2Rb4UVTCrxRt6tSOrO2f2HskKDUhYe+FA5AcQL1X06hCKeDo20APdv3vChYTRgfp3GPgVnvFKMthdQDZesqRKvL3XjJFvShvTmbMt11bh0LVyEs7mLX4Mzg4yt/E1On5rUp2KtodejUHLwON63ERAzJXYZ3e2KuTicnQ48pO+GSHcqBe4ZZuWBaoePUtQ6XILUVEOG1Mz15wuM0CvaiZxSUJni5OtFvv11gV0i1y/pKqqejlbPCIHm8d2BnHuYECffKxH+RAXh/ulcbHciL4w3ZvdRWDSL2f3ZCBe6inAMxLRizZ6cWeNHWIIiqq093Z03Z21P3iYA5ca98jMqoEBK7ME0eSF7SxHeNq+OHZ0rqw0JImAkyLqjQZhf27Rtuun7PRXW/1zeGxg9P2Zl4OCUkZlGH7nMjmrFbEDESaK3fQIpytmEstch+VCMQKO7O/+1AhEW3IYhgnNQCWkKTaY/LbRjjUnovcymtWUKIZEbLYUYx/UeT1nrKWLqpg6LH2v7D7GY16uBNCLMYK70Tpt6LHzJoGspIIg98Zlw98BBEScdPd3XIFxnkytbsxK1AscwwSRGLwz0VJdcQhaMn3vpdYvL37QlJasK5cFP2BETV03aj05GiDbhjtjRhAjzlmWj0="
+    - secure: "GXaWER0VviY3kgmf72Mgm0OBd7bciGAsUHKw0VhiovNJbMZbmmE5quLRV7ion/D0J/yssNLCyPw0pSOCxTXiVkSYuRm3QZoLccIGPWCjRCNHSPvH90fBYbPH5zMeBcm6wRZa76ruqrzNy2ZrXGWf4yOWZ9GU684kr5Mjk7G9rjagXC9cFy8Ijhat5yopHlkh7EbY5EdeRZckSfV3eAkjGrBpjZ3drgw45gK37MLygXiHKd7tK3GK/T5dXXtMo+fVlwPgdK26iQ46hyjQVDRc9X+/5YQY4e0sqqVvqJ9qKTeI3bZ5KuHN79IFBQVASU5e6Nz859C/4LSFoNtitBmMVq+9lS5UFeyRRpfriTZL2rv7OM0tp1hA75fpe5Q4UgpBbafar905outIM9F1duIn83Qz9Kh/ThBf4eedwTyw+9JCyMoM6+Yfn+ZR8V8Ro0WGxalo8hnJ0y0hj+Ud5iHKE77MIua0aMUmOqi2U+gHpt+5gToa/PuSbEYs8m9YigVKvNRJi6N0GhqPzpT2tyyIKEvCdQTtvu2Fjr/y7cwJD4KuzDs5D420qNJmvNzkV04guT2U7H1y9Vd8zd5RPeSGKQrbc/WKdHlOsGi94RxSppj6AgVVphvsiaLbZYM6bhK4lmprG0/AHK2a5Ue1p+ZWGWm+hX1cSUSQc+K9URBbw0c="
