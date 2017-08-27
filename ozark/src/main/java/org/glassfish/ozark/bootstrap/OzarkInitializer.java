@@ -66,8 +66,16 @@ public final class OzarkInitializer {
     }
 
     private static boolean isMvcApplication(Configuration config) {
-        return config.getClasses().stream().anyMatch(OzarkInitializer::isController)
-            || config.getInstances().stream().map(o -> o.getClass()).anyMatch(OzarkInitializer::isController);
+
+        /*
+         * Disabled for now because of:
+         * https://github.com/mvc-spec/ozark/issues/129
+         */
+        //return config.getClasses().stream().anyMatch(OzarkInitializer::isController)
+        //    || config.getInstances().stream().map(o -> o.getClass()).anyMatch(OzarkInitializer::isController);
+
+        return true;
+
     }
 
     private static boolean isController(Class<?> c) {
