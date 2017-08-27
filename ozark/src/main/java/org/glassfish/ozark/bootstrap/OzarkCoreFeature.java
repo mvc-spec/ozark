@@ -17,8 +17,7 @@ package org.glassfish.ozark.bootstrap;
 
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
-import javax.ws.rs.container.DynamicFeature;
-import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
 import javax.ws.rs.ext.Provider;
 
@@ -30,11 +29,12 @@ import javax.ws.rs.ext.Provider;
  */
 @Provider
 @ConstrainedTo(RuntimeType.SERVER)
-public class OzarkCoreFeature implements DynamicFeature {
+public class OzarkCoreFeature implements Feature {
 
     @Override
-    public void configure(ResourceInfo resourceInfo, FeatureContext context) {
+    public boolean configure(FeatureContext context) {
         OzarkInitializer.initialize(context);
+        return true;
     }
 
 }
