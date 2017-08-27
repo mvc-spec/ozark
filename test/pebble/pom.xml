@@ -36,11 +36,5 @@
             <artifactId>ozark-pebble</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.mvc-spec.ozark</groupId>
-            <artifactId>ozark-core</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>
