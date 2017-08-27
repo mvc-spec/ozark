@@ -15,6 +15,7 @@
  */
 package org.glassfish.ozark;
 
+import org.glassfish.ozark.jaxrs.JaxRsContext;
 import org.glassfish.ozark.servlet.OzarkContainerInitializer;
 import org.glassfish.ozark.util.PathUtils;
 
@@ -55,7 +56,8 @@ public class MvcContextImpl implements MvcContext {
     @Inject
     private ServletContext servletContext;
 
-    @Context
+    @Inject
+    @JaxRsContext
     private Configuration configuration;
 
     private Locale locale;
@@ -140,5 +142,5 @@ public class MvcContextImpl implements MvcContext {
     public MvcUriBuilder uriBuilder(String s) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
-    
+
 }

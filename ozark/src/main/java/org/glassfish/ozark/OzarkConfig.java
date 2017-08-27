@@ -15,6 +15,9 @@
  */
 package org.glassfish.ozark;
 
+import org.glassfish.ozark.jaxrs.JaxRsContext;
+
+import javax.inject.Inject;
 import javax.mvc.security.Csrf;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
@@ -28,7 +31,8 @@ import javax.ws.rs.core.Context;
  */
 public class OzarkConfig {
 
-    @Context
+    @Inject
+    @JaxRsContext
     private Configuration config;
 
     public Csrf.CsrfOptions getCsrfOptions() {

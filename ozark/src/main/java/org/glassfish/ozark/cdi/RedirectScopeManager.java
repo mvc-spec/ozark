@@ -17,6 +17,7 @@ package org.glassfish.ozark.cdi;
 
 import org.glassfish.ozark.Properties;
 import org.glassfish.ozark.event.ControllerRedirectEventImpl;
+import org.glassfish.ozark.jaxrs.JaxRsContext;
 import org.glassfish.ozark.util.CdiUtils;
 import org.glassfish.ozark.util.PropertyUtils;
 
@@ -71,15 +72,17 @@ public class RedirectScopeManager {
     /**
      * Stores the HTTP servlet response we work for.
      */
-    @Context
+    @Inject
+    @JaxRsContext
     private HttpServletResponse response;
 
     /**
      * Application's configuration.
      */
-    @Context
+    @Inject
+    @JaxRsContext
     private Configuration config;
-    
+
     /**
      * Stores the MVC context.
      */
@@ -187,11 +190,11 @@ public class RedirectScopeManager {
 
         return result;
     }
-    
+
     /**
      * Update SCOPE_ID request attribute based on either cookie or URL query param
      * information received in the request.
-     * 
+     *
      * @param event the event.
      */
     public void beforeProcessControllerEvent(@Observes BeforeControllerEvent event) {
@@ -212,7 +215,7 @@ public class RedirectScopeManager {
             }
         }
     }
-    
+
     /**
      * Perform the work we need to do at AfterProcessViewEvent time.
      *

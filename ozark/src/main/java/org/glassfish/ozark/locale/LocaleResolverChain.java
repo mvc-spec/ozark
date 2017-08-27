@@ -15,16 +15,17 @@
  */
 package org.glassfish.ozark.locale;
 
+import org.glassfish.ozark.jaxrs.JaxRsContext;
 import org.glassfish.ozark.util.CdiUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.mvc.locale.LocaleResolver;
 import javax.mvc.locale.LocaleResolverContext;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Configuration;
-import javax.ws.rs.core.Context;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +41,8 @@ import java.util.stream.StreamSupport;
 @ApplicationScoped
 public class LocaleResolverChain {
 
-    @Context
+    @Inject
+    @JaxRsContext
     private Configuration configuration;
 
     @PostConstruct

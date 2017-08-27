@@ -18,6 +18,7 @@ package org.glassfish.ozark.bootstrap;
 import org.glassfish.ozark.core.ViewRequestFilter;
 import org.glassfish.ozark.core.ViewResponseFilter;
 import org.glassfish.ozark.core.ViewableWriter;
+import org.glassfish.ozark.jaxrs.JaxRsContextFilter;
 import org.glassfish.ozark.locale.LocaleRequestFilter;
 import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
@@ -40,6 +41,7 @@ public class DefaultConfigProvider implements ConfigProvider {
         context.register(CsrfValidateInterceptor.class);
         context.register(CsrfProtectFilter.class);
         context.register(LocaleRequestFilter.class);
+        context.register(JaxRsContextFilter.class);
 
     }
 

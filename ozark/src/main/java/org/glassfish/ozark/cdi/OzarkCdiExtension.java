@@ -24,6 +24,8 @@ import org.glassfish.ozark.engine.FaceletsViewEngine;
 import org.glassfish.ozark.engine.JspViewEngine;
 import org.glassfish.ozark.engine.ViewEngineFinder;
 import org.glassfish.ozark.event.*;
+import org.glassfish.ozark.jaxrs.JaxRsContextFilter;
+import org.glassfish.ozark.jaxrs.JaxRsContextProducer;
 import org.glassfish.ozark.locale.DefaultLocaleResolver;
 import org.glassfish.ozark.locale.LocaleRequestFilter;
 import org.glassfish.ozark.locale.LocaleResolverChain;
@@ -112,7 +114,11 @@ public class OzarkCdiExtension implements Extension {
                 //locale
                 LocaleRequestFilter.class,
                 LocaleResolverChain.class,
-                DefaultLocaleResolver.class
+                DefaultLocaleResolver.class,
+
+                // jaxrs
+                JaxRsContextFilter.class,
+                JaxRsContextProducer.class
 
         );
     }
