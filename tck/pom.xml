@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright © 2017 Ivar Grimstad (ivar.grimstad@gmail.com)
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.mvc-spec.ozark</groupId>
+        <artifactId>ozark-parent</artifactId>
+        <version>1.0.0-m03-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ozark-tck</artifactId>
+    <name>Ozark TCK Runner</name>
+
+    <properties>
+        <tck.version>1.0-SNAPSHOT</tck.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.mvc-spec.tck</groupId>
+            <artifactId>mvc-tck-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mvc-spec.tck</groupId>
+            <artifactId>mvc-tck-tests</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-depchain</artifactId>
+            <scope>compile</scope>
+            <type>pom</type>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- TCK BOM -->
+            <dependency>
+                <groupId>org.mvc-spec.tck</groupId>
+                <artifactId>mvc-tck-bom</artifactId>
+                <version>${tck.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+
+            <!-- Used by archive provider to lookup versions -->
+            <dependency>
+                <groupId>javax.mvc</groupId>
+                <artifactId>javax.mvc-api</artifactId>
+                <version>${spec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mvc-spec.ozark</groupId>
+                <artifactId>ozark-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mvc-spec.ozark</groupId>
+                <artifactId>ozark-jersey</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+
+        <!-- Run TCK against Glassfish 5 -->
+        <profile>
+            <id>tck-glassfish</id>
+            <activation>
+                <property>
+                    <name>tck-env</name>
+                    <value>glassfish</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <dependenciesToScan>org.mvc-spec.tck:mvc-tck-tests</dependenciesToScan>
+                            <systemProperties>
+                                <org.mvcspec.tck.api.BaseArchiveProvider>
+                                    org.mvcspec.ozark.tck.glassfish.GlassfishArchiveProvider
+                                </org.mvcspec.tck.api.BaseArchiveProvider>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.arquillian.container</groupId>
+                    <artifactId>arquillian-glassfish-remote-3.1</artifactId>
+                    <version>1.0.0.Final</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+    </profiles>
+
+</project>
