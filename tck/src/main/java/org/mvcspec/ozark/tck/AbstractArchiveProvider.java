@@ -61,6 +61,10 @@ public abstract class AbstractArchiveProvider implements BaseArchiveProvider {
         return resolveOzarkModule("org.mvc-spec.ozark", "ozark-jersey");
     }
 
+    protected File[] resolveOzarkRestEasy() {
+        return resolveOzarkModule("org.mvc-spec.ozark", "ozark-resteasy");
+    }
+
     protected File[] resolveOzarkModule(String groupId, String artifactId) {
 
         // will go offline because we only want to the local repo

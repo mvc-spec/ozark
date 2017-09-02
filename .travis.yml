@@ -16,6 +16,10 @@ jobs:
       env:
         - TYPE=tck-glassfish
       script: .travis/tests.sh ${TYPE}
+    - stage: test
+      env:
+        - TYPE=tck-wildfly
+      script: .travis/tests.sh ${TYPE}
     - stage: deploy
       script: skip
       deploy:

@@ -3,6 +3,7 @@
 set -euo pipefail
 
 GLASSFISH_URL="http://download.oracle.com/glassfish/5.0/nightly/glassfish-5.0-web-b10-06_29_2017.zip"
+WILDFLY_URL="http://download.jboss.org/wildfly/11.0.0.CR1/wildfly-11.0.0.CR1.tar.gz"
 
 if [ "${1}" == "glassfish-bundled" ]; then
 
@@ -40,6 +41,18 @@ elif [ "${1}" == "tck-glassfish" ]; then
   mvn -B -V -Dtck-env=glassfish verify
   popd
   glassfish5/bin/asadmin stop-domain
+
+elif [ "${1}" == "tck-wildfly" ]; then
+
+  curl -s -o wildfly.tgz "${WILDFLY_URL}"
+  tar -xzf wildfly.tgz
+  mvn -B -V -DskipTests clean install
+  LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=wildfly.pid ./wildfly-11.0.0.CR1/bin/standalone.sh > wildfly.log 2>&1 &
+  sleep 30
+  pushd tck
+  mvn -B -V -Dtck-env=wildfly verify
+  popd
+  kill $(cat wildfly.pid)
 
 else
   echo "Unknown test type: $1"

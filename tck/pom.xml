@@ -47,6 +47,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Maybe this should be moved to the TCK pom? -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>7.0</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
             <artifactId>shrinkwrap-resolver-depchain</artifactId>
@@ -84,6 +92,11 @@
                 <artifactId>ozark-jersey</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mvc-spec.ozark</groupId>
+                <artifactId>ozark-resteasy</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -105,11 +118,12 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <dependenciesToScan>org.mvc-spec.tck:mvc-tck-tests</dependenciesToScan>
-                            <systemProperties>
+                            <systemPropertyVariables>
+                                <arquillian.launch>glassfish</arquillian.launch>
                                 <org.mvcspec.tck.api.BaseArchiveProvider>
                                     org.mvcspec.ozark.tck.glassfish.GlassfishArchiveProvider
                                 </org.mvcspec.tck.api.BaseArchiveProvider>
-                            </systemProperties>
+                            </systemPropertyVariables>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -119,6 +133,41 @@
                     <groupId>org.jboss.arquillian.container</groupId>
                     <artifactId>arquillian-glassfish-remote-3.1</artifactId>
                     <version>1.0.0.Final</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <!-- Run TCK against Wildfly -->
+        <profile>
+            <id>tck-wildfly</id>
+            <activation>
+                <property>
+                    <name>tck-env</name>
+                    <value>wildfly</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <dependenciesToScan>org.mvc-spec.tck:mvc-tck-tests</dependenciesToScan>
+                            <systemPropertyVariables>
+                                <arquillian.launch>wildfly</arquillian.launch>
+                                <org.mvcspec.tck.api.BaseArchiveProvider>
+                                    org.mvcspec.ozark.tck.wildfly.WildflyArchiveProvider
+                                </org.mvcspec.tck.api.BaseArchiveProvider>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
+                    <version>2.1.0.Final</version>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
