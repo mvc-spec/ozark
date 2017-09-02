@@ -15,6 +15,8 @@
  */
 package org.glassfish.ozark.binding;
 
+import org.glassfish.ozark.cdi.OzarkInternal;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -39,39 +41,9 @@ public class ConstraintViolationTranslator {
 
     private static final Logger log = Logger.getLogger(ConstraintViolationTranslator.class.getName());
 
-    /**
-     * The ValidatorFactory should be available for injection as defined here:
-     * http://beanvalidation.org/1.1/spec/#d0e11327
-     */
     @Inject
-    private Instance<ValidatorFactory> validatorFactoryInstance;
-
-    /**
-     * The actual ValidatorFactory to use
-     */
+    @OzarkInternal
     private ValidatorFactory validatorFactory;
-
-    /**
-     * We should be able to get a ValidatorFactory from the container in an Java EE environment.
-     * However, if we don't get the factory, we will will use a default one. This is especially
-     * useful for non Java EE environments and in the CDI tests
-     */
-    @PostConstruct
-    public void init() {
-
-        // Prefer the ValidatorFactory provided by the container
-        Iterator<ValidatorFactory> iterator = validatorFactoryInstance.iterator();
-        if (iterator.hasNext()) {
-            this.validatorFactory = iterator.next();
-        }
-
-        // create a default factory if we didn't get one
-        else {
-            log.warning("Creating a ValidatorFactory because the container didn't provide one!");
-            this.validatorFactory = Validation.buildDefaultValidatorFactory();
-        }
-
-    }
 
     /**
      * Returns the human readable error message for a given {@link ConstraintViolation}.
