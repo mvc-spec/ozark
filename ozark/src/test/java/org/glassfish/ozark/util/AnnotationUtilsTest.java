@@ -118,24 +118,24 @@ public class AnnotationUtilsTest {
 	}
 
     @Controller
-    private static class BaseController {
+    public static class BaseController {
         @View("start-base.jsp") @Path("/base") public void start() {}
     }
 
-    private static class InheritedController extends BaseController {}
+    public static class InheritedController extends BaseController {}
 
     @Controller
-    private interface ControllerInterface {
+    public interface ControllerInterface {
         @View("start-interface.jsp") void start();
     }
 
-    private static class ControllerImpl implements ControllerInterface {
+    public static class ControllerImpl implements ControllerInterface {
         public void start() {}
     }
 
-    private static class InheritedControllerImpl extends BaseController implements ControllerInterface {}
+    public static class InheritedControllerImpl extends BaseController implements ControllerInterface {}
 
-    private static class NoInheritanceController extends BaseController {
+    public static class NoInheritanceController extends BaseController {
         @View("start.jsp") public void start() {}
     }
 
