@@ -129,11 +129,6 @@ public class MvcContextImpl implements MvcContext {
     }
 
     @Override
-    public URI uri(String s, List<Object> list) {
-        throw new UnsupportedOperationException("Not implemented yet!");
-    }
-
-    @Override
     public URI uri(String s, Map<String, Object> map) {
         throw new UnsupportedOperationException("Not implemented yet!");
     }
