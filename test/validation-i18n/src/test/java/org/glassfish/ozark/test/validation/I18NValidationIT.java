@@ -79,7 +79,7 @@ public class I18NValidationIT {
 
         HtmlPage page2 = form1.getInputByName("button").click();
         assertThat(page2.getWebResponse().getContentAsString(),
-                CoreMatchers.containsString("la taille doit \u00eatre entre 5 et 10"));
+                CoreMatchers.containsString("entre 5 et 10"));
 
     }
 
