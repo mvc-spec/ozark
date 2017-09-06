@@ -80,7 +80,7 @@ public class ValidationIT {
 
     @Test
     public void testFormControllerPropertyOk() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "/indexprop.html");
+        final HtmlPage page = webClient.getPage(webUrl + "indexprop.html");
         final HtmlForm form = page.getFormByName("form");
         final HtmlTextInput name = form.getInputByName("name");
         final HtmlTextInput age = form.getInputByName("age");
@@ -95,7 +95,7 @@ public class ValidationIT {
 
     @Test
     public void testFormControllerPropertyFail() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "/indexprop.html");
+        final HtmlPage page = webClient.getPage(webUrl + "indexprop.html");
         final HtmlForm form = page.getFormByName("form");
         final HtmlTextInput name = form.getInputByName("name");
         final HtmlTextInput age = form.getInputByName("age");
