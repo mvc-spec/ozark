@@ -17,7 +17,9 @@ package org.glassfish.ozark.test.validation;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -27,6 +29,16 @@ import java.util.Set;
  */
 @ApplicationPath("resources")
 public class MyApplication extends Application {
+
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> props = new HashMap<>();
+
+        // https://github.com/jersey/jersey/issues/3659
+        props.put("jersey.config.beanValidation.disable.validateOnExecutableCheck.server", true);
+
+        return props;
+    }
 
     @Override
     public Set<Class<?>> getClasses() {
