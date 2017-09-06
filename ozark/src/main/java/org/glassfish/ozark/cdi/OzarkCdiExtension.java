@@ -20,6 +20,7 @@ import org.glassfish.ozark.OzarkConfig;
 import org.glassfish.ozark.binding.BeanValidationProducer;
 import org.glassfish.ozark.binding.BindingResultImpl;
 import org.glassfish.ozark.binding.ConstraintViolationTranslator;
+import org.glassfish.ozark.cdi.types.AnnotatedTypeProcessor;
 import org.glassfish.ozark.core.*;
 import org.glassfish.ozark.engine.FaceletsViewEngine;
 import org.glassfish.ozark.engine.JspViewEngine;
@@ -35,18 +36,18 @@ import org.glassfish.ozark.security.CsrfProtectFilter;
 import org.glassfish.ozark.security.CsrfValidateInterceptor;
 import org.glassfish.ozark.security.EncodersImpl;
 import org.glassfish.ozark.util.CdiUtils;
+import org.glassfish.ozark.validation.ValidationInterceptor;
 
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.BeforeBeanDiscovery;
-import javax.enterprise.inject.spi.Extension;
-import javax.enterprise.inject.spi.ProcessObserverMethod;
+import javax.enterprise.inject.spi.*;
+import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.RedirectScoped;
 import javax.mvc.event.MvcEvent;
 import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class OzarkCdiExtension. Initialize redirect scope as CDI scope. Collect information
@@ -55,11 +56,16 @@ import java.util.Set;
  *
  * @author Santiago Pericas-Geertsen
  * @author Manfred Riem
+ * @author Christian Kaltepoth
  */
 @SuppressWarnings("unchecked")
 public class OzarkCdiExtension implements Extension {
 
+    private static final Logger log = Logger.getLogger(OzarkCdiExtension.class.getName());
+
     private static Set<Class<? extends MvcEvent>> observedEvents;
+
+    private final AnnotatedTypeProcessor annotatedTypeProcessor = new AnnotatedTypeProcessor();
 
     /**
      * Before bean discovery.
@@ -68,6 +74,9 @@ public class OzarkCdiExtension implements Extension {
      * @param beanManager the bean manager.
      */
     public void beforeBeanDiscovery(@Observes final BeforeBeanDiscovery event, BeanManager beanManager) {
+
+        log.fine("Observed BeforeBeanDiscovery event, registering scopes and beans...");
+
         event.addScope(RedirectScoped.class, true, true);
 
         CdiUtils.addAnnotatedTypes(event, beanManager,
@@ -104,6 +113,7 @@ public class OzarkCdiExtension implements Extension {
 
                 // cdi
                 RedirectScopeManager.class,
+                ValidationInterceptor.class,
 
                 //event
                 AfterControllerEventImpl.class,
@@ -133,6 +143,19 @@ public class OzarkCdiExtension implements Extension {
      */
     public void afterBeanDiscovery(@Observes final AfterBeanDiscovery event, BeanManager beanManager) {
         event.addContext(new RedirectScopeContext());
+    }
+
+    /**
+     * Search for {@link javax.mvc.annotation.Controller} annotation and patch AnnotatedType
+     */
+    public <T> void processAnnotatedType(@Observes @WithAnnotations({Controller.class}) ProcessAnnotatedType<T> pat) {
+
+        AnnotatedType<T> replacement = annotatedTypeProcessor.getReplacement(pat.getAnnotatedType());
+        if (replacement != null) {
+            log.log(Level.FINE, "Replacing AnnotatedType of class: {0}", replacement.getJavaClass().getName());
+            pat.setAnnotatedType(replacement);
+        }
+
     }
 
     /**

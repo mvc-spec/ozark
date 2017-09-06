@@ -18,27 +18,18 @@ package org.glassfish.ozark.jersey.binding;
 import org.glassfish.jersey.server.model.Parameter;
 import org.glassfish.jersey.server.spi.ValidationInterceptor;
 import org.glassfish.jersey.server.spi.ValidationInterceptorContext;
-import org.glassfish.ozark.binding.*;
-import org.glassfish.ozark.util.CdiUtils;
+import org.glassfish.ozark.binding.BindingErrorImpl;
+import org.glassfish.ozark.binding.BindingResultImpl;
+import org.glassfish.ozark.binding.BindingResultUtils;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
-import javax.mvc.MvcContext;
 import javax.mvc.binding.BindingError;
-import javax.mvc.binding.ValidationError;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import static org.glassfish.ozark.binding.BindingResultUtils.getValidInstanceForType;
 import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResultErrors;
-import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResultViolations;
 
 /**
  * CDI backed interceptor to handle validation and binding issues.
@@ -49,7 +40,6 @@ import static org.glassfish.ozark.binding.BindingResultUtils.updateBindingResult
 public class BindingInterceptorImpl implements ValidationInterceptor {
 
     private static final Logger LOG = Logger.getLogger(BindingInterceptorImpl.class.getName());
-
 
     @Override
     public void onValidate(ValidationInterceptorContext ctx) throws ValidationException {
@@ -87,43 +77,7 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
             throw firstException;
         }
 
-        try {
-            ctx.proceed();
-        } catch (ConstraintViolationException cve) {
-            // Update binding result or re-throw exception if not present
-            if (!updateBindingResultViolations(resource, buildViolationErrors(cve), bindingResult)) {
-                throw cve;
-            }
-        }
-    }
-
-    /**
-     * Creates a set of violation errors from a {@link ConstraintViolationException}.
-     *
-     * @param cve the exception containing the violations
-     * @return the set of validation errors
-     */
-    private Set<ValidationError> buildViolationErrors(ConstraintViolationException cve) {
-
-        Set<ValidationError> validationErrors = new LinkedHashSet<>();
-
-        for (ConstraintViolation<?> violation : cve.getConstraintViolations()) {
-
-            String paramName = ConstraintViolationUtils.getParamName(violation);
-            if (paramName == null) {
-                LOG.warning("Cannot resolve paramName for violation: " + violation);
-            }
-
-            MvcContext mvcContext = lookupBean(MvcContext.class);
-            ConstraintViolationTranslator violationTranslator = lookupBean(ConstraintViolationTranslator.class);
-
-            String message = violationTranslator.translate(violation, mvcContext.getLocale());
-
-            validationErrors.add(new ValidationErrorImpl(violation, paramName, message));
-
-        }
-
-        return validationErrors;
+        ctx.proceed();
 
     }
 
@@ -147,18 +101,6 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
             }
         }
         return null;
-    }
-
-    /**
-     * This method is a bit dirty but we will remove the class soon
-     */
-    private <T> T lookupBean(Class<T> type) {
-        List<T> result = CdiUtils.getApplicationBeans(type);
-        if (result.size() == 1) {
-            return result.get(0);
-        }
-        throw new IllegalStateException("Expected a single bean of type " + type.getName() +
-            " but found: " + result.size());
     }
 
 }
