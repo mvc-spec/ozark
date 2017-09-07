@@ -33,7 +33,7 @@ import java.util.Properties;
 
 /**
  * The JadeOzarkConfiguration. The configuration properties are qualified by
- * <code>org.glassfish.ozark.ext.jade</code>. Following precedence is used:
+ * <code>org.mvcspec.ozark.ext.jade</code>. Following precedence is used:
  * <ol>
  * <li>System Properties</li>
  * <li>Properties defined in a file named jade.properties in the classpath.</li>
@@ -47,40 +47,40 @@ public class JadeOzarkConfiguration {
     /**
      * One of HTML, XML, XHTML. Default: XHTML
      */
-    public static final String MODE = "org.glassfish.ozark.ext.jade.mode";
+    public static final String MODE = "org.mvcspec.ozark.ext.jade.mode";
 
     /**
      * Parsed templates will be cached unless this property is set to false.
      */
-    public static final String CACHING = "org.glassfish.ozark.ext.jade.caching";
+    public static final String CACHING = "org.mvcspec.ozark.ext.jade.caching";
 
     /**
      * Jade will produce compressed HTML unless this property is set to true.
      */
-    public static final String PRETTY_PRINT = "org.glassfish.ozark.ext.jade.prettyPrint";
+    public static final String PRETTY_PRINT = "org.mvcspec.ozark.ext.jade.prettyPrint";
 
     /**
      * Qualifier for a {@link Filter} which shall be used by the Jade Engine.
      * The key part after the qualifier will be used as name for the filter. The
      * value should be a fully qualified class name of the filter. Example:      <code>
-	 * org.glassfish.ozark.ext.jade.filter.shiny=com.foo.bar.ShinyFilter
+	 * org.mvcspec.ozark.ext.jade.filter.shiny=com.foo.bar.ShinyFilter
      * </code> Jade4J by default registers following filters: cdata, css, js
      */
-    public static final String FILTER_QUALIFIER = "org.glassfish.ozark.ext.jade.filter";
+    public static final String FILTER_QUALIFIER = "org.mvcspec.ozark.ext.jade.filter";
 
     /**
      * Qualifier for a Helper. The key part after the qualifier will be used as
      * name for the helper. The value should be a fully qualified class name of
      * the filter.      <code>
-	 * org.glassfish.ozark.ext.jade.helper.math=com.foo.bar.MathHelper
+	 * org.mvcspec.ozark.ext.jade.helper.math=com.foo.bar.MathHelper
      * </code>
      */
-    public static final String HELPER_QUALIFIER = "org.glassfish.ozark.ext.jade.helper";
+    public static final String HELPER_QUALIFIER = "org.mvcspec.ozark.ext.jade.helper";
 
     /**
      * The encoding used for the templates. Defaults to UTF-8.
      */
-    public static final String ENCODING = "org.glassfish.ozark.ext.jade.encoding";
+    public static final String ENCODING = "org.mvcspec.ozark.ext.jade.encoding";
 
     private Properties configFile;
 

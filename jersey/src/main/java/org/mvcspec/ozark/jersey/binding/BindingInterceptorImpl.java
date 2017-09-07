@@ -82,7 +82,7 @@ public class BindingInterceptorImpl implements ValidationInterceptor {
     }
 
     /**
-     * Finds the first argument of type {@code org.glassfish.ozark.binding.BindingResultImpl}.
+     * Finds the first argument of type {@code org.mvcspec.ozark.binding.BindingResultImpl}.
      * Inspects superclasses in case of proxies.
      *
      * @param args list of arguments to search.

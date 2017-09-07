@@ -63,7 +63,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>org.mvc-spec.ozark.resteasy</Bundle-SymbolicName>
-                        <Export-Package>org.glassfish.ozark.resteasy.*</Export-Package>
+                        <Export-Package>org.mvcspec.ozark.resteasy.*</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

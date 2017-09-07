@@ -24,7 +24,7 @@ public class PebblePropertyTest {
 
   @Test
   public void propertyKeyShouldStartWithGroupPrefix() {
-    final String groupPrefix = "org.glassfish.ozark.ext.pebble.";
+    final String groupPrefix = "org.mvcspec.ozark.ext.pebble.";
 
     Stream.of(PebbleProperty.values()).forEach(property -> {
       assertTrue(property.key().startsWith(groupPrefix));

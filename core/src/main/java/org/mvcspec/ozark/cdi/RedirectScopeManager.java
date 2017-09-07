@@ -56,7 +56,7 @@ import java.util.UUID;
 @SuppressWarnings("unchecked")
 public class RedirectScopeManager {
 
-    private static final String PREFIX = "org.glassfish.ozark.redirect.";
+    private static final String PREFIX = "org.mvcspec.ozark.redirect.";
     private static final String SCOPE_ID = PREFIX + "ScopeId";
     private static final String INSTANCE = "Instance-";
     private static final String CREATIONAL = "Creational-";

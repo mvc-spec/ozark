@@ -71,7 +71,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>org.mvc-spec.ozark.jersey</Bundle-SymbolicName>
-                        <Export-Package>org.glassfish.ozark.jersey.*</Export-Package>
+                        <Export-Package>org.mvcspec.ozark.jersey.*</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

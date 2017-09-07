@@ -44,7 +44,7 @@ public class PebbleConfigurationProducerTest {
     Properties pebbleConfiguration = pebbleConfigurationProducer.loadFromFile("pebble.properties");
 
     assertNotNull(pebbleConfiguration);
-    assertEquals(pebbleConfiguration.getProperty("org.glassfish.ozark.ext.pebble.autoEscaping"), "true");
+    assertEquals(pebbleConfiguration.getProperty("org.mvcspec.ozark.ext.pebble.autoEscaping"), "true");
   }
 
   @Test
@@ -52,7 +52,7 @@ public class PebbleConfigurationProducerTest {
     Properties pebbleConfiguration = pebbleConfigurationProducer.pebbleConfiguration();
 
     assertNotNull(pebbleConfiguration);
-    assertEquals(pebbleConfiguration.getProperty("org.glassfish.ozark.ext.pebble.autoEscaping"), "true");
+    assertEquals(pebbleConfiguration.getProperty("org.mvcspec.ozark.ext.pebble.autoEscaping"), "true");
   }
 
   @Test

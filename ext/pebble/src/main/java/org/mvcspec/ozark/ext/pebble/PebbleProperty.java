@@ -32,7 +32,7 @@ public enum PebbleProperty {
   TEMPLATE_CACHE_MAX("templateCacheMax"),
   UNKNOWN("unknown");
 
-  private static final String GROUP_PREFIX = "org.glassfish.ozark.ext.pebble.";
+  private static final String GROUP_PREFIX = "org.mvcspec.ozark.ext.pebble.";
   private final String key;
 
   private PebbleProperty(String key) {
