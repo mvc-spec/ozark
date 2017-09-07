@@ -52,7 +52,7 @@ public class ExceptionsIT {
         webClient.closeAllWindows();
     }
 
-    @Test @Ignore       // Intermittent failures with Jersey 2.19
+    @Test
     public void testNotFound() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/exceptions/not_found");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
@@ -66,7 +66,7 @@ public class ExceptionsIT {
         assertFalse(it.next().asText().contains("Hello World"));
     }
 
-    @Test @Ignore       // Intermittent failures with Jersey 2.19
+    @Test
     public void testInternalError() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/exceptions/internal_error");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
@@ -80,7 +80,7 @@ public class ExceptionsIT {
         assertFalse(it.next().asText().contains("Hello World"));
     }
 
-    @Test @Ignore       // Intermittent failures with Jersey 2.19
+    @Test
     public void testInternalErrorMapped() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/exceptions/internal_error_mapped");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
