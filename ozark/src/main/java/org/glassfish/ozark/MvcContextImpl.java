@@ -138,11 +138,6 @@ public class MvcContextImpl implements MvcContext {
     }
 
     @Override
-    public URI uri(String identifier, List<Object> params) {
-        throw new UnsupportedOperationException("Not implemented yet!");
-    }
-
-    @Override
     public MvcUriBuilder uriBuilder(String identifier) {
         return applicationUris.getUriBuilder(identifier);
     }
