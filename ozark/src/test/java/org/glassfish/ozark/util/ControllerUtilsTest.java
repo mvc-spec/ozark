@@ -70,34 +70,34 @@ public class ControllerUtilsTest {
     }
 
     @Controller
-    private static class ClassController {
+    public static class ClassController {
         public void foo() {}
         @GET public void bar() {}
         @GET public void baz() {}
     }
 
-    private static class MethodController {
+    public static class MethodController {
         @Controller public void foo() {}
         @Controller @GET public void bar() {}
     }
 
-    private static class NoController {
+    public static class NoController {
         public void foo() {}
         @GET public void bar() {}
     }
 
-    private static class InheritedController extends ClassController {
+    public static class InheritedController extends ClassController {
         public void foo() {}
         public void bar() {}
         @Path("baz") public void baz() {}
     }
 
-    private interface ControllerInterface {
+    public interface ControllerInterface {
         @GET void foo();
         @GET void baz();
     }
 
-    private static class ControllerImpl implements ControllerInterface {
+    public static class ControllerImpl implements ControllerInterface {
         public void foo() {}
         @Path("baz") public void baz() {}
     }
