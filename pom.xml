@@ -41,7 +41,7 @@
     </properties>
 
     <modules>
-        <module>ozark</module>
+        <module>core</module>
         <module>jersey</module>
         <module>resteasy</module>
         <module>tck</module>
