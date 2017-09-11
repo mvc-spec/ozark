@@ -21,6 +21,7 @@ import javax.mvc.binding.BindingResult;
 import javax.mvc.binding.ValidationError;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -36,7 +37,7 @@ public class BindingResultImpl implements BindingResult {
 
     private Set<BindingError> errors = Collections.emptySet();
 
-    private Set<ValidationError> validationErrors = Collections.emptySet();
+    private final Set<ValidationError> validationErrors = new LinkedHashSet<>();
 
     @Override
     public boolean isFailed() {
@@ -85,8 +86,8 @@ public class BindingResultImpl implements BindingResult {
                 .findFirst().orElse(null);
     }
 
-    public void setValidationErrors(Set<ValidationError> validationErrors) {
-        this.validationErrors = validationErrors;
+    public void addValidationErrors(Set<ValidationError> validationErrors) {
+        this.validationErrors.addAll(validationErrors);
     }
 
     public void setErrors(Set<BindingError> errors) {

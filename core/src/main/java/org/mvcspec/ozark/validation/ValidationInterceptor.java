@@ -67,6 +67,9 @@ public class ValidationInterceptor implements Serializable {
     @Inject
     private MvcContext mvcContext;
 
+    @Inject
+    private BindingResultImpl bindingResult;
+
     @AroundInvoke
     public Object validateMethodInvocation(InvocationContext ctx) throws Exception {
 
@@ -114,20 +117,10 @@ public class ValidationInterceptor implements Serializable {
             .map(v -> createValidationError(v))
             .collect(Collectors.toSet());
 
-        // The old code supported BindingResult as a method argument
-        // TODO: We should remove this later on
-        BindingResultImpl bindingResult = null;
-
-        // Try to find and update BindingResult
-        boolean bindingResultFound = BindingResultUtils.updateBindingResultViolations(ctx.getTarget(), validationErrors, bindingResult);
-
-        // TODO not sure if we really nead to throw an excetion here. Discuss with EG
-        if (!bindingResultFound) {
-            log.fine("Constraint violations found but cloud not find BindingResult");
-            String exceptionMessage = buildExceptionMessage(ctx.getMethod(), ctx.getParameters(), violations);
-            throw new ConstraintViolationException(exceptionMessage, violations);
-        } else {
-            log.log(Level.FINE, "Added {0} validation errors to binding result", validationErrors.size());
+        // update BindingResult
+        if (!validationErrors.isEmpty()) {
+            log.log(Level.FINE, "Adding {0} validation errors to binding result", validationErrors.size());
+            bindingResult.addValidationErrors(validationErrors);
         }
 
     }

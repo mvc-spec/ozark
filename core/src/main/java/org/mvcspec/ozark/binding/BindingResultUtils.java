@@ -114,49 +114,6 @@ public final class BindingResultUtils {
     }
 
     /**
-     * Updates the validation error set of a {@code javax.mvc.binding.BindingResult}.
-     * First checks for an argument, then a property and finally a field.
-     *
-     * @param resource the resource instance.
-     * @param validationErrors set of validation errors.
-     * @param arg argument in invocation or {@code null}.
-     * @return {@code true} if arg, property or field updated, or {@code false} otherwise.
-     */
-    public static boolean updateBindingResultViolations(Object resource, Set<ValidationError> validationErrors,
-                                                        BindingResultImpl arg) {
-
-        // Is it in an argument position
-        if (arg != null) {
-            arg.setValidationErrors(validationErrors);
-            return true;
-        }
-
-        // Otherwise, check property and then field
-        try {
-            if (hasBindingResultProperty(resource)) {
-                final Object obj = getBindingResultGetter(resource).invoke(resource);
-                getSetterMethod(obj, "setValidationErrors").invoke(obj, validationErrors);
-            } else {
-                // Then check for a field
-                final Field vr = getBindingResultField(resource);
-                if (vr != null) {
-                    AccessController.doPrivileged((java.security.PrivilegedAction<Void>) () -> {
-                        vr.setAccessible(true);
-                        return null;
-                    });
-                    final BindingResultImpl value = (BindingResultImpl) vr.get(resource);
-                    value.setValidationErrors(validationErrors);
-                } else {
-                    return false;
-                }
-            }
-        } catch (InvocationTargetException | IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-        return true;
-    }
-
-    /**
      * Searches the class hierarchy for a setter method and returns {@code null} if
      * not found.
      *
