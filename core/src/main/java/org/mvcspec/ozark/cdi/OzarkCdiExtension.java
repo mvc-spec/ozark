@@ -18,7 +18,7 @@ package org.mvcspec.ozark.cdi;
 import org.mvcspec.ozark.MvcContextImpl;
 import org.mvcspec.ozark.OzarkConfig;
 import org.mvcspec.ozark.binding.BeanValidationProducer;
-import org.mvcspec.ozark.binding.BindingResultImpl;
+import org.mvcspec.ozark.binding.BindingResultManager;
 import org.mvcspec.ozark.binding.ConstraintViolationTranslator;
 import org.mvcspec.ozark.cdi.types.AnnotatedTypeProcessor;
 import org.mvcspec.ozark.core.*;
@@ -89,7 +89,7 @@ public class OzarkCdiExtension implements Extension {
 
                 // binding
                 BeanValidationProducer.class,
-                BindingResultImpl.class,
+                BindingResultManager.class,
                 ConstraintViolationTranslator.class,
 
                 // core
