@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/mvc-spec/ozark.svg?branch=master)](https://travis-ci.org/mvc-spec/ozark)
+
 
 Sept 29, 2015
 
