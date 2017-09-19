@@ -29,6 +29,8 @@ import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Locale;
+import java.util.stream.Stream;
 
 /**
  * Implementation if the JAX-RS {@link ParamConverterProvider} contract which delegates conversion
@@ -50,34 +52,44 @@ public class MvcConverterProvider implements ParamConverterProvider {
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
 
-        MvcConverter<T> mvcConverter = converterRegistry.lookup(rawType, annotations);
+        MvcBinding mvcBinding = (MvcBinding) Stream.of(annotations)
+                .filter(a -> a.annotationType().equals(MvcBinding.class))
+                .findFirst()
+                .orElse(null);
 
-        if (mvcConverter != null) {
+        if (mvcBinding != null) {
 
-            return new ParamConverter<T>() {
+            MvcConverter<T> mvcConverter = converterRegistry.lookup(rawType, annotations);
 
-                @Override
-                public T fromString(String value) {
+            if (mvcConverter != null) {
 
-                    // execute the converter
-                    ConverterResult<T> result = mvcConverter.convert(value, rawType, mvcContext.getLocale());
+                return new ParamConverter<T>() {
 
-                    // register possible errors in BindingResult
-                    result.getError()
-                            .map(error -> new BindingErrorImpl(error, getParamName(annotations)))
-                            .ifPresent(bindingError -> bindingResult.addBindingError(bindingError));
+                    @Override
+                    public T fromString(String value) {
 
-                    // always return a value so JAX-RS continues processing the request
-                    return (T) result.getValue();
+                        // execute the converter
+                        Locale locale = mvcBinding.useRequestLocale() ? mvcContext.getLocale() : Locale.ENGLISH;
+                        ConverterResult<T> result = mvcConverter.convert(value, rawType, mvcContext.getLocale());
 
-                }
+                        // register possible errors in BindingResult
+                        result.getError()
+                                .map(error -> new BindingErrorImpl(error, getParamName(annotations)))
+                                .ifPresent(bindingError -> bindingResult.addBindingError(bindingError));
 
-                @Override
-                public String toString(T value) {
-                    throw new UnsupportedOperationException();
-                }
+                        // always return a value so JAX-RS continues processing the request
+                        return (T) result.getValue();
 
-            };
+                    }
+
+                    @Override
+                    public String toString(T value) {
+                        throw new UnsupportedOperationException();
+                    }
+
+                };
+
+            }
 
         }
         return null;
