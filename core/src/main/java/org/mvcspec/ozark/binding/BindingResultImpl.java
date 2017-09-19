@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 @Vetoed // produced by BindingResultManager
 public class BindingResultImpl implements BindingResult {
 
-    private Set<BindingError> errors = Collections.emptySet();
+    private final Set<BindingError> bindingErrors = new LinkedHashSet<>();
 
     private final Set<ValidationError> validationErrors = new LinkedHashSet<>();
 
@@ -45,14 +45,14 @@ public class BindingResultImpl implements BindingResult {
     @Override
     public boolean isFailed() {
         this.consumed = true;
-        return validationErrors.size() > 0 || errors.size() > 0;
+        return validationErrors.size() > 0 || bindingErrors.size() > 0;
     }
 
     @Override
     public List<String> getAllMessages() {
         this.consumed = true;
         final List<String> result = new ArrayList<>();
-        errors.forEach(error -> result.add(error.getMessage()));
+        bindingErrors.forEach(error -> result.add(error.getMessage()));
         validationErrors.forEach(violation -> result.add(violation.getMessage()));
         return result;
     }
@@ -60,13 +60,13 @@ public class BindingResultImpl implements BindingResult {
     @Override
     public Set<BindingError> getAllBindingErrors() {
         this.consumed = true;
-        return errors;
+        return bindingErrors;
     }
 
     @Override
     public BindingError getBindingError(String param) {
         this.consumed = true;
-        for (BindingError error : errors) {
+        for (BindingError error : bindingErrors) {
             if (param.equals(error.getParamName())) {
                 return error;
             }
@@ -100,12 +100,12 @@ public class BindingResultImpl implements BindingResult {
         this.validationErrors.addAll(validationErrors);
     }
 
-    public void setErrors(Set<BindingError> errors) {
-        this.errors = errors;
+    public void addBindingError(BindingError bindingError) {
+        this.bindingErrors.add(bindingError);
     }
 
     public boolean hasUnconsumedErrors() {
-        return !consumed && (!errors.isEmpty() || !validationErrors.isEmpty());
+        return !consumed && (!bindingErrors.isEmpty() || !validationErrors.isEmpty());
     }
 
 }

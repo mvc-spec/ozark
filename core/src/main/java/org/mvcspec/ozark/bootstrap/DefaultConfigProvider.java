@@ -15,6 +15,7 @@
  */
 package org.mvcspec.ozark.bootstrap;
 
+import org.mvcspec.ozark.binding.convert.MvcConverterProvider;
 import org.mvcspec.ozark.core.ViewRequestFilter;
 import org.mvcspec.ozark.core.ViewResponseFilter;
 import org.mvcspec.ozark.core.ViewableWriter;
@@ -42,6 +43,7 @@ public class DefaultConfigProvider implements ConfigProvider {
         context.register(CsrfProtectFilter.class);
         context.register(LocaleRequestFilter.class);
         context.register(JaxRsContextFilter.class);
+        context.register(MvcConverterProvider.class);
 
     }
 

@@ -84,7 +84,7 @@ public final class BindingResultUtils {
                                                     BindingResultImpl arg) {
         // Is it in an argument position
         if (arg != null) {
-            arg.setErrors(errors);
+            errors.stream().forEach(error -> arg.addBindingError(error));
             return true;
         }
 
@@ -102,7 +102,7 @@ public final class BindingResultUtils {
                         return null;
                     });
                     final BindingResultImpl value = (BindingResultImpl) vr.get(resource);
-                    value.setErrors(errors);
+                    errors.stream().forEach(error -> arg.addBindingError(error));
                 } else {
                     return false;
                 }
