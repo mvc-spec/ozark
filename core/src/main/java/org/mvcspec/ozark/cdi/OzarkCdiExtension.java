@@ -35,6 +35,7 @@ import org.mvcspec.ozark.locale.LocaleRequestFilter;
 import org.mvcspec.ozark.locale.LocaleResolverChain;
 import org.mvcspec.ozark.security.CsrfImpl;
 import org.mvcspec.ozark.security.CsrfProtectFilter;
+import org.mvcspec.ozark.security.CsrfTokenManager;
 import org.mvcspec.ozark.security.CsrfValidateInterceptor;
 import org.mvcspec.ozark.security.EncodersImpl;
 import org.mvcspec.ozark.uri.ApplicationUris;
@@ -112,6 +113,7 @@ public class OzarkCdiExtension implements Extension {
                 CsrfImpl.class,
                 CsrfProtectFilter.class,
                 CsrfValidateInterceptor.class,
+                CsrfTokenManager.class,
                 EncodersImpl.class,
 
                 // util

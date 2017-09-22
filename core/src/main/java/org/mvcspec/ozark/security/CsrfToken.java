@@ -15,29 +15,32 @@
  */
 package org.mvcspec.ozark.security;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
-import javax.mvc.security.Csrf;
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
-/**
- * CSRF bean in request scope available for injection and in EL via the {@link
- * javax.mvc.MvcContext} object as {@code mvc.csrf}. Provides access to the CSRF
- * header name (a constant) and the CSRF token value (retrieved from CsrfTokenManager).
- *
- * @author Santiago Pericas-Geertsen
- * @author Christian Kaltepoth
- */
-@RequestScoped
-public class CsrfImpl implements Csrf {
+public class CsrfToken implements Serializable {
 
-    @Inject
-    private CsrfTokenManager csrfTokenManager;
+    private static final long serialVersionUID = -8566501367004693995L;
+
+    private static final String NAME = "X-Requested-By";
+
+    private final String value;
+
+    private CsrfToken(String value) {
+        this.value = Objects.requireNonNull(value, "Value must not be null");
+    }
+
+    public static CsrfToken generate() {
+        return new CsrfToken(UUID.randomUUID().toString());
+    }
 
     public String getName() {
-        return csrfTokenManager.getOrCreateToken().getName();
+        return NAME;
     }
 
-    public String getToken() {
-        return csrfTokenManager.getOrCreateToken().getValue();
+    public String getValue() {
+        return value;
     }
+
 }

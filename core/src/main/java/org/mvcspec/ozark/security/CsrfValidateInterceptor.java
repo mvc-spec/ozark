@@ -38,6 +38,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
+import java.util.Optional;
 
 import static org.mvcspec.ozark.util.AnnotationUtils.hasAnnotation;
 
@@ -68,7 +69,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     private static final String DEFAULT_CHARSET = "UTF-8";
 
     @Inject
-    private Csrf csrf;
+    private CsrfTokenManager csrfTokenManager;
 
     @Inject
     private OzarkConfig ozarkConfig;
@@ -84,10 +85,13 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
         // Validate if name bound or if CSRF property enabled and a POST
         final Method controller = resourceInfo.getResourceMethod();
         if (needsValidation(controller)) {
+
+            CsrfToken token = csrfTokenManager.getToken()
+                    .orElseThrow(() -> new CsrfValidationException(messages.get("CsrfFailed", "missing token")));
+
             // First check if CSRF token is in header
-            final String csrfHeader = csrf.getName();
-            final String csrfToken = context.getHeaders().getFirst(csrfHeader);
-            if (csrf.getToken().equals(csrfToken)) {
+            final String csrfToken = context.getHeaders().getFirst(token.getName());
+            if (token.getValue().equals(csrfToken)) {
                 return context.proceed();
             }
 
@@ -115,10 +119,10 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
                 final String[] fields = pairs[i].split("=");
                 final String nn = URLDecoder.decode(fields[0], DEFAULT_CHARSET);
                 // Is this the CSRF field?
-                if (csrf.getName().equals(nn)) {
+                if (token.getName().equals(nn)) {
                     final String vv = URLDecoder.decode(fields[1], DEFAULT_CHARSET);
                     // If so then check the token
-                    if (csrf.getToken().equals(vv)) {
+                    if (token.getValue().equals(vv)) {
                         validated = true;
                         break;
                     }
