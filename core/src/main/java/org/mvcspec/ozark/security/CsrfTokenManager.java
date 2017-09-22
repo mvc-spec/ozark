@@ -15,12 +15,16 @@
  */
 package org.mvcspec.ozark.security;
 
+import org.mvcspec.ozark.OzarkConfig;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Central class for managing CSRF tokens
@@ -30,15 +34,25 @@ import java.util.Optional;
 @ApplicationScoped
 public class CsrfTokenManager {
 
+    private static final Logger log = Logger.getLogger(CsrfTokenManager.class.getName());
+
     private CsrfTokenStrategy tokenStrategy;
 
     @Inject
     private Instance<HttpServletRequest> requestInstance;
 
+    @Inject
+    private OzarkConfig ozarkConfig;
+
     @PostConstruct
     public void init() {
-        // TODO: Allow to configure which instance to use
-        this.tokenStrategy = new SessionCsrfTokenStrategy();
+
+        this.tokenStrategy = ozarkConfig.getCsrfTokenStrategy();
+
+        log.log(Level.FINE, "Configured strategy for CSRF tokens: {0}", new Object[]{
+                this.tokenStrategy.getClass().getName()
+        });
+
     }
 
     public Optional<CsrfToken> getToken() {

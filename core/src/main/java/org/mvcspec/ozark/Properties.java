@@ -28,4 +28,11 @@ public interface Properties {
      * redirect scope.
      */
     String REDIRECT_SCOPE_COOKIES = "org.mvcspec.ozark.redirectScopeCookies";
+
+    /**
+     * The implementation of {@link org.mvcspec.ozark.security.CsrfTokenStrategy}
+     * to use for storing tokens.
+     */
+    String CSRF_TOKEN_STRATEGY = "org.mvcspec.ozark.csrfTokenStrategy";
+
 }

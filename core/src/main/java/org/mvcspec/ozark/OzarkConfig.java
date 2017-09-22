@@ -16,6 +16,8 @@
 package org.mvcspec.ozark;
 
 import org.mvcspec.ozark.jaxrs.JaxRsContext;
+import org.mvcspec.ozark.security.CsrfTokenStrategy;
+import org.mvcspec.ozark.security.SessionCsrfTokenStrategy;
 
 import javax.inject.Inject;
 import javax.mvc.security.Csrf;
@@ -44,6 +46,18 @@ public class OzarkConfig {
 
         // default as defined in the spec
         return Csrf.CsrfOptions.EXPLICIT;
+
+    }
+
+    public CsrfTokenStrategy getCsrfTokenStrategy() {
+
+        Object value = config.getProperty(Properties.CSRF_TOKEN_STRATEGY);
+        if(value instanceof CsrfTokenStrategy) {
+            return (CsrfTokenStrategy) value;
+        }
+
+        // default
+        return new SessionCsrfTokenStrategy();
 
     }
 
