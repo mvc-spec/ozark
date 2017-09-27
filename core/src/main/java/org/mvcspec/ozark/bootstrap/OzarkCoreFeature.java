@@ -15,8 +15,10 @@
  */
 package org.mvcspec.ozark.bootstrap;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
 import javax.ws.rs.ext.Provider;
@@ -31,9 +33,12 @@ import javax.ws.rs.ext.Provider;
 @ConstrainedTo(RuntimeType.SERVER)
 public class OzarkCoreFeature implements Feature {
 
+    @Context
+    private ServletContext servletContext;
+
     @Override
     public boolean configure(FeatureContext context) {
-        OzarkInitializer.initialize(context);
+        OzarkInitializer.initialize(context, servletContext);
         return true;
     }
 

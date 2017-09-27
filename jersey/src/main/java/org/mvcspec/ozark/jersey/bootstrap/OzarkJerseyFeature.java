@@ -20,8 +20,10 @@ import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
 import org.mvcspec.ozark.bootstrap.OzarkInitializer;
 
 import javax.annotation.Priority;
+import javax.servlet.ServletContext;
 import javax.ws.rs.ConstrainedTo;
 import javax.ws.rs.RuntimeType;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.FeatureContext;
 
 /**
@@ -35,9 +37,12 @@ import javax.ws.rs.core.FeatureContext;
 @Priority(AutoDiscoverable.DEFAULT_PRIORITY)
 public class OzarkJerseyFeature implements ForcedAutoDiscoverable {
 
+    @Context
+    private ServletContext servletContext;
+
     @Override
     public void configure(FeatureContext context) {
-        OzarkInitializer.initialize(context);
+        OzarkInitializer.initialize(context, servletContext);
     }
 
 }

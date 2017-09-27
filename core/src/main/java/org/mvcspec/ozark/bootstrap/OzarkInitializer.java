@@ -16,14 +16,13 @@
 package org.mvcspec.ozark.bootstrap;
 
 import org.mvcspec.ozark.core.ViewResponseFilter;
-import org.mvcspec.ozark.util.AnnotationUtils;
-
-import javax.mvc.annotation.Controller;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
-import java.util.Arrays;
 import java.util.ServiceLoader;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
+import static org.mvcspec.ozark.servlet.OzarkContainerInitializer.OZARK_ENABLE_FEATURES_KEY;
 
 /**
  * Main class for triggering initialization of Ozark
@@ -44,16 +43,16 @@ public final class OzarkInitializer {
      * initialization hasn't been triggered before. So calling this method multiple times
      * won't result in duplicated providers registered.
      */
-    public static void initialize(FeatureContext context) {
+    public static void initialize(FeatureContext context, ServletContext servletContext) {
 
         Configuration config = context.getConfiguration();
 
-        if (!isAlreadyInitialized(config) && isMvcApplication(config)) {
+        if (!isAlreadyInitialized(config) && isMvcApplication(servletContext)) {
 
             log.info("Initializing Ozark...");
 
             for (ConfigProvider provider : ServiceLoader.load(ConfigProvider.class)) {
-                log.fine("Executing: " + provider.getClass().getName());
+                log.log(Level.FINE, "Executing: {0}", provider.getClass().getName());
                 provider.configure(context);
             }
 
@@ -65,30 +64,10 @@ public final class OzarkInitializer {
         return config.isRegistered(ViewResponseFilter.class);
     }
 
-    private static boolean isMvcApplication(Configuration config) {
-
-        /*
-         * Disabled for now because of:
-         * https://github.com/mvc-spec/ozark/issues/129
-         */
-        //return config.getClasses().stream().anyMatch(OzarkInitializer::isController)
-        //    || config.getInstances().stream().map(o -> o.getClass()).anyMatch(OzarkInitializer::isController);
-
-        return true;
-
-    }
-
-    private static boolean isController(Class<?> c) {
-
-        if (AnnotationUtils.getAnnotation(c, Controller.class) != null) {
-            return true;
-        }
-
-        if (Arrays.stream(c.getMethods()).anyMatch(m -> AnnotationUtils.getAnnotation(m, Controller.class) != null)) {
-            return true;
-        }
-
-        return false;
+    private static boolean isMvcApplication(ServletContext servletContext) {
+        boolean enableOzark = (Boolean) servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY);
+        log.log(Level.FINE, "Is Ozark application detected: {0}", enableOzark);
+        return enableOzark;
 
     }
 
