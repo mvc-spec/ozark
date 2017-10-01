@@ -16,17 +16,22 @@
 package org.mvcspec.ozark.security;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 /**
- * SPI to support different ways to store the CSRf token
+ * SPI to support different ways to store the CSRF token
  *
  * @author Christian Kaltepoth
  */
 public interface CsrfTokenStrategy {
 
-    Optional<CsrfToken> getToken(HttpServletRequest request);
-
-    void storeToken(HttpServletRequest request, CsrfToken token);
+    /**
+     * @param request  The current request
+     * @param response The current response
+     * @param create   Whether to create a token if there is none
+     * @return The token
+     */
+    Optional<CsrfToken> getToken(HttpServletRequest request, HttpServletResponse response, boolean create);
 
 }

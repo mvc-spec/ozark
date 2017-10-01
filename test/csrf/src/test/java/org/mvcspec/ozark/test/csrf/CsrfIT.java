@@ -39,7 +39,8 @@ import static org.junit.Assert.*;
  */
 public class CsrfIT {
 
-    private static final String CSRF_HEADER = "X-Requested-By";
+    private static final String CSRF_HEADER = "X-CSRF-TOKEN";
+    private static final String CSRF_PARAM = "_csrf";
 
     private String webUrl;
     private WebClient webClient;
@@ -69,7 +70,7 @@ public class CsrfIT {
         // Check hidden input field
         HtmlElement input = form.getHtmlElementsByTagName("input").get(1);
         assertTrue(input.getAttribute("type").equals("hidden"));
-        assertTrue(input.getAttribute("name").equals("X-Requested-By"));
+        assertTrue(input.getAttribute("name").equals(CSRF_PARAM));
         assertTrue(input.hasAttribute("value"));        // token
 
         // Submit form

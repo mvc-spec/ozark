@@ -48,7 +48,7 @@ import java.io.IOException;
 public class CsrfProtectFilter implements ContainerResponseFilter {
 
     @Inject
-    private Instance<Csrf> csrfInstance;
+    private CsrfTokenManager csrfTokenManager;
 
     @Inject
     private OzarkConfig ozarkConfig;
@@ -64,10 +64,10 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
             throws IOException {
         if (isCsrfEnabled()) {
-            final Csrf csrf = csrfInstance.get();
+            final CsrfToken token = csrfTokenManager.getOrCreateToken();
             final MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-            if (!headers.containsKey(csrf.getName())) {
-                headers.putSingle(csrf.getName(), csrf.getToken());
+            if (!headers.containsKey(token.getHeaderName())) {
+                headers.putSingle(token.getHeaderName(), token.getValue());
             }
         }
     }

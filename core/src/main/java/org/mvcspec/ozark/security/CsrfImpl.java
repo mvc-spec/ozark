@@ -34,10 +34,11 @@ public class CsrfImpl implements Csrf {
     private CsrfTokenManager csrfTokenManager;
 
     public String getName() {
-        return csrfTokenManager.getOrCreateToken().getName();
+        return csrfTokenManager.getOrCreateToken().getParamName();
     }
 
     public String getToken() {
         return csrfTokenManager.getOrCreateToken().getValue();
     }
+
 }

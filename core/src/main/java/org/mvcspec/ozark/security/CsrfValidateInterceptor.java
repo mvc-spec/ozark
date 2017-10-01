@@ -90,7 +90,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
                     .orElseThrow(() -> new CsrfValidationException(messages.get("CsrfFailed", "missing token")));
 
             // First check if CSRF token is in header
-            final String csrfToken = context.getHeaders().getFirst(token.getName());
+            final String csrfToken = context.getHeaders().getFirst(token.getHeaderName());
             if (token.getValue().equals(csrfToken)) {
                 return context.proceed();
             }
@@ -119,7 +119,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
                 final String[] fields = pairs[i].split("=");
                 final String nn = URLDecoder.decode(fields[0], DEFAULT_CHARSET);
                 // Is this the CSRF field?
-                if (token.getName().equals(nn)) {
+                if (token.getParamName().equals(nn)) {
                     final String vv = URLDecoder.decode(fields[1], DEFAULT_CHARSET);
                     // If so then check the token
                     if (token.getValue().equals(vv)) {

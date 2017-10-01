@@ -16,12 +16,13 @@
 package org.mvcspec.ozark.security;
 
 import org.mvcspec.ozark.OzarkConfig;
+import org.mvcspec.ozark.jaxrs.JaxRsContext;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +40,12 @@ public class CsrfTokenManager {
     private CsrfTokenStrategy tokenStrategy;
 
     @Inject
-    private Instance<HttpServletRequest> requestInstance;
+    @JaxRsContext
+    private HttpServletRequest request;
+
+    @Inject
+    @JaxRsContext
+    private HttpServletResponse response;
 
     @Inject
     private OzarkConfig ozarkConfig;
@@ -56,17 +62,12 @@ public class CsrfTokenManager {
     }
 
     public Optional<CsrfToken> getToken() {
-        return tokenStrategy.getToken(requestInstance.get());
+        return tokenStrategy.getToken(request, response, false);
     }
 
     public CsrfToken getOrCreateToken() {
-        return getToken().orElseGet(() -> createAndStoreToken());
-    }
-
-    private CsrfToken createAndStoreToken() {
-        CsrfToken csrfToken = CsrfToken.generate();
-        tokenStrategy.storeToken(requestInstance.get(), csrfToken);
-        return csrfToken;
+        return tokenStrategy.getToken(request, response, true)
+                .orElseThrow(() -> new IllegalStateException("Strategy did not create a token"));
     }
 
 }

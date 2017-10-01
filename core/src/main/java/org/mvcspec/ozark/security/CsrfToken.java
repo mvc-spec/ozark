@@ -17,26 +17,32 @@ package org.mvcspec.ozark.security;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.UUID;
 
+/**
+ * This class represents a CSRF token.
+ *
+ * @author Christian Kaltepoth
+ */
 public class CsrfToken implements Serializable {
 
     private static final long serialVersionUID = -8566501367004693995L;
 
-    private static final String NAME = "X-Requested-By";
-
+    private final String headerName;
+    private final String paramName;
     private final String value;
 
-    private CsrfToken(String value) {
+    public CsrfToken(String headerName, String paramName, String value) {
+        this.headerName = Objects.requireNonNull(headerName, "Header name must not be null");
+        this.paramName = Objects.requireNonNull(paramName, "Parameter name must not be null");
         this.value = Objects.requireNonNull(value, "Value must not be null");
     }
 
-    public static CsrfToken generate() {
-        return new CsrfToken(UUID.randomUUID().toString());
+    public String getHeaderName() {
+        return headerName;
     }
 
-    public String getName() {
-        return NAME;
+    public String getParamName() {
+        return paramName;
     }
 
     public String getValue() {

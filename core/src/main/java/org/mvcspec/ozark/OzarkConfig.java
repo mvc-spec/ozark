@@ -52,12 +52,12 @@ public class OzarkConfig {
     public CsrfTokenStrategy getCsrfTokenStrategy() {
 
         Object value = config.getProperty(Properties.CSRF_TOKEN_STRATEGY);
-        if(value instanceof CsrfTokenStrategy) {
+        if (value instanceof CsrfTokenStrategy) {
             return (CsrfTokenStrategy) value;
         }
 
         // default
-        return new SessionCsrfTokenStrategy();
+        return new SessionCsrfTokenStrategy.Builder().build();
 
     }
 

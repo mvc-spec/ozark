@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class MvcIT {
 
-    private static final String CSRF_HEADER = "X-Requested-By";
+    private static final String CSRF_PARAM = "_csrf";
 
     private String webUrl;
     private WebClient webClient;
@@ -51,7 +51,7 @@ public class MvcIT {
         HtmlPage page = webClient.getPage(webUrl + "resources/mvc");
         assertEquals("/test-mvc", page.getElementById("contextPath").asText());
         assertEquals("/resources", page.getElementById("applicationPath").asText());
-        assertEquals(CSRF_HEADER, page.getElementById("csrf").asText());
+        assertEquals(CSRF_PARAM, page.getElementById("csrf").asText());
         assertEquals("<&>", page.getElementById("encoders").asText());
         assertEquals("true", page.getElementById("config").asText());
     }

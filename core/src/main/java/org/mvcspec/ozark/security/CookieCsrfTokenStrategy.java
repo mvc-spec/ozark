@@ -15,9 +15,10 @@
  */
 package org.mvcspec.ozark.security;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,43 +27,58 @@ import java.util.UUID;
  *
  * @author Christian Kaltepoth
  */
-public class SessionCsrfTokenStrategy implements CsrfTokenStrategy {
-
-    private static final String SESSION_KEY = SessionCsrfTokenStrategy.class.getName() + ".TOKEN";
+public class CookieCsrfTokenStrategy implements CsrfTokenStrategy {
 
     private final String headerName;
     private final String paramName;
+    private final String cookieName;
+    private final int maxAge;
+    private final boolean httpOnly;
 
-    private SessionCsrfTokenStrategy(Builder builder) {
+    private CookieCsrfTokenStrategy(Builder builder) {
         headerName = builder.headerName;
         paramName = builder.paramName;
+        cookieName = builder.cookieName;
+        maxAge = builder.maxAge;
+        httpOnly = builder.httpOnly;
     }
 
     @Override
     public Optional<CsrfToken> getToken(HttpServletRequest request, HttpServletResponse response, boolean create) {
 
-        HttpSession session = request.getSession(false);
-        if (session != null) {
-            Object value = session.getAttribute(SESSION_KEY);
-            if (value instanceof CsrfToken) {
-                return Optional.of((CsrfToken) value);
+        for (Cookie cookie : request.getCookies()) {
+            if (Objects.equals(cookie.getName(), cookieName)) {
+                return Optional.of(new CsrfToken(headerName, paramName, cookie.getValue()));
             }
         }
 
         if (create) {
+
             CsrfToken token = new CsrfToken(headerName, paramName, UUID.randomUUID().toString());
-            request.getSession(true).setAttribute(SESSION_KEY, token);
+
+            Cookie cookie = new Cookie(cookieName, token.getValue());
+            cookie.setSecure(request.isSecure());
+            cookie.setPath(request.getContextPath().isEmpty() ? "/" : request.getContextPath());
+            cookie.setMaxAge(maxAge);
+            cookie.setHttpOnly(httpOnly);
+            response.addCookie(cookie);
+
             return Optional.of(token);
+
         }
 
         return Optional.empty();
 
     }
 
+
     public static final class Builder {
 
-        private String headerName = "X-CSRF-TOKEN";
+        private String headerName = "X-XSRF-TOKEN";
         private String paramName = "_csrf";
+        private String cookieName = "XSRF-TOKEN";
+        private int maxAge = -1;
+        private boolean httpOnly = false;
 
         public Builder headerName(String headerName) {
             this.headerName = headerName;
@@ -74,8 +90,23 @@ public class SessionCsrfTokenStrategy implements CsrfTokenStrategy {
             return this;
         }
 
-        public SessionCsrfTokenStrategy build() {
-            return new SessionCsrfTokenStrategy(this);
+        public Builder cookieName(String cookieName) {
+            this.cookieName = cookieName;
+            return this;
+        }
+
+        public Builder maxAge(int maxAge) {
+            this.maxAge = maxAge;
+            return this;
+        }
+
+        public Builder httpOnly(boolean httpOnly) {
+            this.httpOnly = httpOnly;
+            return this;
+        }
+
+        public CookieCsrfTokenStrategy build() {
+            return new CookieCsrfTokenStrategy(this);
         }
 
     }
