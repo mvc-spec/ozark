@@ -21,6 +21,7 @@ import org.apache.velocity.app.VelocityEngine;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
+import org.mvcspec.ozark.ext.velocity.tools.WebappResourceLoader;
 
 /**
  * Producer for the VelocityEngine used by VelocityViewEngine.
@@ -37,7 +38,7 @@ public class DefaultVelocityEngineProducer {
     public VelocityEngine getVelocityEngine() {
         VelocityEngine velocityEngine = new VelocityEngine();
         velocityEngine.setProperty("resource.loader", "webapp");
-        velocityEngine.setProperty("webapp.resource.loader.class", "org.apache.velocity.tools.view.servlet.WebappLoader");
+        velocityEngine.setProperty("webapp.resource.loader.class", WebappResourceLoader.class.getCanonicalName());
         velocityEngine.setApplicationAttribute("javax.servlet.ServletContext", servletContext);
         velocityEngine.init();
         return velocityEngine;
