@@ -17,10 +17,10 @@ package org.mvcspec.ozark.validation;
 
 import org.mvcspec.ozark.binding.BindingResultImpl;
 import org.mvcspec.ozark.binding.ConstraintViolationTranslator;
-import org.mvcspec.ozark.binding.ConstraintViolationUtils;
 import org.mvcspec.ozark.binding.ValidationErrorImpl;
+import org.mvcspec.ozark.binding.validate.ConstraintViolationMetadata;
+import org.mvcspec.ozark.binding.validate.ConstraintViolations;
 import org.mvcspec.ozark.cdi.OzarkInternal;
-import org.mvcspec.ozark.binding.*;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -30,7 +30,6 @@ import javax.interceptor.InvocationContext;
 import javax.mvc.MvcContext;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.executable.ExecutableValidator;
@@ -77,7 +76,7 @@ public class ValidationInterceptor implements Serializable {
         Method method = ctx.getMethod();
 
         log.log(Level.FINE, "Starting validation for controller method: {0}#{1}", new Object[]{
-            resource.getClass().getName(), method.getName()
+                resource.getClass().getName(), method.getName()
         });
 
         Validator validator = validatorFactory.getValidator();
@@ -85,12 +84,12 @@ public class ValidationInterceptor implements Serializable {
 
         // validate controller property parameters
         processViolations(ctx,
-            validator.validate(resource)
+                validator.validate(resource)
         );
 
         // validate controller method parameters
         processViolations(ctx,
-            executableValidator.validateParameters(resource, method, ctx.getParameters())
+                executableValidator.validateParameters(resource, method, ctx.getParameters())
         );
 
         // execute method
@@ -98,7 +97,7 @@ public class ValidationInterceptor implements Serializable {
 
         // TODO: Does this make sense? Nobody will be able to handle these. Remove?
         processViolations(ctx,
-            executableValidator.validateReturnValue(resource, method, result)
+                executableValidator.validateReturnValue(resource, method, result)
         );
 
         return result;
@@ -114,8 +113,8 @@ public class ValidationInterceptor implements Serializable {
 
         // create validation errors
         Set<ValidationError> validationErrors = violations.stream()
-            .map(v -> createValidationError(v))
-            .collect(Collectors.toSet());
+                .map(v -> createValidationError(v))
+                .collect(Collectors.toSet());
 
         // update BindingResult
         if (!validationErrors.isEmpty()) {
@@ -127,7 +126,9 @@ public class ValidationInterceptor implements Serializable {
 
     private ValidationErrorImpl createValidationError(ConstraintViolation<?> violation) {
 
-        String paramName = ConstraintViolationUtils.getParamName(violation);
+        ConstraintViolationMetadata metadata = ConstraintViolations.getMetadata(violation);
+
+        String paramName = metadata.getParamName().orElse(null);
         if (paramName == null) {
             log.log(Level.WARNING, "Cannot resolve paramName for violation: {0}", violation);
         }

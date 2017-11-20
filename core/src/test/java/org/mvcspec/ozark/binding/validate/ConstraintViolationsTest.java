@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mvcspec.ozark.binding;
+package org.mvcspec.ozark.binding.validate;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,7 +35,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConstraintViolationUtilsTest {
+public class ConstraintViolationsTest {
 
     private static final long VALID = 10;
     private static final long INVALID = -10;
@@ -56,7 +56,7 @@ public class ConstraintViolationUtilsTest {
 
         Assert.assertEquals(1, violations.size());
         Assert.assertEquals("controller-field",
-                ConstraintViolationUtils.getParamName(violations.get(0)));
+                ConstraintViolations.getMetadata(violations.get(0)).getParamName().orElse(null));
 
     }
 
@@ -76,7 +76,7 @@ public class ConstraintViolationUtilsTest {
 
         Assert.assertEquals(1, violations.size());
         Assert.assertEquals("method-parameter",
-                ConstraintViolationUtils.getParamName(violations.get(0)));
+                ConstraintViolations.getMetadata(violations.get(0)).getParamName().orElse(null));
 
     }
 
@@ -97,7 +97,7 @@ public class ConstraintViolationUtilsTest {
 
         Assert.assertEquals(1, violations.size());
         Assert.assertEquals("bean-param-field",
-                ConstraintViolationUtils.getParamName(violations.get(0)));
+                ConstraintViolations.getMetadata(violations.get(0)).getParamName().orElse(null));
 
     }
 

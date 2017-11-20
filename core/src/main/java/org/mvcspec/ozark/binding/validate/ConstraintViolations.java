@@ -13,33 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mvcspec.ozark.binding;
+package org.mvcspec.ozark.binding.validate;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ElementKind;
 import javax.validation.Path;
-import javax.ws.rs.CookieParam;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.MatrixParam;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
- * Utility class for working with {@link ConstraintViolation}.
+ * Utility class to create {@link ConstraintViolationMetadata} from constraint violations.
  *
  * @author Christian Kaltepoth
  */
-public class ConstraintViolationUtils {
+public class ConstraintViolations {
 
-    /**
-     * Returns the parameter name to which a {@link ConstraintViolation} refers.
-     */
-    public static String getParamName(ConstraintViolation<?> violation) {
+    private static final Logger log = Logger.getLogger(ConstraintViolations.class.getName());
+
+    private ConstraintViolations() {
+        // utility class
+    }
+
+    public static ConstraintViolationMetadata getMetadata(ConstraintViolation<?> violation) {
+
+        Annotation[] annotations = getAnnotations(violation);
+
+        return new ConstraintViolationMetadata(violation, annotations);
+
+    }
+
+    private static Annotation[] getAnnotations(ConstraintViolation<?> violation) {
+
 
         // create a simple list of nodes from the path
         List<Path.Node> nodes = new ArrayList<>();
@@ -52,9 +60,7 @@ public class ConstraintViolationUtils {
         if (lastNode.getKind() == ElementKind.PROPERTY) {
 
             Path.PropertyNode propertyNode = lastNode.as(Path.PropertyNode.class);
-            Annotation[] annotations = getPropertyAnnotations(violation, propertyNode);
-
-            return getBeanNameFromAnnotation(annotations);
+            return getPropertyAnnotations(violation, propertyNode);
 
         }
 
@@ -64,15 +70,16 @@ public class ConstraintViolationUtils {
             Path.MethodNode methodNode = nodes.get(0).as(Path.MethodNode.class);
             Path.ParameterNode parameterNode = nodes.get(1).as(Path.ParameterNode.class);
 
-            Annotation[] annotations = getParameterAnnotations(violation, methodNode, parameterNode);
-
-            return getBeanNameFromAnnotation(annotations);
+            return getParameterAnnotations(violation, methodNode, parameterNode);
 
         }
 
-        return null;
+
+        log.warning("Could not read annotations for path: " + violation.getPropertyPath().toString());
+        return new Annotation[0];
 
     }
+
 
     private static Annotation[] getPropertyAnnotations(ConstraintViolation<?> violation, Path.PropertyNode node) {
 
@@ -109,27 +116,6 @@ public class ConstraintViolationUtils {
             throw new IllegalStateException(e);
         }
 
-    }
-
-    private static String getBeanNameFromAnnotation(Annotation[] annotations) {
-        for (Annotation annotation : annotations) {
-            if (annotation instanceof QueryParam) {
-                return ((QueryParam) annotation).value();
-            }
-            if (annotation instanceof PathParam) {
-                return ((PathParam) annotation).value();
-            }
-            if (annotation instanceof FormParam) {
-                return ((FormParam) annotation).value();
-            }
-            if (annotation instanceof MatrixParam) {
-                return ((MatrixParam) annotation).value();
-            }
-            if (annotation instanceof CookieParam) {
-                return ((CookieParam) annotation).value();
-            }
-        }
-        return null;
     }
 
 }
