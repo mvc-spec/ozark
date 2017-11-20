@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mvcspec.ozark.validation;
+package org.mvcspec.ozark.binding.validate;
 
 import org.mvcspec.ozark.binding.BindingResultImpl;
 import org.mvcspec.ozark.binding.ConstraintViolationTranslator;
 import org.mvcspec.ozark.binding.ValidationErrorImpl;
-import org.mvcspec.ozark.binding.validate.ConstraintViolationMetadata;
-import org.mvcspec.ozark.binding.validate.ConstraintViolations;
 import org.mvcspec.ozark.cdi.OzarkInternal;
 
 import javax.annotation.Priority;

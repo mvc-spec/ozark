@@ -41,7 +41,7 @@ import org.mvcspec.ozark.security.EncodersImpl;
 import org.mvcspec.ozark.uri.ApplicationUris;
 import org.mvcspec.ozark.uri.UriTemplateParser;
 import org.mvcspec.ozark.util.CdiUtils;
-import org.mvcspec.ozark.validation.ValidationInterceptor;
+import org.mvcspec.ozark.binding.validate.ValidationInterceptor;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;

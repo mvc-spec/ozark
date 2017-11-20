@@ -15,7 +15,7 @@
  */
 package org.mvcspec.ozark.cdi.types;
 
-import org.mvcspec.ozark.validation.ValidationInterceptorBinding;
+import org.mvcspec.ozark.binding.validate.ValidationInterceptorBinding;
 
 import javax.enterprise.inject.spi.AnnotatedMethod;
 import javax.enterprise.inject.spi.AnnotatedType;
