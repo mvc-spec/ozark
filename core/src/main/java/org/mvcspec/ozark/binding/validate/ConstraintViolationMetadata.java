@@ -45,7 +45,7 @@ public class ConstraintViolationMetadata {
         return Arrays.stream(annotations).filter(a -> a.annotationType().equals(type)).findFirst();
     }
 
-    public boolean hasAnnotation(Class<Annotation> type) {
+    public boolean hasAnnotation(Class<? extends Annotation> type) {
         return Arrays.stream(annotations).anyMatch(a -> a.annotationType().equals(type));
     }
 
