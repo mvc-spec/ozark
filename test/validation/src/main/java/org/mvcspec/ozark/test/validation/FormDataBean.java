@@ -15,6 +15,8 @@
  */
 package org.mvcspec.ozark.test.validation;
 
+import org.mvcspec.ozark.binding.convert.MvcBinding;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import javax.validation.constraints.NotNull;
@@ -31,10 +33,12 @@ import javax.ws.rs.FormParam;
 @RequestScoped
 public class FormDataBean {
 
+    @MvcBinding
     @NotNull @Size(min=1)
     @FormParam("name")
     private String name;
 
+    @MvcBinding
     @Min(18)
     @FormParam("age")
     private int age;

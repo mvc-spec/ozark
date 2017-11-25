@@ -31,6 +31,11 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>org.mvc-spec.ozark</groupId>
+            <artifactId>ozark-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-server</artifactId>
             <version>${jersey.version}</version>

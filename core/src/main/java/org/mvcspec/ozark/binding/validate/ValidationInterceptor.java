@@ -18,6 +18,7 @@ package org.mvcspec.ozark.binding.validate;
 import org.mvcspec.ozark.binding.BindingResultImpl;
 import org.mvcspec.ozark.binding.ConstraintViolationTranslator;
 import org.mvcspec.ozark.binding.ValidationErrorImpl;
+import org.mvcspec.ozark.binding.convert.MvcBinding;
 import org.mvcspec.ozark.cdi.OzarkInternal;
 
 import javax.annotation.Priority;
@@ -28,16 +29,16 @@ import javax.interceptor.InvocationContext;
 import javax.mvc.MvcContext;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.executable.ExecutableValidator;
 import java.io.Serializable;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * CDI backed interceptor to handle validation and binding issues.
@@ -109,10 +110,29 @@ public class ValidationInterceptor implements Serializable {
             return;
         }
 
-        // create validation errors
-        Set<ValidationError> validationErrors = violations.stream()
-                .map(v -> createValidationError(v))
-                .collect(Collectors.toSet());
+        log.log(Level.FINE, "Validation found {} constraint violations...", violations.size());
+
+        Set<ValidationError> validationErrors = new LinkedHashSet<>();
+
+        for (ConstraintViolation<Object> violation : violations) {
+
+            ConstraintViolationMetadata metadata = ConstraintViolations.getMetadata(violation);
+
+            // MVC bindings
+            if (metadata.hasAnnotation(MvcBinding.class)) {
+
+                String paramName = metadata.getParamName().orElse(null);
+                if (paramName == null) {
+                    log.log(Level.WARNING, "Cannot resolve paramName for violation: {0}", violation);
+                }
+
+                String message = violationTranslator.translate(violation, mvcContext.getLocale());
+
+                validationErrors.add(new ValidationErrorImpl(violation, paramName, message));
+
+            }
+
+        }
 
         // update BindingResult
         if (!validationErrors.isEmpty()) {
@@ -120,45 +140,6 @@ public class ValidationInterceptor implements Serializable {
             bindingResult.addValidationErrors(validationErrors);
         }
 
-    }
-
-    private ValidationErrorImpl createValidationError(ConstraintViolation<?> violation) {
-
-        ConstraintViolationMetadata metadata = ConstraintViolations.getMetadata(violation);
-
-        String paramName = metadata.getParamName().orElse(null);
-        if (paramName == null) {
-            log.log(Level.WARNING, "Cannot resolve paramName for violation: {0}", violation);
-        }
-
-        String message = violationTranslator.translate(violation, mvcContext.getLocale());
-
-        return new ValidationErrorImpl(violation, paramName, message);
-
-    }
-
-    private String buildExceptionMessage(Method method, Object[] args,
-                                         Set<? extends ConstraintViolation<?>> violations) {
-
-        StringBuilder message = new StringBuilder(400);
-        message.append(violations.size());
-        message.append(" constraint violation(s) occurred during method invocation.");
-        message.append("\nMethod: ");
-        message.append(method);
-        message.append("\nArgument values: ");
-        message.append(Arrays.toString(args));
-        message.append("\nConstraint violations: ");
-
-        int i = 1;
-        for (ConstraintViolation<?> violation : violations) {
-            message.append("\n (");
-            message.append(i);
-            message.append(") Message: ");
-            message.append(violation.getMessage());
-            i++;
-        }
-
-        return message.toString();
     }
 
 }

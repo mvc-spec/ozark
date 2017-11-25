@@ -15,6 +15,8 @@
  */
 package org.mvcspec.ozark.test.validation;
 
+import org.mvcspec.ozark.binding.convert.MvcBinding;
+
 import javax.validation.constraints.Size;
 import javax.ws.rs.FormParam;
 
@@ -23,6 +25,7 @@ import javax.ws.rs.FormParam;
  */
 public class FormBean {
 
+    @MvcBinding
     @FormParam("name")
     @Size(min = 5, max = 10)
     private String name;
