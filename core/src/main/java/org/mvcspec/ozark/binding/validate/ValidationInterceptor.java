@@ -126,9 +126,17 @@ public class ValidationInterceptor implements Serializable {
                     log.log(Level.WARNING, "Cannot resolve paramName for violation: {0}", violation);
                 }
 
-                String message = violationTranslator.translate(violation, mvcContext.getLocale());
+                boolean hasBindingError = paramName != null && !paramName.isEmpty() &&
+                        bindingResult.getBindingError(paramName) != null;
 
-                validationErrors.add(new ValidationErrorImpl(violation, paramName, message));
+                // if there was a binding error, not the user's input but the default value got validated
+                if (!hasBindingError) {
+
+                    String message = violationTranslator.translate(violation, mvcContext.getLocale());
+
+                    validationErrors.add(new ValidationErrorImpl(violation, paramName, message));
+
+                }
 
             }
 
