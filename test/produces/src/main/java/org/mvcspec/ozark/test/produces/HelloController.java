@@ -15,12 +15,12 @@
  */
 package org.mvcspec.ozark.test.produces;
 
+import org.mvcspec.ozark.engine.Viewable;
+
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
-import javax.mvc.Viewable;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import java.util.Locale;

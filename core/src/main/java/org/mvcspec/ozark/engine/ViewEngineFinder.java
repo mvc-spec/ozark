@@ -20,7 +20,6 @@ import org.mvcspec.ozark.util.CdiUtils;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.Viewable;
 import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
 import java.util.HashMap;
@@ -33,7 +32,7 @@ import static java.util.stream.Collectors.toSet;
 import static org.mvcspec.ozark.util.AnnotationUtils.getAnnotation;
 
 /**
- * <p>Selects the view engine for a {@link javax.mvc.Viewable}. If the viewable
+ * <p>Selects the view engine for a {@link Viewable}. If the viewable
  * includes a reference to an engine, the selection process stops and returns
  * it. Otherwise, the method {@link javax.mvc.engine.ViewEngine#supports(String)}
  * is called for each of the view engines injectable via CDI (i.e., all classes

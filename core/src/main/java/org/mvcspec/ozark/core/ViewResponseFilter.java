@@ -21,7 +21,7 @@ import org.mvcspec.ozark.event.ControllerRedirectEventImpl;
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.mvc.Viewable;
+import org.mvcspec.ozark.engine.Viewable;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.View;
 import javax.mvc.event.AfterControllerEvent;
@@ -57,7 +57,7 @@ import static org.mvcspec.ozark.util.PathUtils.*;
 /**
  * <p>A JAX-RS response filter that fires a {@link javax.mvc.event.AfterControllerEvent}
  * event. It also verifies the static return type of the controller method is correct,
- * and ensures that the entity is a {@link javax.mvc.Viewable} to be processed by
+ * and ensures that the entity is a {@link Viewable} to be processed by
  * {@link ViewableWriter}.</p>
  *
  * <p>The class uses {@link javax.ws.rs.core.Request} which implements the algorithm in

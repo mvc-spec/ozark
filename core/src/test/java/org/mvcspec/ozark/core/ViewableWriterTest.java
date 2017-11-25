@@ -22,7 +22,7 @@ import org.junit.Test;
 import javax.enterprise.event.Event;
 import javax.mvc.event.MvcEvent;
 import javax.ws.rs.core.Configuration;
-import javax.mvc.Viewable;
+import org.mvcspec.ozark.engine.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.servlet.http.HttpServletRequest;

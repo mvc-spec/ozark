@@ -27,7 +27,7 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.MvcContext;
-import javax.mvc.Viewable;
+import org.mvcspec.ozark.engine.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
 import javax.mvc.event.AfterProcessViewEvent;
@@ -62,7 +62,7 @@ import java.nio.charset.Charset;
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 /**
- * <p>Body writer for a {@link javax.mvc.Viewable} instance. Looks for a
+ * <p>Body writer for a {@link Viewable} instance. Looks for a
  * {@link javax.mvc.engine.ViewEngine} that is capable of processing the view. If no
  * engine is found, it forwards the request back to the servlet container.</p>
  *
