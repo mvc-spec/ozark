@@ -35,6 +35,7 @@
         <module>freemarker</module>
         <module>handlebars</module>
         <module>jade</module>
+        <module>jetbrick</module>
         <module>jsr223</module>
         <module>mustache</module>
         <module>stringtemplate</module>
