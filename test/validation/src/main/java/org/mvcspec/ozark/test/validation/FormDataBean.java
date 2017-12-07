@@ -15,10 +15,9 @@
  */
 package org.mvcspec.ozark.test.validation;
 
-import org.mvcspec.ozark.binding.convert.MvcBinding;
-
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
+import javax.mvc.binding.MvcBinding;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;

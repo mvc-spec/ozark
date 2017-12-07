@@ -18,7 +18,6 @@ package org.mvcspec.ozark.binding.validate;
 import org.mvcspec.ozark.binding.BindingResultImpl;
 import org.mvcspec.ozark.binding.ConstraintViolationTranslator;
 import org.mvcspec.ozark.binding.ValidationErrorImpl;
-import org.mvcspec.ozark.binding.convert.MvcBinding;
 import org.mvcspec.ozark.cdi.OzarkInternal;
 
 import javax.annotation.Priority;
@@ -27,6 +26,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.mvc.MvcContext;
+import javax.mvc.binding.MvcBinding;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;

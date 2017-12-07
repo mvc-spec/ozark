@@ -20,6 +20,7 @@ import org.mvcspec.ozark.binding.BindingResultImpl;
 
 import javax.inject.Inject;
 import javax.mvc.MvcContext;
+import javax.mvc.binding.MvcBinding;
 import javax.ws.rs.CookieParam;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.MatrixParam;
@@ -69,7 +70,6 @@ public class MvcConverterProvider implements ParamConverterProvider {
                     public T fromString(String value) {
 
                         // execute the converter
-                        Locale locale = mvcBinding.useRequestLocale() ? mvcContext.getLocale() : Locale.ENGLISH;
                         ConverterResult<T> result = mvcConverter.convert(value, rawType, mvcContext.getLocale());
 
                         // register possible errors in BindingResult

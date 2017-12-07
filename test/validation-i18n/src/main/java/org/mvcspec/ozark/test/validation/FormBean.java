@@ -15,8 +15,7 @@
  */
 package org.mvcspec.ozark.test.validation;
 
-import org.mvcspec.ozark.binding.convert.MvcBinding;
-
+import javax.mvc.binding.MvcBinding;
 import javax.validation.constraints.Size;
 import javax.ws.rs.FormParam;
 
