@@ -16,13 +16,14 @@
 package org.mvcspec.ozark.bootstrap;
 
 import org.mvcspec.ozark.core.ViewResponseFilter;
+import org.mvcspec.ozark.servlet.OzarkContainerInitializer;
+
+import javax.servlet.ServletContext;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContext;
-import static org.mvcspec.ozark.servlet.OzarkContainerInitializer.OZARK_ENABLE_FEATURES_KEY;
 
 /**
  * Main class for triggering initialization of Ozark
@@ -65,9 +66,14 @@ public final class OzarkInitializer {
     }
 
     private static boolean isMvcApplication(ServletContext servletContext) {
-        boolean enableOzark = !Boolean.FALSE.equals(servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY));
+
+        // we fall back to enable Ozark if detection didn't work
+        Object controllersFound = servletContext.getAttribute(OzarkContainerInitializer.OZARK_CONTROLLERS_FOUND);
+        boolean enableOzark = !Boolean.FALSE.equals(controllersFound);
+
         log.log(Level.FINE, "Is Ozark application detected: {0}", enableOzark);
         return enableOzark;
+
     }
 
 }

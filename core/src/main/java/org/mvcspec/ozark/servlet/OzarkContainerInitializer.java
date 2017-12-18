@@ -41,12 +41,14 @@ import static org.mvcspec.ozark.util.AnnotationUtils.hasAnnotationOnClassOrMetho
 public class OzarkContainerInitializer implements ServletContainerInitializer {
 
     public static final String APP_PATH_CONTEXT_KEY = OzarkContainerInitializer.class.getName() + ".APP_PATH";
-    public static final String OZARK_ENABLE_FEATURES_KEY = "ozark.enableFeatures";
+
+    public static final String OZARK_CONTROLLERS_FOUND = "ozark.controllers-found";
+
     private static final Logger LOG = Logger.getLogger(OzarkContainerInitializer.class.getName());
 
     @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        servletContext.setAttribute(OZARK_ENABLE_FEATURES_KEY, false);
+        servletContext.setAttribute(OZARK_CONTROLLERS_FOUND, false);
         if (classes != null && !classes.isEmpty()) {
             LOG.log(Level.INFO, "Ozark version {0} started", getClass().getPackage().getImplementationVersion());
             for (Class<?> clazz : classes) {
@@ -60,10 +62,10 @@ public class OzarkContainerInitializer implements ServletContainerInitializer {
                 }
                 if (hasAnnotationOnClassOrMethod(clazz, Path.class)
                         && hasAnnotationOnClassOrMethod(clazz, Controller.class)) {
-                    servletContext.setAttribute(OZARK_ENABLE_FEATURES_KEY, true);
+                    servletContext.setAttribute(OZARK_CONTROLLERS_FOUND, true);
                 }
                 if (servletContext.getAttribute(APP_PATH_CONTEXT_KEY) != null
-                        && (Boolean) servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY) == true) {
+                        && (Boolean) servletContext.getAttribute(OZARK_CONTROLLERS_FOUND) == true) {
                     break;  // no need to loop further
                 }
             }
