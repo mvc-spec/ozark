@@ -53,7 +53,7 @@ public class MvcConverterProvider implements ParamConverterProvider {
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> rawType, Type genericType, Annotation[] annotations) {
 
-        MvcBinding mvcBinding = (MvcBinding) Stream.of(annotations)
+        MvcBinding mvcBinding = (MvcBinding) Stream.of(annotations != null ? annotations : new Annotation[0])
                 .filter(a -> a.annotationType().equals(MvcBinding.class))
                 .findFirst()
                 .orElse(null);
