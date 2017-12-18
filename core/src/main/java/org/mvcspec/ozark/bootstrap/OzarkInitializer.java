@@ -65,10 +65,9 @@ public final class OzarkInitializer {
     }
 
     private static boolean isMvcApplication(ServletContext servletContext) {
-        boolean enableOzark = (Boolean) servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY);
+        boolean enableOzark = Boolean.TRUE.equals(servletContext.getAttribute(OZARK_ENABLE_FEATURES_KEY));
         log.log(Level.FINE, "Is Ozark application detected: {0}", enableOzark);
         return enableOzark;
-
     }
 
 }
