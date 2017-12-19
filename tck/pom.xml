@@ -31,7 +31,12 @@
     <name>Ozark TCK Runner</name>
 
     <properties>
+
         <tck.version>1.0-SNAPSHOT</tck.version>
+
+        <!-- We don't deploy this module, because the TCK isn't in Maven Central yet -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+
     </properties>
 
     <dependencies>
