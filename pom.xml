@@ -63,8 +63,23 @@
     <scm>
         <connection>scm:git:https://github.com/mvc-spec/ozark.git</connection>
         <developerConnection>scm:git:https://github.com/mvc-spec/ozark.git</developerConnection>
-        <tag>HEAD</tag>
+        <url>https://github.com/mvc-spec/ozark</url>
     </scm>
+
+    <developers>
+        <developer>
+            <id>ivargrimstad</id>
+            <email>ivar.grimstad@gmail.com</email>
+            <name>Ivar Grimstad</name>
+            <timezone>CET</timezone>
+        </developer>
+        <developer>
+            <id>chkal</id>
+            <email>christian@kaltepoth.de</email>
+            <name>Christian Kaltepoth</name>
+            <timezone>CET</timezone>
+        </developer>
+    </developers>
 
     <distributionManagement>
         <snapshotRepository>
