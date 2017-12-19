@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.mvc-spec.ozark</groupId>
         <artifactId>ozark-parent</artifactId>
-        <version>1.0.0-m03</version>
+        <version>1.0.0-m04-SNAPSHOT</version>
     </parent>
 
     <groupId>org.mvc-spec.ozark.ext</groupId>
