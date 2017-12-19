@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.mvc-spec.ozark.ext</groupId>
         <artifactId>ozark-parent-ext</artifactId>
-        <version>1.0.0-m03-SNAPSHOT</version>
+        <version>1.0.0-m03</version>
     </parent>
     <artifactId>ozark-freemarker</artifactId>
     <packaging>jar</packaging>

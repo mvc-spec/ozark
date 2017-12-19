@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.mvc-spec.ozark.test</groupId>
         <artifactId>ozark-parent-test</artifactId>
-        <version>1.0.0-m03-SNAPSHOT</version>
+        <version>1.0.0-m03</version>
     </parent>
     <artifactId>redirectScope</artifactId>
     <packaging>war</packaging>
