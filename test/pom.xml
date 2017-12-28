@@ -54,8 +54,7 @@
     <modules>
         <module>annotations</module>
         <module>application-path</module>
-        <!-- Doesn't work on Glassfish 5.0 b25 -->
-        <!--<module>asciidoc</module>-->
+        <module>asciidoc</module>
         <module>book-cdi</module>
         <module>book-models</module>
         <module>conversation</module>

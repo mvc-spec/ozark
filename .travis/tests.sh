@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-GLASSFISH_URL="http://download.oracle.com/glassfish/5.0/release/glassfish-5.0-web.zip"
+GLASSFISH_URL="http://download.oracle.com/glassfish/5.0.1/nightly/latest-web.zip"
 WILDFLY_URL="http://download.jboss.org/wildfly/11.0.0.CR1/wildfly-11.0.0.CR1.tar.gz"
 
 if [ "${1}" == "glassfish-bundled" ]; then
