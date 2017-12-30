@@ -68,7 +68,8 @@ public final class OzarkInitializer {
     private static boolean isMvcApplication(ServletContext servletContext) {
 
         // we fall back to enable Ozark if detection didn't work
-        Object controllersFound = servletContext.getAttribute(OzarkContainerInitializer.OZARK_CONTROLLERS_FOUND);
+        Object controllersFound = servletContext != null ? 
+                servletContext.getAttribute(OzarkContainerInitializer.OZARK_CONTROLLERS_FOUND) : null;
         boolean enableOzark = !Boolean.FALSE.equals(controllersFound);
 
         log.log(Level.FINE, "Is Ozark application detected: {0}", enableOzark);
