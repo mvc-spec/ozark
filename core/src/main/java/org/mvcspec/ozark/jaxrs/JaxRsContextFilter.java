@@ -25,6 +25,7 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
 import java.io.IOException;
+import javax.ws.rs.core.Application;
 
 /**
  * This filter is used to get the JAX-RS context objects and feed them to the corresponding
@@ -48,9 +49,12 @@ public class JaxRsContextFilter implements ContainerRequestFilter {
     @Context
     private HttpServletResponse response;
 
+    @Context
+    private Application application;
+    
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        jaxRsContextProducer.populate(configuration, request, response);
+        jaxRsContextProducer.populate(configuration, request, response, application);
     }
 
 }

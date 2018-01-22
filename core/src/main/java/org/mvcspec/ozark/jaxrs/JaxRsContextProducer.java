@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Configuration;
 import java.util.Objects;
+import javax.ws.rs.core.Application;
 
 /**
  * CDI producer for JAX-RS context objects
@@ -36,10 +37,13 @@ public class JaxRsContextProducer {
 
     private HttpServletResponse response;
 
-    protected void populate(Configuration configuration, HttpServletRequest request, HttpServletResponse response) {
+    private Application application; 
+    
+    protected void populate(Configuration configuration, HttpServletRequest request, HttpServletResponse response, Application application) {
         this.configuration = Objects.requireNonNull(configuration, "Configuration is required");
         this.request = Objects.requireNonNull(request, "HttpServletRequest is required");
         this.response = Objects.requireNonNull(response, "Configuration is required");
+        this.application = Objects.requireNonNull(application, "Application is required");
     }
 
     @Produces
@@ -66,4 +70,12 @@ public class JaxRsContextProducer {
     }
 
 
+    @Produces
+    @JaxRsContext
+    @RequestScoped
+    public Application produceApplication() {
+        return Objects.requireNonNull(application, "Cannot produce Application");
+    }
+    
+    
 }

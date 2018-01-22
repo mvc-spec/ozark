@@ -38,6 +38,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.mvcspec.ozark.jaxrs.JaxRsContext;
 
 /**
  * <p>Parses all instances of {@link UriTemplate} and @Produces
@@ -51,7 +52,7 @@ public class UriTemplateParser {
     @Inject
     MvcContext mvcContext;
 
-    @Context
+    @Inject @JaxRsContext
     Application application;
 
     @Produces @ApplicationScoped
