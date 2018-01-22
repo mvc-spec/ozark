@@ -29,7 +29,6 @@ import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriBuilder;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
