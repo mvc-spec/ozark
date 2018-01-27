@@ -29,7 +29,6 @@ import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Application;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriBuilder;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.mvcspec.ozark.jaxrs.JaxRsContext;
 
 /**
  * <p>Parses all instances of {@link UriTemplate} and @Produces
@@ -51,7 +51,7 @@ public class UriTemplateParser {
     @Inject
     MvcContext mvcContext;
 
-    @Context
+    @Inject @JaxRsContext
     Application application;
 
     @Produces @ApplicationScoped
