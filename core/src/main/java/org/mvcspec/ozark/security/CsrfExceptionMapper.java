@@ -15,21 +15,24 @@
  */
 package org.mvcspec.ozark.security;
 
-import javax.ws.rs.ForbiddenException;
+import javax.mvc.security.CsrfValidationException;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
 
 /**
- * Custom exception thrown if CSRF token validation failed. Will ensure a corresponding
- * response phrase is send to the client.
+ * Default mapper for {@link CsrfValidationException}.
  *
  * @author Christian Kaltepoth
  */
-public class CsrfValidationException extends ForbiddenException {
+public class CsrfExceptionMapper implements ExceptionMapper<CsrfValidationException> {
 
-    private static final long serialVersionUID = 303250971213462525L;
+    @Override
+    public Response toResponse(CsrfValidationException e) {
 
-    public CsrfValidationException(String message) {
-        super(message, Response.status(new CsrfValidationStatusType(message)).build());
+        CsrfValidationStatusType status = new CsrfValidationStatusType(e.getMessage());
+
+        return Response.status(status).build();
+
     }
 
     /**

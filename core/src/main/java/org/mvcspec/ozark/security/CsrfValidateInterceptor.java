@@ -22,7 +22,7 @@ import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.CsrfValid;
-import javax.mvc.security.Csrf;
+import javax.mvc.security.CsrfValidationException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.WebApplicationException;
@@ -38,7 +38,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLDecoder;
-import java.util.Optional;
 
 import static org.mvcspec.ozark.util.AnnotationUtils.hasAnnotation;
 
