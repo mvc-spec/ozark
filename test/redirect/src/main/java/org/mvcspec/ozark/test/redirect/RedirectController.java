@@ -55,7 +55,7 @@ public class RedirectController {
     @Path("response2")
     public Response getResponse2() {
         eventReceived = false;
-        return Response.status(Response.Status.FOUND)
+        return Response.status(Response.Status.SEE_OTHER)
                 .header("Location", "redirect/here")
                 .build();
     }
