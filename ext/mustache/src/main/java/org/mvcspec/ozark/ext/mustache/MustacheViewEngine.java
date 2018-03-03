@@ -25,7 +25,9 @@ import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * Class MustacheViewEngine.
@@ -47,8 +49,8 @@ public class MustacheViewEngine extends ViewEngineBase {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         Mustache mustache = factory.compile(resolveView(context));
-        try {
-            Writer writer = context.getResponse().getWriter();
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
             mustache.execute(writer, context.getModels()).flush();
         } catch (IOException e) {
             throw new ViewEngineException(e);

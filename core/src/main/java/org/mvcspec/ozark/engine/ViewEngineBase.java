@@ -20,6 +20,9 @@ import org.mvcspec.ozark.util.PropertyUtils;
 
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
+import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MediaType;
+import java.nio.charset.Charset;
 
 /**
  * Base class for view engines that factors out all common logic.
@@ -44,4 +47,30 @@ public abstract class ViewEngineBase implements ViewEngine {
         }
         return view;
     }
+
+    /**
+     * This methods reads the 'charset' parameter from the media type and falls back to 'UTF-8'
+     * if the parameter is missing. It then adds a corresponding 'Content-Type' with the correct
+     * encoding to the response headers. Finally it returns the effective character set so that
+     * the view engine implementation can use it write the data correctly to the output stream.
+     *
+     * @param context The context
+     * @return the effective charset
+     */
+    protected Charset resolveCharsetAndSetContentType(ViewEngineContext context) {
+
+        String charset = context.getMediaType().getParameters().get("charset");
+        if (charset == null) {
+            charset = "UTF-8";
+        }
+
+        MediaType mediaType = context.getMediaType().withCharset(charset);
+
+        context.getResponseHeaders().putSingle(HttpHeaders.CONTENT_TYPE, mediaType.toString());
+
+        return Charset.forName(charset);
+
+    }
+
+
 }

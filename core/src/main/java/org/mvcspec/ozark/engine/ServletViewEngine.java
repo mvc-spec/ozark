@@ -61,8 +61,8 @@ public abstract class ServletViewEngine extends ViewEngineBase {
     protected void forwardRequest(ViewEngineContext context, String... extensions)
             throws ServletException, IOException {
         RequestDispatcher rd = null;
-        HttpServletRequest request = context.getRequest();
-        final HttpServletResponse response = context.getResponse();
+        HttpServletRequest request = context.getRequest(HttpServletRequest.class);
+        final HttpServletResponse response = context.getResponse(HttpServletResponse.class);
 
         // Set attributes in request before forward
         final Models models = context.getModels();
@@ -77,7 +77,7 @@ public abstract class ServletViewEngine extends ViewEngineBase {
                 rd = servletContext.getNamedDispatcher(e.getKey());     // by servlet name
 
                 // Need new request with updated URI and extension matching semantics
-                request = new HttpServletRequestWrapper(context.getRequest()) {
+                request = new HttpServletRequestWrapper(context.getRequest(HttpServletRequest.class)) {
                     @Override
                     public String getRequestURI() {
                         return resolveView(context);

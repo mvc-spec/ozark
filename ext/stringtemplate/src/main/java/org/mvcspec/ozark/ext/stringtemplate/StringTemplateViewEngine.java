@@ -22,7 +22,10 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.*;
 import javax.servlet.ServletContext;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 
 import static java.util.regex.Pattern.compile;
@@ -47,8 +50,8 @@ public class StringTemplateViewEngine extends ViewEngineBase {
 	public void processView(ViewEngineContext context) throws ViewEngineException {
 		ST stringTemplate = getStringTemplate(resolveView(context));
 		context.getModels().forEach((key, value) -> add(key, value, stringTemplate));
-		try {
-			PrintWriter writer = context.getResponse().getWriter();
+		Charset charset = resolveCharsetAndSetContentType(context);
+		try(Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
 			stringTemplate.write(new AutoIndentWriter(writer));
 			stringTemplate.render();
 		} catch (Exception e) {

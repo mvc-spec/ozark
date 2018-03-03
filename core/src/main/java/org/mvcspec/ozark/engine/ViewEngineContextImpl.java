@@ -17,11 +17,12 @@ package org.mvcspec.ozark.engine;
 
 import javax.mvc.Models;
 import javax.mvc.engine.ViewEngineContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
+import java.io.OutputStream;
 
 /**
  * Implementation of {@link javax.mvc.engine.ViewEngineContext}. Provides all the information
@@ -35,9 +36,15 @@ public class ViewEngineContextImpl implements ViewEngineContext {
 
     private final Models models;
 
-    private final HttpServletRequest request;
+    private final Object request;
 
-    private final HttpServletResponse response;
+    private final Object response;
+
+    private final MultivaluedMap<String, Object> responseHeaders;
+
+    private final OutputStream outputStream;
+
+    private final MediaType mediaType;
 
     private final UriInfo uriInfo;
 
@@ -52,16 +59,24 @@ public class ViewEngineContextImpl implements ViewEngineContext {
      * @param models Instance of models.
      * @param request HTTP servlet request.
      * @param response HTTP servlet response.
+     * @param responseHeaders The response responseHeaders
+     * @param outputStream The response stream
+     * @param mediaType The media type
      * @param uriInfo URI info about the request.
      * @param resourceInfo Resource matched info.
      * @param configuration the configuration.
      */
-    public ViewEngineContextImpl(String view, Models models, HttpServletRequest request, HttpServletResponse response,
-                                 UriInfo uriInfo, ResourceInfo resourceInfo, Configuration configuration) {
+    public ViewEngineContextImpl(String view, Models models, Object request, Object response,
+                                 MultivaluedMap<String, Object> responseHeaders, OutputStream outputStream,
+                                 MediaType mediaType, UriInfo uriInfo, ResourceInfo resourceInfo,
+                                 Configuration configuration) {
         this.view = view;
         this.models = models;
         this.request = request;
         this.response = response;
+        this.responseHeaders = responseHeaders;
+        this.outputStream = outputStream;
+        this.mediaType = mediaType;
         this.uriInfo = uriInfo;
         this.resourceInfo = resourceInfo;
         this.configuration = configuration;
@@ -78,13 +93,28 @@ public class ViewEngineContextImpl implements ViewEngineContext {
     }
 
     @Override
-    public HttpServletRequest getRequest() {
-        return request;
+    public <T> T getRequest(Class<T> type) {
+        return type.cast(request);
     }
 
     @Override
-    public HttpServletResponse getResponse() {
-        return response;
+    public <T> T getResponse(Class<T> type) {
+        return type.cast(response);
+    }
+
+    @Override
+    public MultivaluedMap<String, Object> getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    @Override
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    @Override
+    public MediaType getMediaType() {
+        return mediaType;
     }
 
     @Override

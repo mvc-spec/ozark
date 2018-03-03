@@ -26,7 +26,13 @@ import javax.mvc.Models;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.stream.Collectors;
 
 /**
@@ -52,8 +58,9 @@ public class HandlebarsViewEngine extends ViewEngineBase {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         Models models = context.getModels();
+        Charset charset = resolveCharsetAndSetContentType(context);
 
-        try (PrintWriter writer = context.getResponse().getWriter();
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset);
             InputStream resourceAsStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(in);) {

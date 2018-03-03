@@ -16,16 +16,22 @@
 package org.mvcspec.ozark.ext.jsr223;
 
 import org.mvcspec.ozark.engine.ViewEngineBase;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.script.Bindings;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.servlet.ServletContext;
 
 /**
  * The JSR-223 ViewEngine.
@@ -39,6 +45,12 @@ public class Jsr223ViewEngine extends ViewEngineBase {
      * Stores our global ScriptEngineManager.
      */
     ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+
+    /**
+     * Servlet context so we can load load the script
+     */
+    @Inject
+    private ServletContext servletContext;
 
     /**
      * What extensions does the view engine support.
@@ -77,8 +89,7 @@ public class Jsr223ViewEngine extends ViewEngineBase {
         ScriptEngine scriptEngine = getScriptEngine(context.getView());
         Object responseObject;
         try {
-            InputStream inputStream = context.getRequest()
-                    .getServletContext().getResourceAsStream(resolveView(context));
+            InputStream inputStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader reader = new InputStreamReader(inputStream);
             Bindings bindings = scriptEngine.createBindings();
             bindings.put("models", context.getModels());
@@ -87,8 +98,9 @@ public class Jsr223ViewEngine extends ViewEngineBase {
             throw new ViewEngineException("Unable to execute script", exception);
         }
 
-        try {
-            context.getResponse().getWriter().print(responseObject.toString());
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
+            writer.write(responseObject.toString());
         } catch (IOException exception) {
             throw new ViewEngineException("Unable to write response", exception);
         }

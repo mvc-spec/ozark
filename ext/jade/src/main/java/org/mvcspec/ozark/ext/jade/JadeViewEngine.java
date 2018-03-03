@@ -25,6 +25,9 @@ import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * The Jade View Engine.
@@ -48,8 +51,9 @@ public class JadeViewEngine extends ViewEngineBase {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
         String viewPath = resolveView(context);
-        try {
-            jade.renderTemplate(jade.getTemplate(viewPath), context.getModels(), context.getResponse().getWriter());
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
+            jade.renderTemplate(jade.getTemplate(viewPath), context.getModels(), writer);
         } catch (JadeException | IOException ex) {
             throw new ViewEngineException(String.format("Could not process view %s.", context.getView()), ex);
         }
