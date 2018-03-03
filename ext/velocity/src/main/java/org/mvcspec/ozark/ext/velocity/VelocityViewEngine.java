@@ -15,17 +15,20 @@
  */
 package org.mvcspec.ozark.ext.velocity;
 
-import org.mvcspec.ozark.engine.ViewEngineBase;
-import org.mvcspec.ozark.engine.ViewEngineConfig;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.mvcspec.ozark.engine.ViewEngineBase;
+import org.mvcspec.ozark.engine.ViewEngineConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * Class VelocityViewEngine.
@@ -46,10 +49,11 @@ public class VelocityViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
             Template template = velocityEngine.getTemplate(resolveView(context));
             VelocityContext velocityContext = new VelocityContext(context.getModels());
-            template.merge(velocityContext, context.getResponse().getWriter());
+            template.merge(velocityContext, writer);
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }

@@ -27,6 +27,8 @@ import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * Class FreemarkerViewEngine.
@@ -47,10 +49,10 @@ public class FreemarkerViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        try {
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
             final Template template = configuration.getTemplate(resolveView(context));
-            template.process(context.getModels(),
-                    new OutputStreamWriter(context.getResponse().getOutputStream()));
+            template.process(context.getModels(), writer);
         } catch (TemplateException | IOException e) {
             throw new ViewEngineException(e);
         }

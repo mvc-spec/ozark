@@ -52,8 +52,8 @@ public class ThymeleafViewEngine extends ViewEngineBase {
 	@Override
 	public void processView(ViewEngineContext context) throws ViewEngineException {
 		try {
-			HttpServletRequest request = context.getRequest();
-			HttpServletResponse response = context.getResponse();
+			HttpServletRequest request = context.getRequest(HttpServletRequest.class);
+			HttpServletResponse response = context.getResponse(HttpServletResponse.class);
 			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 			ctx.setVariables(context.getModels());
 			engine.process(resolveView(context), ctx, response.getWriter());

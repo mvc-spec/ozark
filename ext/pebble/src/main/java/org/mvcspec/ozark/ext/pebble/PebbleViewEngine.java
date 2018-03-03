@@ -23,6 +23,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import javax.inject.Inject;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 
@@ -48,8 +51,9 @@ public class PebbleViewEngine extends ViewEngineBase {
   public void processView(ViewEngineContext context) throws ViewEngineException {
     String viewPath = resolveView(context);
 
-    try {
-      pebbleEngine.getTemplate(viewPath).evaluate(context.getResponse().getWriter(), context.getModels());
+    Charset charset = resolveCharsetAndSetContentType(context);
+    try(Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
+      pebbleEngine.getTemplate(viewPath).evaluate(writer, context.getModels());
     } catch (PebbleException | IOException ex) {
       throw new ViewEngineException(String.format("Could not process view %s.", context.getView()), ex);
     }

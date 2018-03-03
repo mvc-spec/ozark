@@ -15,8 +15,11 @@
  */
 package org.mvcspec.ozark.ext.jetbrick;
 
-import java.io.IOException;
-import java.io.Writer;
+import jetbrick.template.JetEngine;
+import jetbrick.template.JetTemplate;
+import jetbrick.template.TemplateException;
+import jetbrick.template.web.JetWebEngine;
+import org.mvcspec.ozark.engine.ViewEngineBase;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -24,43 +27,40 @@ import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
-
-import org.mvcspec.ozark.engine.ViewEngineBase;
-
-import jetbrick.template.JetEngine;
-import jetbrick.template.JetTemplate;
-import jetbrick.template.TemplateException;
-import jetbrick.template.web.JetWebEngine;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 
 /**
  * @author Daniel Dias
  */
 @ApplicationScoped
-public class JetbrickViewEngine  extends ViewEngineBase {
+public class JetbrickViewEngine extends ViewEngineBase {
 
-	private  JetEngine jetEngine;
+    private JetEngine jetEngine;
 
-	@PostConstruct
-	public void init() {
-		jetEngine = JetWebEngine.create(servletContext);
-	}
+    @PostConstruct
+    public void init() {
+        jetEngine = JetWebEngine.create(servletContext);
+    }
 
-	@Inject
-	private ServletContext servletContext;
+    @Inject
+    private ServletContext servletContext;
 
-	@Override
-	public boolean supports(String view) {
-		return view.endsWith(".jetx");
-	}
+    @Override
+    public boolean supports(String view) {
+        return view.endsWith(".jetx");
+    }
 
-	@Override
-	public void processView(ViewEngineContext context) throws ViewEngineException {
-		try {
-			JetTemplate template = jetEngine.getTemplate(resolveView(context));
-			Writer writer = context.getResponse().getWriter();
-			template.render(context.getModels(), writer);
-		} catch (TemplateException | IOException e) {
-			throw new ViewEngineException(e);
-		}
-	}
+    @Override
+    public void processView(ViewEngineContext context) throws ViewEngineException {
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
+            JetTemplate template = jetEngine.getTemplate(resolveView(context));
+            template.render(context.getModels(), writer);
+        } catch (TemplateException | IOException e) {
+            throw new ViewEngineException(e);
+        }
+    }
 }

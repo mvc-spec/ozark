@@ -15,10 +15,10 @@
  */
 package org.mvcspec.ozark.ext.asciidoc;
 
-import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Asciidoctor.Factory;
 import org.asciidoctor.Options;
+import org.mvcspec.ozark.engine.ViewEngineBase;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,7 +29,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 /**
@@ -56,7 +58,8 @@ public class AsciiDocViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        try (PrintWriter writer = context.getResponse().getWriter();
+        Charset charset = resolveCharsetAndSetContentType(context);
+        try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset);
              InputStream is = servletContext.getResourceAsStream(resolveView(context));
              InputStreamReader isr = new InputStreamReader(is, "UTF-8");
              BufferedReader reader = new BufferedReader(isr)) {

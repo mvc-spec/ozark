@@ -39,7 +39,7 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetView() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl("view", null, null, null, null, null, null);
+        ViewEngineContextImpl context = new ViewEngineContextImpl("view", null, null, null, null, null, null, null, null, null);
         assertEquals("view", context.getView());
     }
 
@@ -48,9 +48,9 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetModels() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null);
+        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, null);
         assertNull(context.getModels());
-        context = new ViewEngineContextImpl(null, new ModelsImpl(), null, null, null, null, null);
+        context = new ViewEngineContextImpl(null, new ModelsImpl(), null, null, null, null, null, null, null, null);
         assertNotNull(context.getModels());
     }
 
@@ -59,12 +59,12 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetRequest() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null);
-        assertNull(context.getRequest());
+        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, null);
+        assertNull(context.getRequest(Object.class));
         HttpServletRequest request = EasyMock.createMock(HttpServletRequest.class);
         replay(request);
-        context = new ViewEngineContextImpl(null, null, request, null, null, null, null);
-        assertNotNull(context.getRequest());
+        context = new ViewEngineContextImpl(null, null, request, null, null, null, null, null, null, null);
+        assertNotNull(context.getRequest(Object.class));
         verify(request);
     }
 
@@ -73,12 +73,12 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetResponse() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null);
-        assertNull(context.getResponse());
+        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, null);
+        assertNull(context.getResponse(Object.class));
         HttpServletResponse response = EasyMock.createMock(HttpServletResponse.class);
         replay(response);
-        context = new ViewEngineContextImpl(null, null, null, response, null, null, null);
-        assertNotNull(context.getResponse());
+        context = new ViewEngineContextImpl(null, null, null, response, null, null, null, null, null, null);
+        assertNotNull(context.getResponse(Object.class));
         verify(response);
     }
 
@@ -87,11 +87,11 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetUriInfo() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null);
+        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, null);
         assertNull(context.getUriInfo());
         UriInfo uriInfo = EasyMock.createMock(UriInfo.class);
         replay(uriInfo);
-        context = new ViewEngineContextImpl(null, null, null, null, uriInfo, null, null);
+        context = new ViewEngineContextImpl(null, null, null, null, null, null, null, uriInfo, null, null);
         assertNotNull(context.getUriInfo());
         verify(uriInfo);
     }
@@ -101,11 +101,11 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetResourceInfo() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null);
+        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, null);
         assertNull(context.getResourceInfo());
         ResourceInfo resourceInfo = EasyMock.createMock(ResourceInfo.class);
         replay(resourceInfo);
-        context = new ViewEngineContextImpl(null, null, null, null, null, resourceInfo, null);
+        context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, resourceInfo, null);
         assertNotNull(context.getResourceInfo());
         verify(resourceInfo);
     }
@@ -115,11 +115,11 @@ public class ViewEngineContextImplTest {
      */
     @Test
     public void testGetConfiguration() {
-        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null);
+        ViewEngineContextImpl context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, null);
         assertNull(context.getConfiguration());
         Configuration config = EasyMock.createMock(Configuration.class);
         replay(config);
-        context = new ViewEngineContextImpl(null, null, null, null, null, null, config);
+        context = new ViewEngineContextImpl(null, null, null, null, null, null, null, null, null, config);
         assertNotNull(context.getConfiguration());
         verify(config);
     }
