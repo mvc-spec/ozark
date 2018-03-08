@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Custom AnnotatedMethod implementation which wraps an existing instance and allows
@@ -38,10 +40,22 @@ public class AnnotatedMethodWrapper<T> implements AnnotatedMethod<T> {
 
     private final Set<Annotation> annotations = new LinkedHashSet<>();
 
-    public AnnotatedMethodWrapper(AnnotatedMethod<T> wrapped, Set<Annotation> additionalAnnotations) {
+    public AnnotatedMethodWrapper(AnnotatedMethod<T> wrapped,
+                                  Set<Annotation> additionalAnnotations,
+                                  Predicate<Class> annotationBlacklist) {
+
         this.wrapped = wrapped;
-        this.annotations.addAll(wrapped.getAnnotations());
+
+        // add annotations which are not blacklisted
+        this.annotations.addAll(
+                wrapped.getAnnotations().stream()
+                        .filter(a -> !annotationBlacklist.test(a.annotationType()))
+                        .collect(Collectors.toList())
+        );
+
+        // add additional annotations
         this.annotations.addAll(additionalAnnotations);
+
     }
 
     @Override

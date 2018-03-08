@@ -43,8 +43,10 @@ import org.mvcspec.ozark.uri.UriTemplateParser;
 import org.mvcspec.ozark.util.CdiUtils;
 import org.mvcspec.ozark.binding.validate.ValidationInterceptor;
 
+import javax.annotation.Priority;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
+import javax.interceptor.Interceptor;
 import javax.mvc.annotation.Controller;
 import javax.mvc.annotation.RedirectScoped;
 import javax.mvc.event.MvcEvent;
@@ -158,9 +160,12 @@ public class OzarkCdiExtension implements Extension {
     }
 
     /**
-     * Search for {@link javax.mvc.annotation.Controller} annotation and patch AnnotatedType
+     * Search for {@link javax.mvc.annotation.Controller} annotation and patch AnnotatedType.
+     * Note: PLATFORM_AFTER is required so we execute AFTER the Hibernate Validator Extension
      */
-    public <T> void processAnnotatedType(@Observes @WithAnnotations({Controller.class}) ProcessAnnotatedType<T> pat) {
+    public <T> void processAnnotatedType(
+            @Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) @WithAnnotations({Controller.class})
+                    ProcessAnnotatedType<T> pat) {
 
         AnnotatedType<T> replacement = annotatedTypeProcessor.getReplacement(pat.getAnnotatedType());
         if (replacement != null) {
