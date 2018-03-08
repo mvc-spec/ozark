@@ -21,9 +21,11 @@ import javax.enterprise.inject.spi.AnnotatedMethod;
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.mvc.annotation.Controller;
 import javax.ws.rs.*;
+import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -69,6 +71,13 @@ public class AnnotatedTypeProcessor {
         boolean hasControllerAnnotation =
             method.getAnnotation(Controller.class) != null || type.getAnnotation(Controller.class) != null;
 
+        // added to methods to intercept calls with our validation interceptor
+        Set<Annotation> markerAnnotations = Collections.singleton(() -> ValidationInterceptorBinding.class);
+
+        // drop Hibernate Validator's marker annotations to skip the native validation
+        Predicate<Class> annotationBlacklist =
+                clazz -> clazz.getName().equals("org.hibernate.validator.cdi.internal.interceptor.MethodValidated");
+
         if (isResourceMethod && hasControllerAnnotation) {
 
             log.log(Level.FINE, "Found controller method: {0}#{1}", new Object[]{
@@ -76,9 +85,7 @@ public class AnnotatedTypeProcessor {
                 method.getJavaMember().getName()
             });
 
-            return new AnnotatedMethodWrapper<>(
-                method, Collections.singleton(() -> ValidationInterceptorBinding.class)
-            );
+            return new AnnotatedMethodWrapper<>(method, markerAnnotations, annotationBlacklist);
 
         }
 
