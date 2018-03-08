@@ -17,6 +17,7 @@ package org.mvcspec.ozark.jersey.bootstrap;
 
 import org.mvcspec.ozark.bootstrap.ConfigProvider;
 import org.mvcspec.ozark.jersey.model.OzarkModelProcessor;
+import org.mvcspec.ozark.jersey.validation.OzarkValidationInterceptor;
 
 import javax.ws.rs.core.FeatureContext;
 
@@ -30,6 +31,7 @@ public class JerseyConfigProvider implements ConfigProvider {
     @Override
     public void configure(FeatureContext context) {
         context.register(OzarkModelProcessor.class);
+        context.register(OzarkValidationInterceptor.class);
     }
 
 }
