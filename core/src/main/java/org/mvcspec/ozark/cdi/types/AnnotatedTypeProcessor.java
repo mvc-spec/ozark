@@ -75,8 +75,7 @@ public class AnnotatedTypeProcessor {
         Set<Annotation> markerAnnotations = Collections.singleton(() -> ValidationInterceptorBinding.class);
 
         // drop Hibernate Validator's marker annotations to skip the native validation
-        Predicate<Class> annotationBlacklist =
-                clazz -> clazz.getName().equals("org.hibernate.validator.cdi.internal.interceptor.MethodValidated");
+        Predicate<Class> annotationBlacklist = clazz -> isHibernateValidatorMarkerAnnotation(clazz);
 
         if (isResourceMethod && hasControllerAnnotation) {
 
@@ -91,6 +90,16 @@ public class AnnotatedTypeProcessor {
 
         return null;
 
+    }
+
+    private boolean isHibernateValidatorMarkerAnnotation(Class clazz) {
+        /*
+         * May be one of these classes depending on the exact Hibernate Validator version:
+         * org.hibernate.validator.cdi.internal.interceptor.MethodValidated
+         * org.hibernate.validator.internal.cdi.interceptor.MethodValidated
+         */
+        return clazz.getName().startsWith("org.hibernate.validator.")
+                && clazz.getName().endsWith(".interceptor.MethodValidated");
     }
 
 }
