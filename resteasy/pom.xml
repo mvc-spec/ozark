@@ -31,7 +31,7 @@
     <name>Ozark RESTEasy</name>
 
     <properties>
-        <resteasy.version>2.2.1.GA</resteasy.version>
+        <resteasy.version>4.0.0-SNAPSHOT</resteasy.version>
     </properties>
 
     <build>
