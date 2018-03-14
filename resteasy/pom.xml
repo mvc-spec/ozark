@@ -31,7 +31,7 @@
     <name>Ozark RESTEasy</name>
 
     <properties>
-        <resteasy.version>2.2.1.GA</resteasy.version>
+        <resteasy.version>3.1.4.Final</resteasy.version>
     </properties>
 
     <build>
@@ -87,6 +87,12 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
+            <version>${resteasy.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-validator-provider-11</artifactId>
             <version>${resteasy.version}</version>
             <scope>provided</scope>
         </dependency>
