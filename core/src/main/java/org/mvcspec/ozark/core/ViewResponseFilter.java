@@ -128,7 +128,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 // If the entity is null the status will be set to 204 by Jersey. For void methods we need to
                 // set the status to 200 unless no other status was set by e.g. throwing an Exception.
                 responseContext.setStatusInfo(responseContext.getStatusInfo() == NO_CONTENT ? OK : responseContext.getStatusInfo());
-            } else if (returnType == Void.class) {
+            } else if (returnType == Void.TYPE) {
                 throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()), INTERNAL_SERVER_ERROR);
             }
         } else if (entityType != Viewable.class) {
