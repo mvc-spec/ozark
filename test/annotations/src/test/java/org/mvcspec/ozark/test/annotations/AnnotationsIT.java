@@ -35,6 +35,7 @@ public class AnnotationsIT {
     public void setUp() {
         webUrl = System.getProperty("integration.url");
         webClient = new WebClient();
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
     }
 
     @After
@@ -73,6 +74,6 @@ public class AnnotationsIT {
     @Test
     public void testNoOverrideMvc() throws Exception {
         final HtmlPage page = webClient.getPage(webUrl + "resources/annotations/no_override_mvc");
-        assertNull(page);       // Empty 204
+        assertEquals(500, page.getWebResponse().getStatusCode());       // void but no @View -> Exception
     }
 }
