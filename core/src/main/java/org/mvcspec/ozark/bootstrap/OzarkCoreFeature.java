@@ -38,8 +38,14 @@ public class OzarkCoreFeature implements Feature {
 
     @Override
     public boolean configure(FeatureContext context) {
-        OzarkInitializer.initialize(context, servletContext);
-        return true;
+
+        // RESTEasy seems to ignore @ConstrainedTo in some cases
+        if (context.getConfiguration().getRuntimeType() == RuntimeType.SERVER) {
+            OzarkInitializer.initialize(context, servletContext);
+            return true;
+        }
+        return false;
+
     }
 
 }
