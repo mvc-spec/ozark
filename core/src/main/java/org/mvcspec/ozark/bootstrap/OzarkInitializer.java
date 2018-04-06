@@ -21,6 +21,7 @@ import org.mvcspec.ozark.servlet.OzarkContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
+import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +46,9 @@ public final class OzarkInitializer {
      * won't result in duplicated providers registered.
      */
     public static void initialize(FeatureContext context, ServletContext servletContext) {
+
+        Objects.requireNonNull(context, "FeatureContext is required");
+        Objects.requireNonNull(servletContext, "ServletContext is required");
 
         Configuration config = context.getConfiguration();
 
