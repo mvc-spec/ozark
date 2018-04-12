@@ -22,8 +22,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Utility class to create {@link ConstraintViolationMetadata} from constraint violations.
@@ -83,17 +88,20 @@ public class ConstraintViolations {
 
     private static Annotation[] getPropertyAnnotations(ConstraintViolation<?> violation, Path.PropertyNode node) {
 
+        Class<?> leafBeanClass = violation.getLeafBean().getClass();
+        Set<Annotation> allAnnotations = new HashSet<>();
         try {
 
-            Class<?> leafBeanClass = violation.getLeafBean().getClass();
             Field field = leafBeanClass.getDeclaredField(node.getName());
-
-            return field.getAnnotations();
+            allAnnotations.addAll(Arrays.asList(field.getAnnotations()));
 
         } catch (NoSuchFieldException e) {
-            throw new IllegalStateException(e);
+            // ignore for now
         }
 
+        getterAnnotationsForField(leafBeanClass, node.getName()).ifPresent(g -> allAnnotations.addAll(Arrays.asList(g)));
+        setterAnnotationsForField(leafBeanClass, node.getName()).ifPresent(s -> allAnnotations.addAll(Arrays.asList(s)));
+        return allAnnotations.toArray(new Annotation[0]);
     }
 
     private static Annotation[] getParameterAnnotations(ConstraintViolation<?> violation, Path.MethodNode methodNode,
@@ -116,6 +124,87 @@ public class ConstraintViolations {
             throw new IllegalStateException(e);
         }
 
+    }
+
+    private static Optional<Annotation[]> setterAnnotationsForField(Class<?> leafBeanClass, String fieldName) {
+        String setterName = setMethodName(fieldName);
+        List<Method> possibleSetters = Arrays.stream(leafBeanClass.getDeclaredMethods())
+            .filter(m -> m.getName().equals(setterName))
+            .collect(Collectors.toList());
+
+        if(possibleSetters.isEmpty())
+            return Optional.empty();
+        else if(possibleSetters.size() > 1) {
+            throw new IllegalStateException(
+                String.format("Found multiple possible setters for field '%s' in class %s", fieldName, leafBeanClass.getName())
+            );
+        }
+        else {
+            return Optional.of(possibleSetters.get(0).getAnnotations());
+        }
+    }
+
+    private static Optional<Annotation[]> getterAnnotationsForField(Class<?> leafBeanClass, String fieldName) {
+        Method getter = null;
+        // try to determine our getter method
+        try {
+            // first try with getXXX()
+            getter = leafBeanClass.getDeclaredMethod(getMethodName(fieldName));
+        }
+        catch(final NoSuchMethodException e) {
+            // getXXX() didn't work so try isXXX()
+            try {
+                getter = leafBeanClass.getDeclaredMethod(isMethodName(fieldName));
+            }
+            catch(final NoSuchMethodException e1) {
+                // nothing to do
+            }
+        }
+
+        return (getter != null ? Optional.of(getter.getAnnotations()) : Optional.empty());
+    }
+
+    /**
+     * Takes a String propertyName and returns a String representation of what
+     * the getter-style accessor method for that property would be. So for
+     * propertyName <code>foo</code> the String <code>getFoo</code> will be
+     * returned.
+     *
+     * @param propertyName the property name
+     * @return String name of getter method
+     */
+    private static String getMethodName(final String propertyName) {
+        return generateMethodName(propertyName, "get");
+    }
+
+    /**
+     * Takes a String propertyName and returns a String representation of what
+     * the is-style accessor method for that property would be. So for
+     * propertyName <code>foo</code> the String <code>isFoo</code> will be
+     * returned.
+     *
+     * @param propertyName the property name
+     * @return String name of is method
+     */
+    private static String isMethodName(final String propertyName) {
+        return generateMethodName(propertyName, "is");
+    }
+
+    /**
+     * Takes a String propertyName and returns a String representation of what
+     * the setter-style accessor method for that property would be. So for
+     * propertyName <code>foo</code> the String <code>setFoo</code> will be
+     * returned.
+     *
+     * @param propertyName the property name
+     * @return String name of setter method
+     */
+    private static String setMethodName(final String propertyName) {
+        return generateMethodName(propertyName, "set");
+    }
+
+    private static String generateMethodName(final String propertyName, final String prefix) {
+        return prefix + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
     }
 
 }
