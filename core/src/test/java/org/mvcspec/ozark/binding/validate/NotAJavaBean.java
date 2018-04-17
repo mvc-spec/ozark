@@ -15,6 +15,7 @@
  */
 package org.mvcspec.ozark.binding.validate;
 
+import javax.mvc.binding.MvcBinding;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.ws.rs.FormParam;
@@ -34,7 +35,7 @@ public class NotAJavaBean {
     }
 
     // invalid getter name per java beans spec
-    @TestAnnotation
+    @MvcBinding
     public String name() {
         return name;
     }

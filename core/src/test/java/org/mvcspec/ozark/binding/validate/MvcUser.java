@@ -15,6 +15,7 @@
  */
 package org.mvcspec.ozark.binding.validate;
 
+import javax.mvc.binding.MvcBinding;
 import javax.ws.rs.FormParam;
 
 /**
@@ -24,7 +25,7 @@ import javax.ws.rs.FormParam;
  */
 public class MvcUser extends BaseUser {
 
-    @TestAnnotation
+    @MvcBinding
     @Override
     public String getFirstName() {
         return super.getFirstName();
@@ -36,7 +37,7 @@ public class MvcUser extends BaseUser {
         super.setFirstName(firstName);
     }
 
-    @TestAnnotation
+    @MvcBinding
     @Override
     public String getLastName() {
         return super.getLastName();
