@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.mvcspec.ozark.test.constraintViolations;
+package org.mvcspec.ozark.binding.validate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -32,12 +32,6 @@ import javax.ws.rs.FormParam;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mvcspec.ozark.binding.validate.ConstraintViolationMetadata;
-import org.mvcspec.ozark.binding.validate.ConstraintViolations;
-import org.mvcspec.ozark.test.constraintViolations.BaseUser;
-import org.mvcspec.ozark.test.constraintViolations.MvcUser;
-import org.mvcspec.ozark.test.constraintViolations.NotAJavaBean;
-import org.mvcspec.ozark.test.constraintViolations.TestAnnotation;
 
 /**
  * Unit tests for annotation resolution in {@link ConstraintViolations}.
@@ -50,7 +44,7 @@ import org.mvcspec.ozark.test.constraintViolations.TestAnnotation;
  * with {@link javax.ws.rs.FormParam}, as would be done on a JAX-RS/MVC {@link
  * javax.ws.rs.BeanParam}.
  */
-public class ConstraintViolationsTest {
+public class ConstraintViolationsMvcBindingTest {
 
     private static Validator validator;
 

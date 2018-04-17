@@ -13,29 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mvcspec.ozark.test.constraintViolations;
+package org.mvcspec.ozark.binding.validate;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.ws.rs.FormParam;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * A java class that is not a valid java bean.
+ * A test annotation that is taking the place of @MvcBinding for these tests.
  */
-public class NotAJavaBean {
-
-    @FormParam("name")
-    @NotNull
-    @Size(max = 10)
-    private String name;
-
-    public NotAJavaBean(String name) {
-        this.name = name;
-    }
-
-    // invalid getter name per java beans spec
-    @TestAnnotation
-    public String name() {
-        return name;
-    }
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.PARAMETER, ElementType.FIELD, ElementType.METHOD })
+@Documented
+public @interface TestAnnotation {
+    // empty
 }

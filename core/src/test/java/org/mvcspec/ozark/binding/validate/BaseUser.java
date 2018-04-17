@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.mvcspec.ozark.test.constraintViolations;
+package org.mvcspec.ozark.binding.validate;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
