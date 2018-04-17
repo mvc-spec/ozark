@@ -47,7 +47,7 @@ elif [ "${1}" == "tck-wildfly" ]; then
   curl -s -o wildfly.tgz "${WILDFLY_URL}"
   tar -xzf wildfly.tgz
   mvn -B -V -DskipTests clean install
-  LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=wildfly.pid ./wildfly-11.0.0.CR1/bin/standalone.sh > wildfly.log 2>&1 &
+  LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=wildfly.pid ./wildfly-11.0.0.CR1/bin/standalone.sh -Dee8.preview.mode=true > wildfly.log 2>&1 &
   sleep 30
   pushd tck
   mvn -B -V -Dtck-env=wildfly verify
