@@ -165,7 +165,11 @@ public class ConstraintViolations {
             }
         }
         catch(IntrospectionException e) {
-            // should we throw an exception here?
+            log.warning(
+                String.format("Unable to introspect read and write methods for field '%s' on bean class '%s': %s",
+                    fieldName, beanClass.getName(), e.getMessage()
+                )
+            );
         }
 
         return annotationsSet;
