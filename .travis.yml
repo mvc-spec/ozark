@@ -28,6 +28,8 @@ jobs:
         on:
           repo: mvc-spec/ozark
           branch: master
+  allow_failures:
+    - env: TYPE=tck-wildfly
 env:
   global:
     - secure: "APavkBDaNnz8r5CtZt5acSJQ+4yP1Sut1J9dDqDq2Rb4UVTCrxRt6tSOrO2f2HskKDUhYe+FA5AcQL1X06hCKeDo20APdv3vChYTRgfp3GPgVnvFKMthdQDZesqRKvL3XjJFvShvTmbMt11bh0LVyEs7mLX4Mzg4yt/E1On5rUp2KtodejUHLwON63ERAzJXYZ3e2KuTicnQ48pO+GSHcqBe4ZZuWBaoePUtQ6XILUVEOG1Mz15wuM0CvaiZxSUJni5OtFvv11gV0i1y/pKqqejlbPCIHm8d2BnHuYECffKxH+RAXh/ulcbHciL4w3ZvdRWDSL2f3ZCBe6inAMxLRizZ6cWeNHWIIiqq093Z03Z21P3iYA5ca98jMqoEBK7ME0eSF7SxHeNq+OHZ0rqw0JImAkyLqjQZhf27Rtuun7PRXW/1zeGxg9P2Zl4OCUkZlGH7nMjmrFbEDESaK3fQIpytmEstch+VCMQKO7O/+1AhEW3IYhgnNQCWkKTaY/LbRjjUnovcymtWUKIZEbLYUYx/UeT1nrKWLqpg6LH2v7D7GY16uBNCLMYK70Tpt6LHzJoGspIIg98Zlw98BBEScdPd3XIFxnkytbsxK1AscwwSRGLwz0VJdcQhaMn3vpdYvL37QlJasK5cFP2BETV03aj05GiDbhjtjRhAjzlmWj0="
