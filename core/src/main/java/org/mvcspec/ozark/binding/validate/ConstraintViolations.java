@@ -18,11 +18,19 @@ package org.mvcspec.ozark.binding.validate;
 import javax.validation.ConstraintViolation;
 import javax.validation.ElementKind;
 import javax.validation.Path;
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -83,17 +91,20 @@ public class ConstraintViolations {
 
     private static Annotation[] getPropertyAnnotations(ConstraintViolation<?> violation, Path.PropertyNode node) {
 
+        Class<?> leafBeanClass = violation.getLeafBean().getClass();
+        Set<Annotation> allAnnotations = new HashSet<>();
         try {
 
-            Class<?> leafBeanClass = violation.getLeafBean().getClass();
             Field field = leafBeanClass.getDeclaredField(node.getName());
-
-            return field.getAnnotations();
+            allAnnotations.addAll(Arrays.asList(field.getAnnotations()));
 
         } catch (NoSuchFieldException e) {
-            throw new IllegalStateException(e);
+            // ignore for now
         }
 
+        allAnnotations.addAll(readAndWriteMethodAnnotationsForField(leafBeanClass, node.getName()));
+
+        return allAnnotations.toArray(new Annotation[0]);
     }
 
     private static Annotation[] getParameterAnnotations(ConstraintViolation<?> violation, Path.MethodNode methodNode,
@@ -116,6 +127,52 @@ public class ConstraintViolations {
             throw new IllegalStateException(e);
         }
 
+    }
+
+    /**
+     * Returns a set of all annotations present on the getter and setter methods
+     * for field fieldName in class beanClass. The bean class must be a valid
+     * java bean.
+     *
+     * @param beanClass the bean class
+     * @param fieldName the field in the bean class
+     * @return a set of all annotations on the read and write methods for the
+     * field, or an empty set if none are found
+     */
+    private static Set<Annotation> readAndWriteMethodAnnotationsForField(Class<?> beanClass, String fieldName) {
+        Set<Annotation> annotationsSet = new HashSet<>();
+
+        try {
+
+            BeanInfo info = Introspector.getBeanInfo(beanClass);
+
+            Optional<PropertyDescriptor> descriptorOpt = Arrays.stream(info.getPropertyDescriptors())
+                .filter(desc -> desc.getName().equals(fieldName))
+                .findFirst();
+
+            if(descriptorOpt.isPresent()) {
+
+                Method getter = descriptorOpt.get().getReadMethod();
+                if(getter != null) {
+                    annotationsSet.addAll(Arrays.asList(getter.getAnnotations()));
+                }
+
+                Method setter = descriptorOpt.get().getWriteMethod();
+                if(setter != null) {
+                    annotationsSet.addAll(Arrays.asList(setter.getAnnotations()));
+                }
+
+            }
+        }
+        catch(IntrospectionException e) {
+            log.warning(
+                String.format("Unable to introspect read and write methods for field '%s' on bean class '%s': %s",
+                    fieldName, beanClass.getName(), e.getMessage()
+                )
+            );
+        }
+
+        return annotationsSet;
     }
 
 }
