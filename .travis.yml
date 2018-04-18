@@ -5,20 +5,16 @@ jobs:
     - stage: build
       script: mvn -B -V -DskipTests clean install
     - stage: test
-      env:
-        - TYPE=glassfish-module
+      env: TYPE=glassfish-module
       script: .travis/tests.sh ${TYPE}
     - stage: test
-      env:
-        - TYPE=glassfish-bundled
+      env: TYPE=glassfish-bundled
       script: .travis/tests.sh ${TYPE}
     - stage: test
-      env:
-        - TYPE=tck-glassfish
+      env: TYPE=tck-glassfish
       script: .travis/tests.sh ${TYPE}
     - stage: test
-      env:
-        - TYPE=tck-wildfly
+      env: TYPE=tck-wildfly
       script: .travis/tests.sh ${TYPE}
     - stage: deploy
       script: skip
