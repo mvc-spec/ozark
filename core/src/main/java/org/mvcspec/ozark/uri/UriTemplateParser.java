@@ -15,6 +15,7 @@
  */
 package org.mvcspec.ozark.uri;
 
+import org.mvcspec.ozark.servlet.OzarkContainerInitializer;
 import org.mvcspec.ozark.util.AnnotationUtils;
 import org.mvcspec.ozark.util.BeanUtils;
 import org.mvcspec.ozark.util.ControllerUtils;
@@ -24,20 +25,19 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.mvc.MvcContext;
+import javax.servlet.ServletContext;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Application;
 import javax.ws.rs.core.UriBuilder;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.mvcspec.ozark.jaxrs.JaxRsContext;
 
 /**
  * <p>Parses all instances of {@link UriTemplate} and @Produces
@@ -51,24 +51,30 @@ public class UriTemplateParser {
     @Inject
     MvcContext mvcContext;
 
-    @Inject @JaxRsContext
-    Application application;
+    @Inject
+    private ServletContext servletContext;
 
-    @Produces @ApplicationScoped
+    @Produces
+    @ApplicationScoped
     private ApplicationUris applicationUris;
 
     @PostConstruct
     public void init() {
-        applicationUris = init(controllers());
+
+        Set<Class<?>> controllerClasses =
+                (Set<Class<?>>) servletContext.getAttribute(OzarkContainerInitializer.CONTROLLER_CLASSES);
+
+        applicationUris = init(controllerClasses != null ? controllerClasses : Collections.emptySet());
+
     }
 
     ApplicationUris init(Set<Class<?>> controllers) {
         ApplicationUris uris = new ApplicationUris();
         controllers.forEach(controller ->
-            Stream.of(controller.getMethods()).filter(ControllerUtils::isControllerMethod).forEach(method -> {
-                UriTemplate uriTemplate = parseMethod(method, mvcContext.getBasePath());
-                uris.register(uriTemplate, method);
-            })
+                Stream.of(controller.getMethods()).filter(ControllerUtils::isControllerMethod).forEach(method -> {
+                    UriTemplate uriTemplate = parseMethod(method, mvcContext.getBasePath());
+                    uris.register(uriTemplate, method);
+                })
         );
         return uris;
     }
@@ -108,14 +114,6 @@ public class UriTemplateParser {
             }
         });
         return uriTemplateBuilder.build();
-    }
-
-    private Set<Class<?>> controllers() {
-        return Stream.concat( //
-            application.getClasses().stream(), //
-            application.getSingletons().stream().map(Object::getClass)) //
-            .filter(ControllerUtils::isController) //
-            .collect(Collectors.toSet()); //
     }
 
 }

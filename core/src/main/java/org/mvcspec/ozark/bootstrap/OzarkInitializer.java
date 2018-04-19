@@ -23,6 +23,7 @@ import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.FeatureContext;
 import java.util.Objects;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,9 +73,10 @@ public final class OzarkInitializer {
     private static boolean isMvcApplication(ServletContext servletContext) {
 
         // we fall back to enable Ozark if detection didn't work
-        Object controllersFound = servletContext != null ? 
-                servletContext.getAttribute(OzarkContainerInitializer.OZARK_CONTROLLERS_FOUND) : null;
-        boolean enableOzark = !Boolean.FALSE.equals(controllersFound);
+        Set<Class<?>> controllersFound = servletContext != null
+                ? (Set<Class<?>>) servletContext.getAttribute(OzarkContainerInitializer.CONTROLLER_CLASSES)
+                : null;
+        boolean enableOzark = controllersFound == null || !controllersFound.isEmpty();
 
         log.log(Level.FINE, "Is Ozark application detected: {0}", enableOzark);
         return enableOzark;

@@ -15,19 +15,20 @@
  */
 package org.mvcspec.ozark.servlet;
 
+import org.mvcspec.ozark.util.AnnotationUtils;
+
+import javax.mvc.annotation.Controller;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
 import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.Path;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mvc.annotation.Controller;
-import javax.ws.rs.Path;
-
-import static org.mvcspec.ozark.util.AnnotationUtils.getAnnotation;
-import static org.mvcspec.ozark.util.AnnotationUtils.hasAnnotationOnClassOrMethod;
 
 /**
  * Initializes the Mvc class with the application and context path. Note that the
@@ -36,39 +37,49 @@ import static org.mvcspec.ozark.util.AnnotationUtils.hasAnnotationOnClassOrMetho
  *
  * @author Santiago Pericas-Geertsen
  * @author Dmytro Maidaniuk
+ * @author Christian Kaltepoth
  */
-@HandlesTypes({ ApplicationPath.class, Path.class })
+@HandlesTypes({ApplicationPath.class, Path.class})
 public class OzarkContainerInitializer implements ServletContainerInitializer {
 
     public static final String APP_PATH_CONTEXT_KEY = OzarkContainerInitializer.class.getName() + ".APP_PATH";
 
-    public static final String OZARK_CONTROLLERS_FOUND = "ozark.controllers-found";
+    public static final String CONTROLLER_CLASSES = OzarkContainerInitializer.class.getName() + ".CONTROLLER_CLASSES";
 
     private static final Logger LOG = Logger.getLogger(OzarkContainerInitializer.class.getName());
 
     @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
-        servletContext.setAttribute(OZARK_CONTROLLERS_FOUND, false);
-        if (classes != null && !classes.isEmpty()) {
-            LOG.log(Level.INFO, "Ozark version {0} started", getClass().getPackage().getImplementationVersion());
-            for (Class<?> clazz : classes) {
-                final ApplicationPath ap = getAnnotation(clazz, ApplicationPath.class);
-                if (ap != null) {
-                    if (servletContext.getAttribute(APP_PATH_CONTEXT_KEY) != null) {
-                        // must be a singleton
-                        throw new IllegalStateException("More than one JAX-RS ApplicationPath detected!");
-                    }
-                    servletContext.setAttribute(APP_PATH_CONTEXT_KEY, ap.value());
+
+        if (classes == null || classes.isEmpty()) {
+            return;
+        }
+
+        LOG.log(Level.INFO, "Ozark version {0} started", getClass().getPackage().getImplementationVersion());
+
+        Set<Class> controllerClasses = new LinkedHashSet<>();
+
+        for (Class<?> clazz : classes) {
+
+            // find @ApplicationPath annotation
+            ApplicationPath applicationPath = AnnotationUtils.getAnnotation(clazz, ApplicationPath.class);
+            if (applicationPath != null) {
+                if (servletContext.getAttribute(APP_PATH_CONTEXT_KEY) != null) {
+                    // must be a singleton
+                    throw new IllegalStateException("More than one JAX-RS ApplicationPath detected!");
                 }
-                if (hasAnnotationOnClassOrMethod(clazz, Path.class)
-                        && hasAnnotationOnClassOrMethod(clazz, Controller.class)) {
-                    servletContext.setAttribute(OZARK_CONTROLLERS_FOUND, true);
-                }
-                if (servletContext.getAttribute(APP_PATH_CONTEXT_KEY) != null
-                        && (Boolean) servletContext.getAttribute(OZARK_CONTROLLERS_FOUND) == true) {
-                    break;  // no need to loop further
-                }
+                servletContext.setAttribute(APP_PATH_CONTEXT_KEY, applicationPath.value());
+            }
+
+
+            // collect all controllers
+            if (AnnotationUtils.hasAnnotationOnClassOrMethod(clazz, Path.class)
+                    && AnnotationUtils.hasAnnotationOnClassOrMethod(clazz, Controller.class)) {
+                controllerClasses.add(clazz);
             }
         }
+
+        servletContext.setAttribute(CONTROLLER_CLASSES, Collections.unmodifiableSet(controllerClasses));
+
     }
 }
