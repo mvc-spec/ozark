@@ -27,6 +27,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toSet;
+
 /**
  * Implementation for {@link javax.mvc.binding.BindingResult} interface.
  *
@@ -54,13 +57,13 @@ public class BindingResultImpl implements BindingResult {
         final List<String> result = new ArrayList<>();
         bindingErrors.forEach(error -> result.add(error.getMessage()));
         validationErrors.forEach(violation -> result.add(violation.getMessage()));
-        return result;
+        return Collections.unmodifiableList(result);
     }
 
     @Override
     public Set<BindingError> getAllBindingErrors() {
         this.consumed = true;
-        return bindingErrors;
+        return Collections.unmodifiableSet(bindingErrors);
     }
 
     @Override
@@ -85,7 +88,7 @@ public class BindingResultImpl implements BindingResult {
         this.consumed = true;
         return validationErrors.stream()
                 .filter(ve -> Objects.equals(ve.getParamName(), param))
-                .collect(Collectors.toSet());
+                .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
     }
 
     @Override
