@@ -19,9 +19,10 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Configuration;
-import java.util.Objects;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.UriInfo;
+import java.util.Objects;
 
 /**
  * CDI producer for JAX-RS context objects
@@ -37,13 +38,16 @@ public class JaxRsContextProducer {
 
     private HttpServletResponse response;
 
-    private Application application; 
-    
-    protected void populate(Configuration configuration, HttpServletRequest request, HttpServletResponse response, Application application) {
+    private Application application;
+
+    private UriInfo uriInfo;
+
+    protected void populate(Configuration configuration, HttpServletRequest request, HttpServletResponse response, Application application, UriInfo uriInfo) {
         this.configuration = Objects.requireNonNull(configuration, "Configuration is required");
         this.request = Objects.requireNonNull(request, "HttpServletRequest is required");
         this.response = Objects.requireNonNull(response, "Configuration is required");
         this.application = Objects.requireNonNull(application, "Application is required");
+        this.uriInfo = Objects.requireNonNull(uriInfo, "UriInfo is required");
     }
 
     @Produces
@@ -53,14 +57,12 @@ public class JaxRsContextProducer {
         return Objects.requireNonNull(configuration, "Cannot produce Configuration");
     }
 
-
     @Produces
     @JaxRsContext
     @RequestScoped
     public HttpServletRequest produceHttpServletRequest() {
         return Objects.requireNonNull(request, "Cannot produce HttpServletRequest");
     }
-
 
     @Produces
     @JaxRsContext
@@ -69,13 +71,18 @@ public class JaxRsContextProducer {
         return Objects.requireNonNull(response, "Cannot produce HttpServletResponse");
     }
 
-
     @Produces
     @JaxRsContext
     @RequestScoped
     public Application produceApplication() {
         return Objects.requireNonNull(application, "Cannot produce Application");
     }
-    
-    
+
+    @Produces
+    @JaxRsContext
+    @RequestScoped
+    public UriInfo produceUriInfo() {
+        return Objects.requireNonNull(uriInfo, "Cannot produce UriInfo");
+    }
+
 }

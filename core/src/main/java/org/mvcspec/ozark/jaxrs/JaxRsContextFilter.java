@@ -22,10 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
+import javax.ws.rs.core.Application;
 import javax.ws.rs.core.Configuration;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
-import javax.ws.rs.core.Application;
 
 /**
  * This filter is used to get the JAX-RS context objects and feed them to the corresponding
@@ -51,10 +52,13 @@ public class JaxRsContextFilter implements ContainerRequestFilter {
 
     @Context
     private Application application;
-    
+
+    @Context
+    private UriInfo uriInfo;
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        jaxRsContextProducer.populate(configuration, request, response, application);
+        jaxRsContextProducer.populate(configuration, request, response, application, uriInfo);
     }
 
 }

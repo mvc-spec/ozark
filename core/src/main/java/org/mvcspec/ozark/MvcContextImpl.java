@@ -16,7 +16,6 @@
 package org.mvcspec.ozark;
 
 import org.mvcspec.ozark.jaxrs.JaxRsContext;
-import org.mvcspec.ozark.servlet.OzarkContainerInitializer;
 import org.mvcspec.ozark.uri.ApplicationUris;
 import org.mvcspec.ozark.util.PathUtils;
 
@@ -30,9 +29,11 @@ import javax.mvc.security.Csrf;
 import javax.mvc.security.Encoders;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 /**
@@ -62,6 +63,10 @@ public class MvcContextImpl implements MvcContext {
     @JaxRsContext
     private Configuration configuration;
 
+    @Inject
+    @JaxRsContext
+    private UriInfo uriInfo;
+
     private Locale locale;
 
     private String applicationPath;
@@ -69,17 +74,13 @@ public class MvcContextImpl implements MvcContext {
     @PostConstruct
     public void init() {
 
-        Object appPath = servletContext.getAttribute(OzarkContainerInitializer.APP_PATH_CONTEXT_KEY);
-        if (appPath != null) {
-            this.applicationPath = PathUtils.normalizePath(appPath.toString());
-        } else {
-            log.warning("Unable to detect application path. " +
-                    "This means that ${mvc.applicationPath} and ${mvc.basePath} will not work correctly");
-        }
+        Objects.requireNonNull(configuration, "Cannot obtain JAX-RS Configuration instance");
+        Objects.requireNonNull(uriInfo, "Cannot obtain JAX-RS UriInfo instance");
+        Objects.requireNonNull(servletContext, "Cannot obtain ServletContext");
 
-        if (configuration == null) {
-            throw new IllegalArgumentException("Cannot obtain JAX-RS Configuration instance");
-        }
+        applicationPath = PathUtils.normalizePath(
+                uriInfo.getBaseUri().getPath().substring(servletContext.getContextPath().length())
+        );
 
     }
 

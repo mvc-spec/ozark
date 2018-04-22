@@ -22,7 +22,6 @@ import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.HandlesTypes;
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Path;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -31,18 +30,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Initializes the Mvc class with the application and context path. Note that the
- * application path is only initialized if there is an application sub-class that
- * is annotated by {@link javax.ws.rs.ApplicationPath}.
+ * Performs some basic initialization work before CDI and JAX-RS are bootstrapped.
  *
  * @author Santiago Pericas-Geertsen
  * @author Dmytro Maidaniuk
  * @author Christian Kaltepoth
  */
-@HandlesTypes({ApplicationPath.class, Path.class})
+@HandlesTypes({Path.class})
 public class OzarkContainerInitializer implements ServletContainerInitializer {
-
-    public static final String APP_PATH_CONTEXT_KEY = OzarkContainerInitializer.class.getName() + ".APP_PATH";
 
     public static final String CONTROLLER_CLASSES = OzarkContainerInitializer.class.getName() + ".CONTROLLER_CLASSES";
 
@@ -60,17 +55,6 @@ public class OzarkContainerInitializer implements ServletContainerInitializer {
         Set<Class> controllerClasses = new LinkedHashSet<>();
 
         for (Class<?> clazz : classes) {
-
-            // find @ApplicationPath annotation
-            ApplicationPath applicationPath = AnnotationUtils.getAnnotation(clazz, ApplicationPath.class);
-            if (applicationPath != null) {
-                if (servletContext.getAttribute(APP_PATH_CONTEXT_KEY) != null) {
-                    // must be a singleton
-                    throw new IllegalStateException("More than one JAX-RS ApplicationPath detected!");
-                }
-                servletContext.setAttribute(APP_PATH_CONTEXT_KEY, applicationPath.value());
-            }
-
 
             // collect all controllers
             if (AnnotationUtils.hasAnnotationOnClassOrMethod(clazz, Path.class)
