@@ -24,8 +24,10 @@ import org.mvcspec.ozark.locale.LocaleRequestFilter;
 import org.mvcspec.ozark.security.CsrfExceptionMapper;
 import org.mvcspec.ozark.security.CsrfProtectFilter;
 import org.mvcspec.ozark.security.CsrfValidateInterceptor;
+import org.mvcspec.ozark.util.CdiUtils;
 
 import javax.ws.rs.core.FeatureContext;
+import java.util.List;
 
 /**
  * Implementation of ConfigProvider which registers all providers of the core module.
@@ -37,15 +39,42 @@ public class DefaultConfigProvider implements ConfigProvider {
     @Override
     public void configure(FeatureContext context) {
 
-        context.register(ViewRequestFilter.class);
-        context.register(ViewResponseFilter.class);
-        context.register(ViewableWriter.class);
-        context.register(CsrfValidateInterceptor.class);
-        context.register(CsrfProtectFilter.class);
-        context.register(CsrfExceptionMapper.class);
-        context.register(LocaleRequestFilter.class);
-        context.register(JaxRsContextFilter.class);
-        context.register(MvcConverterProvider.class);
+        register(context, ViewRequestFilter.class);
+        register(context, ViewResponseFilter.class);
+        register(context, ViewableWriter.class);
+        register(context, CsrfValidateInterceptor.class);
+        register(context, CsrfProtectFilter.class);
+        register(context, CsrfExceptionMapper.class);
+        register(context, LocaleRequestFilter.class);
+        register(context, JaxRsContextFilter.class);
+        register(context, MvcConverterProvider.class);
+
+    }
+
+    private void register(FeatureContext context, Class<?> providerClass) {
+
+        boolean isCxf = context.getClass().getName().startsWith("org.apache.cxf");
+
+        /*
+         * With CXF there is no CDI injection if JAX-RS providers are registered via
+         * context.register(Class). So we try to lookup provider instances from CDI
+         * and register them instead.
+         * See: https://issues.apache.org/jira/browse/CXF-7501
+         */
+        if (isCxf) {
+            List<?> providerInstances = CdiUtils.getApplicationBeans(providerClass);
+            if (!providerInstances.isEmpty()) {
+                context.register(providerInstances.get(0));
+            } else {
+                context.register(providerClass);
+            }
+        }
+
+        // will work for all other containers
+        else {
+            context.register(providerClass);
+        }
+
 
     }
 
