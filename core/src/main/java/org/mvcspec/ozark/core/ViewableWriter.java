@@ -231,8 +231,30 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
      * @return Character set to use.
      */
     private Charset getCharset(MultivaluedMap<String, Object> headers) {
-        final MediaType mt = (MediaType) headers.get(CONTENT_TYPE).get(0);
+        final MediaType mt = getMediaTypeFromHeaders(headers);
         final String charset = mt.getParameters().get(MediaType.CHARSET_PARAMETER);
         return charset != null ? Charset.forName(charset) : UTF8;
     }
+
+    /**
+     * JAX-RS implementations are using different types for representing the content type.
+     */
+    private MediaType getMediaTypeFromHeaders(MultivaluedMap<String, Object> headers) {
+
+        Object value = headers.get(CONTENT_TYPE).get(0);
+
+        // Jersey + RESTEasy
+        if (value instanceof MediaType) {
+            return (MediaType) value;
+        }
+
+        // CXF
+        if (value instanceof String) {
+            return MediaType.valueOf((String) value);
+        }
+
+        return null;
+
+    }
+
 }
