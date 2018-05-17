@@ -28,7 +28,6 @@ import org.mvcspec.ozark.engine.FaceletsViewEngine;
 import org.mvcspec.ozark.engine.JspViewEngine;
 import org.mvcspec.ozark.engine.ViewEngineFinder;
 import org.mvcspec.ozark.event.*;
-import org.mvcspec.ozark.jaxrs.JaxRsContextFilter;
 import org.mvcspec.ozark.jaxrs.JaxRsContextProducer;
 import org.mvcspec.ozark.locale.DefaultLocaleResolver;
 import org.mvcspec.ozark.locale.LocaleRequestFilter;
@@ -139,7 +138,6 @@ public class OzarkCdiExtension implements Extension {
                 DefaultLocaleResolver.class,
 
                 // jaxrs
-                JaxRsContextFilter.class,
                 JaxRsContextProducer.class,
 
                 // uri

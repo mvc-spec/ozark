@@ -15,8 +15,9 @@
  */
 package org.mvcspec.ozark.jaxrs;
 
+import org.mvcspec.ozark.util.CdiUtils;
+
 import javax.annotation.Priority;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -31,15 +32,14 @@ import java.io.IOException;
 /**
  * This filter is used to get the JAX-RS context objects and feed them to the corresponding
  * CDI producer.
+ * <p>
+ * This class must not be a CDI bean, because CXF/OWB fails to process <code>@Context</code> in this case.
  *
  * @author Christian Kaltepoth
  */
 @PreMatching
 @Priority(0) // very early
 public class JaxRsContextFilter implements ContainerRequestFilter {
-
-    @Inject
-    private JaxRsContextProducer jaxRsContextProducer;
 
     @Context
     private Configuration configuration;
@@ -58,7 +58,15 @@ public class JaxRsContextFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-        jaxRsContextProducer.populate(configuration, request, response, application, uriInfo);
+
+        /*
+         * Please note that we CANNOT inject JaxRsContextProducer here, because this will
+         * fail on TomEE/CXF/OWB because processing @Context fails for some reason.
+         */
+        CdiUtils.getApplicationBean(JaxRsContextProducer.class)
+                .orElseThrow(() -> new IllegalStateException("Cannot find CDI managed JaxRsContextProducer"))
+                .populate(configuration, request, response, application, uriInfo);
+
     }
 
 }

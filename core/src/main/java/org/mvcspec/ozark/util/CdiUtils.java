@@ -24,6 +24,7 @@ import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import java.lang.annotation.Annotation;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -57,7 +58,7 @@ public class CdiUtils {
      * Create a new CDI bean given its class and a bean manager. The bean is created
      * in the context defined by the scope annotation on the class.
      *
-     * @param bm The BeanManager.
+     * @param bm    The BeanManager.
      * @param clazz CDI class.
      * @param <T>   class parameter.
      * @return newly allocated CDI bean.
@@ -70,9 +71,9 @@ public class CdiUtils {
     }
 
     /**
-     * @param beforeBean  The BeforeBeanDiscovery.
-     * @param bm The BeanManager.
-     * @param types annotated types to register
+     * @param beforeBean The BeforeBeanDiscovery.
+     * @param bm         The BeanManager.
+     * @param types      annotated types to register
      */
     public static void addAnnotatedTypes(BeforeBeanDiscovery beforeBean, BeanManager bm, Class<?>... types) {
         for (Class<?> type : types) {
@@ -90,6 +91,22 @@ public class CdiUtils {
         return manager.getBeans(type, qualifiers).stream()
                 .map(bean -> (T) manager.getReference(bean, type, manager.createCreationalContext(bean)))
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Returns a single CDI bean with the given type and qualifiers. Will throw an exception if there
+     * is more than one matching bean. Please note that this method supports looking up beans deployed
+     * with the application even if Ozark is deployed as a container archive.
+     */
+    public static <T> Optional<T> getApplicationBean(Class<T> type, Annotation... qualifiers) {
+        List<T> instances = getApplicationBeans(type);
+        if (instances.size() == 0) {
+            return Optional.empty();
+        } else if (instances.size() == 1) {
+            return Optional.of(instances.get(0));
+        } else {
+            throw new IllegalStateException("More than one CDI managed instance found of: " + type.getName());
+        }
     }
 
     /**
