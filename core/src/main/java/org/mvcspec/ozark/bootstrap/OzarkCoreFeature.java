@@ -22,6 +22,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Feature;
 import javax.ws.rs.core.FeatureContext;
 import javax.ws.rs.ext.Provider;
+import java.util.logging.Logger;
 
 /**
  * JAX-RS feature to initialize Ozark. Please note that automatic initialization will
@@ -33,6 +34,8 @@ import javax.ws.rs.ext.Provider;
 @ConstrainedTo(RuntimeType.SERVER)
 public class OzarkCoreFeature implements Feature {
 
+    private static final Logger log = Logger.getLogger(OzarkCoreFeature.class.getName());
+
     @Context
     private ServletContext servletContext;
 
@@ -41,8 +44,16 @@ public class OzarkCoreFeature implements Feature {
 
         // RESTEasy seems to ignore @ConstrainedTo in some cases
         if (context.getConfiguration().getRuntimeType() == RuntimeType.SERVER) {
+
+            // https://issues.apache.org/jira/browse/CXF-7501
+            // https://issues.apache.org/jira/browse/TOMEE-2122
+            if (servletContext == null) {
+                log.warning("The ServletContext wasn't injected into the JAX-RS Feature class");
+            }
+
             OzarkInitializer.initialize(context, servletContext);
             return true;
+
         }
         return false;
 

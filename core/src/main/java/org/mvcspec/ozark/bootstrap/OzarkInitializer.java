@@ -49,7 +49,6 @@ public final class OzarkInitializer {
     public static void initialize(FeatureContext context, ServletContext servletContext) {
 
         Objects.requireNonNull(context, "FeatureContext is required");
-        Objects.requireNonNull(servletContext, "ServletContext is required");
 
         Configuration config = context.getConfiguration();
 
@@ -70,6 +69,9 @@ public final class OzarkInitializer {
         return config.isRegistered(ViewResponseFilter.class);
     }
 
+    /**
+     * Note: ServletContext may be null here, because CXF doesn't inject it correctly
+     */
     private static boolean isMvcApplication(ServletContext servletContext) {
 
         // we fall back to enable Ozark if detection didn't work
