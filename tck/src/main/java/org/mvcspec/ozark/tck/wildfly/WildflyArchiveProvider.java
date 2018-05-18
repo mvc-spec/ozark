@@ -20,7 +20,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.mvcspec.ozark.tck.AbstractArchiveProvider;
 
 /**
- * BaseArchiveProvider implementation for running TCK against Glassfish
+ * BaseArchiveProvider implementation for running TCK against Wildfly
  */
 public class WildflyArchiveProvider extends AbstractArchiveProvider {
 
