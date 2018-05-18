@@ -56,7 +56,19 @@ public final class OzarkInitializer {
 
             log.info("Initializing Ozark...");
 
-            for (ConfigProvider provider : ServiceLoader.load(ConfigProvider.class)) {
+            // classloader to use for ServiceLoader lookups
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+            /*
+             * Special workaround for TomEE . The context classloader is an instance of CxfContainerClassLoader
+             * and NOT the TomEEWebappClassLoader, which seems to break when redeploying apps into a running
+             * container for some reason.
+             */
+            if (classLoader.getClass().getName().contains("CxfContainerClassLoader")) {
+                classLoader = ConfigProvider.class.getClassLoader();
+            }
+
+            for (ConfigProvider provider : ServiceLoader.load(ConfigProvider.class, classLoader)) {
                 log.log(Level.FINE, "Executing: {0}", provider.getClass().getName());
                 provider.configure(context);
             }
