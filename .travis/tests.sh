@@ -54,6 +54,13 @@ elif [ "${1}" == "tck-wildfly" ]; then
   popd
   kill $(cat wildfly.pid)
 
+elif [ "${1}" == "tck-tomee" ]; then
+
+  mvn -B -V -DskipTests clean install
+  pushd tck
+  mvn -B -V -Dtck-env=tomee verify
+  popd
+
 else
   echo "Unknown test type: $1"
   exit 1;
