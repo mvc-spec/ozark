@@ -39,6 +39,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Variant;
 
@@ -127,7 +128,12 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 responseContext.setEntity(new Viewable(an.value()), null, contentType);
                 // If the entity is null the status will be set to 204 by Jersey. For void methods we need to
                 // set the status to 200 unless no other status was set by e.g. throwing an Exception.
-                responseContext.setStatusInfo(responseContext.getStatusInfo() == NO_CONTENT ? OK : responseContext.getStatusInfo());
+
+                // Don't use equals() on the result of getStatusInfo(), because it doesn't work on CXF
+                if (responseContext.getStatusInfo().getStatusCode() == Response.Status.NO_CONTENT.getStatusCode()) {
+                    responseContext.setStatusInfo(Response.Status.OK);
+                }
+                
             } else if (returnType == Void.TYPE) {
                 throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()), INTERNAL_SERVER_ERROR);
             }
