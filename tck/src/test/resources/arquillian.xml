@@ -44,4 +44,23 @@
         <!-- Nothing yet -->
     </container>
 
+    <!--
+        https://tomee.apache.org/arquillian-available-adapters.html
+    -->
+    <container qualifier="tomee">
+        <configuration>
+
+            <!-- Ports -->
+            <property name="httpPort">8080</property>
+            <property name="stopPort">8005</property>
+
+            <!-- Simpler logging output -->
+            <property name="simpleLog">true</property>
+
+            <!-- Removes working directory -->
+            <property name="cleanOnStartUp">true</property>
+            
+        </configuration>
+    </container>
+
 </arquillian>
