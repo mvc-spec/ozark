@@ -25,6 +25,7 @@ import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -107,7 +108,13 @@ public abstract class ServletViewEngine extends ViewEngineBase {
             rd = servletContext.getRequestDispatcher(resolveView(context));
         }
 
-        // Forward request to servlet
-        rd.forward(request, response);
+        /*
+         * The RequestDispatcher contract requires us to pass in the original request/response
+         * instances or standard wrapper classes. As we get the request/response from JAX-RS,
+         * we cannot assume that we get the "original" request/response. So we use wrapper classes
+         * for the forward.
+         */
+        rd.forward(new HttpServletRequestWrapper(request), new HttpServletResponseWrapper(response));
+        
     }
 }
