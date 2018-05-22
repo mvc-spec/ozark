@@ -129,30 +129,11 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     public void writeTo(Viewable viewable, Class<?> aClass, Type type, Annotation[] annotations, MediaType mediaType,
                         MultivaluedMap<String, Object> headers, OutputStream out)
             throws IOException, WebApplicationException {
+
         // Find engine for this Viewable
         final ViewEngine engine = engineFinder.find(viewable);
         if (engine == null) {
-            RequestDispatcher requestDispatcher =
-                    request.getServletContext().getRequestDispatcher(PathUtils.ensureStartingSlash(viewable.getView()));
-            if (requestDispatcher != null) {
-                try {
-                    /*
-                     * The RequestDispatcher contract requires us to pass in the original request/response
-                     * instances or standard wrapper classes. As we get the request/response via injection,
-                     * we end up with proxies, so we must wrap the proxies in wrapper classes.
-                     */
-                    requestDispatcher.forward(
-                            new HttpServletRequestWrapper(request),
-                            new HttpServletResponseWrapper(response)
-                    );
-                } catch (ServletException ex) {
-                    throw new ServerErrorException(INTERNAL_SERVER_ERROR, ex);
-                }
-            }
-            else {
-                throw new ServerErrorException(messages.get("NoViewEngine", viewable), INTERNAL_SERVER_ERROR);
-            }
-            return;     // null engine, can't proceed
+            throw new ServerErrorException(messages.get("NoViewEngine", viewable), INTERNAL_SERVER_ERROR);
         }
 
         // Create wrapper for response
