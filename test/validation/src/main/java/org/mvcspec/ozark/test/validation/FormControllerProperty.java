@@ -47,7 +47,6 @@ public class FormControllerProperty extends FormControllerBase {
     private ErrorDataBean error;
 
     @POST
-    @ValidateOnExecution(type = ExecutableType.NONE)
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         final BindingResult vr = getVr();
         if (vr.isFailed()) {

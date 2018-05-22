@@ -49,7 +49,6 @@ public class ValidationController {
     }
 
     @POST
-    @ValidateOnExecution(type = ExecutableType.NONE)
     public String post(@Valid @BeanParam FormBean form) {
 
         if (bindingResult.isFailed()) {
