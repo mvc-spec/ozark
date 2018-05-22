@@ -29,20 +29,9 @@ import java.util.Set;
 public class MyApplication extends Application {
 
     @Override
-    public Map<String, Object> getProperties() {
-        Map<String, Object> props = new HashMap<>();
-
-        // https://github.com/jersey/jersey/issues/3659
-        props.put("jersey.config.beanValidation.disable.validateOnExecutableCheck.server", true);
-
-        return props;
-    }
-
-    @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> set = new HashSet<>();
         set.add(ValidationController.class);
         return set;
     }
-
 }

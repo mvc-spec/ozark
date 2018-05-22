@@ -55,7 +55,6 @@ public class FormController {
 
     @POST
     @Controller
-    @ValidateOnExecution(type = ExecutableType.NONE)
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         if (br.isFailed()) {
             ValidationError validationError = br.getAllValidationErrors().iterator().next();
