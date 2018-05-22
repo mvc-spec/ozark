@@ -217,6 +217,41 @@
             </dependencies>
         </profile>
 
+        <!-- Run TCK against Liberty -->
+        <profile>
+            <id>tck-liberty</id>
+            <activation>
+                <property>
+                    <name>tck-env</name>
+                    <value>liberty</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <dependenciesToScan>org.mvc-spec.tck:mvc-tck-tests</dependenciesToScan>
+                            <systemPropertyVariables>
+                                <arquillian.launch>liberty</arquillian.launch>
+                                <org.mvcspec.tck.api.BaseArchiveProvider>
+                                    org.mvcspec.ozark.tck.liberty.LibertyArchiveProvider
+                                </org.mvcspec.tck.api.BaseArchiveProvider>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <dependencies>
+                <dependency>
+                    <groupId>io.openliberty.arquillian</groupId>
+                    <artifactId>arquillian-liberty-managed</artifactId>
+                    <version>1.0.0</version>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
     </profiles>
 
 </project>

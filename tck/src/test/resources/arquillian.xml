@@ -63,4 +63,13 @@
         </configuration>
     </container>
 
+    <!--
+        https://developer.ibm.com/wasdev/docs/getting-started-liberty-arquillian/
+    -->
+    <container qualifier="liberty">
+        <configuration>
+            <property name="wlpHome">${liberty.home}</property>
+        </configuration>
+    </container>
+    
 </arquillian>
