@@ -18,6 +18,8 @@ package org.mvcspec.ozark.test.requestdispatcher;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.junit.After;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,7 +47,8 @@ public class RequestDispatcherIT {
 
     @Test
     public void testView1() throws Exception {
+        webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         final HtmlPage page = webClient.getPage(webUrl + "resources/requestDispatcher/view1/1");
-        assertTrue(page.asXml().contains("RequestDispatcher defaulting"));
+        assertEquals(500, page.getWebResponse().getStatusCode());
     }
 }
