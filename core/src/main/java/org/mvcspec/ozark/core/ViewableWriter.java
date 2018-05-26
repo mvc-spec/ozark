@@ -20,7 +20,6 @@ import org.mvcspec.ozark.engine.ViewEngineFinder;
 import org.mvcspec.ozark.event.AfterProcessViewEventImpl;
 import org.mvcspec.ozark.event.BeforeProcessViewEventImpl;
 import org.mvcspec.ozark.cdi.OzarkCdiExtension;
-import org.mvcspec.ozark.util.PathUtils;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
@@ -33,12 +32,9 @@ import javax.mvc.engine.ViewEngineException;
 import javax.mvc.event.AfterProcessViewEvent;
 import javax.mvc.event.BeforeProcessViewEvent;
 import javax.mvc.event.MvcEvent;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import javax.ws.rs.Produces;
@@ -137,35 +133,9 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         }
 
         // Create wrapper for response
-        final ServletOutputStream responseStream = new ServletOutputStream() {
-            @Override
-            public void write(final int b) throws IOException {
-                out.write(b);
-            }
-
-            @Override
-            public boolean isReady() {
-                return false;
-            }
-
-            @Override
-            public void setWriteListener(WriteListener writeListener) {
-                throw new UnsupportedOperationException("Not supported");
-            }
-        };
+        final ServletOutputStream responseStream = new DelegatingServletOutputStream(out);
         final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, getCharset(headers)));
-        final HttpServletResponse responseWrapper = new HttpServletResponseWrapper(response) {
-
-            @Override
-            public ServletOutputStream getOutputStream() throws IOException {
-                return responseStream;
-            }
-
-            @Override
-            public PrintWriter getWriter() throws IOException {
-                return responseWriter;
-            }
-        };
+        final HttpServletResponse responseWrapper = new MvcHttpServletResponse(response, responseStream, responseWriter);
 
         // Pass request to view engine
         try {
@@ -238,4 +208,57 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
     }
 
+    /**
+     * Implementation of {@link ServletOutputStream} which delegate all write operations
+     * to an underlying {@link OutputStream} provided by JAX-RS.
+     */
+    private static class DelegatingServletOutputStream extends ServletOutputStream {
+        
+        private final OutputStream out;
+
+        public DelegatingServletOutputStream(OutputStream out) {
+            this.out = out;
+        }
+
+        @Override
+        public void write(final int b) throws IOException {
+            out.write(b);
+        }
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
+
+        @Override
+        public void setWriteListener(WriteListener writeListener) {
+            throw new UnsupportedOperationException("Not supported");
+        }
+    }
+
+    /**
+     * Implementation of {@link HttpServletResponseWrapper} which returns custom
+     * output streams and writers.
+     */
+    private static class MvcHttpServletResponse extends HttpServletResponseWrapper {
+
+        private final ServletOutputStream responseStream;
+        private final PrintWriter responseWriter;
+
+        public MvcHttpServletResponse(HttpServletResponse response, ServletOutputStream responseStream, PrintWriter responseWriter) {
+            super(response);
+            this.responseStream = responseStream;
+            this.responseWriter = responseWriter;
+        }
+
+        @Override
+        public ServletOutputStream getOutputStream() throws IOException {
+            return responseStream;
+        }
+
+        @Override
+        public PrintWriter getWriter() throws IOException {
+            return responseWriter;
+        }
+    }
 }
