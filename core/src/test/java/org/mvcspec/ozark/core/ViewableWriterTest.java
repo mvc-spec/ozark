@@ -83,7 +83,7 @@ public class ViewableWriterTest {
         finderField.set(writer, finder);
 
         HttpServletRequest request = EasyMock.createStrictMock(HttpServletRequest.class);
-        Field requestField = writer.getClass().getDeclaredField("request");
+        Field requestField = writer.getClass().getDeclaredField("injectedRequest");
         requestField.setAccessible(true);
         requestField.set(writer, request);
 
@@ -95,7 +95,7 @@ public class ViewableWriterTest {
         ViewEngine viewEngine = EasyMock.createStrictMock(ViewEngine.class);
 
         HttpServletResponse response = EasyMock.createStrictMock(HttpServletResponse.class);
-        Field responseField = writer.getClass().getDeclaredField("response");
+        Field responseField = writer.getClass().getDeclaredField("injectedResponse");
         responseField.setAccessible(true);
         responseField.set(writer, response);
 

@@ -15,18 +15,18 @@
  */
 package org.mvcspec.ozark.core;
 
+import org.mvcspec.ozark.cdi.OzarkCdiExtension;
 import org.mvcspec.ozark.engine.ViewEngineContextImpl;
 import org.mvcspec.ozark.engine.ViewEngineFinder;
+import org.mvcspec.ozark.engine.Viewable;
 import org.mvcspec.ozark.event.AfterProcessViewEventImpl;
 import org.mvcspec.ozark.event.BeforeProcessViewEventImpl;
-import org.mvcspec.ozark.cdi.OzarkCdiExtension;
 
 import javax.enterprise.event.Event;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.mvc.Models;
 import javax.mvc.MvcContext;
-import org.mvcspec.ozark.engine.Viewable;
 import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineException;
 import javax.mvc.event.AfterProcessViewEvent;
@@ -52,6 +52,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
 
@@ -81,10 +82,10 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     private Instance<Models> modelsInstance;
 
     @Context
-    private HttpServletRequest request;
+    private HttpServletRequest injectedRequest;
 
     @Context
-    private HttpServletResponse response;
+    private HttpServletResponse injectedResponse;
 
     @Context
     private UriInfo uriInfo;
@@ -132,6 +133,10 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             throw new ServerErrorException(messages.get("NoViewEngine", viewable), INTERNAL_SERVER_ERROR);
         }
 
+        // Special hack for WebSphere Liberty
+        HttpServletRequest request = unwrap(injectedRequest, HttpServletRequest.class);
+        HttpServletResponse response = unwrap(injectedResponse, HttpServletResponse.class);
+        
         // Create wrapper for response
         final ServletOutputStream responseStream = new DelegatingServletOutputStream(out);
         final PrintWriter responseWriter = new PrintWriter(new OutputStreamWriter(responseStream, getCharset(headers)));
@@ -172,6 +177,33 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
         } finally {
             responseWriter.flush();
         }
+    }
+
+    /**
+     * This method is basically a dirty hack to get Ozark work on WebSphere Liberty.
+     * The primary use case is to unwrap the original request/response from the wrapper we get
+     * from CXF. This is required because the wrappers don't use the official wrapper base classes
+     * and therefore Liberty fails to forward such requests because unwrapping isn't possible.
+     */
+    private <T> T unwrap(T obj, Class<T> type) {
+
+        String implName = obj.getClass().getName();
+
+        if (implName.equals("org.apache.cxf.jaxrs.impl.tl.ThreadLocalHttpServletRequest")
+                || implName.equals("org.apache.cxf.jaxrs.impl.tl.ThreadLocalHttpServletResponse")) {
+
+            try {
+                return type.cast(
+                        obj.getClass().getMethod("get").invoke(obj)
+                );
+            } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                throw new IllegalStateException("Failed to unwrap", e);
+            }
+
+        }
+
+        return obj;
+
     }
 
     /**
