@@ -4,6 +4,7 @@ set -euo pipefail
 
 GLASSFISH_URL="http://download.oracle.com/glassfish/5.0.1/nightly/latest-web.zip"
 WILDFLY_URL="http://download.jboss.org/wildfly/11.0.0.CR1/wildfly-11.0.0.CR1.tar.gz"
+LIBERTY_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp/18.0.0.1/wlp-webProfile7-18.0.0.1.zip"
 
 if [ "${1}" == "glassfish-bundled" ]; then
 
@@ -59,6 +60,17 @@ elif [ "${1}" == "tck-tomee" ]; then
   mvn -B -V -DskipTests clean install
   pushd tck
   mvn -B -V -Dtck-env=tomee verify
+  popd
+
+elif [ "${1}" == "tck-liberty" ]; then
+
+  curl -s -o wlp.zip "${LIBERTY_URL}"
+  unzip wlp.zip
+  cp .travis/wlp-server-template.xml wlp/templates/servers/defaultServer/server.xml
+  LIBERTY_HOME="$( cd ./wlp/ && pwd )"
+  mvn -B -V -DskipTests clean install
+  pushd tck
+  mvn -B -V -Dtck-env=liberty -Dliberty.home=${LIBERTY_HOME} verify
   popd
 
 else
