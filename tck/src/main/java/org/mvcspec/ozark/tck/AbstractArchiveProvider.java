@@ -65,6 +65,10 @@ public abstract class AbstractArchiveProvider implements BaseArchiveProvider {
         return resolveOzarkModule("org.mvc-spec.ozark", "ozark-resteasy");
     }
 
+    protected File[] resolveOzarkCxf() {
+        return resolveOzarkModule("org.mvc-spec.ozark", "ozark-cxf");
+    }
+
     protected File[] resolveOzarkCore() {
         return resolveOzarkModule("org.mvc-spec.ozark", "ozark-core");
     }

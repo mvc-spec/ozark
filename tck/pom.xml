@@ -102,6 +102,11 @@
                 <artifactId>ozark-resteasy</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.mvc-spec.ozark</groupId>
+                <artifactId>ozark-cxf</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
