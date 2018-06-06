@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Hello World</title>
-    <link rel="stylesheet" type="text/css" href="${mvc.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/ozark.css"/>
 </head>
 <body>
 <h1>Hello World</h1>

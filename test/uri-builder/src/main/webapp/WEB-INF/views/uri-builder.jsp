@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>MvcUriBuilder examples</title>
-    <link rel="stylesheet" type="text/css" href="${mvc.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${request.contextPath}/ozark.css"/>
 </head>
 <body>
 <div class="container">
