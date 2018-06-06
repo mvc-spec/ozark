@@ -85,21 +85,11 @@ public class MvcContextImpl implements MvcContext {
     }
 
     @Override
-    public String getContextPath() {
-        return servletContext.getContextPath();   // normalized by servlet
-    }
-
-    @Override
-    public String getApplicationPath() {
-        return applicationPath;
-    }
-
-    @Override
     public String getBasePath() {
-        if (getApplicationPath() != null) {
-            return getContextPath() + getApplicationPath();
+        if (applicationPath != null) {
+            return servletContext.getContextPath() + applicationPath;
         }
-        return getContextPath();
+        return servletContext.getContextPath();
     }
 
     @Override
