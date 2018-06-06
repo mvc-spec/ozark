@@ -49,8 +49,7 @@ public class MvcIT {
     @Test
     public void test() throws Exception {
         HtmlPage page = webClient.getPage(webUrl + "resources/mvc");
-        assertEquals("/test-mvc", page.getElementById("contextPath").asText());
-        assertEquals("/resources", page.getElementById("applicationPath").asText());
+        assertEquals("/test-mvc/resources", page.getElementById("basePath").asText());
         assertEquals(CSRF_PARAM, page.getElementById("csrf").asText());
         assertEquals("<&>", page.getElementById("encoders").asText());
         assertEquals("true", page.getElementById("config").asText());
