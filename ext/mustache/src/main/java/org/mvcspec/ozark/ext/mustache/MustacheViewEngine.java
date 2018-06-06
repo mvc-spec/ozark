@@ -24,10 +24,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class MustacheViewEngine.
@@ -48,10 +51,18 @@ public class MustacheViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        Mustache mustache = factory.compile(resolveView(context));
+
         Charset charset = resolveCharsetAndSetContentType(context);
+
         try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
-            mustache.execute(writer, context.getModels()).flush();
+
+            Mustache mustache = factory.compile(resolveView(context));
+
+            Map<String, Object> model = new HashMap<>(context.getModels());
+            model.put("request", context.getRequest(HttpServletRequest.class));
+
+            mustache.execute(writer, model).flush();
+
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }

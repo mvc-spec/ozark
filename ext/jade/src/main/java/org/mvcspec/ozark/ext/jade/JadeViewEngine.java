@@ -17,6 +17,7 @@ package org.mvcspec.ozark.ext.jade;
 
 import de.neuland.jade4j.JadeConfiguration;
 import de.neuland.jade4j.exceptions.JadeException;
+import de.neuland.jade4j.template.JadeTemplate;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 
@@ -24,10 +25,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The Jade View Engine.
@@ -50,10 +54,18 @@ public class JadeViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        String viewPath = resolveView(context);
+
         Charset charset = resolveCharsetAndSetContentType(context);
+
         try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
-            jade.renderTemplate(jade.getTemplate(viewPath), context.getModels(), writer);
+
+            JadeTemplate template = jade.getTemplate(resolveView(context));
+
+            Map<String, Object> model = new HashMap<>(context.getModels());
+            model.put("request", context.getRequest(HttpServletRequest.class));
+
+            jade.renderTemplate(template, model, writer);
+
         } catch (JadeException | IOException ex) {
             throw new ViewEngineException(String.format("Could not process view %s.", context.getView()), ex);
         }

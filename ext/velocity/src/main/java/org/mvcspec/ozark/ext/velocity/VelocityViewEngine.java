@@ -25,10 +25,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class VelocityViewEngine.
@@ -49,11 +52,19 @@ public class VelocityViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
+        
         Charset charset = resolveCharsetAndSetContentType(context);
+        
         try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
+            
             Template template = velocityEngine.getTemplate(resolveView(context));
-            VelocityContext velocityContext = new VelocityContext(context.getModels());
+
+            Map<String, Object> model = new HashMap<>(context.getModels());
+            model.put("request", context.getRequest(HttpServletRequest.class));
+            VelocityContext velocityContext = new VelocityContext(model);
+            
             template.merge(velocityContext, writer);
+            
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }
