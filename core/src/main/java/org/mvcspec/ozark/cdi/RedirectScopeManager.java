@@ -252,7 +252,7 @@ public class RedirectScopeManager {
         if (request.getAttribute(SCOPE_ID) != null) {
             if (usingCookies()) {
                 Cookie cookie = new Cookie(COOKIE_NAME, request.getAttribute(SCOPE_ID).toString());
-                cookie.setPath(mvc.getContextPath());
+                cookie.setPath(request.getContextPath());
                 cookie.setMaxAge(600);
                 cookie.setHttpOnly(true);
                 response.addCookie(cookie);
