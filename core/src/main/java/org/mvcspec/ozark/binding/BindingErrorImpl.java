@@ -28,9 +28,12 @@ public class BindingErrorImpl implements BindingError {
 
     private String paramName;
 
-    public BindingErrorImpl(String message, String paramName) {
+    private String submittedValue;
+
+    public BindingErrorImpl(String message, String paramName, String submittedValue) {
         this.message = message;
         this.paramName = paramName;
+        this.submittedValue = submittedValue;
     }
 
     @Override
@@ -49,5 +52,10 @@ public class BindingErrorImpl implements BindingError {
 
     public void setParamName(String paramName) {
         this.paramName = paramName;
+    }
+
+    @Override
+    public String getSubmittedValue() {
+        return submittedValue;
     }
 }

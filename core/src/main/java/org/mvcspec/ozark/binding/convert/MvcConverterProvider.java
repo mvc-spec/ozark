@@ -74,7 +74,7 @@ public class MvcConverterProvider implements ParamConverterProvider {
 
                         // register possible errors in BindingResult
                         result.getError()
-                                .map(error -> new BindingErrorImpl(error, getParamName(annotations)))
+                                .map(error -> new BindingErrorImpl(error, getParamName(annotations), value))
                                 .ifPresent(bindingError -> bindingResult.addBindingError(bindingError));
 
                         // always return a value so JAX-RS continues processing the request
