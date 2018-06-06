@@ -28,6 +28,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class Thymeleaf ViewEngine.
@@ -51,12 +53,19 @@ public class ThymeleafViewEngine extends ViewEngineBase {
 
 	@Override
 	public void processView(ViewEngineContext context) throws ViewEngineException {
+		
 		try {
+			
 			HttpServletRequest request = context.getRequest(HttpServletRequest.class);
 			HttpServletResponse response = context.getResponse(HttpServletResponse.class);
 			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariables(context.getModels());
+
+			Map<String, Object> model = new HashMap<>(context.getModels());
+			model.put("request", request);
+			ctx.setVariables(model);
+			
 			engine.process(resolveView(context), ctx, response.getWriter());
+			
 		} catch (IOException e) {
 			throw new ViewEngineException(e);
 		}

@@ -17,6 +17,7 @@ package org.mvcspec.ozark.ext.pebble;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.error.PebbleException;
+import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -26,7 +27,11 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 
 /**
@@ -49,11 +54,18 @@ public class PebbleViewEngine extends ViewEngineBase {
 
   @Override
   public void processView(ViewEngineContext context) throws ViewEngineException {
-    String viewPath = resolveView(context);
 
     Charset charset = resolveCharsetAndSetContentType(context);
+    
     try(Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
-      pebbleEngine.getTemplate(viewPath).evaluate(writer, context.getModels());
+
+      PebbleTemplate template = pebbleEngine.getTemplate(resolveView(context));
+      
+      Map<String, Object> model = new HashMap<>(context.getModels());
+      model.put("request", context.getRequest(HttpServletRequest.class));
+      
+      template.evaluate(writer, model);
+      
     } catch (PebbleException | IOException ex) {
       throw new ViewEngineException(String.format("Could not process view %s.", context.getView()), ex);
     }

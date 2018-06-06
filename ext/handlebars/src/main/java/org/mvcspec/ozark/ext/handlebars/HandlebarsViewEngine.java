@@ -22,10 +22,10 @@ import org.mvcspec.ozark.engine.ViewEngineConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.Models;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +33,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -57,10 +59,14 @@ public class HandlebarsViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
-        Models models = context.getModels();
+
+        Map<String, Object> model = new HashMap<>(context.getModels());
+        model.put("request", context.getRequest(HttpServletRequest.class));
+        
         Charset charset = resolveCharsetAndSetContentType(context);
 
         try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset);
+             
             InputStream resourceAsStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader in = new InputStreamReader(resourceAsStream, "UTF-8");
             BufferedReader bufferedReader = new BufferedReader(in);) {
@@ -68,7 +74,8 @@ public class HandlebarsViewEngine extends ViewEngineBase {
             String viewContent = bufferedReader.lines().collect(Collectors.joining());
 
             Template template = handlebars.compileInline(viewContent);
-            template.apply(models, writer);
+            template.apply(model, writer);
+            
         } catch (IOException e) {
             throw new ViewEngineException(e);
         }

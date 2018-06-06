@@ -15,20 +15,23 @@
  */
 package org.mvcspec.ozark.ext.freemarker;
 
-import org.mvcspec.ozark.engine.ViewEngineBase;
-import org.mvcspec.ozark.engine.ViewEngineConfig;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.mvcspec.ozark.engine.ViewEngineBase;
+import org.mvcspec.ozark.engine.ViewEngineConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Class FreemarkerViewEngine.
@@ -49,10 +52,18 @@ public class FreemarkerViewEngine extends ViewEngineBase {
 
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
+
         Charset charset = resolveCharsetAndSetContentType(context);
+
         try (Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
-            final Template template = configuration.getTemplate(resolveView(context));
-            template.process(context.getModels(), writer);
+
+            Template template = configuration.getTemplate(resolveView(context));
+
+            Map<String, Object> model = new HashMap<>(context.getModels());
+            model.put("request", context.getRequest(HttpServletRequest.class));
+
+            template.process(model, writer);
+
         } catch (TemplateException | IOException e) {
             throw new ViewEngineException(e);
         }
