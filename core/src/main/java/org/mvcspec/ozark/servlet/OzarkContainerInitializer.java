@@ -17,7 +17,7 @@ package org.mvcspec.ozark.servlet;
 
 import org.mvcspec.ozark.util.AnnotationUtils;
 
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

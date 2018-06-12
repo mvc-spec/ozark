@@ -24,7 +24,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mvc.MvcContext;
-import javax.mvc.MvcUriBuilder;
+import javax.mvc.uri.MvcUriBuilder;
 import javax.mvc.security.Csrf;
 import javax.mvc.security.Encoders;
 import javax.servlet.ServletContext;

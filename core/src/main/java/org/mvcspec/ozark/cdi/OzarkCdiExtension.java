@@ -46,8 +46,8 @@ import javax.annotation.Priority;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.*;
 import javax.interceptor.Interceptor;
-import javax.mvc.annotation.Controller;
-import javax.mvc.annotation.RedirectScoped;
+import javax.mvc.Controller;
+import javax.mvc.RedirectScoped;
 import javax.mvc.event.MvcEvent;
 import java.lang.reflect.Type;
 import java.util.HashSet;
@@ -158,7 +158,7 @@ public class OzarkCdiExtension implements Extension {
     }
 
     /**
-     * Search for {@link javax.mvc.annotation.Controller} annotation and patch AnnotatedType.
+     * Search for {@link Controller} annotation and patch AnnotatedType.
      * Note: PLATFORM_AFTER is required so we execute AFTER the Hibernate Validator Extension
      */
     public <T> void processAnnotatedType(

@@ -21,7 +21,7 @@ import org.mvcspec.ozark.cdi.OzarkCdiExtension;
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.mvc.event.BeforeControllerEvent;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -35,7 +35,7 @@ import java.io.IOException;
  * <p>A JAX-RS request filter that fires a {@link javax.mvc.event.BeforeControllerEvent}
  * after the controller has been matched but before it is called.</p>
  *
- * <p>Given that this filter is annotated with {@link javax.mvc.annotation.Controller},
+ * <p>Given that this filter is annotated with {@link Controller},
  * it will be called before a controller is called. Priority is set to
  * {@link javax.ws.rs.Priorities#ENTITY_CODER} which means it will be executed
  * right before user-defined request filters.</p>

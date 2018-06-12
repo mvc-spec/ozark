@@ -20,7 +20,7 @@ import javax.enterprise.context.spi.AlterableContext;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.CDI;
-import javax.mvc.annotation.RedirectScoped;
+import javax.mvc.RedirectScoped;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 

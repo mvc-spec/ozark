@@ -16,13 +16,14 @@
 package org.mvcspec.ozark.binding.validate;
 
 import javax.interceptor.InterceptorBinding;
+import javax.mvc.Controller;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 
 /**
- * Triggers validation of parameters in {@link javax.mvc.annotation.Controller} methods.
+ * Triggers validation of parameters in {@link Controller} methods.
  * This annotation is added by the CDI extension to all controller methods.
  *
  * @author Dmytro Maidaniuk

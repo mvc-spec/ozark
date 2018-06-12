@@ -15,6 +15,7 @@
  */
 package org.mvcspec.ozark.engine;
 
+import javax.mvc.Controller;
 import javax.mvc.Models;
 import javax.mvc.engine.ViewEngine;
 
@@ -25,7 +26,7 @@ import javax.mvc.engine.ViewEngine;
  *
  * @author Santiago Pericas-Geertsen
  * @see javax.mvc.Models
- * @see javax.mvc.annotation.Controller
+ * @see Controller
  * @see javax.mvc.engine.ViewEngine
  * @since 1.0
  */

@@ -17,14 +17,12 @@ package org.mvcspec.ozark.test.validation;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.mvc.binding.BindingError;
 import javax.mvc.binding.BindingResult;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.executable.ExecutableType;
-import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;

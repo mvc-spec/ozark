@@ -20,7 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 
 /**
  * RedirectController test.

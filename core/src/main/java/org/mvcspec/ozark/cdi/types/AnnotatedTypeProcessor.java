@@ -19,7 +19,7 @@ import org.mvcspec.ozark.binding.validate.ValidationInterceptorBinding;
 
 import javax.enterprise.inject.spi.AnnotatedMethod;
 import javax.enterprise.inject.spi.AnnotatedType;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.ws.rs.*;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
