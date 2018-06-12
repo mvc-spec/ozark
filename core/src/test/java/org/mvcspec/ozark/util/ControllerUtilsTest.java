@@ -17,7 +17,7 @@ package org.mvcspec.ozark.util;
 
 import org.junit.Test;
 
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 

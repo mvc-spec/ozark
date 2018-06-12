@@ -15,8 +15,8 @@
  */
 package org.mvcspec.ozark.test.csrfproperty;
 
-import javax.mvc.annotation.Controller;
-import javax.mvc.annotation.View;
+import javax.mvc.Controller;
+import javax.mvc.View;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

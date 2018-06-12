@@ -16,7 +16,7 @@
 package org.mvcspec.ozark.test.requestdispatcher;
 
 import java.io.Serializable;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;

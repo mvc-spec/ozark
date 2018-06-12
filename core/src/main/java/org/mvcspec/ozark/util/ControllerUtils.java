@@ -15,7 +15,7 @@
  */
 package org.mvcspec.ozark.util;
 
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.ws.rs.HttpMethod;
 import java.lang.reflect.Method;
 import java.util.Arrays;

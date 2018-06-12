@@ -15,7 +15,7 @@
  */
 package org.mvcspec.ozark.uri;
 
-import javax.mvc.MvcUriBuilder;
+import javax.mvc.uri.MvcUriBuilder;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriBuilder;

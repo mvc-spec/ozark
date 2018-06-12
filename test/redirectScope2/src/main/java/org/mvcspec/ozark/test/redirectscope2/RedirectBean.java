@@ -17,7 +17,7 @@ package org.mvcspec.ozark.test.redirectscope2;
 
 import java.io.Serializable;
 import javax.inject.Named;
-import javax.mvc.annotation.RedirectScoped;
+import javax.mvc.RedirectScoped;
 
 /**
  * A simple RedirectScoped bean.

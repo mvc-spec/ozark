@@ -20,8 +20,8 @@ import org.mvcspec.ozark.core.Messages;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
-import javax.mvc.annotation.CsrfValid;
+import javax.mvc.Controller;
+import javax.mvc.security.CsrfValid;
 import javax.mvc.security.CsrfValidationException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;

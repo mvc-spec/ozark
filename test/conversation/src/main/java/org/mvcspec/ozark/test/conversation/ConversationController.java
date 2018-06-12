@@ -16,7 +16,7 @@
 package org.mvcspec.ozark.test.conversation;
 
 import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.ws.rs.*;
 
 /**

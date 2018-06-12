@@ -18,8 +18,8 @@ package org.mvcspec.ozark.uri;
 import org.mvcspec.ozark.util.AnnotationUtils;
 
 import javax.enterprise.inject.Vetoed;
-import javax.mvc.MvcUriBuilder;
-import javax.mvc.annotation.UriRef;
+import javax.mvc.uri.MvcUriBuilder;
+import javax.mvc.uri.UriRef;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import java.lang.reflect.Method;

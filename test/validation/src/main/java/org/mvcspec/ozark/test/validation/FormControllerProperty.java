@@ -16,13 +16,11 @@
 package org.mvcspec.ozark.test.validation;
 
 import javax.inject.Inject;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.mvc.binding.BindingResult;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
-import javax.validation.executable.ExecutableType;
-import javax.validation.executable.ValidateOnExecution;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

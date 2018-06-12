@@ -18,7 +18,7 @@ package org.mvcspec.ozark.binding.validate;
 import org.junit.Assert;
 import org.junit.Test;
 
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
 import javax.validation.Validation;

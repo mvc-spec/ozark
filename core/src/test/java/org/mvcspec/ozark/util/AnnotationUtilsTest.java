@@ -22,8 +22,8 @@ import org.junit.runner.RunWith;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mvc.annotation.Controller;
-import javax.mvc.annotation.View;
+import javax.mvc.Controller;
+import javax.mvc.View;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.Path;
 

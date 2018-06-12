@@ -19,7 +19,7 @@ import org.jboss.resteasy.spi.HttpRequest;
 import org.jboss.resteasy.spi.validation.GeneralValidator;
 import org.mvcspec.ozark.util.AnnotationUtils;
 
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import java.lang.reflect.Method;
 
 /**

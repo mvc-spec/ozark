@@ -19,7 +19,7 @@ import org.glassfish.jersey.server.spi.ValidationInterceptor;
 import org.glassfish.jersey.server.spi.ValidationInterceptorContext;
 import org.mvcspec.ozark.util.AnnotationUtils;
 
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 
 /**
  * This interceptor prevents Jersey from performing validation for MVC requests. This

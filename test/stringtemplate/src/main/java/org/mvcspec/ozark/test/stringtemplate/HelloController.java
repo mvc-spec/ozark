@@ -16,8 +16,9 @@
 package org.mvcspec.ozark.test.stringtemplate;
 
 import javax.inject.Inject;
+import javax.mvc.Controller;
 import javax.mvc.Models;
-import javax.mvc.annotation.*;
+import javax.mvc.View;
 import javax.ws.rs.*;
 
 /**

@@ -17,7 +17,7 @@ package org.mvcspec.ozark.test.redirect;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.mvc.annotation.Controller;
+import javax.mvc.Controller;
 import javax.mvc.event.ControllerRedirectEvent;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

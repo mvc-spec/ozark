@@ -22,8 +22,8 @@ import javax.annotation.Priority;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import org.mvcspec.ozark.engine.Viewable;
-import javax.mvc.annotation.Controller;
-import javax.mvc.annotation.View;
+import javax.mvc.Controller;
+import javax.mvc.View;
 import javax.mvc.event.AfterControllerEvent;
 import javax.mvc.event.ControllerRedirectEvent;
 import javax.mvc.event.MvcEvent;
@@ -68,7 +68,7 @@ import static org.mvcspec.ozark.util.PathUtils.*;
  * {@code text/html}. If the method does not return void (has an entity), the computation
  * of the Content-Type is done by JAX-RS and is available via {@code responseContext}.</p>
  *
- * <p>Given that this filter is annotated with {@link javax.mvc.annotation.Controller}, it
+ * <p>Given that this filter is annotated with {@link Controller}, it
  * will be called after every controller method returns. Priority is set to
  * {@link javax.ws.rs.Priorities#ENTITY_CODER} which means it will be executed
  * after user-defined response filters (response filters are sorted in reverse order).</p>
