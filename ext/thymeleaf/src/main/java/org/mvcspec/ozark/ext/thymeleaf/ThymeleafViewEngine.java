@@ -18,9 +18,11 @@ package org.mvcspec.ozark.ext.thymeleaf;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.IWebContext;
 import org.thymeleaf.context.WebContext;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
@@ -39,35 +41,37 @@ import java.util.Map;
 @ApplicationScoped
 public class ThymeleafViewEngine extends ViewEngineBase {
 
-	@Inject
-	private ServletContext servletContext;
+    @Inject
+    private ServletContext servletContext;
 
-	@Inject
-	@ViewEngineConfig
-	private TemplateEngine engine;
+    @Inject
+    private BeanManager beanManager;
 
-	@Override
-	public boolean supports(String view) {
-		return view.endsWith(".html");
-	}
+    @Inject
+    @ViewEngineConfig
+    private TemplateEngine engine;
 
-	@Override
-	public void processView(ViewEngineContext context) throws ViewEngineException {
-		
-		try {
-			
-			HttpServletRequest request = context.getRequest(HttpServletRequest.class);
-			HttpServletResponse response = context.getResponse(HttpServletResponse.class);
-			WebContext ctx = new WebContext(request, response, servletContext, context.getLocale());
+    @Override
+    public boolean supports(String view) {
+        return view.endsWith(".html");
+    }
 
-			Map<String, Object> model = new HashMap<>(context.getModels().asMap());
-			model.put("request", request);
-			ctx.setVariables(model);
-			
-			engine.process(resolveView(context), ctx, response.getWriter());
-			
-		} catch (IOException e) {
-			throw new ViewEngineException(e);
-		}
-	}
+    @Override
+    public void processView(ViewEngineContext context) throws ViewEngineException {
+        try {
+            HttpServletRequest request = context.getRequest(HttpServletRequest.class);
+            HttpServletResponse response = context.getResponse(HttpServletResponse.class);
+
+            CDIWebContext ctx = new CDIWebContext(beanManager, request, response, servletContext, context.getLocale());
+
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
+            model.put("request", request);
+            ctx.setVariables(model);
+
+            engine.process(resolveView(context), ctx, response.getWriter());
+
+        } catch (IOException e) {
+            throw new ViewEngineException(e);
+        }
+    }
 }
