@@ -66,11 +66,13 @@ public class ThymeleafViewEngine extends ViewEngineBase {
             model.put("request", request);
             ctx.setVariables(model);
 
-            engine.process(resolveView(context), ctx, response.getWriter());
-
-        } catch (IOException e) {
-            throw new ViewEngineException(e);
-        }
-    }
+			try {engine.process(resolveView(context), ctx, response.getWriter());response.flushBuffer();
+            } finally {
+			    ctx.close();
+}
+		} catch (IOException e) {
+			throw new ViewEngineException(e);
+		}
+	}
 
 }

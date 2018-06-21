@@ -35,11 +35,11 @@ import java.util.stream.Collectors;
  * {@link org.thymeleaf.context.WebContext} this allows to resolve beans annotated with {@linkplain javax.inject.Named}
  * from the cdi context.
  * <p>
- * Beans will be reolved in this order:
+ * Beans will be resolved in this order:
  * <ol>
- *     <li>special variables (like "request")</li>
- *     <li>variables from the model</li>
- *     <li>named beans from the cdi context</li>
+ * <li>special variables (like "request")</li>
+ * <li>variables from the model</li>
+ * <li>named beans from the cdi context</li>
  * </ol>
  * </p>
  *
@@ -55,6 +55,9 @@ class CDIWebContext implements IWebContext {
     private final BeanManager beanManager;
     private final Set<String> cdiNamedBeans;
 
+    /** keeps track of creational contexts, so beans can get disposed by calling {@link #close()} */
+    private final Queue<CreationalContext<?>> contexts = new LinkedList<>();
+
     private final Map<String, Object> variables = new HashMap<>();
 
     CDIWebContext(BeanManager beanManager, HttpServletRequest request, HttpServletResponse response, ServletContext servletContext, Locale locale) {
@@ -68,7 +71,8 @@ class CDIWebContext implements IWebContext {
 
     @SuppressWarnings("serial")
     private Set<String> enumerateNamedBeans() {
-        Set<Bean<?>> beans = beanManager.getBeans(Object.class, new AnnotationLiteral<Any>() { });
+        Set<Bean<?>> beans = beanManager.getBeans(Object.class, new AnnotationLiteral<Any>() {
+        });
         return beans.stream().map(Bean::getName).filter(Objects::nonNull).collect(Collectors.toSet());
     }
 
@@ -131,6 +135,8 @@ class CDIWebContext implements IWebContext {
             protected Object loadValue() {
                 Bean<?> bean = beanManager.getBeans(name).iterator().next();
                 CreationalContext ctx = beanManager.createCreationalContext(bean);
+                // push the context a list so they can be disposed after the template has been processed
+                contexts.add(ctx);
                 return beanManager.getReference(bean, bean.getBeanClass(), ctx);
             }
         };
@@ -143,5 +149,14 @@ class CDIWebContext implements IWebContext {
         }
     }
 
-
+    /**
+     * Dispose all CDI creational contexts to depdenent scoped beans get disposed.
+     * <p>
+     * MUST be called after the template has been processed
+     */
+    void close() {
+        for (CreationalContext ctx : contexts) {
+            ctx.release();
+        }
+    }
 }
