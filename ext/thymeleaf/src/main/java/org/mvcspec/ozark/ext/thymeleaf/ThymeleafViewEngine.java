@@ -18,8 +18,6 @@ package org.mvcspec.ozark.ext.thymeleaf;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.IWebContext;
-import org.thymeleaf.context.WebContext;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
@@ -74,4 +72,5 @@ public class ThymeleafViewEngine extends ViewEngineBase {
             throw new ViewEngineException(e);
         }
     }
+
 }

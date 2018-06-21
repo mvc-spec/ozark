@@ -15,30 +15,23 @@
  */
 package org.mvcspec.ozark.test.thymeleaf;
 
-import javax.inject.Inject;
-import javax.mvc.Controller;
-import javax.mvc.View;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.faces.bean.RequestScoped;
+import javax.inject.Named;
 
 /**
- * HelloController test.
- *
- * @author Rodrigo Turini
+ * @author Gregor Tudan
  */
-@Path("hello")
-public class HelloController {
+@RequestScoped
+@Named("greeting")
+public class Greeting {
 
-    @Inject
-    private Greeting greeting;
+    private String user;
 
-    @GET
-    @Controller
-    @Produces("text/html")
-    @View("hello.html")
-    public void hello(@QueryParam("user") String user) {
-        greeting.setUser(user);
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

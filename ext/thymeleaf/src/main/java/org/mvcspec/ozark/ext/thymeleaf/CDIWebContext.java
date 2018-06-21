@@ -84,7 +84,7 @@ class CDIWebContext implements IWebContext {
 
     @Override
     public HttpSession getSession() {
-        return request.getSession();
+        return request.getSession(false);
     }
 
     @Override
@@ -142,4 +142,6 @@ class CDIWebContext implements IWebContext {
             this.variables.putAll(variables);
         }
     }
+
+
 }
