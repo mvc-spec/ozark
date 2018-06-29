@@ -86,6 +86,7 @@
         <module>uri-builder</module>
         <module>jetbrick</module>
         <module>groovy</module>
+        <module>jtwig</module>
     </modules>
     <profiles>
         <profile>
