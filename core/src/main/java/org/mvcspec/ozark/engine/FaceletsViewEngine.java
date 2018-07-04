@@ -16,7 +16,7 @@
 package org.mvcspec.ozark.engine;
 
 import javax.annotation.Priority;
-import javax.mvc.engine.Priorities;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletException;
@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Santiago Pericas-Geertsen
  * @see ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
-@Priority(Priorities.DEFAULT)
+@Priority(ViewEngine.PRIORITY_DEFAULT)
 public class FaceletsViewEngine extends ServletViewEngine {
 
     /**
