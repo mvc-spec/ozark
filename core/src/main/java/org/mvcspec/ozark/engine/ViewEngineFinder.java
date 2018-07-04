@@ -20,7 +20,6 @@ import org.mvcspec.ozark.util.CdiUtils;
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.mvc.engine.Priorities;
 import javax.mvc.engine.ViewEngine;
 import java.util.HashMap;
 import java.util.List;
@@ -85,9 +84,9 @@ public class ViewEngineFinder {
                 engine = candidates.stream().max(
                         (e1, e2) -> {
                             final Priority p1 = getAnnotation(e1.getClass(), Priority.class);
-                            final int v1 = p1 != null ? p1.value() : Priorities.DEFAULT;
+                            final int v1 = p1 != null ? p1.value() : ViewEngine.PRIORITY_DEFAULT;
                             final Priority p2 = getAnnotation(e2.getClass(), Priority.class);
-                            final int v2 = p2 != null ? p2.value() : Priorities.DEFAULT;
+                            final int v2 = p2 != null ? p2.value() : ViewEngine.PRIORITY_DEFAULT;
                             return v1 - v2;
                         });
                 // Update cache
