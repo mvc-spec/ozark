@@ -69,7 +69,7 @@ public class OzarkServletContextListener implements ServletContextListener {
     private void failIfNoCdiBean(Class<?> controllerClass) {
         Set<Bean<?>> controllerBeans = beanManager.getBeans(controllerClass);
         if (controllerBeans == null || controllerBeans.isEmpty()) {
-            String message = String.format("The controller %s is not a managed CDI bean. Maybe the controller class is" +
+            String message = String.format("The controller %s is not a managed CDI bean. Maybe the controller class is " +
                     "missing a scope annotation (e.g. @RequestScope).", controllerClass.getName());
             throw new IllegalArgumentException(message);
         }
@@ -82,7 +82,7 @@ public class OzarkServletContextListener implements ServletContextListener {
         Named namedAnnotation = controllerClass.getAnnotation(Named.class);
         if (namedAnnotation != null) {
             String message = String.format("Controller class %s is annotated with @Named. Typically this should not be " +
-                    "required and can lead to some unexpected results.", controllerClass.getName());
+                    "required, because you should never access the controller directly from a view.", controllerClass.getName());
             log.warning(message);
         }
     }
