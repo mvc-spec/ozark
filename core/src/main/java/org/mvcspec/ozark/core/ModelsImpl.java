@@ -17,91 +17,50 @@ package org.mvcspec.ozark.core;
 
 import javax.enterprise.context.RequestScoped;
 import javax.mvc.Models;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Implementation of {@link javax.mvc.Models} interface. A CDI class that delegates
  * to a {@link java.util.Map} implementation.
  *
  * @author Santiago Pericas-Geertsen
+ * @author Christian Kaltepoth
  */
 @RequestScoped
 public class ModelsImpl implements Models {
 
-    private Map<String, Object> delegate = new HashMap<>();
+    private final Map<String, Object> map = new LinkedHashMap<>();
 
     @Override
-    public int size() {
-        return delegate.size();
+    public Models put(String name, Object model) {
+        Objects.requireNonNull(name, "Name must not be null");
+        map.put(name, model);
+        return this;
     }
 
     @Override
-    public boolean isEmpty() {
-        return delegate.isEmpty();
+    public Object get(String name) {
+        return get(name, Object.class);
     }
 
     @Override
-    public boolean containsKey(Object key) {
-        return delegate.containsKey(key);
+    public <T> T get(String name, Class<T> type) {
+        Objects.requireNonNull(name, "Name must not be null");
+        Objects.requireNonNull(type, "Type must not be null");
+        return type.cast(map.get(name));
     }
 
     @Override
-    public boolean containsValue(Object value) {
-        return delegate.containsValue(value);
-    }
-
-    @Override
-    public Object get(Object key) {
-        return delegate.get(key);
-    }
-
-    @Override
-    public Object put(String key, Object value) {
-        return delegate.put(key, value);
-    }
-
-    @Override
-    public Object remove(Object key) {
-        return delegate.remove(key);
-    }
-
-    @Override
-    public void putAll(Map<? extends String, ?> m) {
-        delegate.putAll(m);
-    }
-
-    @Override
-    public void clear() {
-        delegate.clear();
-    }
-
-    @Override
-    public Set<String> keySet() {
-        return delegate.keySet();
-    }
-
-    @Override
-    public Collection<Object> values() {
-        return delegate.values();
-    }
-
-    @Override
-    public Set<Entry<String, Object>> entrySet() {
-        return delegate.entrySet();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return delegate.equals(o);
-    }
-
-    @Override
-    public int hashCode() {
-        return delegate.hashCode();
+    public Map<String, Object> asMap() {
+        return Collections.unmodifiableMap(new LinkedHashMap<>(map));
     }
 
     @Override
     public Iterator<String> iterator() {
-        return delegate.keySet().iterator();
+        return map.keySet().iterator();
     }
 }

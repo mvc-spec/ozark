@@ -49,7 +49,7 @@ public class StringTemplateViewEngine extends ViewEngineBase {
 	@Override
 	public void processView(ViewEngineContext context) throws ViewEngineException {
 		ST stringTemplate = getStringTemplate(resolveView(context));
-		context.getModels().forEach((key, value) -> add(key, value, stringTemplate));
+		context.getModels().asMap().forEach((key, value) -> add(key, value, stringTemplate));
 		Charset charset = resolveCharsetAndSetContentType(context);
 		try(Writer writer = new OutputStreamWriter(context.getOutputStream(), charset)) {
 			stringTemplate.write(new AutoIndentWriter(writer));

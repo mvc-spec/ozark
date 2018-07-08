@@ -61,7 +61,7 @@ public class PebbleViewEngine extends ViewEngineBase {
 
       PebbleTemplate template = pebbleEngine.getTemplate(resolveView(context));
       
-      Map<String, Object> model = new HashMap<>(context.getModels());
+      Map<String, Object> model = new HashMap<>(context.getModels().asMap());
       model.put("request", context.getRequest(HttpServletRequest.class));
       
       template.evaluate(writer, model);

@@ -59,7 +59,7 @@ public class VelocityViewEngine extends ViewEngineBase {
             
             Template template = velocityEngine.getTemplate(resolveView(context));
 
-            Map<String, Object> model = new HashMap<>(context.getModels());
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
             model.put("request", context.getRequest(HttpServletRequest.class));
             VelocityContext velocityContext = new VelocityContext(model);
             

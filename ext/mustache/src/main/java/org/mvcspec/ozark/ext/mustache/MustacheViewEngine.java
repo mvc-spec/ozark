@@ -58,7 +58,7 @@ public class MustacheViewEngine extends ViewEngineBase {
 
             Mustache mustache = factory.compile(resolveView(context));
 
-            Map<String, Object> model = new HashMap<>(context.getModels());
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
             model.put("request", context.getRequest(HttpServletRequest.class));
 
             mustache.execute(writer, model).flush();
