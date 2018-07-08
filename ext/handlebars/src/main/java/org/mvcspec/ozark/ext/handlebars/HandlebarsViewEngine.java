@@ -60,7 +60,7 @@ public class HandlebarsViewEngine extends ViewEngineBase {
     @Override
     public void processView(ViewEngineContext context) throws ViewEngineException {
 
-        Map<String, Object> model = new HashMap<>(context.getModels());
+        Map<String, Object> model = new HashMap<>(context.getModels().asMap());
         model.put("request", context.getRequest(HttpServletRequest.class));
         
         Charset charset = resolveCharsetAndSetContentType(context);

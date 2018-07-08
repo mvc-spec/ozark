@@ -65,7 +65,7 @@ public class JetbrickViewEngine extends ViewEngineBase {
 
             JetTemplate template = jetEngine.getTemplate(resolveView(context));
 
-            Map<String, Object> model = new HashMap<>(context.getModels());
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
             model.put("request", context.getRequest(HttpServletRequest.class));
 
             template.render(model, writer);

@@ -61,7 +61,7 @@ public class JadeViewEngine extends ViewEngineBase {
 
             JadeTemplate template = jade.getTemplate(resolveView(context));
 
-            Map<String, Object> model = new HashMap<>(context.getModels());
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
             model.put("request", context.getRequest(HttpServletRequest.class));
 
             jade.renderTemplate(template, model, writer);

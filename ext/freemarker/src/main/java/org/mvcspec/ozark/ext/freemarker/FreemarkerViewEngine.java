@@ -59,7 +59,7 @@ public class FreemarkerViewEngine extends ViewEngineBase {
 
             Template template = configuration.getTemplate(resolveView(context));
 
-            Map<String, Object> model = new HashMap<>(context.getModels());
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
             model.put("request", context.getRequest(HttpServletRequest.class));
 
             template.process(model, writer);

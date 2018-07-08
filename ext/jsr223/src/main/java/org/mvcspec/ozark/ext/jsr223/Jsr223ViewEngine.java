@@ -92,7 +92,7 @@ public class Jsr223ViewEngine extends ViewEngineBase {
             InputStream inputStream = servletContext.getResourceAsStream(resolveView(context));
             InputStreamReader reader = new InputStreamReader(inputStream);
             Bindings bindings = scriptEngine.createBindings();
-            bindings.put("models", context.getModels());
+            bindings.put("models", context.getModels().asMap());
             responseObject = scriptEngine.eval(reader, bindings);
         } catch (ScriptException exception) {
             throw new ViewEngineException("Unable to execute script", exception);

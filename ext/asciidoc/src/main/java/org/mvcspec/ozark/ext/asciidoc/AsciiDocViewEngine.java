@@ -65,7 +65,7 @@ public class AsciiDocViewEngine extends ViewEngineBase {
              BufferedReader reader = new BufferedReader(isr)) {
 
             Options options = new Options();
-            options.setAttributes(new HashMap(context.getModels()));
+            options.setAttributes(new HashMap<>(context.getModels().asMap()));
 
             asciidoctor.convert(reader, writer, options);
         } catch (IOException e) {

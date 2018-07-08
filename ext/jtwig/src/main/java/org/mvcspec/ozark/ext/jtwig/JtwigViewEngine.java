@@ -51,7 +51,7 @@ public class JtwigViewEngine extends ViewEngineBase {
 
         try {
 
-            Map<String, Object> model = new HashMap<>(context.getModels());
+            Map<String, Object> model = new HashMap<>(context.getModels().asMap());
             model.put("request", context.getRequest(HttpServletRequest.class));
 
             HttpServletRequest request = context.getRequest(HttpServletRequest.class);
