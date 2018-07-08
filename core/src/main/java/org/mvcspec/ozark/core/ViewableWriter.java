@@ -163,7 +163,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
 
             // Process view using selected engine
             engine.processView(new ViewEngineContextImpl(viewable.getView(), models, request, responseWrapper,
-                    headers, responseStream, mediaType, uriInfo, resourceInfo, config));
+                    headers, responseStream, mediaType, uriInfo, resourceInfo, config, mvc.getLocale()));
 
             // Fire AfterProcessView event
             if (OzarkCdiExtension.isEventObserved(AfterProcessViewEvent.class)) {
