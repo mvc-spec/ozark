@@ -70,7 +70,7 @@ public class OzarkServletContextListener implements ServletContextListener {
         Set<Bean<?>> controllerBeans = beanManager.getBeans(controllerClass);
         if (controllerBeans == null || controllerBeans.isEmpty()) {
             String message = String.format("The controller %s is not a managed CDI bean. Maybe the controller class is " +
-                    "missing a scope annotation (e.g. @RequestScope).", controllerClass.getName());
+                    "missing a scope annotation (e.g. @RequestScoped).", controllerClass.getName());
             throw new IllegalArgumentException(message);
         }
     }
