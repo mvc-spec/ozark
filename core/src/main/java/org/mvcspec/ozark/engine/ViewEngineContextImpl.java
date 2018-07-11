@@ -23,6 +23,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.io.OutputStream;
+import java.util.Locale;
 
 /**
  * Implementation of {@link javax.mvc.engine.ViewEngineContext}. Provides all the information
@@ -52,6 +53,8 @@ public class ViewEngineContextImpl implements ViewEngineContext {
 
     private final Configuration configuration;
 
+    private final Locale locale;
+
     /**
      * Constructor for view engine contexts.
      *
@@ -65,11 +68,12 @@ public class ViewEngineContextImpl implements ViewEngineContext {
      * @param uriInfo URI info about the request.
      * @param resourceInfo Resource matched info.
      * @param configuration the configuration.
+     * @param locale the request locale
      */
     public ViewEngineContextImpl(String view, Models models, Object request, Object response,
                                  MultivaluedMap<String, Object> responseHeaders, OutputStream outputStream,
                                  MediaType mediaType, UriInfo uriInfo, ResourceInfo resourceInfo,
-                                 Configuration configuration) {
+                                 Configuration configuration, Locale locale) {
         this.view = view;
         this.models = models;
         this.request = request;
@@ -80,6 +84,7 @@ public class ViewEngineContextImpl implements ViewEngineContext {
         this.uriInfo = uriInfo;
         this.resourceInfo = resourceInfo;
         this.configuration = configuration;
+        this.locale = locale;
     }
 
     @Override
@@ -90,6 +95,11 @@ public class ViewEngineContextImpl implements ViewEngineContext {
     @Override
     public Models getModels() {
         return models;
+    }
+
+    @Override
+    public Locale getLocale() {
+        return locale;
     }
 
     @Override
