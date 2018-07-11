@@ -16,6 +16,7 @@
 package org.mvcspec.ozark.core;
 
 import org.easymock.EasyMock;
+import org.mvcspec.ozark.MvcContextImpl;
 import org.mvcspec.ozark.engine.ViewEngineFinder;
 import org.junit.Test;
 
@@ -77,6 +78,10 @@ public class ViewableWriterTest {
     public void testWriteTo() throws Exception {
         ViewableWriter writer = new ViewableWriter();
 
+        Field mvcField = writer.getClass().getDeclaredField("mvc");
+        mvcField.setAccessible(true);
+        mvcField.set(writer, new MvcContextImpl());
+        
         ViewEngineFinder finder = EasyMock.createStrictMock(ViewEngineFinder.class);
         Field finderField = writer.getClass().getDeclaredField("engineFinder");
         finderField.setAccessible(true);
