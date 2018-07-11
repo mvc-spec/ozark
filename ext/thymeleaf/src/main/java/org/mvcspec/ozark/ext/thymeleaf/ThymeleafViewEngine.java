@@ -58,7 +58,7 @@ public class ThymeleafViewEngine extends ViewEngineBase {
 			
 			HttpServletRequest request = context.getRequest(HttpServletRequest.class);
 			HttpServletResponse response = context.getResponse(HttpServletResponse.class);
-			WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+			WebContext ctx = new WebContext(request, response, servletContext, context.getLocale());
 
 			Map<String, Object> model = new HashMap<>(context.getModels().asMap());
 			model.put("request", request);
