@@ -35,6 +35,7 @@ import java.util.Map;
  * Class Thymeleaf ViewEngine.
  *
  * @author Rodrigo Turini
+ * @author Gregor Tudan
  */
 @ApplicationScoped
 public class ThymeleafViewEngine extends ViewEngineBase {
@@ -66,13 +67,15 @@ public class ThymeleafViewEngine extends ViewEngineBase {
             model.put("request", request);
             ctx.setVariables(model);
 
-			try {engine.process(resolveView(context), ctx, response.getWriter());response.flushBuffer();
+            try {
+                engine.process(resolveView(context), ctx, response.getWriter());
+                response.flushBuffer();
             } finally {
-			    ctx.close();
-}
-		} catch (IOException e) {
-			throw new ViewEngineException(e);
-		}
-	}
+                ctx.close();
+            }
+        } catch (IOException e) {
+            throw new ViewEngineException(e);
+        }
+    }
 
 }
