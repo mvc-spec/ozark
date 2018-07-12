@@ -3,8 +3,8 @@
 set -euo pipefail
 
 GLASSFISH_URL="http://download.oracle.com/glassfish/5.0.1/nightly/latest-web.zip"
-WILDFLY_URL="http://download.jboss.org/wildfly/11.0.0.CR1/wildfly-11.0.0.CR1.tar.gz"
-LIBERTY_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp/18.0.0.1/wlp-webProfile7-18.0.0.1.zip"
+WILDFLY_URL="http://download.jboss.org/wildfly/13.0.0.Final/wildfly-13.0.0.Final.tar.gz"
+LIBERTY_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasdev/downloads/wlp/18.0.0.2/wlp-webProfile7-18.0.0.2.zip"
 
 if [ "${1}" == "glassfish-bundled" ]; then
 
@@ -48,7 +48,7 @@ elif [ "${1}" == "tck-wildfly" ]; then
   curl -s -o wildfly.tgz "${WILDFLY_URL}"
   tar -xzf wildfly.tgz
   mvn -B -V -DskipTests clean install
-  LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=wildfly.pid ./wildfly-11.0.0.CR1/bin/standalone.sh -Dee8.preview.mode=true > wildfly.log 2>&1 &
+  LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=wildfly.pid ./wildfly-13.0.0.Final/bin/standalone.sh -Dee8.preview.mode=true > wildfly.log 2>&1 &
   sleep 30
   pushd tck
   mvn -B -V -Dtck-env=wildfly verify
