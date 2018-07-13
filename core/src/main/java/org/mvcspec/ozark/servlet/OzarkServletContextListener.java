@@ -37,9 +37,11 @@ public class OzarkServletContextListener implements ServletContextListener {
 
     private static final Logger log = Logger.getLogger(OzarkServletContextListener.class.getName());
 
+    @Inject
     private BeanManager beanManager;
 
-    @Inject
+    public OzarkServletContextListener() { }
+
     public OzarkServletContextListener(BeanManager beanManager) {
         this.beanManager = beanManager;
     }
