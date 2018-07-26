@@ -193,7 +193,7 @@
                 </property>
             </activation>
             <properties>
-                <tomee.version>7.0.4</tomee.version>
+                <tomee.version>7.0.5</tomee.version>
                 <tomee.classifier>webprofile</tomee.classifier>
             </properties>
             <build>
