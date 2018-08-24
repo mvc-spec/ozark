@@ -27,7 +27,7 @@
     </parent>
     <artifactId>uri-builder</artifactId>
     <packaging>war</packaging>
-    <name>Ozark MvcUriBuilder Test</name>
+    <name>Ozark UriBuilder Test</name>
     <build>
         <finalName>${project.artifactId}</finalName>
     </build>

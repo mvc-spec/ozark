@@ -16,8 +16,7 @@
 package org.mvcspec.ozark.uri;
 
 import javax.mvc.Controller;
-import javax.mvc.uri.MvcUriBuilder;
-import javax.mvc.uri.UriRef;
+import javax.mvc.UriRef;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.MatrixParam;
@@ -27,7 +26,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 /**
- * Some Controllers for {@link MvcUriBuilder related tests}
+ * Some Controllers for {@link javax.mvc.MvcContext#uriBuilder(String)} related tests}
  *
  * @author Florian Hirsch
  */

@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 /**
  * @author Florian Hirsch
  */
-public class MvcUriBuilderIT {
+public class UriBuilderIT {
 
     private String webUrl;
     private WebClient webClient;
