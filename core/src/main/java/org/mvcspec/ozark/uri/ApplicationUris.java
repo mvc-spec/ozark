@@ -18,12 +18,13 @@ package org.mvcspec.ozark.uri;
 import org.mvcspec.ozark.util.AnnotationUtils;
 
 import javax.enterprise.inject.Vetoed;
-import javax.mvc.uri.MvcUriBuilder;
-import javax.mvc.uri.UriRef;
+import javax.mvc.UriRef;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriBuilder;
 import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -53,16 +54,28 @@ public class ApplicationUris {
      * @see javax.mvc.MvcContext#uri(String, Map)
      */
     public URI get(String identifier, Map<String, Object> params) {
-        MvcUriBuilder uriBuilder = getUriBuilder(identifier);
-        params.forEach(uriBuilder::param);
-        return uriBuilder.build();
+        UriTemplate uriTemplate = getUriTemplate(identifier);
+        UriBuilder uriBuilder = UriBuilder.fromUri(uriTemplate.path());
+        Map<String, Object> pathParams = new HashMap<>();
+        // Everything which is not defined as query- or matrix-param should be a path-param
+        params.forEach((key, value) -> {
+            if (uriTemplate.queryParams().contains(key)) {
+                uriBuilder.queryParam(key, value);
+            } else if (uriTemplate.matrixParams().contains(key)) {
+                uriBuilder.matrixParam(key, value);
+            } else {
+                pathParams.put(key, value);
+            }
+        });
+        return uriBuilder.buildFromMap(pathParams);
     }
 
     /**
      * @see javax.mvc.MvcContext#uriBuilder(String)
      */
-    public MvcUriBuilder getUriBuilder(String identifier) {
-        return new DefaultMvcUriBuilder(getUriTemplate(identifier));
+    public UriBuilder getUriBuilder(String identifier) {
+        UriTemplate uriTemplate = getUriTemplate(identifier);
+        return UriBuilder.fromUri(uriTemplate.path());
     }
 
     /**

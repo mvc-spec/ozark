@@ -3,19 +3,17 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>MvcUriBuilder examples</title>
+    <title>UriBuilder examples</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
 </head>
 <body>
 <div class="container">
 
-    <h1>MvcUriBuilder</h1>
+    <h1>UriBuilder</h1>
 
     <p>
         Hardcoding URIs in a template can be awkward.
-        The MVC specification provides the
-        <a href="https://github.com/mvc-spec/mvc-spec/blob/master/api/src/main/java/javax/mvc/MvcUriBuilder.java">MvcUriBuilder</a>
-        to generate URIs from <code>@Path</code>,
+        The MVC specification provides methods to generate URIs from <code>@Path</code>,
         <code>@PathParam</code>, <code>@QueryParam</code> and <code>@MatrixParam</code> annotations.
         It can be used from a template but also from Java code.
     </p>
@@ -57,7 +55,7 @@ public class UriBuilderController {
     </p>
 
     <p>
-        But you don't have to use <code>UriRef</code> to use the <code>MvcUriBuilder</code>.
+        But you don't have to use <code>UriRef</code> annotation.
         You can also reference a controller method with the simple class name of your
         controller and the method name seperated by a '#':
     </p>

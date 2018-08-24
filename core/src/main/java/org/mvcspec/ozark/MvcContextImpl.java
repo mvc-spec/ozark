@@ -24,11 +24,11 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.mvc.MvcContext;
-import javax.mvc.uri.MvcUriBuilder;
 import javax.mvc.security.Csrf;
 import javax.mvc.security.Encoders;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Configuration;
+import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.Locale;
@@ -127,7 +127,7 @@ public class MvcContextImpl implements MvcContext {
     }
 
     @Override
-    public MvcUriBuilder uriBuilder(String identifier) {
+    public UriBuilder uriBuilder(String identifier) {
         return applicationUris.getUriBuilder(identifier);
     }
 
