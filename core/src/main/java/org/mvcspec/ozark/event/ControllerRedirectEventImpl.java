@@ -29,7 +29,7 @@ import java.net.URI;
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class ControllerRedirectEventImpl extends MvcEventImpl implements ControllerRedirectEvent {
+public class ControllerRedirectEventImpl implements ControllerRedirectEvent {
 
     private UriInfo uriInfo;
 

@@ -25,7 +25,7 @@ import javax.mvc.event.AfterProcessViewEvent;
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class AfterProcessViewEventImpl extends MvcEventImpl implements AfterProcessViewEvent {
+public class AfterProcessViewEventImpl implements AfterProcessViewEvent {
 
     private String view;
 
