@@ -16,7 +16,7 @@
 package org.mvcspec.ozark.test.csrf;
 
 import javax.mvc.Controller;
-import javax.mvc.security.CsrfValid;
+import javax.mvc.security.CsrfProtected;
 import javax.mvc.View;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -38,7 +38,7 @@ public class CsrfController {
     }
 
     @POST
-    @CsrfValid
+    @CsrfProtected
     public String postForm(@FormParam("greeting") String greeting) {
         return "redirect:/csrf/ok";
     }

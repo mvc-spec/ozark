@@ -21,7 +21,7 @@ import org.mvcspec.ozark.core.Messages;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.mvc.Controller;
-import javax.mvc.security.CsrfValid;
+import javax.mvc.security.CsrfProtected;
 import javax.mvc.security.CsrfValidationException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Priorities;
@@ -179,7 +179,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
             case IMPLICIT:
                 return true;
             case EXPLICIT:
-                return hasAnnotation(controller, CsrfValid.class);
+                return hasAnnotation(controller, CsrfProtected.class);
         }
         return false;
     }
