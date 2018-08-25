@@ -130,7 +130,6 @@ public class OzarkCdiExtension implements Extension {
                 BeforeControllerEventImpl.class,
                 BeforeProcessViewEventImpl.class,
                 ControllerRedirectEventImpl.class,
-                MvcEventImpl.class,
 
                 //locale
                 LocaleRequestFilter.class,

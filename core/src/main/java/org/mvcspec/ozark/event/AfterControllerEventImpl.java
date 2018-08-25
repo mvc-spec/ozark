@@ -28,7 +28,7 @@ import javax.ws.rs.core.UriInfo;
  * @author Santiago Pericas-Geertsen
  */
 @Dependent
-public class AfterControllerEventImpl extends MvcEventImpl implements AfterControllerEvent {
+public class AfterControllerEventImpl implements AfterControllerEvent {
 
     private UriInfo uriInfo;
 
