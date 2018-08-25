@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>CSRF Protection OK</title>
-    <link rel="stylesheet" type="text/css" href="${request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
 </head>
 <body>
     <h1>CSRF Protection OK</h1>
