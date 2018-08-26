@@ -16,10 +16,10 @@
 package org.mvcspec.ozark.test.validation;
 
 import javax.inject.Inject;
-import javax.mvc.Models;
 import javax.mvc.Controller;
+import javax.mvc.Models;
 import javax.mvc.binding.BindingResult;
-import javax.mvc.binding.ValidationError;
+import javax.mvc.binding.ParamError;
 import javax.validation.Valid;
 import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
@@ -51,8 +51,8 @@ public class ValidationController {
 
         if (bindingResult.isFailed()) {
 
-            List<String> errors = bindingResult.getAllValidationErrors().stream()
-                    .map(ValidationError::getMessage)
+            List<String> errors = bindingResult.getAllErrors().stream()
+                    .map(ParamError::getMessage)
                     .collect(Collectors.toList());
 
             models.put("errors", errors);
