@@ -127,7 +127,7 @@ public class ValidationInterceptor implements Serializable {
                 }
 
                 boolean hasBindingError = paramName != null && !paramName.isEmpty() &&
-                        bindingResult.getBindingError(paramName) != null;
+                        bindingResult.getErrors(paramName).size() > 0;
 
                 // if there was a binding error, not the user's input but the default value got validated
                 if (!hasBindingError) {

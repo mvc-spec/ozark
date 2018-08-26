@@ -18,17 +18,15 @@ package org.mvcspec.ozark.binding;
 import javax.enterprise.inject.Vetoed;
 import javax.mvc.binding.BindingError;
 import javax.mvc.binding.BindingResult;
+import javax.mvc.binding.ParamError;
 import javax.mvc.binding.ValidationError;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toSet;
+import java.util.stream.Stream;
 
 /**
  * Implementation for {@link javax.mvc.binding.BindingResult} interface.
@@ -54,49 +52,25 @@ public class BindingResultImpl implements BindingResult {
     @Override
     public List<String> getAllMessages() {
         this.consumed = true;
-        final List<String> result = new ArrayList<>();
-        bindingErrors.forEach(error -> result.add(error.getMessage()));
-        validationErrors.forEach(violation -> result.add(violation.getMessage()));
-        return Collections.unmodifiableList(result);
+        return Stream.concat(bindingErrors.stream(), validationErrors.stream())
+                .map(ParamError::getMessage)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     @Override
-    public Set<BindingError> getAllBindingErrors() {
+    public Set<ParamError> getAllErrors() {
         this.consumed = true;
-        return Collections.unmodifiableSet(bindingErrors);
+        return Stream.concat(bindingErrors.stream(), validationErrors.stream())
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
     }
 
     @Override
-    public BindingError getBindingError(String param) {
+    public Set<ParamError> getErrors(String param) {
+        Objects.requireNonNull(param, "Parameter name is required");
         this.consumed = true;
-        for (BindingError error : bindingErrors) {
-            if (param.equals(error.getParamName())) {
-                return error;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public Set<ValidationError> getAllValidationErrors() {
-        this.consumed = true;
-        return Collections.unmodifiableSet(validationErrors);
-    }
-
-    @Override
-    public Set<ValidationError> getValidationErrors(String param) {
-        this.consumed = true;
-        return validationErrors.stream()
-                .filter(ve -> Objects.equals(ve.getParamName(), param))
-                .collect(collectingAndThen(toSet(), Collections::unmodifiableSet));
-    }
-
-    @Override
-    public ValidationError getValidationError(String param) {
-        this.consumed = true;
-        return validationErrors.stream()
-                .filter(ve -> Objects.equals(ve.getParamName(), param))
-                .findFirst().orElse(null);
+        return Stream.concat(bindingErrors.stream(), validationErrors.stream())
+                .filter(paramError -> Objects.equals(paramError.getParamName(), param))
+                .collect(Collectors.collectingAndThen(Collectors.toSet(), Collections::unmodifiableSet));
     }
 
     public void addValidationErrors(Set<ValidationError> validationErrors) {

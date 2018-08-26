@@ -18,8 +18,8 @@ package org.mvcspec.ozark.test.validation;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.mvc.Controller;
-import javax.mvc.binding.BindingError;
 import javax.mvc.binding.BindingResult;
+import javax.mvc.binding.ParamError;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
 import javax.validation.Valid;
@@ -55,7 +55,7 @@ public class FormController {
     @Controller
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         if (br.isFailed()) {
-            ValidationError validationError = br.getAllValidationErrors().iterator().next();
+            ValidationError validationError = (ValidationError) br.getAllErrors().iterator().next();
             final ConstraintViolation<?> cv = validationError.getViolation();
             final String property = cv.getPropertyPath().toString();
             error.setProperty(property.substring(property.lastIndexOf('.') + 1));
@@ -71,7 +71,7 @@ public class FormController {
     @Controller
     public Response get(@QueryParam("n") @DefaultValue("25") int n) {
         if (br.isFailed()) {
-            final BindingError be = br.getBindingError("n");
+            final ParamError be = br.getErrors("n").iterator().next();
             error.setProperty(be.getParamName());
             error.setMessage(be.getMessage());
             return Response.ok("binderror.jsp").build();

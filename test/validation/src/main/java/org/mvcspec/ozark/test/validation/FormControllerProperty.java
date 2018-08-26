@@ -48,7 +48,7 @@ public class FormControllerProperty extends FormControllerBase {
     public Response formPost(@Valid @BeanParam FormDataBean form) {
         final BindingResult vr = getVr();
         if (vr.isFailed()) {
-            ValidationError validationError = vr.getAllValidationErrors().iterator().next();
+            ValidationError validationError = (ValidationError) vr.getAllErrors().iterator().next();
             final ConstraintViolation<?> cv = validationError.getViolation();
             final String property = cv.getPropertyPath().toString();
             error.setProperty(property.substring(property.lastIndexOf('.') + 1));
