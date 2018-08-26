@@ -18,6 +18,7 @@ package org.mvcspec.ozark.ext.stringtemplate;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.stringtemplate.v4.*;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.mvc.engine.*;
@@ -36,6 +37,7 @@ import static java.util.regex.Pattern.compile;
  * @author Rodrigo Turini
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class StringTemplateViewEngine extends ViewEngineBase {
 
 	@Inject

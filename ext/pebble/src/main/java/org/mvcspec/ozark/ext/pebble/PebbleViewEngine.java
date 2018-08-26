@@ -20,7 +20,9 @@ import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import java.io.IOException;
@@ -38,6 +40,7 @@ import org.mvcspec.ozark.engine.ViewEngineConfig;
  * @see <a href="http://www.mitchellbosecke.com/pebble/home">Pebble</a>
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class PebbleViewEngine extends ViewEngineBase {
 
   private PebbleEngine pebbleEngine;

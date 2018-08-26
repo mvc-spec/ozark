@@ -21,8 +21,10 @@ import freemarker.template.TemplateException;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +41,7 @@ import java.util.Map;
  * @author Santiago Pericas-Geertsen
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class FreemarkerViewEngine extends ViewEngineBase {
 
     @Inject

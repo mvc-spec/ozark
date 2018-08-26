@@ -23,8 +23,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.script.Bindings;
@@ -39,6 +41,7 @@ import javax.servlet.ServletContext;
  * @author Manfred Riem (manfred.riem@oracle.com)
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class Jsr223ViewEngine extends ViewEngineBase {
 
     /**
