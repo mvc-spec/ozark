@@ -19,9 +19,11 @@ import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 import org.thymeleaf.TemplateEngine;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
@@ -38,6 +40,7 @@ import java.util.Map;
  * @author Gregor Tudan
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class ThymeleafViewEngine extends ViewEngineBase {
 
     @Inject

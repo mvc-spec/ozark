@@ -22,8 +22,10 @@ import jetbrick.template.web.JetWebEngine;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletContext;
@@ -39,6 +41,7 @@ import java.util.Map;
  * @author Daniel Dias
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class JetbrickViewEngine extends ViewEngineBase {
 
     private JetEngine jetEngine;

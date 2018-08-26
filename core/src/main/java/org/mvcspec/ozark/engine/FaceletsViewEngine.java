@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author Santiago Pericas-Geertsen
  * @see ViewEngineBase#resolveView(javax.mvc.engine.ViewEngineContext)
  */
-@Priority(ViewEngine.PRIORITY_DEFAULT)
+@Priority(ViewEngine.PRIORITY_BUILTIN)
 public class FaceletsViewEngine extends ServletViewEngine {
 
     /**

@@ -84,9 +84,9 @@ public class ViewEngineFinder {
                 engine = candidates.stream().max(
                         (e1, e2) -> {
                             final Priority p1 = getAnnotation(e1.getClass(), Priority.class);
-                            final int v1 = p1 != null ? p1.value() : ViewEngine.PRIORITY_DEFAULT;
+                            final int v1 = p1 != null ? p1.value() : ViewEngine.PRIORITY_APPLICATION;
                             final Priority p2 = getAnnotation(e2.getClass(), Priority.class);
-                            final int v2 = p2 != null ? p2.value() : ViewEngine.PRIORITY_DEFAULT;
+                            final int v2 = p2 != null ? p2.value() : ViewEngine.PRIORITY_APPLICATION;
                             return v1 - v2;
                         });
                 // Update cache

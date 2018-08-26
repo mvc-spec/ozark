@@ -20,7 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.ServletException;
@@ -34,6 +36,7 @@ import org.mvcspec.ozark.engine.ViewEngineBase;
  * @author Daniel Dias
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class JtwigViewEngine extends ViewEngineBase {
 
     private JtwigRenderer jtwigRenderer;

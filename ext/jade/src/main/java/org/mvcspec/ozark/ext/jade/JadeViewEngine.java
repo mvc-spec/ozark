@@ -21,8 +21,10 @@ import de.neuland.jade4j.template.JadeTemplate;
 import org.mvcspec.ozark.engine.ViewEngineBase;
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 
+import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.mvc.engine.ViewEngine;
 import javax.mvc.engine.ViewEngineContext;
 import javax.mvc.engine.ViewEngineException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +43,7 @@ import java.util.Map;
  * @see <a href="https://github.com/neuland/jade4j">Jade4J</a>
  */
 @ApplicationScoped
+@Priority(ViewEngine.PRIORITY_FRAMEWORK)
 public class JadeViewEngine extends ViewEngineBase {
 
     @Inject
