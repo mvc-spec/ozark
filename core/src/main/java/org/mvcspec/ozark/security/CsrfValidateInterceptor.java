@@ -179,7 +179,8 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
             case IMPLICIT:
                 return true;
             case EXPLICIT:
-                return hasAnnotation(controller, CsrfProtected.class);
+                return hasAnnotation(controller, CsrfProtected.class)
+                        || hasAnnotation(controller.getDeclaringClass(), CsrfProtected.class);
         }
         return false;
     }
