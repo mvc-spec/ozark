@@ -74,7 +74,8 @@ public abstract class ServletViewEngine extends ViewEngineBase {
         // Find request dispatcher based on extensions
         for (Map.Entry<String, ? extends ServletRegistration> e : servletContext.getServletRegistrations().entrySet()) {
             final Collection<String> mappings = e.getValue().getMappings();
-            if (mappings.containsAll(Arrays.asList(extensions))) {
+            // the 'mappings' collection may be null on Liberty (see #200)
+            if (mappings != null && mappings.containsAll(Arrays.asList(extensions))) {
                 rd = servletContext.getNamedDispatcher(e.getKey());     // by servlet name
 
                 // Need new request with updated URI and extension matching semantics
