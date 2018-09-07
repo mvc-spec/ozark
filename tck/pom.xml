@@ -219,6 +219,13 @@
                     <artifactId>arquillian-tomee-remote</artifactId>
                     <version>${tomee.version}</version>
                 </dependency>
+                <dependency>
+                    <groupId>org.apache.tomee</groupId>
+                    <artifactId>apache-tomee</artifactId>
+                    <version>${tomee.version}</version>
+                    <classifier>${tomee.classifier}</classifier>
+                    <type>zip</type>
+                </dependency>
             </dependencies>
         </profile>
 
