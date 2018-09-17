@@ -35,4 +35,9 @@ public interface Properties {
      */
     String CSRF_TOKEN_STRATEGY = "org.mvcspec.ozark.csrfTokenStrategy";
 
+    /**
+     * Property for defining default file extension for usage in views
+     */
+    String DEFAULT_VIEW_FILE_EXTENSION = "org.mvcspec.ozark.defaultViewFileExtension";
+
 }
