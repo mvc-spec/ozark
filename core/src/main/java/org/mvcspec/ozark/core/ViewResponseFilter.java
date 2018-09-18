@@ -183,7 +183,8 @@ public class ViewResponseFilter implements ContainerResponseFilter {
      * Append to view name default extension if one available and applicable.
      */
     protected static String appendExtensionIfRequired(String viewName, String defaultExtension) {
-        if (viewName == null || viewName.startsWith(REDIRECT) || defaultExtension == null) {
+        if (viewName == null || viewName.startsWith(REDIRECT)
+            || defaultExtension == null || defaultExtension.length() == 0) {
             return viewName;
         }
 
