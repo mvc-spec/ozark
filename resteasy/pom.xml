@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.mvc-spec.ozark</groupId>
         <artifactId>ozark-parent</artifactId>
-        <version>1.0.0-m04</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>ozark-resteasy</artifactId>
