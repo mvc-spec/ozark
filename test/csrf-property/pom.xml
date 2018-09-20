@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.mvc-spec.ozark.test</groupId>
         <artifactId>ozark-parent-test</artifactId>
-        <version>1.0.0-m04-SNAPSHOT</version>
+        <version>1.0.0-m04</version>
     </parent>
     <artifactId>csrf-property</artifactId>
     <packaging>war</packaging>
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.mvc-spec.ozark</groupId>
             <artifactId>ozark-core</artifactId>
-            <version>1.0.0-m04-SNAPSHOT</version>
+            <version>1.0.0-m04</version>
         </dependency>
     </dependencies>
 </project>
