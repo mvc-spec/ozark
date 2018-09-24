@@ -81,7 +81,6 @@ import static org.mvcspec.ozark.util.PathUtils.*;
 public class ViewResponseFilter implements ContainerResponseFilter {
 
     private static final String REDIRECT = "redirect:";
-    private static final String DOT_CHAR = ".";
 
     @Context
     private UriInfo uriInfo;
@@ -116,7 +115,6 @@ public class ViewResponseFilter implements ContainerResponseFilter {
 
         final Method method = resourceInfo.getResourceMethod();
         final Class<?> returnType = method.getReturnType();
-        final String defaultExtension = ozarkConfig.getDefaultViewFileExtension();
 
         // Wrap entity type into Viewable, possibly looking at @View
         Object entity = responseContext.getEntity();
@@ -131,7 +129,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 if (contentType == null) {
                     contentType = MediaType.TEXT_HTML_TYPE;     // default
                 }
-                responseContext.setEntity(new Viewable(appendExtensionIfRequired(an.value(), defaultExtension)), null, contentType);
+                responseContext.setEntity(new Viewable(appendExtensionIfRequired(an.value())), null, contentType);
                 // If the entity is null the status will be set to 204 by Jersey. For void methods we need to
                 // set the status to 200 unless no other status was set by e.g. throwing an Exception.
 
@@ -144,7 +142,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
                 throw new ServerErrorException(messages.get("VoidControllerNoView", resourceInfo.getResourceMethod()), INTERNAL_SERVER_ERROR);
             }
         } else if (entityType != Viewable.class) {
-            final String view = appendExtensionIfRequired(entity.toString(), defaultExtension);
+            final String view = appendExtensionIfRequired(entity.toString());
             if (view == null) {
                 throw new ServerErrorException(messages.get("EntityToStringNull", resourceInfo.getResourceMethod()), INTERNAL_SERVER_ERROR);
             }
@@ -154,7 +152,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         // Redirect logic, entity must be a Viewable if not null
         entity = responseContext.getEntity();
         if (entity != null) {
-            final String view = appendExtensionIfRequired(((Viewable) entity).getView(), defaultExtension);
+            final String view = appendExtensionIfRequired(((Viewable) entity).getView());
             final String uri = uriInfo.getBaseUri() + noStartingSlash(noPrefix(view, REDIRECT));
             if (view.startsWith(REDIRECT)) {
                 responseContext.setStatusInfo(SEE_OTHER);
@@ -179,20 +177,22 @@ public class ViewResponseFilter implements ContainerResponseFilter {
         }
     }
 
+    private String appendExtensionIfRequired(String viewName) {
+        return appendExtensionIfRequired(viewName, ozarkConfig.getDefaultViewFileExtension());
+    }
+
     /*
      * Append to view name default extension if one available and applicable.
      */
-    protected static String appendExtensionIfRequired(String viewName, String defaultExtension) {
+    static String appendExtensionIfRequired(String viewName, String defaultExtension) {
         if (viewName == null || viewName.startsWith(REDIRECT)
             || defaultExtension == null || defaultExtension.length() == 0) {
             return viewName;
         }
 
         String resultView = viewName;
-        if (!viewName.contains(DOT_CHAR) && !viewName.contains(":")) {
-            resultView += DOT_CHAR + defaultExtension;
-        } else if (viewName.endsWith(DOT_CHAR)) {
-            throw new IllegalArgumentException("Invalid format for view name: " + viewName);
+        if (!viewName.contains(".") && !viewName.contains(":")) {
+            resultView += "." + defaultExtension;
         }
         return resultView;
     }

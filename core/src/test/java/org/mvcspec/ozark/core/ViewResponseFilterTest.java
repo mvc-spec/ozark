@@ -15,9 +15,7 @@
  */
 package org.mvcspec.ozark.core;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -41,39 +39,29 @@ public class ViewResponseFilterTest {
 
     private String expectedViewName;
 
-    private Class<? extends Exception> expectedException;
-
     public ViewResponseFilterTest(String viewName,
                                   String defaultExtension,
-                                  String expectedViewName,
-                                  Class<? extends Exception> expectedException) {
+                                  String expectedViewName) {
         this.viewName = viewName;
         this.defaultExtension = defaultExtension;
         this.expectedViewName = expectedViewName;
-        this.expectedException = expectedException;
     }
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-            {"main.jsp", "jsp", "main.jsp", null},
-            {"main", "jsp", "main.jsp", null},
-            {"main", null, "main", null},
-            {"main", "", "main", null},
-            {"redirect:some.jsp", "jsp", "redirect:some.jsp", null},
-            {"react:some", "jsp", "react:some", null},
-            {"main.", "jsp", null, IllegalArgumentException.class}
+            {"main.jsp", "jsp", "main.jsp"},
+            {"main", "jsp", "main.jsp"},
+            {"main", null, "main"},
+            {"main", "", "main"},
+            {"redirect:some.jsp", "jsp", "redirect:some.jsp"},
+            {"react:some", "jsp", "react:some"},
+            {"main.", "jsp", "main."}
         });
     }
 
     @Test
     public void testAppendExtensionIfRequired() {
-        if (expectedException != null) {
-            exception.expect(expectedException);
-        }
         String actualViewName = ViewResponseFilter.appendExtensionIfRequired(viewName, defaultExtension);
         assertEquals(expectedViewName, actualViewName);
     }
