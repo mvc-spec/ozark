@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.mvc-spec.ozark.test</groupId>
         <artifactId>ozark-parent-test</artifactId>
-        <version>1.0.0-m04-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>annotations</artifactId>
     <packaging>war</packaging>
