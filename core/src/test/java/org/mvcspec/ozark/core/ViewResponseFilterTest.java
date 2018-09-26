@@ -55,7 +55,7 @@ public class ViewResponseFilterTest {
             {"main", null, "main"},
             {"main", "", "main"},
             {"redirect:some.jsp", "jsp", "redirect:some.jsp"},
-            {"react:some", "jsp", "react:some"},
+            {"react:some", "jsp", "react:some.jsp"},
             {"main.", "jsp", "main."}
         });
     }
