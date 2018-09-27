@@ -60,6 +60,7 @@
         <module>conversation</module>
         <module>csrf</module>
         <module>csrf-property</module>
+        <module>def-ext</module>
         <module>events</module>
         <module>exceptions</module>
         <module>facelets</module>

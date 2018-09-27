@@ -61,4 +61,12 @@ public class OzarkConfig {
 
     }
 
+    public String getDefaultViewFileExtension() {
+        Object value = config.getProperty(Properties.DEFAULT_VIEW_FILE_EXTENSION);
+        if (value instanceof String) {
+            return (String) value;
+        }
+        return null;
+    }
+
 }
