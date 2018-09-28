@@ -48,7 +48,7 @@
         <module>cxf</module>
         <module>tck</module>
         <module>ext</module>
-        <module>test</module>
+        <module>examples</module>
     </modules>
 
     <licenses>

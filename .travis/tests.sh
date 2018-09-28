@@ -11,7 +11,7 @@ if [ "${1}" == "glassfish-bundled" ]; then
   curl -s -o glassfish5.zip "${GLASSFISH_URL}"
   unzip -q glassfish5.zip
   mvn -B -V -Pbundled clean install
-  find ./test/ -name \*.war -exec cp {} ./glassfish5/glassfish/domains/domain1/autodeploy/ \;
+  find ./examples/ -name \*.war -exec cp {} ./glassfish5/glassfish/domains/domain1/autodeploy/ \;
   glassfish5/bin/asadmin start-domain
   sleep 120
   mvn -Pintegration -Dintegration.serverPort=8080 verify
@@ -25,7 +25,7 @@ elif [ "${1}" == "glassfish-module" ]; then
   cp core/target/ozark-core-*.jar ./glassfish5/glassfish/modules/
   cp jersey/target/ozark-jersey-*.jar ./glassfish5/glassfish/modules/
   cp ~/.m2/repository/javax/mvc/javax.mvc-api/1.0-pfd/*.jar ./glassfish5/glassfish/modules/
-  find ./test/ -name \*.war -exec cp {} ./glassfish5/glassfish/domains/domain1/autodeploy/ \;
+  find ./examples/ -name \*.war -exec cp {} ./glassfish5/glassfish/domains/domain1/autodeploy/ \;
   glassfish5/bin/asadmin start-domain
   sleep 120
   mvn -Pintegration -Dintegration.serverPort=8080 verify
