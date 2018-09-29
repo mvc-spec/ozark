@@ -118,7 +118,7 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
-            <version>8.0</version>
+            <version>${javaee.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

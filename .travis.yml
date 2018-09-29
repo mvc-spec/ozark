@@ -1,6 +1,10 @@
 language: java
 sudo: required
 jdk: oraclejdk8
+
+services:
+- docker
+
 jobs:
   include:
     - stage: build
@@ -11,6 +15,10 @@ jobs:
     - stage: test
       env: TYPE=glassfish-bundled
       script: .travis/tests.sh ${TYPE}
+    - stage: test
+      env: TYPE=testsuite-wildfly
+      before_script: .travis/docker-wildfly.sh
+      script: mvn -P${TYPE} --projects testsuite clean verify
     - stage: test
       env: TYPE=tck-glassfish
       script: .travis/tests.sh ${TYPE}
