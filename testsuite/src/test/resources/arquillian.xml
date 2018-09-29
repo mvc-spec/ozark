@@ -16,9 +16,22 @@
     limitations under the License.
 
 -->
+<arquillian xmlns="http://jboss.org/schema/arquillian" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="
+        http://jboss.org/schema/arquillian
+        http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
-<beans xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/beans_1_1.xsd"
-       bean-discovery-mode="all">
-</beans>
+    <defaultProtocol type="Servlet 3.0" />
+
+    <extension qualifier="webdriver">
+        <property name="browser">htmlunit</property>
+    </extension>
+
+    <container qualifier="wildfly" default="true">
+        <configuration>
+            <property name="username">admin</property>
+            <property name="password">wildfly</property>
+        </configuration>
+    </container>
+
+</arquillian>

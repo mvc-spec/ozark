@@ -78,7 +78,6 @@
         <module>requestDispatcher</module>
         <module>returns</module>
         <module>stringtemplate</module>
-        <module>thymeleaf</module>
         <module>validation</module>
         <module>validation-i18n</module>
         <module>velocity</module>
