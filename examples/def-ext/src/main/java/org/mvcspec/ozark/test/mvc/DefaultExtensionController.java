@@ -16,8 +16,12 @@
 package org.mvcspec.ozark.test.mvc;
 
 import javax.mvc.Controller;
+import javax.mvc.View;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Response;
+
+import org.mvcspec.ozark.engine.Viewable;
 
 /**
  * DefaultExtensionController test.
@@ -29,7 +33,25 @@ import javax.ws.rs.Path;
 public class DefaultExtensionController {
 
     @GET
-    public String get() {
+    @Path("string")
+    public String getString() {
         return "extension";
+    }
+    
+    @GET
+    @Path("void")
+    @View("extension")
+    public void getView() { }
+    
+    @GET
+    @Path("viewable")
+    public Viewable getViewAble() {
+        return new Viewable("extension");
+    }
+    
+    @GET
+    @Path("response")
+    public Response getResponse() {
+        return Response.ok().entity("extension").build();
     }
 }
