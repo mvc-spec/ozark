@@ -68,4 +68,9 @@ class ServletContextTemplateLoader implements TemplateLoader {
         }
         return template.lastModified();
     }
+
+    @Override
+    public String getExtension() {
+        return "jade";
+    }
 }

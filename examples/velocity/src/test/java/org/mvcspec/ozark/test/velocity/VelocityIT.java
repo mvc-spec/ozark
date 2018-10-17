@@ -44,7 +44,14 @@ public class VelocityIT {
 
     @Test
     public void testView1() throws Exception {
-        final HtmlPage page = webClient.getPage(webUrl + "resources/hello?user=mvc");
+        final HtmlPage page = webClient.getPage(webUrl + "resources/hello/v1?user=mvc");
+        final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
+        assertTrue(it.next().asText().contains("mvc"));
+    }
+    
+    @Test
+    public void testView2() throws Exception {
+        final HtmlPage page = webClient.getPage(webUrl + "resources/hello/v2?user2=mvc");
         final Iterator<HtmlElement> it = page.getDocumentElement().getHtmlElementsByTagName("h1").iterator();
         assertTrue(it.next().asText().contains("mvc"));
     }

@@ -52,7 +52,7 @@ public class JadeViewEngine extends ViewEngineBase {
 
     @Override
     public boolean supports(String view) {
-        return view.endsWith(".jade");
+        return view.endsWith(".".concat(jade.getTemplateLoader().getExtension()));
     }
 
     @Override

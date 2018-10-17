@@ -95,9 +95,9 @@ public class JadeOzarkConfiguration {
         jade.setMode(Mode.valueOf(property(MODE).orElse("XHTML")));
         jade.setCaching(Boolean.valueOf(property(CACHING).orElse("true")));
         jade.setPrettyPrint(Boolean.valueOf(property(PRETTY_PRINT).orElse("false")));
-        for (Map.Entry<String, Object> filter : getExtensions(FILTER_QUALIFIER).entrySet()) {
+        getExtensions(FILTER_QUALIFIER).entrySet().forEach(filter -> {
             jade.setFilter(filter.getKey(), (Filter) filter.getValue());
-        }
+        });
         jade.setSharedVariables(getExtensions(HELPER_QUALIFIER));
         String encoding = property(ENCODING).orElse("UTF-8");
         jade.setTemplateLoader(new ServletContextTemplateLoader(servletContext, encoding));
