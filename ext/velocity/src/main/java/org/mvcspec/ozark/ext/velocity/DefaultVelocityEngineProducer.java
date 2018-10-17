@@ -17,11 +17,11 @@ package org.mvcspec.ozark.ext.velocity;
 
 import org.mvcspec.ozark.engine.ViewEngineConfig;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.tools.view.WebappResourceLoader;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
-import org.mvcspec.ozark.ext.velocity.tools.WebappResourceLoader;
 
 /**
  * Producer for the VelocityEngine used by VelocityViewEngine.

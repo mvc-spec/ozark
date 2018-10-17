@@ -39,7 +39,17 @@ public class HelloController {
     @Controller
     @Produces("text/html")
     @View("hello.vm")
+    @Path("v1")
     public void hello(@QueryParam("user") String user) {
         models.put("user", user);
+    }
+
+    @GET
+    @Controller
+    @Produces("text/html")
+    @View("hello2.vhtml")
+    @Path("v2")
+    public void hello2(@QueryParam("user2") String user2) {
+        models.put("user2", user2);
     }
 }

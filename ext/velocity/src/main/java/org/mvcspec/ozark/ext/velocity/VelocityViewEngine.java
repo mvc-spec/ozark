@@ -50,7 +50,7 @@ public class VelocityViewEngine extends ViewEngineBase {
 
     @Override
     public boolean supports(String view) {
-        return view.endsWith(".vm");
+        return view.endsWith(".vm") || view.endsWith(".vhtml");
     }
 
     @Override
