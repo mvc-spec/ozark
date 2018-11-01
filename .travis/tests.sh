@@ -8,7 +8,7 @@ LIBERTY_URL="https://public.dhe.ibm.com/ibmdl/export/pub/software/websphere/wasd
 
 if [ "${1}" == "glassfish-bundled" ]; then
 
-  curl -s -o glassfish5.zip "${GLASSFISH_URL}"
+  curl -L -s -o glassfish5.zip "${GLASSFISH_URL}"
   unzip -q glassfish5.zip
   mvn -B -V -Pbundled clean install
   find ./examples/ -name \*.war -exec cp {} ./glassfish5/glassfish/domains/domain1/autodeploy/ \;
@@ -19,7 +19,7 @@ if [ "${1}" == "glassfish-bundled" ]; then
 
 elif [ "${1}" == "glassfish-module" ]; then
 
-  curl -s -o glassfish5.zip "${GLASSFISH_URL}"
+  curl -L -s -o glassfish5.zip "${GLASSFISH_URL}"
   unzip -q glassfish5.zip
   mvn -B -V -P\!bundled,module clean install
   cp core/target/ozark-core-*.jar ./glassfish5/glassfish/modules/
@@ -33,7 +33,7 @@ elif [ "${1}" == "glassfish-module" ]; then
 
 elif [ "${1}" == "tck-glassfish" ]; then
 
-  curl -s -o glassfish5.zip "${GLASSFISH_URL}"
+  curl -L -s -o glassfish5.zip "${GLASSFISH_URL}"
   unzip -q glassfish5.zip
   mvn -B -V -DskipTests clean install
   glassfish5/bin/asadmin start-domain
@@ -45,7 +45,7 @@ elif [ "${1}" == "tck-glassfish" ]; then
 
 elif [ "${1}" == "tck-wildfly" ]; then
 
-  curl -s -o wildfly.tgz "${WILDFLY_URL}"
+  curl -L -s -o wildfly.tgz "${WILDFLY_URL}"
   tar -xzf wildfly.tgz
   mvn -B -V -DskipTests clean install
   LAUNCH_JBOSS_IN_BACKGROUND=1 JBOSS_PIDFILE=wildfly.pid ./wildfly-14.0.0.Final/bin/standalone.sh > wildfly.log 2>&1 &
@@ -64,7 +64,7 @@ elif [ "${1}" == "tck-tomee" ]; then
 
 elif [ "${1}" == "tck-liberty" ]; then
 
-  curl -s -o wlp.zip "${LIBERTY_URL}"
+  curl -L -s -o wlp.zip "${LIBERTY_URL}"
   unzip wlp.zip
   cp .travis/wlp-server-template.xml wlp/templates/servers/defaultServer/server.xml
   LIBERTY_HOME="$( cd ./wlp/ && pwd )"
