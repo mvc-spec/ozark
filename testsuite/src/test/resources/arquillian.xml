@@ -34,4 +34,12 @@
         </configuration>
     </container>
 
+    <container qualifier="payara">
+        <configuration>
+            <property name="adminHttps">true</property>
+            <property name="adminUser">admin</property>
+            <property name="adminPassword">admin</property>
+        </configuration>
+    </container>
+
 </arquillian>

@@ -219,5 +219,45 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>testsuite-payara</id>
+
+            <properties>
+                <skipITs>false</skipITs>
+            </properties>
+
+            <dependencies>
+                <dependency>
+                    <groupId>fish.payara.arquillian</groupId>
+                    <artifactId>arquillian-payara-server-4-remote</artifactId>
+                    <version>1.0.Beta3</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.mvc-spec.ozark</groupId>
+                    <artifactId>ozark-jersey</artifactId>
+                    <version>${project.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <configuration>
+                            <skipITs>false</skipITs>
+                            <systemProperties>
+                                <arquillian.launch>payara</arquillian.launch>
+                                <testsuite.profile>testsuite-payara</testsuite.profile>
+                                <javax.net.ssl.trustStore>src/test/resources/payara-truststore.jks
+                                </javax.net.ssl.trustStore>
+                                <javax.net.ssl.trustStorePassword>changeit</javax.net.ssl.trustStorePassword>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
