@@ -44,6 +44,8 @@ jobs:
           repo: mvc-spec/ozark
           branch: master
   allow_failures:
+    - env: TYPE=tck-glassfish
+    - env: TYPE=tck-wildfly
     - env: TYPE=tck-tomee
     - env: TYPE=tck-liberty
 env:
