@@ -61,6 +61,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Define optional dependencies for the tests below -->
+            <!-- EXT -->
+            <dependency>
+                <groupId>org.mvc-spec.ozark.ext</groupId>
+                <artifactId>ozark-thymeleaf</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -81,13 +89,6 @@
             <artifactId>ozark-core</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- EXT -->
-        <dependency>
-            <groupId>org.mvc-spec.ozark.ext</groupId>
-            <artifactId>ozark-thymeleaf</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <!-- Arquillian -->
@@ -153,7 +154,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <skipITs>true</skipITs>
                     <systemPropertyVariables>
                         <project.build.finalName>${project.build.finalName}</project.build.finalName>
                         <project.build.sourceEncoding>${project.build.sourceEncoding}

@@ -16,7 +16,6 @@
 package org.mvcspec.ozark.test;
 
 import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.drone.api.annotation.Drone;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.test.api.ArquillianResource;
@@ -28,21 +27,23 @@ import org.junit.runner.RunWith;
 import org.mvcspec.ozark.test.util.WebArchiveBuilder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import java.net.URL;
 import java.nio.file.Paths;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 /**
- * @author Gregor Tudan
+ * Tests Mvc Implementation.
+ *
+ * @author Santiago Pericas-Geertsen
  */
 @RunWith(Arquillian.class)
-public class ThymeleafIT {
+public class MvcIT {
 
-    private static final String WEB_INF_SRC = "src/main/resources/thymeleaf/";
+    private static final String CSRF_PARAM = "_csrf";
+
+    private static final String WEB_INF_SRC = "src/main/resources/mvc/";
 
     @ArquillianResource
     private URL baseURL;
@@ -53,19 +54,20 @@ public class ThymeleafIT {
     @Deployment(testable = false, name = "thymeleaf")
     public static Archive createDeployment() {
         return new WebArchiveBuilder()
-            .addPackage("org.mvcspec.ozark.test.thymeleaf")
-            .addView(Paths.get(WEB_INF_SRC).resolve("views/hello.html").toFile(), "hello.html")
+            .addPackage("org.mvcspec.ozark.test.mvc")
+            .addView(Paths.get(WEB_INF_SRC).resolve("views/mvc.jsp").toFile(), "mvc.jsp")
             .addBeansXml()
-            .addDependency("org.mvc-spec.ozark.ext:ozark-thymeleaf")
             .build();
     }
 
     @Test
-    @RunAsClient
-    public void test() {
-        webDriver.get(baseURL + "resources/hello?user=mvc");
-        WebElement h1 = webDriver.findElement(By.tagName("h1"));
-        assertNotNull(h1);
-        assertTrue(h1.getText().contains("mvc"));
+    public void test() throws Exception {
+        webDriver.get(baseURL + "resources/mvc");
+
+        assertEquals(baseURL.getPath() + "resources", webDriver.findElement(By.id("basePath")).getText());
+        assertEquals(CSRF_PARAM, webDriver.findElement(By.id("csrf")).getText());
+        assertEquals("<&>", webDriver.findElement(By.id("encoders")).getText());
+        assertEquals("true", webDriver.findElement(By.id("config")).getText());
     }
 }
+
