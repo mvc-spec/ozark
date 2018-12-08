@@ -22,13 +22,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.mvc-spec.ozark.ext</groupId>
-		<artifactId>ozark-parent-ext</artifactId>
+		<groupId>org.eclipse.krazo.ext</groupId>
+		<artifactId>krazo-parent-ext</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>ozark-groovy</artifactId>
+	<artifactId>krazo-groovy</artifactId>
 	<packaging>jar</packaging>
-	<name>Ozark Groovy Extension</name>
+	<name>Eclipse Krazo Groovy Extension</name>
 
 	<dependencies>
 		<dependency>

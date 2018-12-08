@@ -23,13 +23,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.mvc-spec.ozark</groupId>
-        <artifactId>ozark-parent</artifactId>
+        <groupId>org.eclipse.krazo</groupId>
+        <artifactId>krazo-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>testsuite</artifactId>
-    <name>Ozark Testsuite</name>
+    <name>Eclipse Krazo Testsuite</name>
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -65,8 +65,8 @@
             <!-- Define optional dependencies for the tests below -->
             <!-- EXT -->
             <dependency>
-                <groupId>org.mvc-spec.ozark.ext</groupId>
-                <artifactId>ozark-thymeleaf</artifactId>
+                <groupId>org.eclipse.krazo.ext</groupId>
+                <artifactId>krazo-thymeleaf</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -85,8 +85,8 @@
             <version>${spec.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mvc-spec.ozark</groupId>
-            <artifactId>ozark-core</artifactId>
+            <groupId>org.eclipse.krazo</groupId>
+            <artifactId>krazo-core</artifactId>
             <version>${project.version}</version>
             <scope>runtime</scope>
         </dependency>
@@ -192,8 +192,8 @@
 
             <dependencies>
                 <dependency>
-                    <groupId>org.mvc-spec.ozark</groupId>
-                    <artifactId>ozark-resteasy</artifactId>
+                    <groupId>org.eclipse.krazo</groupId>
+                    <artifactId>krazo-resteasy</artifactId>
                     <version>${project.version}</version>
                     <scope>runtime</scope>
                 </dependency>
@@ -234,8 +234,8 @@
                     <scope>test</scope>
                 </dependency>
                 <dependency>
-                    <groupId>org.mvc-spec.ozark</groupId>
-                    <artifactId>ozark-jersey</artifactId>
+                    <groupId>org.eclipse.krazo</groupId>
+                    <artifactId>krazo-jersey</artifactId>
                     <version>${project.version}</version>
                     <scope>runtime</scope>
                 </dependency>

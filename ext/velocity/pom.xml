@@ -20,13 +20,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mvc-spec.ozark.ext</groupId>
-        <artifactId>ozark-parent-ext</artifactId>
+        <groupId>org.eclipse.krazo.ext</groupId>
+        <artifactId>krazo-parent-ext</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>ozark-velocity</artifactId>
+    <artifactId>krazo-velocity</artifactId>
     <packaging>jar</packaging>
-    <name>Ozark Velocity Extension</name>
+    <name>Eclipse Krazo Velocity Extension</name>
     <dependencies>
         <dependency>
             <groupId>org.apache.velocity.tools</groupId>

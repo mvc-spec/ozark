@@ -22,13 +22,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.mvc-spec.ozark</groupId>
-        <artifactId>ozark-parent</artifactId>
+        <groupId>org.eclipse.krazo</groupId>
+        <artifactId>krazo-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>ozark-tck</artifactId>
-    <name>Ozark TCK Runner</name>
+    <artifactId>krazo-tck</artifactId>
+    <name>Eclipse Krazo TCK Runner</name>
 
     <properties>
 
@@ -88,23 +88,23 @@
                 <version>${spec.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mvc-spec.ozark</groupId>
-                <artifactId>ozark-core</artifactId>
+                <groupId>org.eclipse.krazo</groupId>
+                <artifactId>krazo-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mvc-spec.ozark</groupId>
-                <artifactId>ozark-jersey</artifactId>
+                <groupId>org.eclipse.krazo</groupId>
+                <artifactId>krazo-jersey</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mvc-spec.ozark</groupId>
-                <artifactId>ozark-resteasy</artifactId>
+                <groupId>org.eclipse.krazo</groupId>
+                <artifactId>krazo-resteasy</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.mvc-spec.ozark</groupId>
-                <artifactId>ozark-cxf</artifactId>
+                <groupId>org.eclipse.krazo</groupId>
+                <artifactId>krazo-cxf</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -131,7 +131,7 @@
                             <systemPropertyVariables>
                                 <arquillian.launch>glassfish</arquillian.launch>
                                 <org.mvcspec.tck.api.BaseArchiveProvider>
-                                    org.mvcspec.ozark.tck.glassfish.GlassfishArchiveProvider
+                                    org.eclipse.krazo.tck.glassfish.GlassfishArchiveProvider
                                 </org.mvcspec.tck.api.BaseArchiveProvider>
                             </systemPropertyVariables>
                         </configuration>
@@ -166,7 +166,7 @@
                             <systemPropertyVariables>
                                 <arquillian.launch>wildfly</arquillian.launch>
                                 <org.mvcspec.tck.api.BaseArchiveProvider>
-                                    org.mvcspec.ozark.tck.wildfly.WildflyArchiveProvider
+                                    org.eclipse.krazo.tck.wildfly.WildflyArchiveProvider
                                 </org.mvcspec.tck.api.BaseArchiveProvider>
                             </systemPropertyVariables>
                         </configuration>
@@ -206,7 +206,7 @@
                                 <tomee.version>${tomee.version}</tomee.version>
                                 <arquillian.launch>tomee</arquillian.launch>
                                 <org.mvcspec.tck.api.BaseArchiveProvider>
-                                    org.mvcspec.ozark.tck.tomee.TomeeArchiveProvider
+                                    org.eclipse.krazo.tck.tomee.TomeeArchiveProvider
                                 </org.mvcspec.tck.api.BaseArchiveProvider>
                             </systemPropertyVariables>
                         </configuration>
@@ -247,7 +247,7 @@
                             <systemPropertyVariables>
                                 <arquillian.launch>liberty</arquillian.launch>
                                 <org.mvcspec.tck.api.BaseArchiveProvider>
-                                    org.mvcspec.ozark.tck.liberty.LibertyArchiveProvider
+                                    org.eclipse.krazo.tck.liberty.LibertyArchiveProvider
                                 </org.mvcspec.tck.api.BaseArchiveProvider>
                             </systemPropertyVariables>
                         </configuration>

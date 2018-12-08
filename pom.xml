@@ -20,14 +20,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.mvc-spec.ozark</groupId>
-    <artifactId>ozark-parent</artifactId>
+    <groupId>org.eclipse.krazo</groupId>
+    <artifactId>krazo-parent</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>Ozark Parent</name>
-    <description>Ozark Parent</description>
-    <url>https://www.mvc-spec.org/ozark/</url>
+    <name>Eclipse Krazo Parent</name>
+    <description>Eclipse Krazo Parent</description>
+    <url>https://projects.eclipse.org/projects/ee4j.krazo</url>
 
     <properties>
 
@@ -65,9 +65,9 @@
     </reporting>
 
     <scm>
-        <connection>scm:git:https://github.com/mvc-spec/ozark.git</connection>
-        <developerConnection>scm:git:https://github.com/mvc-spec/ozark.git</developerConnection>
-        <url>https://github.com/mvc-spec/ozark</url>
+        <connection>scm:git:https://github.com/eclipse-ee4j/krazo.git</connection>
+        <developerConnection>scm:git:https://github.com/eclipse-ee4j/krazo.git</developerConnection>
+        <url>https://github.com/eclipse-ee4j/krazo</url>
     </scm>
 
     <developers>
@@ -98,7 +98,7 @@
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/mvc-spec/ozark/issues</url>
+        <url>https://github.com/eclipse-ee4j/krazo/issues</url>
     </issueManagement>
 
     <build>

@@ -20,13 +20,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mvc-spec.ozark.test</groupId>
-        <artifactId>ozark-parent-test</artifactId>
+        <groupId>org.eclipse.krazo.test</groupId>
+        <artifactId>krazo-parent-test</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>book-models</artifactId>
     <packaging>war</packaging>
-    <name>Ozark Book Models Tests</name>
+    <name>Eclipse Krazo Book Models Tests</name>
     <build>
         <finalName>test-book-models</finalName>
     </build>

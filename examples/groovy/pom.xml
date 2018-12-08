@@ -21,20 +21,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.mvc-spec.ozark.test</groupId>
-    <artifactId>ozark-parent-test</artifactId>
+    <groupId>org.eclipse.krazo.test</groupId>
+    <artifactId>krazo-parent-test</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>groovy</artifactId>
   <packaging>war</packaging>
-  <name>Ozark Groovy Tests</name>
+  <name>Eclipse Krazo Groovy Tests</name>
   <build>
         <finalName>test-groovy</finalName>
     </build>
   <dependencies>
         <dependency>
-            <groupId>org.mvc-spec.ozark.ext</groupId>
-            <artifactId>ozark-groovy</artifactId>
+            <groupId>org.eclipse.krazo.ext</groupId>
+            <artifactId>krazo-groovy</artifactId>
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
