@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Starting Conversation</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css"/>
 </head>
 <body>
     <h1>Starting Conversation</h1>

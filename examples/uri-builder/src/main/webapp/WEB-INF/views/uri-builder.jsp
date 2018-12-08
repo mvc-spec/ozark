@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>UriBuilder examples</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css"/>
 </head>
 <body>
 <div class="container">

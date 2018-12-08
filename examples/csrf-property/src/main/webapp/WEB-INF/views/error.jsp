@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>CSRF Protection Error</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css"/>
 </head>
 <body>
     <h1>CSRF Protection Failed</h1>

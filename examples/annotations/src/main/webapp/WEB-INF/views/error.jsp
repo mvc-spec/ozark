@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Error</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css"/>
 </head>
 <body>
     <h1>Error</h1>

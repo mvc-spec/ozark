@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Default Extension Test</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css"/>
 </head>
 <body>
     <h1>Default Extension Test</h1>

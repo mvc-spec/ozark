@@ -3,7 +3,7 @@
 <html>
     <head>
         <title>Book Information</title>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css">
     </head>
     <body>
     <h1>Book Information</h1>

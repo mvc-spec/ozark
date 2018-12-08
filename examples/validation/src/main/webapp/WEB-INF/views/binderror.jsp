@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/ozark.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/krazo.css"/>
     <title>Form Binding Error</title>
 </head>
 <body>
