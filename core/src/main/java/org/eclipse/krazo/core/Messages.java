@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
 @ApplicationScoped
 public class Messages {
 
-    private static final String BASENAME = "ozark";
+    private static final String BASENAME = "krazo";
 
     @Inject
     private HttpServletRequest request;
