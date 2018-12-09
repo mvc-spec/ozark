@@ -28,7 +28,7 @@ public class GlassfishArchiveProvider extends AbstractArchiveProvider {
     public WebArchive getBaseArchive() {
         return ShrinkWrap.create(WebArchive.class)
             .addAsLibraries(resolveMvcSpecJar())
-            .addAsLibraries(resolveOzarkJersey());
+            .addAsLibraries(resolveKrazoJersey());
     }
 
 }

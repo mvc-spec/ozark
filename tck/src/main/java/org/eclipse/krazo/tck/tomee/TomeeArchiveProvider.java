@@ -28,7 +28,7 @@ public class TomeeArchiveProvider extends AbstractArchiveProvider {
     public WebArchive getBaseArchive() {
         return ShrinkWrap.create(WebArchive.class)
                 .addAsLibraries(resolveMvcSpecJar())
-                .addAsLibraries(resolveOzarkCore());
+                .addAsLibraries(resolveKrazoCore());
     }
 
 }

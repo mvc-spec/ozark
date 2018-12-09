@@ -28,7 +28,7 @@ public class WildflyArchiveProvider extends AbstractArchiveProvider {
     public WebArchive getBaseArchive() {
         return ShrinkWrap.create(WebArchive.class)
             .addAsLibraries(resolveMvcSpecJar())
-            .addAsLibraries(resolveOzarkRestEasy());
+            .addAsLibraries(resolveKrazoRestEasy());
     }
 
 }

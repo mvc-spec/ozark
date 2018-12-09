@@ -57,23 +57,23 @@ public abstract class AbstractArchiveProvider implements BaseArchiveProvider {
 
     }
 
-    protected File[] resolveOzarkJersey() {
-        return resolveOzarkModule("org.mvc-spec.ozark", "ozark-jersey");
+    protected File[] resolveKrazoJersey() {
+        return resolveKrazoModule("org.eclipse.krazo", "krazo-jersey");
     }
 
-    protected File[] resolveOzarkRestEasy() {
-        return resolveOzarkModule("org.mvc-spec.ozark", "ozark-resteasy");
+    protected File[] resolveKrazoRestEasy() {
+        return resolveKrazoModule("org.eclipse.krazo", "krazo-resteasy");
     }
 
-    protected File[] resolveOzarkCxf() {
-        return resolveOzarkModule("org.mvc-spec.ozark", "ozark-cxf");
+    protected File[] resolveKrazoCxf() {
+        return resolveKrazoModule("org.eclipse.krazo", "krazo-cxf");
     }
 
-    protected File[] resolveOzarkCore() {
-        return resolveOzarkModule("org.mvc-spec.ozark", "ozark-core");
+    protected File[] resolveKrazoCore() {
+        return resolveKrazoModule("org.eclipse.krazo", "krazo-core");
     }
 
-    protected File[] resolveOzarkModule(String groupId, String artifactId) {
+    protected File[] resolveKrazoModule(String groupId, String artifactId) {
 
         // will go offline because we only want to the local repo
         return Maven.configureResolver()
