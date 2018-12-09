@@ -84,7 +84,7 @@ public class CdiUtils {
     /**
      * Returns a list of CDI beans with the specified bean type and qualifiers.
      * Please note that this method supports looking up beans deployed with the application
-     * even if Ozark is deployed as a container archive.
+     * even if Krazo is deployed as a container archive.
      */
     public static <T> List<T> getApplicationBeans(Class<T> type, Annotation... qualifiers) {
         BeanManager manager = getApplicationBeanManager();
@@ -96,7 +96,7 @@ public class CdiUtils {
     /**
      * Returns a single CDI bean with the given type and qualifiers. Will throw an exception if there
      * is more than one matching bean. Please note that this method supports looking up beans deployed
-     * with the application even if Ozark is deployed as a container archive.
+     * with the application even if Krazo is deployed as a container archive.
      */
     public static <T> Optional<T> getApplicationBean(Class<T> type, Annotation... qualifiers) {
         List<T> instances = getApplicationBeans(type);
@@ -112,7 +112,7 @@ public class CdiUtils {
     /**
      * This method returns a {@link BeanManager} which can resolve beans defined in the application.
      * In case of Glassfish the injected {@link BeanManager} doesn't work here as it only resolves
-     * beans in the Ozark archive if Ozark is installed as part of the container.
+     * beans in the Krazo archive if Krazo is installed as part of the container.
      */
     public static BeanManager getApplicationBeanManager() {
         return CDI.current().getBeanManager();

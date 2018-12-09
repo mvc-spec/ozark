@@ -27,7 +27,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.FeatureContext;
 
 /**
- * This class uses the Jersey specific ForcedAutoDiscoverable SPI to trigger the Ozark initialization
+ * This class uses the Jersey specific ForcedAutoDiscoverable SPI to trigger the Krazo initialization
  * process. Please not that this will work even if the Application subclass explicitly specifies
  * singletons and instances.
  *

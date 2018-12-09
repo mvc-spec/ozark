@@ -19,7 +19,7 @@ import javax.inject.Qualifier;
 import java.lang.annotation.*;
 
 /**
- * CDI qualifier used by Ozark internally to prevent clashes with the Default qualifier
+ * CDI qualifier used internally to prevent clashes with the Default qualifier
  *
  * @author Christian Kaltepoth
  */

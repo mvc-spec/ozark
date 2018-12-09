@@ -32,7 +32,7 @@ public class KrazoValidationInterceptor implements ValidationInterceptor {
 
     /**
      * For some weird reason we cannot preserve the <code>throws ConstraintViolationException</code>
-     * in the method signature. Bundling Ozark as a Glassfish plugin starts failing as soon as
+     * in the method signature. Bundling Krazo as a Glassfish plugin starts failing as soon as
      * this class uses any interface from the javax.validation package. My current guess is
      * that this is related to the OSGi bundling.
      */

@@ -16,14 +16,14 @@
 package org.eclipse.krazo;
 
 /**
- * Interface Properties. Application-level properties used to configure Ozark.
+ * Interface Properties. Application-level properties used to configure Krazo.
  *
  * @author Santiago Pericas-Geertsen
  */
 public interface Properties {
 
     /**
-     * Boolean property that when set to {@code true} indicates Ozark to
+     * Boolean property that when set to {@code true} indicates Krazo to
      * use cookies instead of the default URL re-write mechanism to implement
      * redirect scope.
      */

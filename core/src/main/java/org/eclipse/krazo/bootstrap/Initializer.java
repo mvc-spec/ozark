@@ -28,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Main class for triggering initialization of Ozark
+ * Main class for triggering initialization of Eclipse Krazo
  *
  * @author Christian Kaltepoth
  */
@@ -41,7 +41,7 @@ public final class Initializer {
     }
 
     /**
-     * Registers all required provides for Ozark. Please note that the initialization is
+     * Registers all required provides for Krazo. Please note that the initialization is
      * only performed if at least one controller is detected for the application and if the
      * initialization hasn't been triggered before. So calling this method multiple times
      * won't result in duplicated providers registered.
@@ -74,7 +74,7 @@ public final class Initializer {
      */
     private static boolean isMvcApplication(ServletContext servletContext) {
 
-        // we fall back to enable Ozark if detection didn't work
+        // we fall back to enable Krazo if detection didn't work
         Set<Class<?>> controllersFound = servletContext != null
                 ? (Set<Class<?>>) servletContext.getAttribute(KrazoContainerInitializer.CONTROLLER_CLASSES)
                 : null;

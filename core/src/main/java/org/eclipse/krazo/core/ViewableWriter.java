@@ -180,7 +180,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
     }
 
     /**
-     * This method is basically a dirty hack to get Ozark work on WebSphere Liberty.
+     * This method is basically a dirty hack to get Eclipse Krazo work on WebSphere Liberty.
      * The primary use case is to unwrap the original request/response from the wrapper we get
      * from CXF. This is required because the wrappers don't use the official wrapper base classes
      * and therefore Liberty fails to forward such requests because unwrapping isn't possible.

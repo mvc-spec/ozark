@@ -32,7 +32,6 @@ public class CsrfValidateInterceptorMediaTypeTest {
 
   @Test
   public void shouldSupportFormMediaTypeWithCharset() {
-    // https://java.net/jira/browse/OZARK-66
     assertEquals(true, CsrfValidateInterceptor.isSupportedMediaType(
         MediaType.valueOf("application/x-www-form-urlencoded;charset=windows-31j")
     ));

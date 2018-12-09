@@ -25,7 +25,7 @@ import javax.ws.rs.ext.Provider;
 import java.util.logging.Logger;
 
 /**
- * JAX-RS feature to initialize Ozark. Please note that automatic initialization will
+ * JAX-RS feature to initialize Krazo. Please note that automatic initialization will
  * only work if the application class doesn't specify instances and singletons explicitly.
  *
  * @author Christian Kaltepoth

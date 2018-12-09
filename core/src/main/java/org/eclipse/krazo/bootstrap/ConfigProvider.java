@@ -18,7 +18,7 @@ package org.eclipse.krazo.bootstrap;
 import javax.ws.rs.core.FeatureContext;
 
 /**
- * SPI used to register providers when Ozark is initialized. Implementations are discovered
+ * SPI used to register providers when Krazo is initialized. Implementations are discovered
  * using the JDK's ServiceLoader mechanism.
  *
  * @author Christian Kaltepoth
