@@ -28,7 +28,7 @@ import javax.mvc.Controller;
  *
  * @author Christian Kaltepoth
  */
-public class OzarkValidationInterceptor implements ValidationInterceptor {
+public class KrazoValidationInterceptor implements ValidationInterceptor {
 
     /**
      * For some weird reason we cannot preserve the <code>throws ConstraintViolationException</code>

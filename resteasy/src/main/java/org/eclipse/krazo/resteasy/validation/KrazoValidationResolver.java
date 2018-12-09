@@ -26,7 +26,7 @@ import javax.ws.rs.ext.ContextResolver;
  *
  * @author Christian Kaltepoth
  */
-public class OzarkValidationResolver implements ContextResolver<GeneralValidator> {
+public class KrazoValidationResolver implements ContextResolver<GeneralValidator> {
 
     public GeneralValidator getContext(Class<?> aClass) {
 
@@ -34,7 +34,7 @@ public class OzarkValidationResolver implements ContextResolver<GeneralValidator
         GeneralValidator wrapped = new ValidatorContextResolver().getContext(aClass);
 
         // only delegate to wrapped validator for regular JAX-RS requests
-        return new OzarkGeneralValidator(wrapped);
+        return new KrazoGeneralValidator(wrapped);
 
     }
 

@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.core;
 
-import org.eclipse.krazo.cdi.OzarkCdiExtension;
+import org.eclipse.krazo.cdi.KrazoCdiExtension;
 import org.eclipse.krazo.engine.ViewEngineContextImpl;
 import org.eclipse.krazo.engine.ViewEngineFinder;
 import org.eclipse.krazo.engine.Viewable;
@@ -154,7 +154,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
             models.put("mvc", mvc);
 
             // Fire BeforeProcessView event
-            if (OzarkCdiExtension.isEventObserved(BeforeProcessViewEvent.class)) {
+            if (KrazoCdiExtension.isEventObserved(BeforeProcessViewEvent.class)) {
                 final BeforeProcessViewEventImpl event = new BeforeProcessViewEventImpl();
                 event.setEngine(engine.getClass());
                 event.setView(viewable.getView());
@@ -166,7 +166,7 @@ public class ViewableWriter implements MessageBodyWriter<Viewable> {
                     headers, responseStream, mediaType, uriInfo, resourceInfo, config, mvc.getLocale()));
 
             // Fire AfterProcessView event
-            if (OzarkCdiExtension.isEventObserved(AfterProcessViewEvent.class)) {
+            if (KrazoCdiExtension.isEventObserved(AfterProcessViewEvent.class)) {
                 final AfterProcessViewEventImpl event = new AfterProcessViewEventImpl();
                 event.setEngine(engine.getClass());
                 event.setView(viewable.getView());

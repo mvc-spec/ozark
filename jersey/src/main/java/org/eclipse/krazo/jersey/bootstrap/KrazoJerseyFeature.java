@@ -17,7 +17,7 @@ package org.eclipse.krazo.jersey.bootstrap;
 
 import org.glassfish.jersey.internal.spi.AutoDiscoverable;
 import org.glassfish.jersey.internal.spi.ForcedAutoDiscoverable;
-import org.eclipse.krazo.bootstrap.OzarkInitializer;
+import org.eclipse.krazo.bootstrap.Initializer;
 
 import javax.annotation.Priority;
 import javax.servlet.ServletContext;
@@ -35,14 +35,14 @@ import javax.ws.rs.core.FeatureContext;
  */
 @ConstrainedTo(RuntimeType.SERVER)
 @Priority(AutoDiscoverable.DEFAULT_PRIORITY)
-public class OzarkJerseyFeature implements ForcedAutoDiscoverable {
+public class KrazoJerseyFeature implements ForcedAutoDiscoverable {
 
     @Context
     private ServletContext servletContext;
 
     @Override
     public void configure(FeatureContext context) {
-        OzarkInitializer.initialize(context, servletContext);
+        Initializer.initialize(context, servletContext);
     }
 
 }

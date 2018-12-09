@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.binding;
 
-import org.eclipse.krazo.cdi.OzarkInternal;
+import org.eclipse.krazo.cdi.Internal;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -73,7 +73,7 @@ public class BeanValidationProducer {
     }
 
     @Produces
-    @OzarkInternal
+    @Internal
     @ApplicationScoped
     public ValidatorFactory produceValidationFactory() {
         return validatorFactory;

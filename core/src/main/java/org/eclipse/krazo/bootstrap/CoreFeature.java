@@ -32,9 +32,9 @@ import java.util.logging.Logger;
  */
 @Provider
 @ConstrainedTo(RuntimeType.SERVER)
-public class OzarkCoreFeature implements Feature {
+public class CoreFeature implements Feature {
 
-    private static final Logger log = Logger.getLogger(OzarkCoreFeature.class.getName());
+    private static final Logger log = Logger.getLogger(CoreFeature.class.getName());
 
     @Context
     private ServletContext servletContext;
@@ -51,7 +51,7 @@ public class OzarkCoreFeature implements Feature {
                 log.warning("The ServletContext wasn't injected into the JAX-RS Feature class");
             }
 
-            OzarkInitializer.initialize(context, servletContext);
+            Initializer.initialize(context, servletContext);
             return true;
 
         }

@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.security;
 
-import org.eclipse.krazo.OzarkConfig;
+import org.eclipse.krazo.KrazoConfig;
 import org.eclipse.krazo.core.Messages;
 
 import javax.annotation.Priority;
@@ -71,7 +71,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
     private CsrfTokenManager csrfTokenManager;
 
     @Inject
-    private OzarkConfig ozarkConfig;
+    private KrazoConfig krazoConfig;
 
     @Context
     private ResourceInfo resourceInfo;
@@ -173,7 +173,7 @@ public class CsrfValidateInterceptor implements ReaderInterceptor {
         if (controller == null || !hasAnnotation(controller, POST.class)) {
             return false;
         }
-        switch (ozarkConfig.getCsrfOptions()) {
+        switch (krazoConfig.getCsrfOptions()) {
             case OFF:
                 return false;
             case IMPLICIT:

@@ -32,7 +32,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 /**
- * The JadeOzarkConfiguration. The configuration properties are qualified by
+ * The JadeKrazoConfiguration. The configuration properties are qualified by
  * <code>org.eclipse.krazo.ext.jade</code>. Following precedence is used:
  * <ol>
  * <li>System Properties</li>
@@ -42,7 +42,7 @@ import java.util.Properties;
  *
  * @author Florian Hirsch
  */
-public class JadeOzarkConfiguration {
+public class JadeKrazoConfiguration {
 
     /**
      * One of HTML, XML, XHTML. Default: XHTML

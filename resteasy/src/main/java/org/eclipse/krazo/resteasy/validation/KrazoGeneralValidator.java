@@ -28,11 +28,11 @@ import java.lang.reflect.Method;
  *
  * @author Christian Kaltepoth
  */
-class OzarkGeneralValidator implements GeneralValidator {
+class KrazoGeneralValidator implements GeneralValidator {
 
     private GeneralValidator delegate;
 
-    OzarkGeneralValidator(GeneralValidator delegate) {
+    KrazoGeneralValidator(GeneralValidator delegate) {
         this.delegate = delegate;
     }
 

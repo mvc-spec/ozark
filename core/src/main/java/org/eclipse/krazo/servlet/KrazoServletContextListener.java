@@ -27,22 +27,22 @@ import javax.servlet.annotation.WebListener;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import static org.eclipse.krazo.servlet.OzarkContainerInitializer.CONTROLLER_CLASSES;
+import static org.eclipse.krazo.servlet.KrazoContainerInitializer.CONTROLLER_CLASSES;
 
 /**
  * Performs some sanity checks for controllers during startup
  */
 @WebListener
-public class OzarkServletContextListener implements ServletContextListener {
+public class KrazoServletContextListener implements ServletContextListener {
 
-    private static final Logger log = Logger.getLogger(OzarkServletContextListener.class.getName());
+    private static final Logger log = Logger.getLogger(KrazoServletContextListener.class.getName());
 
     @Inject
     private BeanManager beanManager;
 
-    public OzarkServletContextListener() { }
+    public KrazoServletContextListener() { }
 
-    public OzarkServletContextListener(BeanManager beanManager) {
+    public KrazoServletContextListener(BeanManager beanManager) {
         this.beanManager = beanManager;
     }
 

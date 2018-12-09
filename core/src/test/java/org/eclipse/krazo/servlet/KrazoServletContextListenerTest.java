@@ -28,7 +28,7 @@ import static java.util.Collections.singletonList;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 
-public class OzarkServletContextListenerTest {
+public class KrazoServletContextListenerTest {
 
     private static class TestController { }
 
@@ -40,11 +40,11 @@ public class OzarkServletContextListenerTest {
         ServletContextEvent event = createMock(ServletContextEvent.class);
         ServletContext context = createMock(ServletContext.class);
 
-        OzarkServletContextListener listener = new OzarkServletContextListener(beanManager);
+        KrazoServletContextListener listener = new KrazoServletContextListener(beanManager);
         Set<Class<?>> controllers = new HashSet<>(singletonList(TestController.class));
 
         expect(event.getServletContext()).andStubReturn(context);
-        expect(context.getAttribute(OzarkContainerInitializer.CONTROLLER_CLASSES)).andStubReturn(controllers);
+        expect(context.getAttribute(KrazoContainerInitializer.CONTROLLER_CLASSES)).andStubReturn(controllers);
         expect(beanManager.getBeans(TestController.class)).andStubReturn(new HashSet<>());
 
         EasyMock.replay(event, context, beanManager);

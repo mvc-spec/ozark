@@ -37,11 +37,11 @@ import java.util.logging.Logger;
  * @author Christian Kaltepoth
  */
 @HandlesTypes({Path.class})
-public class OzarkContainerInitializer implements ServletContainerInitializer {
+public class KrazoContainerInitializer implements ServletContainerInitializer {
 
-    public static final String CONTROLLER_CLASSES = OzarkContainerInitializer.class.getName() + ".CONTROLLER_CLASSES";
+    public static final String CONTROLLER_CLASSES = KrazoContainerInitializer.class.getName() + ".CONTROLLER_CLASSES";
 
-    private static final Logger LOG = Logger.getLogger(OzarkContainerInitializer.class.getName());
+    private static final Logger LOG = Logger.getLogger(KrazoContainerInitializer.class.getName());
 
     @Override
     public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {

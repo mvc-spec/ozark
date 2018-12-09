@@ -18,7 +18,7 @@ package org.eclipse.krazo.binding.validate;
 import org.eclipse.krazo.binding.BindingResultImpl;
 import org.eclipse.krazo.binding.ConstraintViolationTranslator;
 import org.eclipse.krazo.binding.ValidationErrorImpl;
-import org.eclipse.krazo.cdi.OzarkInternal;
+import org.eclipse.krazo.cdi.Internal;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -29,7 +29,6 @@ import javax.mvc.MvcContext;
 import javax.mvc.binding.MvcBinding;
 import javax.mvc.binding.ValidationError;
 import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.executable.ExecutableValidator;
@@ -56,7 +55,7 @@ public class ValidationInterceptor implements Serializable {
     private static final Logger log = Logger.getLogger(ValidationInterceptor.class.getName());
 
     @Inject
-    @OzarkInternal
+    @Internal
     private ValidatorFactory validatorFactory;
 
     @Inject

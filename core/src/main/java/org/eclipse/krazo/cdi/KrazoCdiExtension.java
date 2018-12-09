@@ -16,7 +16,7 @@
 package org.eclipse.krazo.cdi;
 
 import org.eclipse.krazo.MvcContextImpl;
-import org.eclipse.krazo.OzarkConfig;
+import org.eclipse.krazo.KrazoConfig;
 import org.eclipse.krazo.binding.BeanValidationProducer;
 import org.eclipse.krazo.binding.BindingResultManager;
 import org.eclipse.krazo.binding.ConstraintViolationTranslator;
@@ -56,7 +56,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Class OzarkCdiExtension. Initialize redirect scope as CDI scope. Collect information
+ * Class KrazoCdiExtension. Initialize redirect scope as CDI scope. Collect information
  * about all MVC events being observed by the application to optimize event creation
  * and firing.
  *
@@ -65,9 +65,9 @@ import java.util.logging.Logger;
  * @author Christian Kaltepoth
  */
 @SuppressWarnings("unchecked")
-public class OzarkCdiExtension implements Extension {
+public class KrazoCdiExtension implements Extension {
 
-    private static final Logger log = Logger.getLogger(OzarkCdiExtension.class.getName());
+    private static final Logger log = Logger.getLogger(KrazoCdiExtension.class.getName());
 
     private static Set<Class<? extends MvcEvent>> observedEvents;
 
@@ -89,7 +89,7 @@ public class OzarkCdiExtension implements Extension {
 
                 // .
                 MvcContextImpl.class,
-                OzarkConfig.class,
+                KrazoConfig.class,
 
                 // binding
                 BeanValidationProducer.class,

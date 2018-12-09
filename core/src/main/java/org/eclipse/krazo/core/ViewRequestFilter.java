@@ -16,7 +16,7 @@
 package org.eclipse.krazo.core;
 
 import org.eclipse.krazo.event.BeforeControllerEventImpl;
-import org.eclipse.krazo.cdi.OzarkCdiExtension;
+import org.eclipse.krazo.cdi.KrazoCdiExtension;
 
 import javax.annotation.Priority;
 import javax.enterprise.event.Event;
@@ -58,7 +58,7 @@ public class ViewRequestFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         // Fire BeforeControllerEvent event
-        if (OzarkCdiExtension.isEventObserved(BeforeControllerEvent.class)) {
+        if (KrazoCdiExtension.isEventObserved(BeforeControllerEvent.class)) {
             final BeforeControllerEventImpl event = new BeforeControllerEventImpl();
             event.setUriInfo(uriInfo);
             event.setResourceInfo(resourceInfo);

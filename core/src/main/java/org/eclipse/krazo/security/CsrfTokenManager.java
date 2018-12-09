@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.security;
 
-import org.eclipse.krazo.OzarkConfig;
+import org.eclipse.krazo.KrazoConfig;
 import org.eclipse.krazo.jaxrs.JaxRsContext;
 
 import javax.annotation.PostConstruct;
@@ -48,12 +48,12 @@ public class CsrfTokenManager {
     private HttpServletResponse response;
 
     @Inject
-    private OzarkConfig ozarkConfig;
+    private KrazoConfig krazoConfig;
 
     @PostConstruct
     public void init() {
 
-        this.tokenStrategy = ozarkConfig.getCsrfTokenStrategy();
+        this.tokenStrategy = krazoConfig.getCsrfTokenStrategy();
 
         log.log(Level.FINE, "Configured strategy for CSRF tokens: {0}", new Object[]{
                 this.tokenStrategy.getClass().getName()

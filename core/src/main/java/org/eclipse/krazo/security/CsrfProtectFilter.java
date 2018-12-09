@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.security;
 
-import org.eclipse.krazo.OzarkConfig;
+import org.eclipse.krazo.KrazoConfig;
 
 import javax.annotation.Priority;
 import javax.inject.Inject;
@@ -51,7 +51,7 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
     private CsrfTokenManager csrfTokenManager;
 
     @Inject
-    private OzarkConfig ozarkConfig;
+    private KrazoConfig krazoConfig;
 
     /**
      * Inject CSRF header if enabled in the application.
@@ -78,6 +78,6 @@ public class CsrfProtectFilter implements ContainerResponseFilter {
      * @return outcome of test.
      */
     private boolean isCsrfEnabled() {
-        return ozarkConfig.getCsrfOptions() != Csrf.CsrfOptions.OFF;
+        return krazoConfig.getCsrfOptions() != Csrf.CsrfOptions.OFF;
     }
 }

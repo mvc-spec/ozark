@@ -30,7 +30,7 @@ import javax.ws.rs.core.Configuration;
  *
  * @author Christian Kaltepoth
  */
-public class OzarkConfig {
+public class KrazoConfig {
 
     @Inject
     @JaxRsContext

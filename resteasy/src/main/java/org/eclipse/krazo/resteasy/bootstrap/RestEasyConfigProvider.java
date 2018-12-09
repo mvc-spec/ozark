@@ -16,7 +16,7 @@
 package org.eclipse.krazo.resteasy.bootstrap;
 
 import org.eclipse.krazo.bootstrap.ConfigProvider;
-import org.eclipse.krazo.resteasy.validation.OzarkValidationResolver;
+import org.eclipse.krazo.resteasy.validation.KrazoValidationResolver;
 
 import javax.ws.rs.core.FeatureContext;
 
@@ -29,7 +29,7 @@ public class RestEasyConfigProvider implements ConfigProvider {
 
     @Override
     public void configure(FeatureContext context) {
-        context.register(OzarkValidationResolver.class);
+        context.register(KrazoValidationResolver.class);
     }
 
 }

@@ -16,8 +16,8 @@
 package org.eclipse.krazo.jersey.bootstrap;
 
 import org.eclipse.krazo.bootstrap.ConfigProvider;
-import org.eclipse.krazo.jersey.model.OzarkModelProcessor;
-import org.eclipse.krazo.jersey.validation.OzarkValidationInterceptor;
+import org.eclipse.krazo.jersey.model.KrazoModelProcessor;
+import org.eclipse.krazo.jersey.validation.KrazoValidationInterceptor;
 
 import javax.ws.rs.core.FeatureContext;
 
@@ -30,8 +30,8 @@ public class JerseyConfigProvider implements ConfigProvider {
 
     @Override
     public void configure(FeatureContext context) {
-        context.register(OzarkModelProcessor.class);
-        context.register(OzarkValidationInterceptor.class);
+        context.register(KrazoModelProcessor.class);
+        context.register(KrazoValidationInterceptor.class);
     }
 
 }

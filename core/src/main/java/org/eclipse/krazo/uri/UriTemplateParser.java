@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.uri;
 
-import org.eclipse.krazo.servlet.OzarkContainerInitializer;
+import org.eclipse.krazo.servlet.KrazoContainerInitializer;
 import org.eclipse.krazo.util.AnnotationUtils;
 import org.eclipse.krazo.util.BeanUtils;
 import org.eclipse.krazo.util.ControllerUtils;
@@ -62,7 +62,7 @@ public class UriTemplateParser {
     public void init() {
 
         Set<Class<?>> controllerClasses =
-                (Set<Class<?>>) servletContext.getAttribute(OzarkContainerInitializer.CONTROLLER_CLASSES);
+                (Set<Class<?>>) servletContext.getAttribute(KrazoContainerInitializer.CONTROLLER_CLASSES);
 
         applicationUris = init(controllerClasses != null ? controllerClasses : Collections.emptySet());
 

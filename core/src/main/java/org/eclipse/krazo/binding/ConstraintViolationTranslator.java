@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.binding;
 
-import org.eclipse.krazo.cdi.OzarkInternal;
+import org.eclipse.krazo.cdi.Internal;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -38,7 +38,7 @@ public class ConstraintViolationTranslator {
     private static final Logger log = Logger.getLogger(ConstraintViolationTranslator.class.getName());
 
     @Inject
-    @OzarkInternal
+    @Internal
     private ValidatorFactory validatorFactory;
 
     /**

@@ -42,10 +42,10 @@ public class DefaultMustacheFactoryProducer {
     @Produces
     @ViewEngineConfig
     public MustacheFactory getMustacheFactory() {
-        return new OzarkMustacheFactory();
+        return new KrazoMustacheFactory();
     }
 
-    private class OzarkMustacheFactory extends DefaultMustacheFactory {
+    private class KrazoMustacheFactory extends DefaultMustacheFactory {
         @Override
         public Reader getReader(String resourceName) {
             InputStream is = servletContext.getResourceAsStream(resourceName);

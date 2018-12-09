@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.core;
 
-import org.eclipse.krazo.OzarkConfig;
+import org.eclipse.krazo.KrazoConfig;
 import org.eclipse.krazo.event.AfterControllerEventImpl;
 import org.eclipse.krazo.event.ControllerRedirectEventImpl;
 
@@ -32,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.Produces;
 import javax.ws.rs.ServerErrorException;
-import javax.ws.rs.client.ResponseProcessingException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
@@ -53,7 +52,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static javax.ws.rs.core.Response.Status.*;
-import static org.eclipse.krazo.cdi.OzarkCdiExtension.isEventObserved;
+import static org.eclipse.krazo.cdi.KrazoCdiExtension.isEventObserved;
 import static org.eclipse.krazo.util.AnnotationUtils.getAnnotation;
 import static org.eclipse.krazo.util.PathUtils.*;
 
@@ -99,7 +98,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     private Messages messages;
 
     @Inject
-    private OzarkConfig ozarkConfig;
+    private KrazoConfig krazoConfig;
 
     @Override
     public void filter(ContainerRequestContext requestContext,
@@ -179,7 +178,7 @@ public class ViewResponseFilter implements ContainerResponseFilter {
     }
 
     private String appendExtensionIfRequired(String viewName) {
-        return appendExtensionIfRequired(viewName, ozarkConfig.getDefaultViewFileExtension());
+        return appendExtensionIfRequired(viewName, krazoConfig.getDefaultViewFileExtension());
     }
 
     /*

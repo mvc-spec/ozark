@@ -16,7 +16,7 @@
 package org.eclipse.krazo.bootstrap;
 
 import org.eclipse.krazo.core.ViewResponseFilter;
-import org.eclipse.krazo.servlet.OzarkContainerInitializer;
+import org.eclipse.krazo.servlet.KrazoContainerInitializer;
 import org.eclipse.krazo.util.ServiceLoaders;
 
 import javax.servlet.ServletContext;
@@ -32,11 +32,11 @@ import java.util.logging.Logger;
  *
  * @author Christian Kaltepoth
  */
-public final class OzarkInitializer {
+public final class Initializer {
 
-    private static final Logger log = Logger.getLogger(OzarkInitializer.class.getName());
+    private static final Logger log = Logger.getLogger(Initializer.class.getName());
 
-    private OzarkInitializer() {
+    private Initializer() {
         // static methods only
     }
 
@@ -76,7 +76,7 @@ public final class OzarkInitializer {
 
         // we fall back to enable Ozark if detection didn't work
         Set<Class<?>> controllersFound = servletContext != null
-                ? (Set<Class<?>>) servletContext.getAttribute(OzarkContainerInitializer.CONTROLLER_CLASSES)
+                ? (Set<Class<?>>) servletContext.getAttribute(KrazoContainerInitializer.CONTROLLER_CLASSES)
                 : null;
         boolean enableOzark = controllersFound == null || !controllersFound.isEmpty();
 

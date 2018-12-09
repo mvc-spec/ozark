@@ -27,18 +27,18 @@ import javax.ws.rs.core.MediaType;
 import static org.junit.Assert.assertTrue;
 
 /**
- * The JUnit test for the OzarkModelProcessor class.
+ * The JUnit test for the KrazoModelProcessor class.
  *
  * @author Florian Hirsch
  */
-public class OzarkModelProcessorTest {
+public class KrazoModelProcessorTest {
 
 	@Test
 	public void processResourceModel() {
 		ResourceModel.Builder rmb = new ResourceModel.Builder(false);
 		Resource resource = Resource.builder(SomeController.class).build();
 		rmb.addResource(resource);
-		ResourceModel processedModel = new OzarkModelProcessor().processResourceModel(rmb.build(), null);
+		ResourceModel processedModel = new KrazoModelProcessor().processResourceModel(rmb.build(), null);
 		Resource processedResource = processedModel.getResources().get(0);
 		processedResource.getResourceMethods().forEach(m -> assertTrue(m.getProducedTypes().contains(MediaType.TEXT_HTML_TYPE)));
 	}

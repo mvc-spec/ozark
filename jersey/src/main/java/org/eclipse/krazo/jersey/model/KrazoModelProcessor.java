@@ -30,7 +30,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Santiago Pericas-Geertsen
  */
-public class OzarkModelProcessor implements ModelProcessor {
+public class KrazoModelProcessor implements ModelProcessor {
 
     @Override
     public ResourceModel processResourceModel(ResourceModel resourceModel, Configuration configuration) {

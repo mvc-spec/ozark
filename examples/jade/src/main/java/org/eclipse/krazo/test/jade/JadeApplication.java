@@ -15,7 +15,7 @@
  */
 package org.eclipse.krazo.test.jade;
 
-import org.eclipse.krazo.ext.jade.JadeOzarkConfiguration;
+import org.eclipse.krazo.ext.jade.JadeKrazoConfiguration;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -34,7 +34,7 @@ public class JadeApplication extends Application {
         classes = new HashSet<>();
         classes.add(JadeController.class);
         // Register a filter to test if configuration via SystemProperties works
-        String filterName = String.format("%s.%s", JadeOzarkConfiguration.FILTER_QUALIFIER, "systemProperties");
+        String filterName = String.format("%s.%s", JadeKrazoConfiguration.FILTER_QUALIFIER, "systemProperties");
         System.setProperty(filterName, DummyFilter.class.getName());
     }
 
