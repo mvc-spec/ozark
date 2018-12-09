@@ -54,7 +54,7 @@ public final class Initializer {
 
         if (!isAlreadyInitialized(config) && isMvcApplication(servletContext)) {
 
-            log.info("Initializing Ozark...");
+            log.info("Initializing Eclipse Krazo...");
 
             for (ConfigProvider provider : ServiceLoaders.list(ConfigProvider.class)) {
                 log.log(Level.FINE, "Executing: {0}", provider.getClass().getName());
@@ -78,10 +78,10 @@ public final class Initializer {
         Set<Class<?>> controllersFound = servletContext != null
                 ? (Set<Class<?>>) servletContext.getAttribute(KrazoContainerInitializer.CONTROLLER_CLASSES)
                 : null;
-        boolean enableOzark = controllersFound == null || !controllersFound.isEmpty();
+        boolean enable = controllersFound == null || !controllersFound.isEmpty();
 
-        log.log(Level.FINE, "Is Ozark application detected: {0}", enableOzark);
-        return enableOzark;
+        log.log(Level.FINE, "Is Eclipse Krazo application detected: {0}", enable);
+        return enable;
 
     }
 

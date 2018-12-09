@@ -50,7 +50,7 @@ public class KrazoContainerInitializer implements ServletContainerInitializer {
             return;
         }
 
-        LOG.log(Level.INFO, "Ozark version {0} started", getClass().getPackage().getImplementationVersion());
+        LOG.log(Level.INFO, "Eclipse Krazo version {0} started", getClass().getPackage().getImplementationVersion());
 
         Set<Class> controllerClasses = new LinkedHashSet<>();
 
