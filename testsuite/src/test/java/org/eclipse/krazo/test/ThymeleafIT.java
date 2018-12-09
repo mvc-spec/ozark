@@ -56,7 +56,7 @@ public class ThymeleafIT {
             .addPackage("org.eclipse.krazo.test.thymeleaf")
             .addView(Paths.get(WEB_INF_SRC).resolve("views/hello.html").toFile(), "hello.html")
             .addBeansXml()
-            .addDependency("org.mvc-spec.ozark.ext:ozark-thymeleaf")
+            .addDependency("org.eclipse.krazo.ext:krazo-thymeleaf")
             .build();
     }
 
