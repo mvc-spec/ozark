@@ -25,8 +25,8 @@
         <artifactId>krazo-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <groupId>org.eclipse.krazo.test</groupId>
-    <artifactId>krazo-parent-test</artifactId>
+    <groupId>org.eclipse.krazo.examples</groupId>
+    <artifactId>krazo-examples-parent</artifactId>
     <packaging>pom</packaging>
     <name>Eclipse Krazo Integration Tests Parent</name>
     <properties>

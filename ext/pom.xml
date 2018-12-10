@@ -28,7 +28,7 @@
     </parent>
 
     <groupId>org.eclipse.krazo.ext</groupId>
-    <artifactId>krazo-parent-ext</artifactId>
+    <artifactId>krazo-ext-parent</artifactId>
     <packaging>pom</packaging>
     <name>Eclipse Krazo Extensions Parent</name>
 

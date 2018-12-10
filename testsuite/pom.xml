@@ -29,7 +29,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>testsuite</artifactId>
+    <artifactId>krazo-testsuite</artifactId>
     <name>Eclipse Krazo Testsuite</name>
 
     <properties>
