@@ -1,6 +1,6 @@
 <!--
 
-    Copyright © 2017 Ivar Grimstad (ivar.grimstad@gmail.com)
+    Copyright © 2017, 2018 Ivar Grimstad
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -13,6 +13,8 @@
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+    SPDX-License-Identifier: Apache-2.0
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -144,16 +146,21 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.commonjava.maven.plugins</groupId>
+                    <artifactId>directory-maven-plugin</artifactId>
+                    <version>0.1</version>
+                    <configuration>
+                        <property>rootDir</property>
+                    </configuration>
+                </plugin>
+
+                <plugin>
                     <groupId>com.mycila</groupId>
                     <artifactId>license-maven-plugin</artifactId>
                     <version>3.0</version>
                     <configuration>
-                        <header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
-                        <properties>
-                            <owner>Ivar Grimstad</owner>
-                            <email>ivar.grimstad@gmail.com</email>
-                            <project.inceptionYear>2017</project.inceptionYear>
-                        </properties>
+                        <!-- rootDir property is set from directory-maven-plugin -->
+                        <header>${rootDir}/etc/license-header.txt</header>
                         <includes>
                             <include>src/**/*.java</include>
                             <include>src/**/*.xml</include>
@@ -204,6 +211,22 @@
         </pluginManagement>
 
         <plugins>
+
+            <!-- Plugins to determine the project root directory -->
+            <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+                <version>0.1</version>
+                <executions>
+                    <execution>
+                        <id>highest-basedir</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>highest-basedir</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <!-- We need to run this on every module -->
             <plugin>
